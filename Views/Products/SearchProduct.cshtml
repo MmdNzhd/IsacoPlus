@@ -108,119 +108,138 @@
 
         countDown('@ViewBag.timer');
 
+
+
+
+        $(".category").on("click", function () {
+            if ($(".child-list").hasClass("d-none")) $(".child-list").addClass("d-block").removeClass("d-none");
+            else if ($(".child-list").hasClass("d-block")) $(".child-list").addClass("d-none").removeClass("d-block");
+        })
     </script>
 
 }
 
 <!--header-->
-@Html.Partial("Header")
+<div class="container-fluid p-0 mx-auto  bg-product">
+    @Html.Partial("Header")
 
-<!-- ---list product---- -->
-<div class="container-fluid px-5">
-    @*<div class="row w-100 mx-auto text-right py-3">
-            <div class="col-6">
-                <h3 class="text-white"><b class="font-kalame">دسته بندی خودروها</b></h3>
+    <!-- ---list product---- -->
+    <div class="container-fluid px-5">
+        @*<div class="row w-100 mx-auto text-right py-3">
+                <div class="col-6">
+                    <h3 class="text-white"><b class="font-kalame">دسته بندی خودروها</b></h3>
+                </div>
+                <div class="col-6 ">
+                    <h3 class="text-left"><img src="./img/brand2.png" class="img-fluid width-10 pl-2">هیوندا</h3>
+                </div>
+
+            </div>*@
+        <!-- --- -->
+
+        <div class="row w-100 mx-auto text-center mt-4">
+            <div class="col-3 bg-white mt-5 filter-PageList">
+                <div class="col-12 py-3 text-right"><span class="font-kalame size-20 pr-1 "> دسته بندی</span></div>
+                <div class="col-12 py-3 text-right"><i class="fa fa-chevron-left  category"><span class="font-kalameBlack size-20 pr-1">لوازم یدکی</span></i></div>
+                <div class="child-list d-none">
+                    <div class="col-8 py-1 text-right">لاستیک</div>
+                    <div class="col-8 py-1 text-right">لاستیک</div>
+                    <div class="col-8 py-1 text-right">لاستیک</div>
+                </div>
             </div>
-            <div class="col-6 ">
-                <h3 class="text-left"><img src="./img/brand2.png" class="img-fluid width-10 pl-2">هیوندا</h3>
-            </div>
 
-        </div>*@
-    <!-- --- -->
-    <div class="row w-100 mx-auto text-center mt-4">
-        <div class="col-3 bg-white mt-5 filter-PageList"></div>
-        <div class="col-9">
-            @if (Model.Count > 0)
-            {
-                @foreach (var item in Model)
+            <div class="col-12 col-lg-9">
+                @if (Model.Count > 0)
                 {
-                    var offerPrice = item.Price - item.Price * item.Off / 100;
-                    <div class="col-md-3">
-                        <div class="card-Pagelist my-5 py-5 w-100  ">
-                            <img src="@item.Picture" class="img-fluid hj-productImg w-75">
-                            <div class="row w-100 mx-auto text-center pt-4 px-2 ">
-                                <h1 class="font-kalame text-center mx-auto">
-                                    <b class=" font-kalame">@item.Title </b>
-                                </h1>
-                            </div>
-                            <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
-                                <del class="w-100 original-pricePageList">
-                                    <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">@item.Price</b></h4>
-                                </del>
-                            </div>
-                            <div class="row w-100 mx-auto text-center pb-1 px-5 ">
-
-                                <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame"></b>@offerPrice</h2>
-                                <h6 class="text-center w-100"> تومان</h6>
-                            </div>
-                            <div class="row w-100 mx-auto text-center">
-                                <button type="button" onclick="document.location='/Products/ProductDetail?code=@item.Code'"
-                                        class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
-                                    <b>
-                                        اطلاعات
-                                        بیشتـر
-                                    </b>
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
-                }
-            }
-            else
-            {
-                <h1 style="margin-left:40%">محصولی یافت نشد</h1>
-            }
-
-        </div>
-    </div>
-    <!-- ---pagination--- -->
-    <div class="row w-100 mx-auto text-center py-5">
-        <nav aria-label="..." style="margin-right:55%">
-            <ul class="pagination">
-
-                @if (ViewBag.Page == ViewBag.CurrectPage)
-                {
-                    <li class="page-item disabled">
-                        <a class="page-link" href="/Search/@ViewBag.Key/@next">بعدی</a>
-                    </li>
-
-                }
-                else
-                {
-                    <li class="page-item">
-                        <a class="page-link" href="/Search/@ViewBag.Key/@next">بعدی</a>
-                    </li>
-
-                }
-
-                @if (ViewBag.Page > 1)
-                {
-                    @for (int i = 1; i <= ViewBag.Page; i++)
+                    @foreach (var item in Model)
                     {
+                        var offerPrice = item.Price - item.Price * item.Off / 100;
+                        <div class="col-lg-4">
+                            <div class="hj-card my-5 py-5 w-100  ">
+                                <img src="@item.Picture" class="img-fluid hj-productImg w-75">
+                                <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                                    <h1 class="font-kalame text-center mx-auto">
+                                        <b class=" font-kalame">@item.Title </b>
+                                    </h1>
+                                </div>
+                                <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                                    <del class="w-100 original-pricePageList">
+                                        <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">@item.Price</b></h4>
+                                    </del>
+                                </div>
+                                <div class="row w-100 mx-auto text-center pb-1 px-5 ">
 
-                        <li class="page-item"><a class="page-link" href="/Search/@ViewBag.Key/@i">@i</a></li>
+                                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame"></b>@offerPrice</h2>
+                                    <h6 class="text-center w-100"> تومان</h6>
+                                </div>
+                                <div class="row w-100 mx-auto text-center">
+                                    <button type="button" onclick="document.location='/Products/ProductDetail?code=@item.Code'"
+                                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                                        <b>
+                                            اطلاعات
+                                            بیشتـر
+                                        </b>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
                     }
                 }
-                @if (ViewBag.CurrectPage == 1)
-                {
-                    <li class="page-item disabled ">
-                        <a class="page-link" href="/Search/@ViewBag.Key/@prev">قبلی</a>
-                    </li>
-                }
                 else
                 {
-                    <li class="page-item ">
-                        <a class="page-link" href="/Search/@ViewBag.Key/@prev">قبلی</a>
-                    </li>
+                    <h1 style="margin-left:40%">محصولی یافت نشد</h1>
                 }
 
-            </ul>
-        </nav>
-    </div>
-    <!-- ---end pagination--- -->
-</div>
+            </div>
+        </div>
+        <!-- ---pagination--- -->
+        <div class="row w-100 mx-auto text-center py-5">
+            <nav aria-label="..." style="margin-right:55%">
+                <ul class="pagination">
 
+                    @if (ViewBag.Page == ViewBag.CurrectPage)
+                    {
+                        <li class="page-item disabled">
+                            <a class="page-link" href="/Search/@ViewBag.Key/@next">بعدی</a>
+                        </li>
+
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="/Search/@ViewBag.Key/@next">بعدی</a>
+                        </li>
+
+                    }
+
+                    @if (ViewBag.Page > 1)
+                    {
+                        @for (int i = 1; i <= ViewBag.Page; i++)
+                        {
+
+                            <li class="page-item"><a class="page-link" href="/Search/@ViewBag.Key/@i">@i</a></li>
+                        }
+                    }
+                    @if (ViewBag.CurrectPage == 1)
+                    {
+                        <li class="page-item disabled ">
+                            <a class="page-link" href="/Search/@ViewBag.Key/@prev">قبلی</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item ">
+                            <a class="page-link" href="/Search/@ViewBag.Key/@prev">قبلی</a>
+                        </li>
+                    }
+
+                </ul>
+            </nav>
+        </div>
+        <!-- ---end pagination--- -->
+    </div>
+
+</div>
 <!-- ---End list product---- -->
 <!-- ---service--- -->
 <div class="container-fluid p-0 my-5">
@@ -283,7 +302,7 @@
         {
             var productRealPrice = item.Price - (item.Off * item.Price / 100);
 
-            <div class=" col-md-3 col-sm-4 col-12">
+            <div class=" col-lg-3 col-sm-4 col-12">
                 <div class="hj-card my-5 py-5 w-100  ">
                     <img src="@item.Picture" class="img-fluid hj-productImg w-75">
                     <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">

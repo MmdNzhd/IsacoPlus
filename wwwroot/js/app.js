@@ -65,7 +65,7 @@ var swiper = new Swiper('.swiper-containerTitr', {
 });
   //----swiper2---
   var swiper = new Swiper('.swiper-container2', {
-    slidesPerView: 4,
+    slidesPerView: 3,
     loop:true,
     spaceBetween: 30,
     freeMode: true,
@@ -80,12 +80,12 @@ var swiper = new Swiper('.swiper-containerTitr', {
             spaceBetweenSlides: 30
         },
         600: {
-            slidesPerView: 2,
+            slidesPerView: 1,
             spaceBetweenSlides: 40
         },
    
         1000: {
-            slidesPerView: 4,
+            slidesPerView: 3,
             spaceBetweenSlides: 40
         }
     }
