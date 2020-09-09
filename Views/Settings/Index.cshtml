@@ -1,0 +1,105 @@
+﻿@model IEnumerable<KaraYadak.Models.Setting>
+@{
+    ViewBag.Title = "تنظیمات";
+    Layout = "_AdminPanel";
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors-rtl.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css">
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/dropzone.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/dataTables.select.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
+}
+@section scripts{
+    <script src="/app-assets/js/scripts/ui/data-list-view.js"></script>
+}
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+<div class="content-body">
+    <section id="data-list-view" class="data-list-view-header">
+        <div class="table-responsive">
+            <table class="table data-list-view datatable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>@Html.DisplayNameFor(model => model.Title)</th>
+                        <th>@Html.DisplayNameFor(model => model.Key)</th>
+                        <th>@Html.DisplayNameFor(model => model.Value)</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th></th>
+                            <td>@item.Title</td>
+                            <td>@item.Key</td>
+                            <td>@(item.Value.Length > 25 ? item.Value.Substring(0, 25) + " ... " : item.Value)</td>
+                            <td class="product-action">
+                                <a asp-action="edit" asp-route-id="@item.Id" class="action-edit1"><i class="feather icon-edit"></i></a>
+                            </td>
+                            <td class="product-action">
+                                <a asp-action="delete" asp-route-id="@item.Id" class="action-delete1"><i class="feather icon-trash"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="add-new-data-sidebar">
+            <div class="overlay-bg"></div>
+            <div class="add-new-data">
+                <form method="post" asp-action="create">
+                    <div class="div mt-2 px-2 d-flex new-data-title justify-content-between">
+                        <div>
+                            <h4 class="text-uppercase">ثبت دسترسی جدید</h4>
+                        </div>
+                        <div class="hide-data-sidebar">
+                            <i class="feather icon-x"></i>
+                        </div>
+                    </div>
+                    <div class="data-items pb-3">
+                        <div class="data-fields px-2 mt-3">
+                            <div class="row">
+                                <div class="col-sm-12 data-field-col">
+                                    <label for="data-key">تیتر</label>
+                                    <input type="text" name="Title" class="form-control" id="data-title" required>
+                                </div>
+                                <div class="col-sm-12 data-field-col">
+                                    <label for="data-key">key</label>
+                                    <input type="text" name="Key" class="form-control" id="data-key" required>
+                                </div>
+                                <div class="col-sm-12 data-field-col">
+                                    <label for="data-value">value</label>
+                                    <textarea name="Value" class="form-control" rows="10" id="data-value" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-data-footer d-flex justify-content-around px-3 mt-2">
+                        <div class="add-data-btn">
+                            <button class="btn btn-primary" type="submit">ثبت </button>
+                        </div>
+                        <div class="cancel-data-btn">
+                            <button class="btn btn-outline-danger">بازگشت</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+

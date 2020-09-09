@@ -1,0 +1,169 @@
+﻿@model KaraYadak.ViewModels.LandingPageTextViewModel
+
+@{
+    ViewBag.Title = "تغییر تنظیمات صفحه اصلی";
+    Layout = "_AdminPanel";
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors-rtl.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css">
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/plugins/forms/validation/form-validation.css">
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>
+}
+@section scripts{
+    <script src="/app-assets/js/scripts/forms/validation/form-validation.js"></script>
+}
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "لیست تنظیمات", ParentUrl = Url.Action("index", "settings") })
+<div class="content-body">
+    <section id="basic-vertical-layouts">
+        <div class="row match-height">
+            <div class="col-md-9 col-lg-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">@ViewBag.Title</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form asp-action="landingtexts" method="post" novalidate>
+                                <div class="form-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="sitetitle">نام سایت</label>
+                                                <input required data-validation-required-message="This Email field is required" type="text" class="form-control" asp-for="sitetitle" placeholder="نام سایت">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="instagram">اینستاگرام</label>
+                                                <input required data-validation-required-message="This Email field is required" type="url" dir="ltr" class="form-control" asp-for="instagram" placeholder="اینستاگرام">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="linkedin">لینکداین</label>
+                                                <input required data-validation-required-message="This Email field is required" type="url" dir="ltr" class="form-control" asp-for="linkedin" placeholder="لینکداین">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="email">ایمیل</label>
+                                                <input required data-validation-required-message="This Email field is required" type="email" dir="ltr" class="form-control" asp-for="email" placeholder="ایمیل">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="phone">شماره همراه</label>
+                                                <input required data-validation-required-message="This Email field is required" type="tel" dir="ltr" class="form-control" asp-for="phone" placeholder="شماره همراه">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="timing">ساعات کاری</label>
+                                                <input required data-validation-required-message="This Email field is required" type="text" class="form-control" asp-for="timing" placeholder="ساعات کاری">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="address_center">آدرس دفتر مرکزی</label>
+                                                <input required data-validation-required-message="This Email field is required" type="text" class="form-control" asp-for="address_center" placeholder="آدرس دفتر مرکزی">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="address">آدرس دفتر </label>
+                                                <input required data-validation-required-message="This Email field is required" type="text" class="form-control" asp-for="address" placeholder="آدرس دفتر ">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="aboutus_h2">تیتر درباره ما</label>
+                                                <input required data-validation-required-message="This Email field is required" type="text" class="form-control" asp-for="aboutus_h2" placeholder="تیتر درباره ما">
+                                            </div>
+                                        </div><div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="aboutus">درباره ما</label>
+                                                <textarea required data-validation-required-message="This Email field is required" rows="10" class="form-control" asp-for="aboutus" placeholder="درباره ما"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="introrear">اهداف - رو</label>
+                                                <textarea required data-validation-required-message="This Email field is required" rows="10" class="form-control" asp-for="introrear" placeholder="اهداف - رو"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="introback">اهداف - پشت</label>
+                                                <textarea required data-validation-required-message="This Email field is required" rows="10" class="form-control" asp-for="introback" placeholder="اهداف - پشت"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="visionrear">چشم انداز - رو</label>
+                                                <textarea required data-validation-required-message="This Email field is required" rows="10" class="form-control" asp-for="visionrear" placeholder="چشم انداز - رو"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="visionback">چشم انداز - پشت</label>
+                                                <textarea required data-validation-required-message="This Email field is required" rows="10" class="form-control" asp-for="visionback" placeholder="چشم انداز - پشت"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="missionrear">ماموریت - رو</label>
+                                                <textarea required data-validation-required-message="This Email field is required" rows="10" class="form-control" asp-for="missionrear" placeholder="ماموریت - رو"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="missionback">ماموریت - پشت</label>
+                                                <textarea required data-validation-required-message="This Email field is required" rows="10" class="form-control" asp-for="missionback" placeholder="ماموریت - پشت"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="trustus_h2">تیتر به ما اعتماد کنید</label>
+                                                <input required data-validation-required-message="This Email field is required" type="text" class="form-control" asp-for="trustus_h2" placeholder="تیتر به ما اعتماد کنید">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="trustus_p">متن به ما اعتماد کنید</label>
+                                                <textarea required data-validation-required-message="This Email field is required" rows="10" class="form-control" asp-for="trustus_p" placeholder="متن به ما اعتماد کنید"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="appsection_h2">تیتر نرم افزار</label>
+                                                <input required data-validation-required-message="This Email field is required" type="text" class="form-control" asp-for="appsection_h2" placeholder="تیتر نرم افزار">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="appsection_p">متن نرم افزار</label>
+                                                <textarea required data-validation-required-message="This Email field is required" rows="10" class="form-control" asp-for="appsection_p" placeholder="متن نرم افزار"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary mr-1 mb-1">ثبت تغییرات</button>
+                                            <a asp-action="index" class="btn btn-outline-warning mr-1 mb-1">بازگشت</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

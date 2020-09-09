@@ -1,0 +1,66 @@
+﻿@model ICollection<KaraYadak.ViewModels.ProductForIndexVM>
+    <div class="row  hj-gallery  m-0 p-0 mt-5">
+        <div class="col-lg-3  col-12 px-4">
+            <div class="row w-100 mx-auto  py-2 my-4">
+                <h2 class="text-right w-100 "><b class="hj-producttext">پیشنهاد های</b></h2>
+            </div>
+
+            <div class="row w-100 mx-auto  py-2 my-4">
+                <h1 class="text-center w-100 "><b class="hj-prouduct-Tslider"> ویژه</b></h1>
+            </div>
+            <div class="row w-100 mx-auto  py-2 my-4">
+                <h2 class="text-left w-100 "><b class="hj-producttext"> امروز</b></2>
+            </div>
+
+
+            <div class="row w-100 mx-auto text-center my-3 mb-5">
+                <span id="timer-offer1" class="timer-offer w-100 mx-auto" style="font-weight: bold;"></span>
+            </div>
+
+        </div>
+        <div class="col-lg-9  col-12">
+            <div class="swiper-container swiper-container2 swiper-container-initialized swiper-container-horizontal swiper-container-free-mode swiper-container-rtl"
+                 style="height:auto !important">
+                <div class="swiper-wrapper hj-img-swiper"
+                     style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+                   
+                    @foreach (var item in Model)
+                    {
+                        <div class="swiper-slide swiper-slide-active" style="width: 311.667px; margin-left: 30px;">
+                            <div class="hj-card my-5 py-5 w-100  ">
+                                <img src="@item.Picture" class="img-fluid hj-productImg w-75">
+                                <div class="row w-100 mx-auto text-center pt-5 mt-2 px-5 ">
+                                    <h1 class="font-kalame text-center mx-auto">
+                                        <b class=" font-kalame">@item.Title</b>
+                                    </h1>
+                                </div>
+                                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                                </div>
+                                <div class="row w-100 mx-auto text-center">
+
+                                        <button type="button" onclick="document.location='/Products/ProductDetail?code=@item.Code'"
+                                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2">
+                                            <b>
+                                                اطلاعات
+                                                بیشتـر
+                                            </b>
+                                        </button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+            </div>
+
+        </div>
+
+
+
+    </div>

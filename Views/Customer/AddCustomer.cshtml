@@ -1,0 +1,278 @@
+﻿@model KaraYadak.ViewModels.ProfileVM
+
+
+@{
+    ViewBag.Title = "پنل مشتری";
+    Layout = "_AdminPanel";
+}
+@section Styles{
+    <link href="~/mtk/css/profile.css" rel="stylesheet" />
+    <style>
+        .swal-footer {
+            text-align: center;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .mtk-register {
+            height: auto !important;
+        }
+
+            .mtk-register > form {
+                position: relative !important;
+                padding-bottom: 30px;
+            }
+    </style>
+}
+<div id="throbber" style="display:none;">
+    <img src="~/assets/iKSmF.gif" />
+</div>
+
+
+<div class="container-fluid p-0 m-0 bg-white mtk-category hj-profil  pt-5 mt-5 hj-content">
+    <div class="col-10 mx-auto ">
+        <div class="row w-100 mx-auto pr-lg-5 pb-2">
+            <h4 class="pr-lg-5 pr-4 mr-lg-5 ">ویرایش پروفایل</h4>
+        </div>
+        <div class="row mtk-register">
+            <form style="display:block" asp-action="AddCustomers" method="post" class="w-100 col-12 " id="register">
+                <div class="row mt-3">
+                    <input asp-for="FirstName" class="mx-auto w-75 px-3 wow fadeInUp"
+                           type="text" />
+                    <span class="title bg-white d-block wow fadeInDown">نام </span>
+                </div>
+                <div class="row mt-3">
+                    <input asp-for="LastName" class="mx-auto w-75 px-3 wow fadeInUp"
+                           type="text" />
+                    <span class="title bg-white d-block wow fadeInDown"> نام خانوادگی</span>
+                </div>
+                <div class="row mt-3">
+                    <input asp-for="PhoneNumber" class="mx-auto w-75 px-3 wow fadeInUp" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                           type="number"
+                           maxlength="11" />
+                    <span class="title bg-white d-block wow fadeInDown">شماره تلفن</span>
+                </div>
+                <div class="row mt-3">
+                    <input asp-for="Phone" class="mx-auto w-75 px-3 wow fadeInUp" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                           type="number"
+                           maxlength="11" />
+                    <span class="title bg-white d-block wow fadeInDown">شماره تلفن ثابت</span>
+                </div>
+                <div class="row mt-3">
+                    <input asp-for="NationalCode" class="mx-auto w-75 px-3 wow fadeInUp" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                           type="number"
+                           maxlength="10" />
+                    <span class="title bg-white d-block wow fadeInDown">کد ملی</span>
+                </div>
+                <div class="row mt-3">
+                    <input type="text" asp-for="Email" class="mx-auto w-75 px-3 wow fadeInUp" />
+                    <span class="title bg-white d-block wow fadeInDown">پست الکنرونیک</span>
+                </div>
+                <div class="row mt-3">
+                    <textarea style="border: 2px solid #55FF42;" asp-for="Address" class="mx-auto w-75 px-3 wow fadeInUp"></textarea>
+                    <span class="title bg-white d-block wow fadeInDown">آدرس</span>
+                </div>
+                <input type="hidden" asp-for="CallbackUrl" />
+                <div class="row">
+                    @*<div class="form-check mx-auto text-right w-75 my-3">
+                            <input class="form-check-input wow fadeInRight" type="checkbox" value="" id="defaultCheck1">
+                            <label class="form-check-label mx-4 font-weight-bold wow fadeInLeft" for="defaultCheck1">
+                                قوانین را میپذیرم
+                            </label>
+                        </div>*@
+                </div>
+                <br />
+                <div class="row mb-3 wow fadeInRight">
+                    <select asp-for="Gender" class="custom-select w-75 mx-auto" id="gender">
+                        <option value="" disabled selected>جنسیت</option>
+                        <option value="Male">مرد</option>
+                        <option value="Female">زن</option>
+                    </select>
+                </div>
+                <div class="alert hidden" id="form_alert">
+                    <p class="text-center"></p>
+                </div>
+                <div class="row wow fadeIn mt-3">
+                    <button type="submit" class="btn btn-lg btn-green-empty w-75 button-edit">تایید</button>
+                </div>
+            </form>
+
+
+        </div>
+
+    </div>
+</div>
+@section Scripts{
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
+
+    <script>
+
+        $("#register").submit(function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var url = form.attr('action');
+            $.blockUI({ message: $('#throbber') });
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(),
+                success: function (data) {
+                    console.log(data)
+                    if (data.status == 0) {
+                        $('#form_alert').addClass('alert-danger');
+                        $('#form_alert').removeClass('hidden');
+                        $('#form_alert p').empty();
+                        for (var i = 0; i < data.error.length; i++) {
+                            $('#form_alert p').append(data.error[i] + "<br/>");
+                        }
+                        if (data.error.length == 7) {
+                            $(".mtk-register").css("margin-top", "150px");
+                        }
+                    } else {
+                        let url = data.url;
+                        let phoneNumber = data.result.phoneNumber;
+                        var user = data.result.phoneNumber + "_" + data.result.firstName + "" + data.result.lastName;
+                        $.cookie('user', user, { expires: 7, path: '/' });
+
+                        swal({
+                            title: "افزودن به باشگاه مشتریان؟؟",
+                            icon: "info",
+                            buttons: {
+                                cancel: "انصراف",
+                                catch: {
+                                    text: "تایید",
+                                    value: "catch",
+                                }
+                            },
+                        })
+                            .then((value) => {
+                                switch (value) {
+
+                                    case "defeat":
+                                        window.location.href = data.url;
+                                        break;
+
+                                    case "catch":
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Customer/AddUserInCustomersClub",
+                                            data: { "phoneNumber": data.result.phoneNumber },
+                                            success: function (data) {
+                                                if (data.status == "1") {
+                                                    swal("تبریک", "با موفقیت اضافه شد", "success");
+                                                    window.location.href = url;
+
+                                                }
+                                                else {
+                                                    swal({
+                                                        //title: "!",
+                                                        text: data.message,
+                                                        icon: "warning",
+                                                        buttons: {
+                                                            cancel: "انصراف",
+                                                            catch: {
+                                                                text: "تلاش مجدد",
+                                                                value: "catch",
+                                                            }
+                                                        },
+                                                    })
+                                                        .then((value) => {
+                                                            switch (value) {
+
+                                                                case "defeat":
+                                                                    window.location.href = url;
+                                                                    break;
+
+                                                                case "catch":
+                                                                    $.ajax({
+                                                                        type: "POST",
+                                                                        url: "/Customer/AddUserInCustomersClub",
+                                                                        data: { "phoneNumber": phoneNumber },
+                                                                        success: function (data) {
+                                                                            if (data.status == "1") {
+                                                                                swal("تبریک", "با موفقیت اضافه شد", "success");
+                                                                                window.location.href = url;
+
+                                                                            }
+                                                                            else {
+                                                                                swal({
+                                                                                    //title: "!",
+                                                                                    text: data.message,
+                                                                                    icon: "warning",
+                                                                                    buttons: {
+                                                                                        cancel: "انصراف",
+                                                                                        catch: {
+                                                                                            text: "تلاش مجدد",
+                                                                                            value: "catch",
+                                                                                        }
+                                                                                    },
+                                                                                })
+                                                                                    .then((value) => {
+                                                                                        switch (value) {
+
+                                                                                            case "defeat":
+                                                                                                window.location.href = url;
+                                                                                                break;
+
+                                                                                            case "catch":
+                                                                                                $.ajax({
+                                                                                                    type: "POST",
+                                                                                                    url: "/Customer/AddUserInCustomersClub",
+                                                                                                    data: { "phoneNumber": phoneNumber },
+                                                                                                    success: function (data) {
+                                                                                                        if (data.status == "1") {
+
+                                                                                                            swal("تبریک", "با موفقیت اضافه شد", "success");
+                                                                                                            window.location.href = url;
+
+                                                                                                        }
+                                                                                                        else {
+                                                                                                            swal("!", "متاسفانه عملیات با خطا مواجه شد", "error");
+                                                                                                            window.location.href = url;
+
+                                                                                                        }
+                                                                                                    }
+                                                                                                });
+                                                                                                break;
+
+                                                                                            default:
+                                                                                        }
+                                                                                    });
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                    break;
+
+                                                                default:
+                                                            }
+                                                        });
+                                                }
+                                            }
+                                        });
+                                        break;
+
+                                    default:
+                                }
+                            });
+
+
+
+
+
+                    }
+                }
+            });
+            $.unblockUI();
+        });
+    </script>
+}

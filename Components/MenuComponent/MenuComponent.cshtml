@@ -1,0 +1,25 @@
+﻿@model IEnumerable<KaraYadak.Components.MenuComponentVM>
+
+<li class=" nav-item">
+    <a href="/">
+        <i class="feather icon-home"></i>
+        <span class="menu-title" data-i18n="Dashboard">داشبورد</span>
+    </a>
+</li>
+
+@foreach (var item in Model)
+{
+    <li class=" nav-item">
+        <a href="@Url.Content(item.Url)">
+            <i class="@item.Icon"></i>
+            <span class="menu-title" data-i18n="Dashboard">@item.Title</span>
+        </a>
+    </li>
+}
+
+<li class=" nav-item">
+    <a href="/account/logout">
+        <i class="feather icon-log-out"></i>
+        <span class="menu-title" data-i18n="Logout">خروج</span>
+    </a>
+</li>

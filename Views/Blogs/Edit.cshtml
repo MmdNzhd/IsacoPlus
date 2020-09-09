@@ -1,0 +1,43 @@
+﻿@model KaraYadak.Models.Blog
+    <form asp-controller="Blogs" asp-action="Edit" method="post">
+        <div class="div mt-2 px-2 d-flex new-data-title justify-content-between">
+            <div>
+                <h4 class="text-uppercase"> بروزرسانی اخبار</h4>
+            </div>
+            <div class="hide-data-sidebar">
+                <i class="feather icon-x"></i>
+            </div>
+        </div>
+        <div class="data-items pb-3">
+            <div class="data-fields px-2 mt-3">
+                <div class="row">
+                    <div class="col-sm-12 data-field-col">
+                        <label for="data-key">تیتر</label>
+                        <input type="text" name="Title" class="form-control" id="title" value="@Model.Title" required>
+                    </div>
+
+                    <div class="col-sm-12 data-field-col">
+                        <label for="data-value">توضیح مختصر</label>
+                        <textarea name="shortDescription" class="form-control" rows="10" id="shortDescription" required> @Model.ShortDescription</textarea>
+                    </div>
+                    <div class="col-sm-12 data-field-col">
+                        <label for="data-value">متن</label>
+                        <textarea name="Text" class="form-control" rows="10" id="Text" required> @Model.Text</textarea>
+                    </div>
+                    <div class="col-sm-12 data-field-col">
+                        <label for="data-key">تصویر</label>
+                        <input type="file" name="Image" class="form-control" id="Image">
+                        <img  src="/uploads/blogs/@Model.Image" style="width:100px;height:100px"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="add-data-footer d-flex justify-content-around px-3 mt-2">
+            <div class="add-data-btn">
+                <button class="btn btn-primary" id="editBlog"type="submit">ثبت </button>
+            </div>
+            <div class="cancel-data-btn">
+                <button class="btn btn-outline-danger">بازگشت</button>
+            </div>
+        </div>
+    </form>

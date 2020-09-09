@@ -1,0 +1,156 @@
+﻿@model KaraYadak.ViewModels.ProfileVM
+
+<a href="#" class="position-relative d-inline-block h-100"></a>
+@{
+    ViewData["Title"] = "ورود";
+    Layout = "_WebAppLanding";
+}
+@section Styles{ 
+<style>
+    input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+</style>
+}
+<div id="throbber" style="display:none;">
+    <img src="~/assets/iKSmF.gif" />
+</div>
+
+
+<div class="container-fluid p-0 m-0 bg-white mtk-category">
+    <div class="col-12">
+        <div class="row">
+            <partial name="_Back" />
+        </div>
+        <div class="row mtk-register" style="margin-top: 80px;">
+            <form style="display:block" asp-action="saveprofile" asp-controller="webapp" method="post" class="w-100 col-12 " id="register">
+                <div class="row mt-3">
+                    <input asp-for="FirstName" class="mx-auto w-75 px-3 wow fadeInUp"
+                           type="text" />
+                    <span class="title bg-white d-block wow fadeInDown">نام </span>
+                </div>
+                <div class="row mt-3">
+                    <input asp-for="LastName" class="mx-auto w-75 px-3 wow fadeInUp"
+                           type="text" />
+                    <span class="title bg-white d-block wow fadeInDown"> نام خانوادگی</span>
+                </div>
+                <div class="row mt-3">
+                    <input readonly="readonly" asp-for="PhoneNumber" class="mx-auto w-75 px-3 wow fadeInUp" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                           type="number"
+                           maxlength="11" />
+                    <span class="title bg-white d-block wow fadeInDown">شماره تلفن</span>
+                </div>
+                <div class="row mt-3">
+                    <input asp-for="Phone" class="mx-auto w-75 px-3 wow fadeInUp" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                           type="number"
+                           maxlength="11" />
+                    <span class="title bg-white d-block wow fadeInDown">شماره تلفن ثابت</span>
+                </div>
+                <div class="row mt-3">
+                    <input asp-for="NationalCode" class="mx-auto w-75 px-3 wow fadeInUp" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                           type="number"
+                           maxlength="10" />
+                    <span class="title bg-white d-block wow fadeInDown">کد ملی</span>
+                </div>
+                <div class="row mt-3">
+                    <input type="text" asp-for="Email" class="mx-auto w-75 px-3 wow fadeInUp" />
+                    <span class="title bg-white d-block wow fadeInDown">پست الکنرونیک</span>
+                </div>
+                <div class="row mt-3">
+                    <textarea style="border: 2px solid #55FF42;" asp-for="Address" class="mx-auto w-75 px-3 wow fadeInUp"></textarea>
+                    <span class="title bg-white d-block wow fadeInDown">آدرس</span>
+                </div>
+                <input type="hidden" asp-for="CallbackUrl" />
+                <div class="row">
+                    @*<div class="form-check mx-auto text-right w-75 my-3">
+                            <input class="form-check-input wow fadeInRight" type="checkbox" value="" id="defaultCheck1">
+                            <label class="form-check-label mx-4 font-weight-bold wow fadeInLeft" for="defaultCheck1">
+                                قوانین را میپذیرم
+                            </label>
+                        </div>*@
+                </div>
+                <br />
+                <div class="row mb-3 wow fadeInRight">
+                    <select asp-for="Gender" class="custom-select w-75 mx-auto" id="gender">
+                        <option value="" disabled selected>جنسیت</option>
+                        <option value="Male">مرد</option>
+                        <option value="Female">زن</option>
+                    </select>
+                </div>
+                <div class="alert hidden" id="form_alert">
+                    <p class="text-center"></p>
+                </div>
+                <div class="row wow fadeIn mt-3">
+                    <button type="submit" class="btn btn-lg btn-green-empty w-75">تایید</button>
+                </div>
+            </form>
+
+            <form style="display:none" asp-action="Verify" asp-controller="webapp" method="post" class="w-100 col-12" id="verify">
+                <div class="row position-relative">
+                    <input id="Code" class="mx-auto w-75 px-3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                           type="number"
+                           maxlength="6" />
+                    @*<svg width="30" height="30" viewbox="0 0 250 250">
+                            <path id="border" transform="translate(125, 125)" />
+                            <path id="loader" transform="translate(125, 125) scale(.84)" />
+                        </svg>*@
+                    <div class="row">
+                        <span class="title bg-white d-block">کد تایید خود را وارد کنید</span>
+                    </div>
+                </div>
+                <div class="row mx-auto alert">
+                    <span>کد خود را به درستی وارد کنید</span>
+                </div>
+                <div class="row">
+                    <button type="submit" class="btn btn-lg">تایید</button>
+                </div>
+            </form>
+            <partial name="_Menu" />
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $("#register").submit(function (e) {
+            console.log(1);
+            e.preventDefault();
+            var form = $(this);
+            var url = form.attr('action');
+            $.blockUI({ message: $('#throbber') });
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(),
+                success: function (data) {
+                    console.log(data);
+                    if (data.status == 0) {
+                        $('#form_alert').addClass('alert-danger');
+                        $('#form_alert').removeClass('hidden');
+                        $('#form_alert p').empty();
+                        for (var i = 0; i < data.error.length; i++) {
+                            $('#form_alert p').append(data.error[i] + "<br/>");
+                        }
+                        if (data.error.length == 7) {
+                            $(".mtk-register").css("margin-top", "150px");
+                        }
+                    } else {
+                        swal("", "با موفقیت ثبت شد", "success")
+                        setTimeout(function () {
+                            location.href = data
+                        }, 3000);
+                    }
+                }
+            });
+            $.unblockUI();
+        });
+    </script>
+}

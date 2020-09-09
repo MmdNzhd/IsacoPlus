@@ -1,0 +1,287 @@
+﻿@model KaraYadak.ViewModels.CartVM
+@{
+    Layout = "_WebAppLanding";
+    ViewData["Title"] = "سبد خرید";
+}
+@section Styles{
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+}
+
+<div id="throbber" style="display:none;">
+    <img src="~/assets/iKSmF.gif" />
+</div>
+
+<div class="container m-0 mtk-main mtk-cart p-0 py-1 bg-white">
+
+    @* Title *@
+
+    <div class="row justify-content-around mtk-navbar align-items-center px-4 m-0 mb-2">
+        <div class="col-8 p-0 text-right py-2 animated fadeInDown">
+            <a href="#" class="text-white">
+                سبد خرید
+            </a>
+        </div>
+        <div class="col-4 p-0 py-2 animated fadeInDown">
+            <a href="@ViewBag.P" class="align-middle">
+                <img src="~/mtk/images/icon/arrow-left.png" alt="Alternate Text" />
+            </a>
+        </div>
+    </div>
+
+    @* Sum *@
+    <div class="row m-0 p-0 mt-5 py-2 border border-dark mx-2 mb-2  sumPrice">
+        <div class="col-7 font-weight-bold text-right animated fadeInDown">
+            جمع سبد خرید شما:
+        </div>
+        <div class="col-5 animated fadeInDown">
+            تومان <span id="totalPrice" class="text-danger px-3">@string.Format("{0:n0}", Model.Price)</span>
+        </div>
+    </div>
+
+
+
+    <div class="sec-1 bg-white mb-5 mt-5 pt-5 pb-5">
+        @if (Model != null)
+        {
+            @if (Model.Products != null && Model.ProductIds.Count > 0)
+            {
+                @foreach (var item in Model.ProductIds)
+                {
+                    @*<h4 style="color:blue">@Model.Lengths.ElementAt(Model.Products.IndexOf(item))</h4>
+                        <h4 style="color:blue">@Model.ProductIds.ElementAt(Model.Products.IndexOf(item))</h4>
+                        <h4 style="color:blue">@item.Id</h4>*@
+                    @* Product *@
+                var meter = (Model.Lengths.ElementAt(Model.ProductIds.IndexOf(item)) / 100);
+                var centimeter = (Model.Lengths.ElementAt(Model.ProductIds.IndexOf(item)) % 100);
+
+                    <div id="@item-00" class="row m-0  border border-dark mx-2 p-3 align-items-center  mt-2 pb-4">
+                        <i data-item-id="@item" class="fa fa-window-close  removeFromCart" style="color:red;cursor:pointer" aria-hidden="true"></i>
+                        <div class="col-12 px-2">
+                            <div class="row align-items-center  mtk-product">
+                                <div class="col-6 rounded p-2 wow fadeInDown text-right">
+                                    <a href="#" class="rounded">
+                                        <img src="@Model.Products.SingleOrDefault(x => x.Code == item.ToString()).ImageUrl" class="w-100 rounded" alt="Alternate Text" />
+                                    </a>
+                                </div>
+                                <div class="col-6 rounded px-2 py-2">
+                                    @* Name *@
+                                    <div class="row mb-3 wow fadeInDown px-2">
+                                        <div class="col-6 text-left">
+                                            <span class="row font-weight-bold">نام پارچه :</span>
+                                        </div>
+                                        <div class="col-6 text-right p-0">
+                                            <span class="row font-weight-bold">@Model.Products.SingleOrDefault(x => x.Code == item.ToString()).Name</span>
+                                        </div>
+                                    </div>
+
+                                    @* Color *@
+                                    @*<div class="row mt-2 wow fadeInDown px-2">
+                                            <div class="col-6 text-center">
+                                                <small class="row font-weight-bold">رنگ پارچه :</small>
+                                            </div>
+                                            <div class="col-6 text-right">
+                                                <small class="row font-weight-bold text-success">سبز</small>
+                                            </div>
+                                        </div>*@
+
+                                    @* Price *@
+                                    <div class="row mb-3 wow fadeInDown px-2">
+                                        <div class="col-6 text-center">
+                                            <span class="row font-weight-bold"> قیمت واحد :</span>
+                                        </div>
+                                        <div class="col-6 text-right p-0">
+                                            <span class="row font-weight-bold text-danger"><span class="pl-2">@string.Format("{0:n0}", Model.Products.SingleOrDefault(x => x.Code == item.ToString()).Price)</span>تومان</span>
+                                        </div>
+                                    </div>
+                                    @*  Meter  *@
+                                    <div class="row mb-3 wow fadeInDown px-2">
+                                        <div class="col-6 text-center">
+                                            <span class="row font-weight-bold"> متراژ :</span>
+                                        </div>
+                                        <div class="col-6 text-right p-0">
+                                            @if (centimeter == 0)
+                {
+                                                <span class="row font-weight-bold text-dark mtk-meter d-inline-block px-2 py-1 rounded"><span class="pl-2" id="@item">@meter</span>متر</span>
+                }
+                else
+                {
+                                                <span class="row font-weight-bold text-dark mtk-meter d-inline-block px-2  py-1 rounded"><span class="pl-2" id="@item">@meter.@centimeter</span>متر</span>
+                }
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-2 product-range position-relative px-2">
+                                <input data-price="@(Model.Products.SingleOrDefault(x => x.Code == item.ToString()).Price / 100)" data-item-id="@Model.Products.SingleOrDefault(x => x.Code == item.ToString()).Code" type="range" min="0.1" max="5" step="0.1" value="@meter.@centimeter" class="slider w-100 ltr my-2 myRange" id="myRange">
+                                <span class="ruler"></span>
+                            </div>
+                            <div class="row py-0">
+                                <div class="col-6 text-right p-0">قیمت این محصول :</div>
+                                @{
+                                    var p = Model.Products.SingleOrDefault(x => x.Code == item.ToString()).Price  / 100;
+                                    var l = Model.Lengths.ElementAt(Model.ProductIds.IndexOf(item));
+                                        }
+                                <div class="col-6 text-left p-0 text-success"><span id="@item-Price">@string.Format("{0:n0}", p * l)</span><span> تومان </span></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+        <div class="text-right  purchase-btn">
+            <button id="" class="btn btn-success text-white btn-block" data-toggle="modal" data-target="#factor">تایید و ادامه خرید</button>
+        </div>
+    </div>
+
+    <partial name="_Menu" />
+</div>
+
+<!--Factor Modal-->
+
+
+<!-- Central Modal Small -->
+<div class="modal fade mt-5 pt-5" id="factor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+
+    <!-- Change class .modal-sm to change the size of the modal -->
+    <div class="modal-dialog modal-sm" role="document">
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title w-100 text-right" id="myModalLabel">فاکتور</h4>
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 px-5">
+                        <h6 class="float-right">قیمت کل :</h6>
+                        <h6 id="factorPrice" class="float-left">@string.Format("{0:n0}", Model.Price) <span>تومان</span></h6>
+                    </div>
+                    <div class="col-12 px-5">
+                        <h6 class="float-right">هزینه ارسال :</h6>
+                        @if (Model.SendPrice != 0)
+                        {
+                            <h6 class="float-left"> @string.Format("{0:n0}", Model.SendPrice) <span>تومان</span></h6>
+                        }
+                        else
+                        {
+                            <h6 class="float-left">رایگان</h6>
+                        }
+                    </div>
+                    <div class="col-12 px-5">
+                        <h6 class="float-right">قیمت نهایی :</h6>
+                        <h6 id="factorTotalPrice" class="float-left">@string.Format("{0:n0}", Model.TotalPrice) <span>تومان</span></h6>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @if (User.Identity.Name != null)
+                {
+                    if (Model.IsProfileCompelete)
+                    {
+                        <a style="color:white" asp-action="purchase" class="btn btn-success btn-md btn-block my-2">ادامه</a>
+                        @*<a class="btn btn-success text-white btn-block">تایید و ادامه خرید</a>*@
+                    }
+                    else
+                    {
+                        <a style="color:white" asp-action="editProfile" asp-route-call="purchase" asp-route-id="0" class="btn btn-success btn-md btn-block my-2">ادامه</a>
+                        @*<a asp-action="editProfile" asp-route-call="purchase" class="btn btn-success text-white btn-block">تایید و ادامه خرید</a>*@
+                    }
+                }
+                else
+                {
+                    <a style="color:white" asp-action="register" asp-route-call="cart" class="btn btn-success btn-md btn-block my-2">ادامه</a>
+                    @*<a asp-action="register" class="btn btn-success text-white btn-block">تایید و ادامه خرید</a>*@
+                }
+                <button type="button" class="btn btn-danger btn-md btn-block my-2" data-dismiss="modal">بازگشت</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Central Modal Small -->
+
+@section Scripts{
+
+    <script>
+        $(document).on('input', '.myRange', function () {
+            var product = $(this).attr("data-item-id");
+            $('#' + product).html($(this).val());
+            $("#" + product).parent("span").css("background-color", "red");
+            $("#" + product).parent("span").removeClass('text-dark').addClass('text-white')
+        });
+        $(".myRange").on("change", function () {
+            var s = $.cookie("cart");
+            var product = $(this).attr("data-item-id");
+            var list = [];
+            var newLength = $(this).val() * 100;
+            var l = s.split("_");
+            for (var i = 0; i < l.length; i++) {
+                if (l[i].split("-")[0] == product) {
+                    //totalPrice = totalPrice - (l[i].split("-")[1] * price);
+                    //var b = $(this).val();
+                    //var c = b * 100;
+                    //newLength = c;
+                    //totalPrice += c * price;
+                    list.push(l[i].split("-")[0] + "-" + newLength.toString().split(".")[0]);
+                } else {
+                    list.push(l[i]);
+                }
+            }
+            $.removeCookie('cart', { path: '/' });
+            $.cookie("cart", list.join("_"), { expires: 7, path: '/' });
+            $.blockUI({ message: $('#throbber') });
+            $.ajax({
+                type: 'POST',
+                url: '/webapp/ChangeLengthCartPrice',
+                data: {
+                    list: list.join("_"),
+                    newLength: newLength,
+                    product : product
+                }
+            }).done(function (result) {
+                console.log(result);
+                if (result.status != '0') {
+                    $("#totalPrice").text(result.price);
+                    $("#factorPrice").text(result.price);
+                    $("#factorTotalPrice").text(result.price);
+                    $("#" + product + "-Price").text(result.productPrice);
+                }
+            });
+            $("#" + product).parent("span").css("background-color", "transparent");
+            $("#" + product).parent("span").removeClass('text-white').addClass('text-dark');
+            $.unblockUI();
+        });
+        $("body").on("click", ".removeFromCart", function () {
+            var value = $(this).attr("data-item-id");
+            $.blockUI({ message: $('#throbber') });
+            $.ajax({
+                type: 'POST',
+                url: '/webapp/RemoveFromBascket',
+                data: {
+                    Id: value,
+                }
+            }).done(function (result) {
+                console.log(result);
+                if (result.status == '1') {
+                    $.removeCookie('cart', { path: '/' });
+                    $.cookie("cart", result.items, { expires: 7, path: '/' });
+                } else {
+                    $.removeCookie('cart', { path: '/' });
+                }
+                $("#totalPrice").text(result.cartValue);
+                $("#factorPrice").text(result.cartValue);
+                $("#factorTotalPrice").text(result.cartValue);
+                //$("#cartValue2").text(result.cartValue);
+                //if (result.cartValue == 0) {
+                //    $('.confirmBascket').remove();
+                //    $("#removeAll").remove();
+                //}
+                $('#' + value + "-00").remove();
+            });
+            $.unblockUI();
+        });
+    </script>
+}

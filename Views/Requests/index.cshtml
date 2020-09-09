@@ -1,0 +1,510 @@
+﻿@model IEnumerable<KaraYadak.Models.ShoppingCart>
+@using DNTPersianUtils.Core
+@{
+    ViewBag.Title = "سفارشات";
+    Layout = "_AdminPanel";
+}
+
+@section styles{
+    <style>
+        .mtk-delete {
+            right: 31%;
+            top: 0;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-outline-primary {
+            display: none
+        }
+
+        label {
+            font-size: 14px
+        }
+
+        .data-field-col > span {
+            float: left;
+            text-align: left
+        }
+
+        .pb-3 > h3 {
+            float: left !important;
+            text-align: left !important;
+            margin-top: 10px;
+            margin-left: 15px
+        }
+        #table > tbody > tr > td{
+            height:10px !important
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+    <link rel="stylesheet" href="~/app-assets/date/persianDatepicker-default.css" />
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/dropzone.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/dataTables.select.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
+}
+@section scripts{
+    <script src="/app-assets/js/scripts/ui/data-list-view.js"></script>
+    <script src="~/app-assets/date/persianDatepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha256-KsRuvuRtUVvobe66OFtOQfjP8WA2SzYsmm4VPfMnxms=" crossorigin="anonymous"></script>
+    <script>
+        $("#dateId, .dateClass").persianDatepicker();
+        $("#dateId1, .dateClass1").persianDatepicker();
+    </script>
+    <script>
+        $("#table").on("click", ".RejectRequest", function () {
+            var button = $(this);
+            var model = {
+                id: button.attr("data-item-id")
+            };
+            swal("آیا اطمینان دارید؟", {
+                buttons: {
+                    cancel: "خیر",
+                    catch: {
+                        text: "بلی",
+                        value: "catch",
+                    },
+                },
+            })
+                .then((a) => {
+                    switch (a) {
+
+                        case "catch":
+                            $.blockUI({ message: '<h1>درحال ارسال درخواست...</h1>' });
+                            $.ajax({
+                                url: "/Requests/Reject/",
+                                method: "POST",
+                                data: model,
+                                success: function (data) {
+                                    data.status == '0' ? swal("", data.message, "error") : swal("", data.message, "success");
+                                    button.parents("td").html('<i class="fa fa-close" style="font-size:30px;color:red;padding-right:30%"></i>');
+                                }
+                            });
+                            $.unblockUI();
+                            break;
+                    }
+                });
+        });
+        $("#table").on("click", ".ConfirmRequest", function () {
+            var button = $(this);
+            var model = {
+                id: button.attr("data-item-id")
+            };
+            swal("آیا اطمینان دارید؟", {
+                buttons: {
+                    cancel: "خیر",
+                    catch: {
+                        text: "بلی",
+                        value: "catch",
+                    },
+                },
+            })
+                .then((a) => {
+                    switch (a) {
+
+                        case "catch":
+                            $.blockUI({ message: '<h1>درحال ارسال درخواست...</h1>' });
+                            $.ajax({
+                                url: "/Requests/Confirm/",
+                                method: "POST",
+                                data: model,
+                                success: function (data) {
+                                    data.status == '0' ? swal("", data.message, "error") : swal("", data.message, "success");
+                                    button.parents("td").html('<button data-item-id="' + data.item + '" class="btn btn-success Delivery">تحویل نهایی</button>');
+                                }
+                            });
+                            $.unblockUI();
+                            break;
+                    }
+                });
+        });
+        $("#table").on("click", ".Deliver", function () {
+            var button = $(this);
+            var model = {
+                id: button.attr("data-item-id")
+            };
+            swal("آیا اطمینان دارید؟", {
+                buttons: {
+                    cancel: "خیر",
+                    catch: {
+                        text: "بلی",
+                        value: "catch",
+                    },
+                },
+            })
+                .then((a) => {
+                    switch (a) {
+
+                        case "catch":
+                            $.blockUI({ message: '<h1>درحال ارسال درخواست...</h1>' });
+                            $.ajax({
+                                url: "/Requests/Deliver/",
+                                method: "POST",
+                                data: model,
+                                success: function (data) {
+                                    data.status == '0' ? swal("", data.message, "error") : swal("", data.message, "success");
+                                    button.parents("td").html('<i class="fa fa-check" aria-hidden="true" style="font-size:30px;color:green;padding-right:30%"></i>');
+                                }
+                            });
+                            $.unblockUI();
+                            break;
+                    }
+                });
+        });
+        $("#table").on("click", ".description", function () {
+            var button = $(this);
+            var model = {
+                id: button.attr("data-item-id")
+            };
+            $.blockUI({ message: '<h1>درحال ارسال درخواست...</h1>' });
+            $.ajax({
+                url: "/Requests/Cart/",
+                method: "POST",
+                data: model,
+                success: function (data) {
+                    console.log(data);
+                    $("#Title").html("سفارش کد " + data.cart.requestCode);
+                    $("#RequestDate").html(data.date);
+                    $("#phoneNumber").html(data.cart.userName);
+                    $("#name").html(data.cart.name);
+                    $("#customerPhone").html(data.cart.phoneNumber);
+                    $("#address").html(data.cart.address);
+                    $("#price").html(data.price);
+                    $("#payment").html(data.payment);
+                    $("#status").html(data.status);
+                    var counter = 1;
+                    $("#Mtbody").empty();
+                    for (var i = 0; i < data.items.length; i++) {
+                        $("#modalTable").append('<tr><td>' + counter + '</td><td>' + data.items[i].product + '</td><td>' + data.items[i].quantity + '</td><td>' + data.items[i].price + '</td></tr>');
+                        counter++;
+                    }
+                    console.log(data.items);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    alert(errorThrown);
+                    console.log(errorThrown);
+                }
+            });
+            $.unblockUI();
+            $(".overlay-bg").addClass("show");
+            $(".add-new-data").addClass("show");
+        });
+        $("#filter").submit(function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var url = form.attr('action');
+            var formData = new FormData();
+            var Status = $('#RequestStatus :selected').val();
+            var PaymentType = $('#PaymentType :selected').val();
+            var PriceRange = $('#PriceRange :selected').val();
+            formData.append("Status", Status);
+            formData.append("PaymentType", PaymentType);
+            formData.append("PriceRange", PriceRange);
+            formData.append("Date1", $("#dateId").val());
+            formData.append("Date2", $("#dateId1").val());
+            $.blockUI({ message: '<h1>درحال ارسال درخواست...</h1>' });
+            $.ajax({
+                type: "POST",
+                url: url,
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    if (data.status == '1') {
+                        console.log(data);
+                        $("#table").DataTable().clear().draw();
+                        for (var i = 0; i < data.items.length; i++) {
+                            var button = '';
+                            if (data.items[i].requestStatus == 0) {
+                                button = '<button data-item-id="' + data.items[i].id + '" class="btn btn-success ConfirmRequest">تایید</button><button data-item-id="' + data.items[i].id + '" class="btn btn-danger RejectRequest">رد</button>';
+                            }
+                            if (data.items[i].requestStatus == 1) {
+                                button = '<button data-item-id="' + data.items[i].id + '" class="btn btn-success Delivery">تحویل نهایی</button>';
+                            }
+                            if (data.items[i].requestStatus == 2) {
+                                button = '<i class="fa fa-close" style="font-size:30px;color:red"></i>';
+                            }
+                            if (data.items[i].requestStatus == 3) {
+                                button = '<i class="fa fa-check" aria-hidden="true" style="font-size:30px;color:green"></i>';
+                            }
+                            console.log(data.items[i]);
+                            $("#table").DataTable().row.add([
+                                "",
+                                i + 1,
+                                data.items[i].requestCode,
+                                data.items[i].userName,
+                                data.items[i].address,
+                                data.items[i].price,
+                                data.items[i].paymentType,
+                                data.items[i].status,
+                                data.items[i].date,
+                                button,
+                                '<button data-item-id="' + data.items[i].id + '" class="btn btn-primary description">جزیات</button>',
+                            ]).draw();
+                            //$("#table").append('<tr>< td ></td >< td ></td >< td ></td >< td ></td >< td ></td >< td ></td >< td ></td >< td ></td >< td ></td >< td ></td >< td ></td ></tr > ')
+                        }
+                    } else {
+                        swal("", data.message,"error")
+                    }
+                }
+            });
+                $.unblockUI();
+        });
+        $("#reset").on("click", function () {
+            $.blockUI({ message: '<h1>درحال ارسال درخواست...</h1>' });
+            $.ajax({
+                type: "GET",
+                url: "requests/ResetList",
+                success: function (data) {
+                    if (data.status == '1') {
+                        console.log(data);
+                        $("#table").DataTable().clear().draw();
+                        for (var i = 0; i < data.items.length; i++) {
+                            var button = '';
+                            if (data.items[i].requestStatus == 0) {
+                                button = '<button data-item-id="' + data.items[i].id + '" class="btn btn-success ConfirmRequest">تایید</button><button data-item-id="' + data.items[i].id + '" class="btn btn-danger RejectRequest">رد</button>';
+                            }
+                            if (data.items[i].requestStatus == 1) {
+                                button = '<button data-item-id="' + data.items[i].id + '" class="btn btn-success Delivery">تحویل نهایی</button>';
+                            }
+                            if (data.items[i].requestStatus == 2) {
+                                button = '<i class="fa fa-close" style="font-size:30px;color:red"></i>';
+                            }
+                            if (data.items[i].requestStatus == 3) {
+                                button = '<i class="fa fa-check" aria-hidden="true" style="font-size:30px;color:green"></i>';
+                            }
+                            console.log(data.items[i]);
+                            $("#table").DataTable().row.add([
+                                "",
+                                i + 1,
+                                data.items[i].requestCode,
+                                data.items[i].userName,
+                                data.items[i].address,
+                                data.items[i].price,
+                                data.items[i].paymentType,
+                                data.items[i].status,
+                                data.items[i].date,
+                                button,
+                                '<button data-item-id="' + data.items[i].id + '" class="btn btn-primary description">جزیات</button>',
+                            ]).draw();
+                        }
+                    } else {
+                        swal("", data.message,"error")
+                    }
+                }
+            });
+            $.unblockUI();
+        });
+    </script>
+}
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+
+<div class="content-body">
+    <h4>فیلتر</h4>
+    <hr />
+    <form asp-action="filter" asp-controller="requests" id="filter" class="offset-2">
+        <div class="row">
+            <div class="col-lg-5">
+                <label>شرایط</label>
+                <select id="RequestStatus" asp-items="Html.GetEnumSelectList<RequestStatus>()" class="form-control" type="text"></select>
+            </div>
+            <div class="col-lg-5">
+                <label>نحوه پرداخت</label>
+                <select id="PaymentType" asp-items="Html.GetEnumSelectList<PaymentType>()" class="form-control" type="text"></select>
+            </div>
+            <div class="col-lg-5">
+                <label>بازه قیمت</label>
+                <select id="PriceRange" class="form-control" type="text">
+                    <option value="0_50000"> 0-50,000</option>
+                    <option value="50000_100000">50,000-100,000</option>
+                    <option value="100000_150000">100,000-150,000</option>
+                    <option value="150000_200000">150,000-200,000</option>
+                    <option value="200000_250000">200,000-250,000</option>
+                    <option value="250000_300000">250,000-300,000</option>
+                </select>
+            </div>
+            <div class="col-lg-5">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label>از تاریخ</label>
+                        <input id="dateId" style="border-top:0px;border-left:0px;border-right:0px;" class="form-control dateClass " type="text" />
+                    </div>
+                    <div class="col-lg-6">
+                        <label>تا</label>
+                        <input id="dateId1" style="border-top:0px;border-left:0px;border-right:0px;" class="form-control dateClass1" type="text" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5" style="margin-top:10px">
+                <button type="submit" class="btn btn-info">نمایش</button>
+                <button id="reset" type="reset" class="btn btn-outline-danger">reset</button>
+            </div>
+            <div class="col-lg-5" style="margin-top:10px">
+            </div>
+        </div>
+    </form>
+    <section id="data-list-view" class="data-list-view-header">
+        <div class="table-responsive">
+            <table id="table" class="table data-list-view">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>#</th>
+                        <th>کد درخواست</th>
+                        <th>کاربر</th>
+                        <th>آدرس - کد پستی</th>
+                        <th>مبلغ</th>
+                        <th>نحوه پرداخت</th>
+                        <th>وضعیت</th>
+                        <th>تاریخ</th>
+                        <th>عملیات</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    @{
+                        int i = 1;
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr id="@item.Id">
+                            <td></td>
+                            <td>@i</td>
+                            <td>@item.RequestCode</td>
+                            <td class="text-center">@item.UserName</td>
+                            <td>@item.Address.ToPersianNumbers()</td>
+                            <td>@string.Format("{0:n0}", item.Price)</td>
+                            <td>@item.PaymentType.ToString()</td>
+                            <td>@item.Status.ToString()</td>
+                            <td>@item.Date.ToPersianDateTextify()</td>
+                            <td class="text-center">
+                                @if (item.Status == RequestStatus.Waiting)
+                                {
+                                    <button data-item-id="@item.Id" class="btn btn-success ConfirmRequest">تایید</button>
+                                    <button data-item-id="@item.Id" class="btn btn-danger RejectRequest">رد</button>
+                                }
+                                @if (item.Status == RequestStatus.Rejected)
+                                {
+                                    <i class="fa fa-close" style="font-size:30px;color:red"></i>
+                                }
+                                @if (item.Status == RequestStatus.Confirmed)
+                                {
+                                    <button data-item-id="@item.Id" class="btn btn-success Delivery">تحویل نهایی</button>
+                                }
+                                @if (item.Status == RequestStatus.Finished)
+                                {
+                                    <i class="fa fa-check" aria-hidden="true" style="font-size:30px;color:green"></i>
+                                }
+                            </td>
+                            <td class="product-action">
+                                <button data-item-id="@item.Id" class="btn btn-primary description">جزیات</button>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="add-new-data-sidebar">
+            <div class="overlay-bg"></div>
+            <div class="add-new-data overflow-auto">
+                <div class="div mt-2 px-2 d-flex new-data-title justify-content-between ">
+                    <div>
+                        <h4 id="Title" class="text-uppercase"></h4>
+                    </div>
+                    <div class="hide-data-sidebar">
+                        <i class="feather icon-x"></i>
+                    </div>
+                </div>
+                <div class="data-items pb-3">
+                    <h3 id="RequestDate"></h3>
+                    <div class="data-fields px-2 mt-3">
+                        <div class="row">
+                            <div class="col-sm-12 data-field-col">
+                                <label for="data-name">نام کاربری / شماره تلفن :</label>
+                                <br />
+                                <span id="phoneNumber"></span>
+                                <br />
+                                <hr />
+                            </div>
+                            <div class="col-sm-12 data-field-col">
+                                <label for="data-name">نام :</label>
+                                <br />
+                                <span id="name"></span>
+                                <br />
+                                <hr />
+                            </div>
+                            <div class="col-sm-12 data-field-col">
+                                <label for="data-name">آدرس - کد پستی :</label>
+                                <br />
+                                <span id="address"></span>
+                                <br />
+                                <hr />
+                            </div>
+                            <div class="col-sm-12 data-field-col">
+                                <label for="data-name">تلفن تحویل گیرنده :</label>
+                                <br />
+                                <span id="customerPhone"></span>
+                                <br />
+                                <hr />
+                            </div>
+                            <div class="col-sm-12 data-field-col">
+                                <label for="data-name">مبلغ :</label>
+                                <br />
+                                <span id="price"></span>
+                                <br />
+                                <hr />
+                            </div>
+                            <div class="col-sm-12 data-field-col">
+                                <label for="data-name"> نحوه پرداخت :</label>
+                                <br />
+                                <span id="payment"></span>
+                                <br />
+                                <hr />
+                            </div>
+                            <div class="col-sm-12 data-field-col">
+                                <label for="data-name"> شرایط :</label>
+                                <br />
+                                <span id="status"></span>
+                                <br />
+                                <hr />
+                            </div>
+                            <h4>سبد خرید</h4>
+                            <table id="modalTable" class="table col-lg-12 border-2 table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>محصول</th>
+                                        <th>متراژ (cm)</th>
+                                        <th>قیمت واحد(m)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="Mtbody">
+                                </tbody>
+                            </table>
+                            @*<input id="itemId" type="hidden" />*@
+                        </div>
+                    </div>
+                </div>
+                <div class="add-data-footer d-flex justify-content-around px-3 mt-2">
+                    @*<div class="add-data-btn">
+                            <button class="btn btn-primary" type="submit">ثبت </button>
+                        </div>*@
+                    <div class="cancel-data-btn">
+                        <button class="btn btn-outline-danger">بازگشت</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

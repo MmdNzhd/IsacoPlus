@@ -1,0 +1,211 @@
+﻿@model IEnumerable<KaraYadak.Models.ProductUnit>
+
+@{
+    ViewBag.Title = "لیست واحد ها";
+    Layout = "_AdminPanel";
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css" />
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css" />
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $(".hide-data-sidebar, .cancel-data-btn, .overlay-bg").on("click", function () {
+                CloseSidebar();
+            });
+            $('form').submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+                var url = form.attr('action');
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: form.serialize(),
+                    success: function (data) {
+                        $('.modal').modal('hide');
+                        oTable.draw();
+                    }
+                });
+                CloseSidebar();
+                $(this).trigger('reset');
+            });
+        });
+
+        function DeleteItem(id){
+            Swal.fire({
+                title: '',
+                text: "آیا مطمئن به حذف هستید؟",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'بله',
+                cancelButtonText: 'خیر',
+                confirmButtonClass: 'btn btn-primary',
+                cancelButtonClass: 'btn btn-danger ml-1',
+                buttonsStyling: false,
+            }).then(function (result) {
+                if (result.value) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("delete","productunits")',
+                        data: "id=" + id,
+                        success: function (data) {
+                            oTable.draw();
+                        }
+                    });
+
+                    Swal.fire({
+                        type: "success",
+                        title: '',
+                        text: 'با موفقیت حذف شد',
+                        confirmButtonClass: 'btn btn-success',
+                        confirmButtonText: 'باشه',
+                    });
+                }
+            });
+        }
+
+        function EditItem(id) {
+            //$(".add-new-data").addClass("show");
+            //$(".overlay-bg").addClass("show");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("details", "productunits")' + '/' + id,
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+
+        function AddItem() {
+            $('#data-form').trigger('reset');
+            $(".add-new-data").addClass("show");
+            $(".overlay-bg").addClass("show");
+        }
+
+        function CloseSidebar() {
+            $(".add-new-data").removeClass("show")
+            $(".overlay-bg").removeClass("show")
+        }
+
+        var oTable = $('.zero-configuration').DataTable({
+            processing: true,
+            serverSide: true,
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Persian.json"
+            },
+            ajax: {
+                url: '@Url.Action("index", "productunits")',
+                type: "POST",
+                dataType: "json",
+                delay: 1000,
+                data: function (d) {
+                    //d._token = $('meta[name="csrf-token"]').attr('content');
+                    //d.created_start = $('input[name=created_start]').val();
+                }
+            },
+            columns: [
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'updatedAt',
+                    name: 'updatedAt'
+                },
+                {
+                    data: 'id',
+                    name: 'id'
+                },
+            ],
+            columnDefs: [
+                {
+                    targets: -1,
+                    render: function (data, type, row) {
+                        var html = '<a href="/productunits/edit/' + data + '" class="btn btn-icon btn-sm btn-primary"><i class="feather icon-edit"></i></a> | ';
+                        html += ' <button type="button" onclick="DeleteItem(' + data + ')" class="btn btn-icon btn-sm btn-danger"><i class="feather icon-trash-2"></i></button> ';
+                        return html;
+                    }
+                },
+            ],
+        });
+    </script>
+}
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+
+<div class="content-body">
+    <section id="basic-datatable" class="data-list-view-header">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">@ViewBag.Title</h4>
+                        <button class="btn btn-success" type="button" onclick="AddItem()"><i class="feather icon-plus"></i>ثبت جدید </button>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body card-dashboard">
+                            <div class="table-responsive">
+                                <table class="table zero-configuration">
+                                    <thead>
+                                        <tr>
+                                            <th>نام</th>
+                                            <th>تاریخ تغییر</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="add-new-data-sidebar">
+            <div class="overlay-bg"></div>
+            <div class="add-new-data">
+                <form method="post" asp-action="create" id="data-form">
+                    <div class="div mt-2 px-2 d-flex new-data-title justify-content-between">
+                        <div>
+                            <h4 class="text-uppercase">ثبت طرف حساب جدید</h4>
+                        </div>
+                        <div class="hide-data-sidebar">
+                            <i class="feather icon-x"></i>
+                        </div>
+                    </div>
+                    <div class="data-items pb-2">
+                        <div class="data-fields px-2 mt-2">
+                            <div class="row">
+                                <div class="col-sm-12 data-field-col">
+                                    <label for="data-name">نام</label>
+                                    <input type="text" name="Name" required class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-data-footer d-flex justify-content-around px-3 mt-2">
+                        <div class="add-data-btn">
+                            <button class="btn btn-primary" type="submit">ثبت </button>
+                        </div>
+                        <div class="cancel-data-btn">
+                            <button class="btn btn-outline-danger" type="reset" onclick="CloseSidebar()">بازگشت</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>

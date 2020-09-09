@@ -1,0 +1,115 @@
+﻿@model IEnumerable<KaraYadak.ViewModels.MenuVm>
+
+@{
+    ViewBag.Title = "لیست منو ها";
+    Layout = "_AdminPanel";
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors-rtl.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css">
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/dropzone.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/dataTables.select.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
+}
+@section scripts{
+    <script src="/app-assets/js/scripts/ui/data-list-view.js"></script>
+}
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+
+<div class="content-body">
+    <section id="data-list-view" class="data-list-view-header">
+        <div class="table-responsive">
+            <table class="table data-list-view">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>آدرس</th>
+                        <th>دسترسی</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td></td>
+                            <td class="product-name"><a href="@Url.Content(item.Url)" class="btn btn-info "><i class="@item.Icon"></i>  @item.Name</a></td>
+                            <td class="product-name">@item.AccessName</td>
+                            <td class="product-action">
+                                <a asp-action="edit" asp-route-id="@item.Id" class="action-edit1"><i class="feather icon-edit"></i></a>
+                                <a asp-action="delete" asp-route-id="@item.Id" class="action-delete1"><i class="feather icon-trash"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="add-new-data-sidebar">
+            <div class="overlay-bg"></div>
+            <div class="add-new-data">
+                <form method="post" asp-action="create">
+                    <div class="div mt-2 px-2 d-flex new-data-title justify-content-between">
+                        <div>
+                            <h4 class="text-uppercase">ثبت منو جدید</h4>
+                        </div>
+                        <div class="hide-data-sidebar">
+                            <i class="feather icon-x"></i>
+                        </div>
+                    </div>
+                    <div class="data-items pb-3">
+                        <div class="data-fields px-2 mt-3">
+                            <div class="row">
+                                <div class="col-sm-12 data-field-col">
+                                    <label for="data-name">نام</label>
+                                    <input class="form-control" name="Name" id="data-name" required />
+                                </div>
+                                <div class="col-sm-12 data-field-col">
+                                    <label for="data-icon">آیکون</label>
+                                    <input dir="ltr" class="form-control" name="Icon" id="data-icon" required />
+                                </div>
+                                <div class="col-sm-12 data-field-col">
+                                    <label for="data-url">آدرس</label>
+                                    <select class="form-control" name="Url" id="data-url" required>
+                                        @foreach (var item in (List<string>)ViewBag.Routes)
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-12 data-field-col">
+                                    <label for="data-access">دسترسی</label>
+                                    <select class="form-control" name="AccessId" id="data-access" required>
+                                        @foreach (var item in (List<KaraYadak.Models.Access>)ViewBag.Accesses)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-data-footer d-flex justify-content-around px-3 mt-2">
+                        <div class="add-data-btn">
+                            <button class="btn btn-primary" type="submit">ثبت </button>
+                        </div>
+                        <div class="cancel-data-btn">
+                            <button class="btn btn-outline-danger">بازگشت</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+

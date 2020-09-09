@@ -1,0 +1,315 @@
+﻿
+@model IEnumerable<KaraYadak.Models.Product>
+
+@{
+    ViewBag.Title = "لیست محصولات";
+    Layout = "_AdminPanel";
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css" />
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css" />
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css" integrity="sha512-f8gN/IhfI+0E9Fc/LKtjVq4ywfhYAVeMGKsECzDUHcFJ5teVwvKTqizm+5a84FINhfrgdvjX8hEJbem2io1iTA==" crossorigin="anonymous" />
+
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $(".hide-data-sidebar, .cancel-data-btn, .overlay-bg").on("click", function () {
+                CloseSidebar();
+            });
+            $('form').submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+                var url = form.attr('action');
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: form.serialize(),
+                    success: function (data) {
+                        $('.modal').modal('hide');
+                        oTable.draw();
+                    }
+                });
+                CloseSidebar();
+                $(this).trigger('reset');
+            });
+        });
+
+        function DeleteItem(id){
+            Swal.fire({
+                title: '',
+                text: "آیا مطمئن به حذف هستید؟",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'بله',
+                cancelButtonText: 'خیر',
+                confirmButtonClass: 'btn btn-primary',
+                cancelButtonClass: 'btn btn-danger ml-1',
+                buttonsStyling: false,
+            }).then(function (result) {
+                if (result.value) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("delete","products")',
+                        data: "id=" + id,
+                        success: function (data) {
+                            oTable.draw();
+                        }
+                    });
+
+                    Swal.fire({
+                        type: "success",
+                        title: '',
+                        text: 'با موفقیت حذف شد',
+                        confirmButtonClass: 'btn btn-success',
+                        confirmButtonText: 'باشه',
+                    });
+                }
+            });
+        }
+
+        function EditItem(id) {
+            //$(".add-new-data").addClass("show");
+            //$(".overlay-bg").addClass("show");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("details", "products")' + '/' + id,
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+
+        function AddItem() {
+            $('#data-form').trigger('reset');
+            $(".add-new-data").addClass("show");
+            $(".overlay-bg").addClass("show");
+        }
+
+        function CloseSidebar() {
+            $(".add-new-data").removeClass("show")
+            $(".overlay-bg").removeClass("show")
+        }
+
+        var oTable = $('.zero-configuration').DataTable({
+            processing: true,
+            //serverSide: true,
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Persian.json"
+            },
+            ajax: {
+                url: '@Url.Action("index", "products")',
+                type: "POST",
+                dataType: "json",
+                delay: 1000,
+                data: function (d) {
+                    //d._token = $('meta[name="csrf-token"]').attr('content');
+                    //d.created_start = $('input[name=created_start]').val();
+                }
+            },
+            columns: [
+                {
+                    data: 'code',
+                    name: 'code'
+                },
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+
+                {
+                    data: 'categories',
+                    name: 'categories'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
+                    data: 'updatedAt',
+                    name: 'updatedAt'
+                },
+                //{
+                //    data: 'id',
+                //    name: 'id'
+                //},
+            ],
+            columnDefs: [
+                {
+                    targets: 0,
+                    render: function (data, type, row) {
+                        return `<code>` + data + `</code>`;
+                    }
+                },
+                {
+                    targets: 4,
+                    render: function (data, type, row) {
+                        return `<div class="chip chip-success"><div class="chip-body"><div class="chip-text font-regular">` + data + `</div></div></div>`;
+                    }
+                },
+                //{
+                //    targets: -1,
+                //    render: function (data, type, row) {
+                //        //var html = '<a href="/products/edit/' + data + '" class="btn btn-icon btn-sm btn-primary"><i class="feather icon-edit"></i></a> | ';
+                //        var html = ' <button type="button" onclick="DeleteItem(' + data + ')" class="btn btn-icon btn-sm btn-danger"><i class="feather icon-trash-2"></i></button> ';
+                //        return html;
+                //    }
+                //},
+            ],
+        });
+    </script>
+    <!--Exel-->
+    <script>
+        $("#addProductWithExel").click(function () {
+            var fileExtension = ['xls', 'xlsx'];
+            var filename = $('#fileUpload2').val();
+            if (filename.length == 0) {
+
+                toastr.error("لطفا فایل انتخاب کنید")
+                return false;
+            }
+            else {
+                var extension = filename.replace(/^.*\./, '');
+                if ($.inArray(extension, fileExtension) == -1) {
+                    toastr.error("لطفا فایل اکسل انتخاب کنید")
+                    return false;
+                }
+            }
+            var fdata = new FormData();
+            var fileUpload = $("#fileUpload2").get(0);
+            var files = fileUpload.files;
+            fdata.append("file", files[0]);
+            $.ajax({
+                type: "POST",
+                url: "Products/AddProductWithExel",
+                data: fdata,
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    if (res.status == 1) {
+                        toastr.success(res.message);
+                    }
+                    else {
+                        toastr.error(res.message);
+                    }
+                }
+            });
+        });
+
+        $("#updateProductWithExel").click(function () {
+            var fileExtension = ['xls', 'xlsx'];
+            var filename = $('#fileUpload1').val();
+            if (filename.length == 0) {
+                toastr.error("لطفا فایل انتخاب کنید")
+                return false;
+            }
+            else {
+                var extension = filename.replace(/^.*\./, '');
+                if ($.inArray(extension, fileExtension) == -1) {
+                    toastr.error("لطفا فایل اکسل انتخاب کنید")
+                    return false;
+                }
+            }
+            var fdata = new FormData();
+            var fileUpload = $("#fileUpload2").get(0);
+            var files = fileUpload.files;
+            fdata.append("file", files[0]);
+            $.ajax({
+                type: "POST",
+                url: "Products/updateProductWithExel",
+                data: fdata,
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    if (res.status == 1) {
+                        toastr.success(res.message);
+                    }
+                    else {
+                        toastr.error(res.message);
+                    }
+                }
+            });
+        });
+    </script>
+}
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+
+<div class="content-body">
+    <section id="basic-datatable" class="data-list-view-header">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">@ViewBag.Title</h4>
+                        <a class="btn btn-success offset-7" asp-action="create"><i class="feather icon-plus"></i>ثبت جدید </a>
+                        <button class="btn btn-success" data-toggle="modal" data-target="#importFromExel"><i class="feather icon-plus"></i>خواندن اطلاعات از اکسل  </button>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body card-dashboard">
+                            <div class="table-responsive">
+                                <table class="table zero-configuration">
+                                    <thead>
+                                        <tr>
+                                            <th>کد</th>
+                                            <th>نام</th>
+                                            <th>دسته بندی</th>
+                                            <th>وضعیت</th>
+                                            <th>تاریخ تغییر</th>
+                                            @*<th>عملیات</th>*@
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!--Modal-->
+<div class="modal fade" id="importFromExel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">خواندن اطلاعات از اکسل</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body card-content">
+                <div class=" row mb-1" style="text-align:center">
+                    آپدیت کردن محصولات
+                </div>
+
+                <div class=" row">
+                    <input type="file" class="col-7 form-control form-control-file" id="fileUpload1" />
+                    <button class="btn btn-primary col-4 ml-2" id="updateProductWithExel">اعمال تغییرات</button>
+                </div>
+                <div class=" row mt-4 mb-1" style="text-align:center">
+                    اضافه کردن محصولات
+                </div>
+                <div class=" row">
+                    <input type="file" class="col-7 form-control form-control-file" id="fileUpload2" />
+                    <button class="btn btn-primary col-4 ml-2" id="addProductWithExel">اعمال تغییرات</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Modal-->

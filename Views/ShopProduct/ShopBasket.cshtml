@@ -1,0 +1,662 @@
+﻿@using KaraYadak.Helper
+@model KaraYadak.ViewModels.ProfileVM
+@{
+    ViewBag.Title = "سبد خرید";
+    Layout = "_SiteLayout";
+    var fullName = Model.FirstName + " " + Model.LastName;
+
+}
+@section styles{
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/profile.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha256-aAr2Zpq8MZ+YA/D6JtRD3xtrwpEz2IqOS+pWD/7XKIw=" crossorigin="anonymous" />
+    <!-- Font Awesome -->
+
+    <link href="~/range-slider/css/ion.rangeSlider.min.css" rel="stylesheet" />
+    <link href="~/css/modal.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" />
+
+
+}
+
+<!--Cart-->
+<div class="container w-100 mx-auto pt-5 mt-5">
+    <div id="totalPriceDiv" class="row w-100 mx-auto">
+        <div class="col-md-7 cost-cart  mt-2">
+            <div class="row w-100 py-3">
+                <div class="col-6 "><h5>قیمت کل سبد خرید شما</h5></div>
+                <div class="col-6"><h5 id="totalPrice"></h5></div>
+            </div>
+        </div>
+        <div class="col-md-1 col-0  mt-2"></div>
+        <div class="col-md-4 text-center pay-cart py-3 mt-2">
+            @if (User.Identity.Name != null)
+            {
+                if (ViewBag.profileIsComplete)
+                {
+                    <h5 id="submit">تایید و ادامه خرید</h5>
+
+                }
+                else
+                {
+                    <h5 id="notComplete">تایید و ادامه خرید</h5>
+
+                }
+            }
+            else
+            {
+                <h5 id="notLogin">تایید و ادامه خرید</h5>
+            }
+        </div>
+    </div>
+
+
+
+</div>
+<!--EndCart-->
+<!-- Central Modal Small -->
+<div class="modal fade mt-5 pt-5" id="factor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+
+    <!-- Change class .modal-sm to change the size of the modal -->
+    <div class="modal-dialog modal-xl" role="document">
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title w-100 text-right" id="myModalLabel">فاکتور</h2>
+                <h3>@DateTime.Now.ToShamsi()</h3>
+
+            </div>
+            <div class="modal-body table-responsive">
+            </div>
+            <div class="modal-footer   row">
+                <button class="btn btn-success col-2 " onclick="updateCookie()" id="submitShop">ادامه</button>
+                <div class="col-6"></div>
+                <button      id="return" type="button" class="btn btn-danger col-2" data-dismiss="modal">بازگشت</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal login -->
+<div class="modal fade" id="centralModalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+
+    <!-- Change class .modal-sm to change the size of the modal -->
+    <div class="modal-dialog modal-md login" role="document">
+
+
+        <div class="modal-content modal-login">
+
+            <div class="modal-body">
+
+                <div class="login-wrap">
+                    <div class="login-html">
+                        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">ورود </label>
+                        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"> ثبت نام</label>
+                        <div class="login-form mt-3">
+                            <form id="login-form" action="" method="post">
+                                <div class="sign-in-htm">
+                                    <div class="group">
+                                        <label for="username" class="label"> ایمبل  </label>
+                                        <input id="username" type="text" class="input" name="username">
+                                    </div>
+                                    <div class="group">
+                                        <label for="pass" class="label">رمزعبور</label>
+                                        <input id="password" type="password" class="input" data-type="password" name="password">
+                                    </div>
+                                    <div class="group">
+                                        <input id="check" type="checkbox" class="check" checked>
+                                        <label for="check"><span class="icon"></span> به یاد داشته باش </label>
+                                    </div>
+                                    <div class="group">
+                                        <input type="submit" class="button" value=" ورود">
+                                    </div>
+                                    <div class="hr"></div>
+                                    <div class="foot-lnk">
+                                        <a href="#forgot"> فراموشی رمزعبور؟</a>
+                                    </div>
+                                </div>
+                            </form>
+                            <form id="Register-form" action="" method="post">
+                                <div class="sign-up-htm">
+                                    <div class="group">
+                                        <label for="usernameForReg" class="label">نام نام خانوادگی</label>
+                                        <input id="usernameForReg" type="text" class="input" name="usernameForReg">
+                                    </div>
+                                    <div class="group">
+                                        <label for="passwordForReg" class="label">رمزعبور</label>
+                                        <input id="passwordForReg" type="password" class="input" data-type="password" name="passwordForReg">
+                                    </div>
+                                    <div class="group">
+                                        <label for="ConfirmPassword" class="label"> تایید رمزعبور</label>
+                                        <input id="ConfirmPassword" type="password" class="input" data-type="password" name="ConfirmPassword">
+                                    </div>
+                                    <div class="group">
+                                        <label for="email" class="label"> آدرس ایمیل</label>
+                                        <input id="email" type="text" class="input">
+                                    </div>
+                                    <div class="group">
+                                        <input type="submit" class="button" value=" ثبت نام">
+                                    </div>
+                                    <div class="foot-lnk">
+                                        <label for="tab-1"> قبلا ثبت نام کردید؟</label>
+                                    </div>
+
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end modal login -->
+<!--EditProfileModal-->
+<div class="modal fade" id="centralModalEditProfile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <section class="card card-body border mb-0 body current" id="wizard-example-p-0" role="tabpanel" aria-labelledby="wizard-example-h-0" aria-hidden="false">
+                    <div class="profile-tab text-right">
+
+                        <div class="profile-tab__detail profile-tab__detail-active">
+                            <div class="profile-tab__container">
+                                <h4 class="profile-tab__title">ویرایش پروفایل</h4>
+                                <div class="profile-tab__row">
+                                    <div class="row w-100 mx-auto">
+                                        <div class="col-md-6">
+                                            <div class="profile-tab__col-left">
+                                                <div class="display-avarta__img">
+                                                    @if (!string.IsNullOrWhiteSpace(Model.ImageProfile))
+                                                    {
+                                                        <img src='~/uploads/UserImg/@Model.ImageProfile'>
+                                                    }
+                                                    else
+                                                    { <img src="~/img/profile.png">}
+                                                </div>
+                                                <form class="text-center">
+                                                    <label class="profile-upload">
+                                                        انتخاب تصویر
+                                                        <input type="file" name="fileToUpload" id="fileToUpload">
+                                                    </label>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="profile-tab__col-right">
+                                                <form class="profile-form  mt-3">
+                                                    <label> نام و نام خانوادگی </label>
+                                                    <input type="text" id="fullName" value="@fullName">
+                                                    <label> شماره تلفن </label>
+                                                    <input type="text" id="phone" value="@Model.PhoneNumber">
+                                                    <label>پست الکترونیک</label>
+                                                    <input type="email" id="email1" required="" value="@Model.Email">
+                                                    <label>  کدملی </label>
+                                                    <input type="text" id="nationalCode" value="@Model.NationalCode">
+                                                    <label>  شماره کارت </label>
+                                                    <input type="text" id="cartNumber" value="@Model.CartNumber">
+                                                    <label>  آدرس </label>
+                                                    <textarea id="address">@Model.Address</textarea>
+                                                </form>
+                                                <div class="profile-footer ">
+                                                    <button id="editProfileSubmit" class="profile-button profile-button--save text-center w-100">ثبت</button>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </section>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@*<a href="#" class="w-100" data-toggle="modal" data-target="#centralModalEditProfile">
+        <h6 class="text-center w-100"><i class="fa fa-pencil" aria-hidden="true"></i> ویرایش اطلاعات شخصی</h6>
+    </a>*@
+
+<!--End EditProfileModal-->
+
+
+@section scripts{
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- MDB core JavaScript -->
+
+    <script src="~/range-slider/js/ion.rangeSlider.min.js"></script>
+    <script>
+        const sleep = (milliseconds) => {
+            return new Promise(resolve => setTimeout(resolve, milliseconds))
+        }
+
+        $(document).ready(function () {
+
+
+            reloadPage();
+        })
+        function reloadPage() {
+            $("#totalPriceDiv").hide();
+            var oldCookieValue = $.cookie('cart');
+            if (oldCookieValue != undefined) {
+                var products = oldCookieValue.split(",");
+                if (products == "") {
+                    $('#cartCount').text(0);
+                } else {
+                    $('#cartCount').text(products.length);
+                }
+
+            }
+            else {
+                var products = "";
+                $(".container").html("");
+                $('#cartCount').text(0);
+
+            }
+
+            if (products.length > 0 && products != "") {
+                $("#totalPriceDiv").show();
+
+                $.ajax({
+                    type: "Post",
+                    url: "/ShopProduct/GetProductsForBasket",
+                    data: { items: products },
+                    success: function (data) {
+                        var submit = $(".submit").detach();
+                        var totalPriceDiv = $("#totalPriceDiv").detach();
+                        $(".container").html("");
+                        $(".container").append(totalPriceDiv);
+                        data.result.forEach((element) => {
+                            var $mainDiv = ` <div  data-item-code="${element.code}" id="${element.id}" class="row w-100 mx-auto Product-portfolio mt-5 py-4">
+<div class="col-md-4 mx-auto text-center">
+<img src="${element.picture}" class="img-fluid w-75">
+</div>
+<div class="col-md-6 col-9 ">
+<div class="row w-100 mx-auto text-center pt-3">
+<div class="col-6"><h5 class="text-right"><b>نام محصول:</b></h5></div>
+<div class="col-6 textcart"><h4 class="text-right"><b>"${element.title}"</b></h4></div>
+</div>
+<div class="row w-100 mx-auto text-center pt-3">
+<div class="col-6"><h5 class="text-right"><b>قیمت :</b></h5></div>
+<div  class="col-6 textcart price1" data-price="${element.price}"><h4 class="text-right"><b >"${element.price}" تومان</b></h4></div>
+</div>
+<div class="row w-100 mx-auto text-center pt-3">
+<div class="col-6"><h5 class="text-right"><b> برند:</b></h5></div>
+<div class="col-6 textcart"><h4 class="text-right"><b>"${element.brand}"</b></h4></div>
+</div>
+<div class="row w-100 mx-auto text-center pt-3">
+<div class="col-6"><h5 class="text-right  "><b>کد محصول :</b></h5></div>
+<div class="col-6 textcart"><h4 class="text-right color-code"><b ">#"${element.code}"</b></h4></div>
+</div>
+</div>
+<div class="col-3 col-md-2 pt-2">
+<div class="row w-100 mx-auto">
+<h6 class="text-left w-100 pl-1"><b>تعداد</b></h6>
+<form class="input-Number position-relative">
+                                                                                                        <div class="value-button button-cartPlus increase"  onclick="increaseValue(${element.id})" value="Increase Value">+</div>
+
+                                                                                                        <input type="number" class="number" id="number${element.id}" value="1" />
+                                                                                                        <div class="value-button button-minus decrease"  onclick="decreaseValue(${element.id})" value="Decrease Value">-</div>
+</form>
+</div>
+</div>
+<img src="/img/delete.png" class="img-fluid delete-cart "  onclick="deleteItem(${element.id})">
+</div>`;
+                            $(".container").append($mainDiv);
+
+                            changeTotalPrice();
+
+                        })
+
+                    }
+                });
+
+            }
+        }
+
+        function increaseValue(id) {
+
+            var value = parseInt($("#number" + id).val(), 10);
+            value = isNaN(value) ? 0 : value;
+            value++;
+            $("#number" + id).val(value);
+            changeTotalPrice();
+        }
+
+        function decreaseValue(id) {
+            var value = parseInt($("#number" + id).val(), 10);
+            value = isNaN(value) ? 0 : value;
+            value < 1 ? value = 1 : '';
+            value--;
+            $("#number" + id).val(value);
+            changeTotalPrice();
+        }
+        function deleteItem(id) {
+            var oldCookieValue = $.cookie('cart');
+            var products = oldCookieValue.split(",");
+            products.forEach((element) => {
+                if (element == id) {
+                    products.splice(products.indexOf(element), 1);
+                }
+                if (element == "") {
+                    products.splice(products.indexOf(""), 1);
+                }
+            })
+            if (products == "") {
+                $.removeCookie('cart', { path: '/' });
+            }
+            else {
+                $.removeCookie('cart', { path: '/' });
+                $.cookie('cart', products, { expires: 7, path: '/' });
+            }
+            $('#cartCount').text(products.length);
+            $("#" + id).remove();
+            changeTotalPrice();
+            //reloadPage();
+
+        }
+        function changeTotalPrice() {
+            var totalPrice = 0;
+            $(".Product-portfolio").each(function () {
+                if ($(this)) {
+                    var price = $(this).find($(".price1")).text().replace("تومان", "").replace('"', '').replace('"', '');
+                    var count = $(this).find($(".number")).val();
+                    totalPrice += price * count;
+                }
+
+            })
+            $("#totalPrice").html(totalPrice + "تومان");
+        }
+        function updateCookie() {
+            changeTotalPrice();
+            var newItem = []
+            var products = "";
+            $(".Product-portfolio").each(function (index) {
+                var code = $(this).attr("data-item-code");
+                var count = $(this).find($(".number")).val();
+                newItem[index] = code + "-" + count;
+            })
+            newItem.forEach(element => {
+                if (products != "") {
+                    products += "_" + element;
+                }
+                else {
+                    products = element;
+                }
+            })
+
+            $.cookie('tempcart', products, { expires: 7, path: '/' });
+
+        }
+        $("#notLogin").click(function () {
+            $("#centralModalLogin").modal("toggle");
+            $("#Register-form").submit(function (e) {
+                e.preventDefault();
+                var url = "/Account/Register"
+                let formData = new FormData();
+                formData.append("Nickname", $("#usernameForReg").val());
+                formData.append("Email", $("#email").val());
+                formData.append("Password", $("#passwordForReg").val());
+                formData.append("ConfirmPassword", $("#ConfirmPassword").val());
+                if ($("#ConfirmPassword").val() != $("#passwordForReg").val()) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: "عدم کلمه عبور همخوانی ندارد"
+                    })
+                }
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+
+                        var errors = "";
+
+                        if (data.status == 1) {
+                            Toast.fire({
+                                icon: 'success',
+                                title: data.message
+
+                            })
+                            $("#centralModalLogin").modal("hide");
+                            location.reload();
+
+                        }
+
+
+                        if (data.status == 2) {
+                            Toast.fire({
+                                icon: 'error',
+                                title: data.error
+                            })
+                        }
+                        if (data.status == 0) {
+                            if (typeof (data.error) != "object") {
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: data.error
+                                })
+
+                            }
+                            else {
+                                data.error.forEach((err) => {
+                                    var er = `---${err}`;
+
+                                    errors += er;
+
+                                })
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: errors
+                                })
+
+                            }
+                        }
+
+
+                    }
+                });
+            });
+            $("#login-form").submit(function (e) {
+                e.preventDefault();
+
+                let values = { 'Username': $("#username").val(), 'Password': $("#password").val() };
+                var url = "/Account/SignIn"
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    dataType: 'json',
+                    data: values,
+                    success: function (data) {
+
+                        var errors = "";
+
+                        if (data.status == 1) {
+                            Toast.fire({
+                                icon: 'success',
+                                title: data.message
+
+                            })
+                            $("#centralModalLogin").modal("hide");
+                            location.reload();
+
+                        }
+
+
+                        if (data.status == 2) {
+                            Toast.fire({
+                                icon: 'error',
+                                title: data.error
+                            })
+                        }
+                        if (data.status == 0) {
+                            data.error.forEach((err) => {
+                                var er = `---${err}`;
+
+                                errors += er;
+
+                            })
+                            Toast.fire({
+                                icon: 'error',
+                                title: errors
+                            })
+
+                        }
+                    }
+                });
+            });
+
+        });
+        $("#notComplete").click(function () {
+            $("#centralModalEditProfile").modal("toggle");
+
+
+            $("#editProfileSubmit").click(function () {
+                var fdata = new FormData();
+                var fileUpload = $("#fileToUpload").get(0);
+                var files = fileUpload.files;
+                fdata.append("file", files[0]);
+                let fullName = $("#fullName").val();
+                let names = fullName.split(" ");
+                let firstName = names[0];
+                let lastName = names[1];
+                if (!firstName && lastName) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: "لطفا نام و نام خانوادگی را با فاصله از هم بنویسید"
+
+                    })
+                    return;
+                }
+                fdata.append("FirstName", firstName);
+                fdata.append("LastName", lastName);
+                fdata.append("PhoneNumber", $("#phone").val());
+                fdata.append("CallbackUrl", "/ShopProduct/ShopBasket");
+                fdata.append("Email", $("#email1").val());
+                fdata.append("NationalCode", $("#nationalCode").val());
+                fdata.append("CartNumber", $("#cartNumber").val());
+                fdata.append("Address", $("#address").val());
+
+                $.ajax({
+                    type: "POST",
+                    url: "/SiteAccount/SaveProfile",
+                    data: fdata,
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.status == 1) {
+                            $("#centralModalEditProfile").modal("hide");
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: "با موفقیت ثبت شد"
+
+                            })
+                            sleep(2000).then(() => {
+                                location.reload();
+                            })
+                        }
+                        else {
+                            let errors = `<p> `;
+                            res.error.forEach(er => {
+                                errors += `${er}<br />`;
+                            });
+                            errors += `<p/>`;
+
+                            Toast.fire({
+                                icon: 'error',
+                                title: errors
+
+                            })
+
+
+                        }
+                    }
+                });
+            });
+        })
+        $("#submit").click(function (e) {
+
+            updateCookie();
+            var url = "/ShopProduct/cart"
+            $.ajax({
+                type: "Get",
+                url: url,
+                dataType: "html",
+                data: {},
+                success: function (data) {
+
+                    $("#factor").modal();
+                    $(".modal-body").html(data);
+                }
+            });
+        });
+        $("#submitShop").click(function (e) {
+            e.preventDefault();
+            var url = "/ShopProduct/SubmitBasket"
+            $.ajax({
+                type: "Get",
+                url: url,
+                data: {},
+                success: function (data) {
+                    console.log(data);
+                    if (data.status == 0) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: data.message
+
+                        })
+                    }
+                    else {
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.message
+
+                        })
+                        $.removeCookie('tempcart', { path: '/' });
+                        $.removeCookie('cart', { path: '/' });
+                        location.href = '/SiteAccount/EditProfile';
+                    }
+
+                   
+                }
+            });
+        })
+
+
+    </script>
+
+
+}

@@ -1,0 +1,206 @@
+﻿@model KaraYadak.Models.Product
+
+@{
+    ViewBag.Title = "ثبت محصول جدید";
+    Layout = "_AdminPanel";
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/forms/select/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/extensions/toastr.css">
+    <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/forms/spinner/jquery.bootstrap-touchspin.css">
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/plugins/extensions/toastr.css">
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+    <script src="/app-assets/vendors/js/extensions/toastr.min.js"></script>
+    <script src="../../../app-assets/vendors/js/forms/spinner/jquery.bootstrap-touchspin.js"></script>
+}
+@section scripts{
+    <script>
+        $(".select2").select2({
+            dropdownAutoWidth: true,
+            width: '100%'
+        });
+        $(".touchspin").TouchSpin({
+            buttondown_class: "btn btn-primary",
+            buttonup_class: "btn btn-primary",
+            step: 5
+        });
+        function RepeatCategory() {
+
+        }
+        $('form').submit(function (e) {
+            e.preventDefault();
+            $(e.target)
+                .find("button[type='submit']")
+                .attr('disabled', 'disabled')
+
+            var form = $(this);
+            var url = form.attr('action');
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(),
+                success: function (data) {
+                    if (data.status == '0') {
+                        //$(e.target).find('.form-message').html(data.message);
+                        toastr.error(data.message, '', {
+                            showMethod: 'slideDown',
+                            showDuration: 200,
+                            hideDuration: 300,
+                            timeOut: 1500,
+                            positionClass: 'toast-bottom-left',
+                            containerId: 'toast-bottom-left'
+                        });
+                    } else {
+                        //$(e.target).trigger('reset');
+                        toastr.success('با موفقیت ثبت شد', '', {
+                            showMethod: 'slideDown',
+                            showDuration: 200,
+                            hideDuration: 300,
+                            timeOut: 1500,
+                            positionClass: 'toast-bottom-left',
+                            containerId: 'toast-bottom-left'
+                        });
+                    }
+                    setTimeout(function () {
+                        $(e.target)
+                            .find("button[type='submit']")
+                            .removeAttr('disabled');
+                    }, 500);
+                }
+            });
+        });
+    </script>
+}
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "محصولات", ParentUrl = Url.Action("index") })
+
+<div class="content-body">
+    <section id="basic-vertical-layouts">
+        <div class="row match-height">
+            <div class="col-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">@ViewBag.Title</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form asp-action="create">
+                                <input type="hidden" asp-for="Id" />
+                                <div class="form-body">
+                                    <p class="d-block bg-light text-danger form-message"></p>
+                                    <div class="row">
+                                        <div class="col-6 data-field-col">
+                                            <div class="form-group">
+                                                <label asp-for="Name">نام محصول</label>
+                                                <input asp-for="Name"  class="form-control"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 data-field-col">
+                                            <div class="form-group">
+                                                <label asp-for="Code">کد محصول</label>
+                                                <input asp-for="Code" class="form-control"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 data-field-col">
+                                            <div class="form-group">
+                                                <label for="data-name">توضیحات</label>
+                                                <textarea asp-for="Description" rows="5" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                        @foreach (var item in (List<KaraYadak.ViewModels.ProductCategoriesWithType>)ViewBag.PCWT)
+                                        {
+                                            <div class="col-md-4 col-12 data-field-col">
+                                                <div class="form-group">
+                                                    <label for="data-name">@item.Name</label>
+                                                    <select class="select2 form-control" name="CategoryId" multiple="multiple">
+                                                        @foreach (var c in item.Categories)
+                                                        {
+                                                            if (c.Childs.Count() > 0)
+                                                            {
+                                                                <optgroup label="@c.Name">
+                                                                    @foreach (var cc in c.Childs)
+                                                                    {
+                                                                        <option value="@cc.Id">@cc.Name</option>
+                                                                    }
+                                                                </optgroup>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@c.Id">@c.Name</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    @*<p><small class="text-muted">میتوانید چند دسته بندی انتخاب کنید.</small></p>*@
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="col-md-4 col-12 data-field-col">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <label>حداقل موجودی</label>
+                                                    <div class="d-inline-block mb-1">
+                                                        <div class="input-group">
+                                                            <input type="number" min="0" asp-for="MinEntity" required class="touchspin" value="0" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label>حداکثر موجودی</label>
+                                                    <div class="d-inline-block mb-1">
+                                                        <div class="input-group">
+                                                            <input type="number" min="0" asp-for="MaxEntity" required class="touchspin" value="0" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-auto ml-auto mr-auto data-field-col">
+                                            <br />
+                                            <div class="form-group">
+                                                <ul class="list-unstyled mb-0">
+                                                    <li class="d-inline-block mr-2">
+                                                        <fieldset>
+                                                            <div class="vs-radio-con vs-radio-success">
+                                                                <input type="radio" name="ProductStatus" checked value="@ProductStatus.دردسترس">
+                                                                <span class="vs-radio">
+                                                                    <span class="vs-radio--border"></span>
+                                                                    <span class="vs-radio--circle"></span>
+                                                                </span>
+                                                                <span class="">@(ProductStatus.دردسترس.ToString())</span>
+                                                            </div>
+                                                        </fieldset>
+                                                    </li>
+                                                    <li class="d-inline-block mr-2">
+                                                        <fieldset>
+                                                            <div class="vs-radio-con vs-radio-danger">
+                                                                <input type="radio" name="ProductStatus" value="@ProductStatus.خارج_از_دسترس">
+                                                                <span class="vs-radio">
+                                                                    <span class="vs-radio--border"></span>
+                                                                    <span class="vs-radio--circle"></span>
+                                                                </span>
+                                                                <span class="">@(ProductStatus.خارج_از_دسترس.ToString())</span>
+                                                            </div>
+                                                        </fieldset>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+
+                                            <button type="submit" class="btn btn-primary mr-1 mb-1 ml-2">ثبت </button>
+                                            <a asp-action="index" class="btn btn-outline-warning mr-1 mb-1 ml-2">بازگشت</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,329 @@
+﻿@model IEnumerable<KaraYadak.ViewModels.ProductWithCategoryVM>
+    <a href="#" class="position-relative d-inline-block h-100">
+        @{
+            ViewData["Title"] = "محصولات";
+            Layout = "_WebAppLanding";
+        }
+
+        @section styles{
+            <style>
+                .mtk-off-perc {
+                    left: 0 !important;
+                }
+
+                .mtk-buy {
+                    position: absolute !important;
+                    left: 30px !important;
+                    top: -24% !important;
+                }
+
+                .sec-5 {
+                    height: auto !important;
+                }
+
+                .swiper-off {
+                    height: auto !important;
+                }
+            </style>
+        }
+        <div id="throbber" style="display:none;">
+            <img src="~/assets/iKSmF.gif" />
+        </div>
+        <div class="container m-0  mtk-main p">
+            <div class="row">
+                <partial name="_Back" />
+            </div>
+
+            <div class="sec-5 container-fluid m-0 p-0 mb-4 pb-3">
+                <div class="row animated fadeInDown">
+                    <h4 class="cat-header w-100 text-center bg-white p-0 m-0">محصولات</h4>
+                </div>
+                <div class="row bg-white swiper-off py-3">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-6 mt-4">
+                            <div class="card position-relative wow fadeInDown" data-wow-duration="2s">
+                                <a asp-action="productDetail" asp-route-code="@item.Product.Code" asp-route-name="@item.Product.Name">
+                                    @{
+                                        var image = item.Product.ImageUrl == null ? "/assets/noImg.png" : item.Product.ImageUrl;
+                                    }
+                                    <img class="card-img-top w-100" src="@image" alt="Card image cap">
+                                    <div class="mtk-star position-absolute p-2" onclick="fav(this)">
+                                        @*<i class="fa fa-star text-white mt-1"></i><small class="text-white ml-3"> </small>*@
+                                    </div>
+                                    @if (User.Identity.Name != null)
+                                    {
+                                        <div data-title="@item.Product.Name @item.Categories?.Replace(",", "")" data-item-id="@item.Product.Code" style="cursor:pointer!important" class="mtk-like position-absolute p-2 m-2 mr-3" onclick="likeDislike(this)">
+                                            @*<i class="fa fa-heart text-white "></i>*@
+                                            @if (!ViewBag.Fav.Contains(item.Product.Code))
+                                            {
+                                                <i class="fa fa-heart text-white "></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="fa fa-heart text-danger "></i>
+                                            }
+                                        </div>
+                                    }
+                                    <div class="mtk-off-perc position-absolute">
+                                        @*<small class="text-dark"><span>3</span>% تخفیف</small>*@
+                                        @if (item.Product.Discount != 0)
+                                        {
+                                            <span>
+                                                <small class="font-weight-bold">@item.Product.Discount%</small>
+                                            </span>
+                                        }
+                                        @*@if (item.NearEnd == true)
+            {
+                <span>ته طاقه</span>
+            }*@
+                                    </div>
+                                    <div class="card-body p-0 px-2 py-1 bg-light-gray">
+                                        <!-- Title -->
+                                        <h6 class="card-title text-right p-0 m-0 pl-4"><a>@item.Product.Name @item.Categories?.Replace(",", "")</a></h6>
+                                        <!-- Text -->
+                                        @*<span class="small d-inline-block w-100">مخصوص لباس مجلسی</span>*@
+                                        <!-- Proce -->
+                                        <span class="small d-inline-block w-100"> <span class="mtk-price">@item.Product.Price</span>تومان</span>
+                                        <!--Buy-->
+                                        <div id="mtk-buy" class="mtk-buy ltr mt-3">
+                                            @if (!ViewBag.Cookie.Contains(item.Product.Code.ToString()))
+                                            {
+                                                <a class="buyModal @item.Product.Code-00" data-item-id="@item.Product.Code" href="#">
+                                                    <img src="~/mtk/images/icon/Group 72.png" />اضافه به سبد خرید
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="editModal @item.Product.Code-00" data-item-id="@item.Product.Code" href="#">
+                                                    <img src="~/mtk/images/icon/Group 72.png" />اضافه به سبد خرید
+                                                </a>
+                                            }
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <partial name="_Menu" />
+            </div>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="buy" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+
+            <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+            <div class="modal-dialog modal-dialog-centered" role="document">
+
+
+                <div class="modal-content  border border-yellow">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">خرید پارچه</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            @*<span aria-hidden="true">&times;</span>*@
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group text-right float-right w-50">
+                            <label for="meter">متر</label>
+                            <select class="form-control" id="meter">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                            </select>
+                        </div>
+                        <div class="form-group text-right float-right w-50">
+                            <label for="centimiter">سانتی متر</label>
+                            <select class="form-control" id="centimiter">
+                                <option value="0">0</option>
+                                <option value="10">10</option>
+                                <option>20</option>
+                                <option>40</option>
+                                <option>60</option>
+                                <option>80</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div id="modalFooter" class="modal-footer align-items-center">
+                        <button type="button" class="btn btn-red addToBascket" data-item-id=""><i class="fas fa-shopping-cart mt-2"></i><span>افزودن به سبد خرید</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* ********************************************************** *@
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+
+            <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+            <div class="modal-dialog modal-dialog-centered" role="document">
+
+
+                <div class="modal-content  border border-yellow">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">خرید پارچه</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            @*<span aria-hidden="true">&times;</span>*@
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group text-right float-right w-50">
+                            <label for="meter">متر</label>
+                            <select class="form-control" id="eMeter">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                            </select>
+                        </div>
+                        <div class="form-group text-right float-right w-50">
+                            <label for="centimiter">سانتی متر</label>
+                            <select class="form-control" id="eCentimiter">
+                                <option value="0">0</option>
+                                <option value="10">10</option>
+                                <option>20</option>
+                                <option>40</option>
+                                <option>60</option>
+                                <option>80</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div id="modalFooter" class="modal-footer align-items-center">
+                        <button type="button" class="btn btn-red changeLength" data-item-id=""><i class="fas fa-shopping-cart mt-2"></i><span>تغییر متراژ</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @section Scripts{
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+            <script>
+                //$.cookie("one", "two", { path: '/' })
+                var products = [];
+                var goods = [];
+                var modals = [];
+                $(".buyModal").on("click", function (e) {
+                    e.preventDefault();
+                    if (modals.includes($(this).attr("data-item-id"))) {
+                        $(".changeLength").attr("data-item-id", $(this).attr("data-item-id"));
+                        $("#edit").modal();
+                    } else {
+                        $(".addToBascket").attr("data-item-id", $(this).attr("data-item-id"));
+                        $("#buy").modal();
+                    }
+                });
+                $(".editModal").on("click", function (e) {
+                    e.preventDefault();
+                    $(".changeLength").attr("data-item-id", $(this).attr("data-item-id"));
+                    $("#edit").modal();
+                });
+                $(".addToBascket").on("click", function (e) {
+                    e.preventDefault();
+                    console.log($(this).attr('data-target', "#edit"));
+                    var meter = parseInt($("#meter option:selected").text() * 100);
+                    var centimeter = parseInt($("#centimiter option:selected").text());
+                    var val = meter + centimeter;
+                    var oldCookieValue = $.cookie('cart');
+                    var pId = $(this).attr("data-item-id") + "-" + val;
+                    products.push(pId);
+                    if (oldCookieValue == undefined) {
+                        $.cookie('cart', products.join('_'), { expires: 7, path: '/' });
+                    } else {
+                        var value = oldCookieValue + "_" + products.join('_');
+                        $.removeCookie('cart', { path: '/' });
+                        //Create new cookie with same name and concatenate the old and new desired value.
+                        $.cookie('cart', value, { expires: 7, path: '/' });
+                    }
+                    products = [];
+                    $('#buy').modal('toggle');
+                    $("." + $(this).attr("data-item-id") + "-00").addClass("editModal").removeClass("buyModal");
+                    modals.push($(this).attr("data-item-id"));
+                    let currentBascketCount = $('#cartCount').text();
+                    currentBascketCount = Number(currentBascketCount) + 1;
+                    $('#cartCount').text(currentBascketCount);
+                });
+                $(".changeLength").on("click", function (e) {
+                    e.preventDefault();
+                    var meter = parseInt($("#eMeter option:selected").text() * 100);
+                    var centimeter = parseInt($("#eCentimiter option:selected").text());
+                    var val = meter + centimeter;
+                    var oldCookieValue = $.cookie('cart');
+                    $.ajax({
+                        type: 'POST',
+                        url: '/webapp/ChangeLength',
+                        data: {
+                            id: $(this).attr("data-item-id"),
+                            length: val
+                        }
+                    }).done(function (result) {
+                        if (result.status != '0') {
+                            $.removeCookie('cart', { path: '/' });
+                            $.cookie("cart", result, { expires: 7, path: '/' });
+                            $("#edit").modal('toggle');
+                        }
+                    });
+                });
+                function likeDislike(item) {
+                    if ($(item).children('svg').hasClass('text-white')) {
+                        $.blockUI({ message: $('#throbber') });
+                        $(item).children('svg').animate().addClass('text-danger');
+                        $(item).children('svg').attr('transform', 'scale(1.3)');
+                        $(item).children('svg').animate().removeClass('text-white');
+                        var value = $(item).attr("data-item-id");
+                        var product = $(item).attr("data-title");
+                        $.ajax({
+                            type: 'POST',
+                            url: '/webapp/AddToFavorite',
+                            data: {
+                                Id: value
+                            }
+                        }).done(function (result) {
+                            if (result.status != '0') {
+                                //swal("", result.message, "success");
+                                Swal.fire({
+                                    icon: "success",
+                                    html: "</span>" + product + '<span> به لیست علاقه مندی شما اضافه شد. جهت مشاهده لیست علاقه مندی خود</a> اینجا <a  href="/webapp/Favorite  "> کلیک کنید ',
+                                    confirmButtonText: "بستن",
+                                });
+                            }
+                        });
+                        $.unblockUI();
+
+                    }
+                    else/* if ($(item).children('svg').hasClass('text-danger')) */ {
+                        $.blockUI({ message: $('#throbber') });
+                        $(item).children('svg').animate().addClass('text-white');
+                        $(item).children('svg').attr('transform', 'scale(1)');
+                        $(item).children('svg').animate().removeClass('text-danger');
+                        var value = $(item).attr("data-item-id");
+                        $.ajax({
+                            type: 'POST',
+                            url: '/webapp/RemoveFromFavorites',
+                            data: {
+                                Id: value
+                            }
+                        }).done(function (result) {
+                            if (result.status != '0') {
+                                //swal("", result.message, "success");
+                            }
+                            console.log(result);
+                        });
+                        $.unblockUI();
+                    }
+                }
+
+            </script>
+        }

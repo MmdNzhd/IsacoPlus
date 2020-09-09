@@ -1,0 +1,147 @@
+﻿@model KaraYadak.ViewModels.RequestFormVM
+<a href="#" class="position-relative d-inline-block h-100"></a>
+@{
+    ViewData["Title"] = "فرم سفارش";
+    Layout = "_WebAppLanding";
+}
+@section Styles{
+    <style>
+        #map {
+            width: 100%;
+            height: 200px;
+        }
+    </style>
+}
+<div id="throbber" style="display:none;">
+    <img src="~/iKSmF.gif" />
+</div>
+
+<div class="container-fluid p-0 m-0 bg-white mtk-category">
+    <div class="col-12">
+        <div class="row">
+            <partial name="_Back" />
+        </div>
+        <div class="row mtk-register" style="margin-top: 100px;">
+            <form style="display:block" asp-action="submitrequest" asp-controller="webapp" method="post" class="w-100 col-12 " id="register">
+                <div class="row mt-3">
+                    <input asp-for="FirstName" class="mx-auto w-75 px-3 wow fadeInUp"
+                           type="text" />
+                    <span class="title bg-white d-block wow fadeInDown">نام </span>
+                </div>
+                <div class="row mt-3">
+                    <input asp-for="LastName" class="mx-auto w-75 px-3 wow fadeInUp"
+                           type="text" />
+                    <span class="title bg-white d-block wow fadeInDown"> نام خانوادگی</span>
+                </div>
+                <div class="row mt-3">
+                    <input asp-for="PhoneNumber" class="mx-auto w-75 px-3 wow fadeInUp" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                           type="number"
+                           maxlength="11" />
+                    <span class="title bg-white d-block wow fadeInDown">شماره تلفن</span>
+                </div>
+                <div class="row mt-3">
+                    <input asp-for="Phone" class="mx-auto w-75 px-3 wow fadeInUp" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                           type="number"
+                           maxlength="11" />
+                    <span class="title bg-white d-block wow fadeInDown">شماره تلفن ثابت</span>
+                </div>
+                <div class="row mt-3">
+                    <input type="text" asp-for="Email" class="mx-auto w-75 px-3 wow fadeInUp" />
+                    <span class="title bg-white d-block wow fadeInDown">پست الکنرونیک</span>
+                </div>
+                <div class="row mt-3">
+                    <input type="text" asp-for="PostalCode" class="mx-auto w-75 px-3 wow fadeInUp" />
+                    <span class="title bg-white d-block wow fadeInDown">کد پستی</span>
+                </div>
+                <div style="margin-top:10px" class="row mb-3 wow fadeInRight">
+                    <textarea asp-for="Address" class="w-75 mx-auto p-2 border-green rounded" rows="5" cols="40" placeholder="آدرس خود را وارد کنید"></textarea>
+                </div>
+                <div class="row mb-3 wow fadeInRight">
+                    @*<select style="border: 2px solid #55FF42;" class="custom-select w-75 mx-auto" id="payment">
+                            <option value="" selected>شیوه پرداحت</option>
+                            <option value="0">حضوری</option>
+                            <option value="1">آنلاین</option>
+                        </select>*@
+                </div>
+                <div class="alert hidden" id="form_alert">
+                    <p class="text-center"></p>
+                </div>
+                <div class="row wow fadeIn mt-3">
+                    <button type="submit" class="btn btn-lg btn-green-empty w-75 rounded">تایید</button>
+                </div>
+            </form>
+
+            <partial name="_Menu" />
+        </div>
+
+    </div>
+</div>
+@section Scripts{
+    @*<script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5Jrp9PtHe0WapppUzxbIpMDWMAcV3qE4"></script>
+    <script src="https://unpkg.com/location-picker/dist/location-picker.min.js"></script>
+
+    <script>
+        var LLL;
+        // Get element references
+        var confirmBtn = document.getElementById('confirmPosition');
+        var onClickPositionView = document.getElementById('onClickPositionView');
+        var onIdlePositionView = document.getElementById('onIdlePositionView');
+        var map = document.getElementById('map');
+
+        // Initialize LocationPicker plugin
+        var lp = new locationPicker(map, {
+            setCurrentPosition: true, // You can omit this, defaults to true
+            lat: 36.56332,
+            lng: 53.06009
+        }, {
+            zoom: 15 // You can set any google map options here, zoom defaults to 15
+        });
+
+        // Listen to button onclick event
+        //confirmBtn.onclick = function () {
+        //    // Get current location and show it in HTML
+        //    var location = lp.getMarkerPosition();
+        //    onClickPositionView.innerHTML = 'The chosen location is ' + location.lat + ',' + location.lng;
+        //};
+
+        // Listen to map idle event, listening to idle event more accurate than listening to ondrag event
+        google.maps.event.addListener(lp.map, 'idle', function (event) {
+            // Get current location and show it in HTML
+            var location = lp.getMarkerPosition();
+            LLL = lp.getMarkerPosition();
+            //onIdlePositionView.innerHTML = 'The chosen location is ' + location.lat + ',' + location.lng;
+        });
+    </script>*@
+    <script>
+        $("#register").submit(function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var url = form.attr('action');
+            console.log(form.serialize());
+            $.blockUI({ message: $('#throbber') });
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(),
+                success: function (data) {
+                    console.log(data);
+                    if (data.status == 0) {
+                        $('#form_alert').addClass('alert-danger');
+                        $('#form_alert').removeClass('hidden');
+                        $('#form_alert p').empty();
+                        for (var i = 0; i < data.error.length; i++) {
+                            $('#form_alert p').append(data.error[i] + "<br/>");
+                        }
+                    } else {
+                        swal("", "با موفقیت ثبت شد", "success")
+                        setTimeout(function () {
+                            location.href = data.url
+                        }, 3000);
+                    }
+                }
+            });
+            $.unblockUI();
+        });
+    </script>
+}

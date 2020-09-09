@@ -1,0 +1,1242 @@
+﻿@model IEnumerable<KaraYadak.ViewModels.ProductWithCategoryVM>
+@using DNTPersianUtils.Core;
+@{
+    ViewBag.Title = "لیست محصولات فروشگاه";
+    Layout = "_layout";
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css" />
+    <link rel="stylesheet" href="https://z9t4u9f6.stackpathcdn.com/wp-content/themes/mdbootstrap4/css/compiled-4.19.0.min.css?ver=4.19.0" />
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css" />
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+    <link rel="stylesheet" href="~/bordash/vendors/tagsinput/bootstrap-tagsinput.css" type="text/css">
+    <link rel="stylesheet" href="~/bordash/vendors/select2/css/select2.min.css" type="text/css">
+    <link rel="stylesheet" href="~/bordash/vendors/lightbox/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="~/assets/cropper/css/cropper.css" type="text/css">
+
+    <style>
+        .modal {
+            left: 0 !important;
+            margin-left: 0 !important;
+            padding-left: 0 !important;
+        }
+
+        .selected {
+            background-color: white !important;
+            color: #212529 !important
+        }
+
+        .blockMsg {
+            background-color: none !important;
+            border: none !important
+        }
+
+        .mtk-delete {
+            right: 5%;
+            top: 0;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .mainPicture {
+            right: 10%;
+            bottom: 0;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .swal2-confirm {
+            display: none !important;
+        }
+    </style>
+}
+@section vendors{
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedcolumns/3.3.1/js/dataTables.fixedColumns.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+    <script src="/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    <script src="~/bordash/vendors/tagsinput/bootstrap-tagsinput.js"></script>
+    <script src="~/bordash/vendors/select2/js/select2.min.js"></script>
+    <script src="~/bordash/vendors/lightbox/jquery.magnific-popup.min.js"></script>
+    <script src="~/assets/cropper/js/cropper.js"></script>
+    <script src="~/assets/js/jquery.cookie.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js" integrity="sha256-9wRM03dUw6ABCs+AU69WbK33oktrlXamEXMvxUaF+KU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.js" integrity="sha256-apFUVcutYBHTJh5O835gpzGcVk3v6iUxg38lKBpQMDA=" crossorigin="anonymous"></script>
+}
+
+@*html:
+                    '<button class="btn btn-info">joaopdsdaaa</button>
+    <button class="btn btn-info">joaopdsdaaa</button>
+    <button class="btn btn-info">joaopdsdaaa</button>
+    <button class="btn btn-info">joaopdsdaaa</button>',*@
+@section scripts{
+
+    <script>
+        //uploade ax ba cropper js
+        window.addEventListener('DOMContentLoaded', function () {
+            //var avatar = document.getElementById('avatar');
+            var image = document.getElementById('image');
+            var input = document.getElementById('file-input');
+            var $progress = $('.progress');
+            var $progressBar = $('.progress-bar');
+            var $alert = $('.alert');
+            var $modal = $('#modal');
+            var cropper;
+            $('[data-toggle="tooltip"]').tooltip();
+
+            input.addEventListener('change', function (e) {
+                var files = e.target.files;
+                var done = function (url) {
+                    input.value = '';
+                    image.src = url;
+                    $alert.hide();
+                    $modal.modal('show');
+                };
+                var reader;
+                var file;
+                var url;
+
+                if (files && files.length > 0) {
+                    file = files[0];
+
+                    if (URL) {
+                        done(URL.createObjectURL(file));
+                    } else if (FileReader) {
+                        reader = new FileReader();
+                        reader.onload = function (e) {
+                            done(reader.result);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+
+            $modal.on('shown.bs.modal', function () {
+                cropper = new Cropper(image, {
+                    dragMode: 'move',
+                    aspectRatio: 1 / 1,
+                    //autoCropArea: 1,
+                    restore: false,
+                    guides: false,
+                    center: false,
+                    highlight: false,
+                    cropBoxMovable: false,
+                    cropBoxResizable: false,
+                    toggleDragModeOnDblclick: false,
+                    minCropBoxHeight: 100,
+                });
+            }).on('hidden.bs.modal', function () {
+                cropper.destroy();
+                cropper = null;
+            });
+
+            document.getElementById('out').addEventListener('click', function () {
+                cropper.zoom(-0.1);
+
+            });
+            document.getElementById('in').addEventListener('click', function () {
+                cropper.zoom(0.1);
+
+            });
+            document.getElementById('crop').addEventListener('click', function () {
+                var initialAvatarURL;
+                var canvas;
+
+                $modal.modal('hide');
+
+                if (cropper) {
+                    canvas = cropper.getCroppedCanvas({
+                        width: 600,
+                        height: 600,
+                    });
+                    $alert.removeClass('alert-success alert-warning');
+                    canvas.toBlob(function (blob) {
+                        var formData = new FormData();
+                        formData.append('image', blob, "image.jpg");
+                        $.blockUI({
+                            message: $('#loaderUi'),
+                            theme: true,
+                            baseZ: 2000
+                        });
+                        $.ajax({
+                            url: "/shopProducts/AddImage",
+                            method: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (data) {
+                                console.log(data);
+                                if (data.status != '0') {
+                                    AddImgToGallery(data);
+                                    //toast("1", "ok")
+                                    //$("#gallerySpace").empty();
+                                    //for (var i = 0; i < data.length; i++) {
+                                    //    $("#gallerySpace").append('<div class="col-lg-3 text-center text-lg-center mt-1 position-relative"><img style="max-height:100%;max-width:100%" src="' + data[i] + '" /><span data-url="' + data[i] + '" class="badge badge-danger deleteImg position-absolute mtk-delete">X</span></div>');
+                                    //}
+                                    //$("#gallerySpace").append('<div class="col-lg-3 text-center text-lg-center mt-1"><button id="newImg" class="btn btn-success">عکس جدید</button></div>');
+                                    //$("#gallerySpace").append('<input type="hidden" id="galleryId" value="' + modelId + '" />');
+                                }
+                                else {
+                                    toast("0", "error")
+                                }
+
+                                $.unblockUI();
+                            }
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
+        $("#searchButton").on("click", function () {
+            var key = $("#searchInput").val();
+            var name = $("#itemId").val();
+            alert(key + " " + name)
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("searchSetProducts", "ShopProducts")',
+                data: {
+                    key: key,
+                    name: name,
+                    page :0
+                },
+                success: function (data) {
+                    console.log(data);
+                    var products;
+                    $("#setProductList").empty();
+                    if (data.setProducts != null) {
+                        products = data.setProducts.split("__");
+                    } else {
+                        products = "";
+                    }
+                    for (var i = 0; i < data.items.length; i++) {
+                        var url = "/assets/noImg.png";
+                        var classesName = "btn-primary setOption";
+                        var buttonText = "انتخاب";
+                        if (data.items[i].product.imageUrl != null) {
+                            url = data.items[i].product.imageUrl;
+                        }
+                        if (products.includes(data.items[i].product.name)) {
+                            var classesName = "btn-danger removeFromSet";
+                            var buttonText = "حذف";
+                        }
+                        $("#setProductList").append('<div class="card col-lg-2"><img style = "max-width:100%!important;max-height:100%!important" src = "' + url + '" class= "card-img-top" alt = "..." ><div class="card-body"><h5 class="card-title">' + data.items[i].product.name + '</h5><a href="#" class="btn ' + classesName + ' w-100" data-name="' + data.items[i].product.name + '" style="font-size:9px">' + buttonText + '</a></div></div >');
+                    }
+                    var hasBefore = "disabled";
+                    var hasAfter = "disabled";
+                    var beforeVal = "";
+                    var afterVal = "";
+                    var li = "";
+                    if (data.before == true) {
+                        hasBefore = "";
+                        var previousPage = data.page - 1;
+                        beforeVal = 'data-page="' + previousPage + '"';
+                    }
+                    if (data.after == true) {
+                        hasAfter = "";
+                        var nextPage = data.page + 1;
+                        afterVal = 'data-page="' + nextPage + '"';
+                    }
+                    for (var i = 1; i <= data.pages; i++) {
+                        li += '<li data-page="' + i + '" class="page-item"><a class="page-link">' + i + '</a></li>';
+                    }
+                    console.log(li);
+                    console.log(data.pages);
+                    $("#paginationUl").empty();
+                    $("#paginationUl").append('<li ' + beforeVal + ' class="page-item ' + hasBefore + '"><a class="page-link" > Previous</a ></li>'
+                        + li
+                        + '<li ' + afterVal + ' class="page-item ' + hasAfter + '"><a class="page-link">Next</a></li>');
+                    closeLoader();
+                }
+            });
+        });
+        //FUNCTION gereftan list mahsoolati ke mitoonan set bashan
+        function GetSetProducts(page) {
+            var name = $("#itemId").val();
+            loading();
+            $.ajax({
+                type: "POST",
+                data: {
+                    name: name,
+                    page : page
+                },
+                url: '@Url.Action("getSetOptions", "shopproducts")',
+                success: function (data) {
+                    console.log(data);
+                    var products;
+                    $("#setProductList").empty();
+                    if (data.setProducts != null) {
+                        products = data.setProducts.split("__");
+                    } else {
+                        products = "";
+                    }
+                    for (var i = 0; i < data.items.length; i++) {
+                        var url = "/assets/noImg.png";
+                        var classesName = "btn-primary setOption";
+                        var buttonText = "انتخاب";
+                        if (data.items[i].product.imageUrl != null) {
+                            url = data.items[i].product.imageUrl;
+                        }
+                        if (products.includes(data.items[i].product.name)) {
+                            var classesName = "btn-danger removeFromSet";
+                            var buttonText = "حذف";
+                        }
+                        $("#setProductList").append('<div class="card col-lg-2"><img style = "max-width:100%!important;max-height:100%!important" src = "' + url + '" class= "card-img-top" alt = "..." ><div class="card-body"><h5 class="card-title">' + data.items[i].product.name + '</h5><a href="#" class="btn ' + classesName + ' w-100" data-name="' + data.items[i].product.name + '" style="font-size:9px">' + buttonText + '</a></div></div >');
+                    }
+                    var hasBefore = "disabled";
+                    var hasAfter = "disabled";
+                    var beforeVal = "";
+                    var afterVal = "";
+                    var li = "";
+                    if (data.before == true) {
+                        hasBefore = "";
+                        var previousPage = data.page - 1;
+                        beforeVal = 'data-page="' + previousPage + '"';
+                    }
+                    if (data.after == true) {
+                        hasAfter = "";
+                        var nextPage = data.page + 1;
+                        afterVal = 'data-page="' + nextPage + '"';
+                    }
+                    for (var i = 1; i <= data.pages; i++) {
+                        li += '<li data-page="' + i + '" class="page-item"><a class="page-link">' + i + '</a></li>';
+                    }
+                    console.log(li);
+                    console.log(data.pages);
+                    $("#paginationUl").empty();
+                    $("#paginationUl").append('<li ' + beforeVal + ' class="page-item ' + hasBefore + '"><a class="page-link" > Previous</a ></li>'
+                        + li
+                        + '<li ' + afterVal + ' class="page-item ' + hasAfter + '"><a class="page-link">Next</a></li>');
+                    closeLoader();
+                }
+            });
+        }
+        //change page
+        $("#paginationUl").on("click", ".page-item", function () {
+            var page = $(this).attr("data-page");
+            GetSetProducts(page);
+        });
+        //ezafe be set
+        $("#setProductList").on("click", ".setOption", function () {
+            var name = $(this).attr("data-name");
+            var oldValue = $("#setProductsValue").val();
+            var value = "";
+            if (oldValue == "") {
+                value += name;
+            } else {
+                value += oldValue + "__" + name;
+            }
+            $("#setProductsValue").val(value);
+            $(this).addClass("btn-danger").addClass("removeFromSet").removeClass("setOption").removeClass("btn-primary").text("حذف");
+        });
+        //hazf az set
+        $("#setProductList").on("click", ".removeFromSet", function () {
+            var name = $(this).attr("data-name");
+            var oldValue = $("#setProductsValue").val();
+            if (oldValue.split("__").length != 1) {
+                var value = oldValue.replace(name + '__', '');
+            } else {
+                var value = oldValue.replace(name, '');
+            }
+            $("#setProductsValue").val(value);
+            $(this).removeClass("btn-danger").removeClass("removeFromSet").addClass("setOption").addClass("btn-primary").text("انتخاب");
+
+        });
+        //loader sweetalert
+        function loading() {
+            const imageURL = "/app-assets/load.gif";
+            Swal.fire({
+                //title: 'در حال ارسال؟',
+                //html: '<button style="display:none" id="loaderUi" class="btn btn-primary" type="button" disabled>< span class= "spinner-border spinner-border-sm mr-2" role="status" aria- hidden="true" ></span >درحال بارگذاری...</button >',
+                html: '<p>در حال بارگذاری</p><img src="/app-assets/load.gif"/>',
+                allowOutsideClick: false
+            });
+        }
+        //bastan e loader
+        function closeLoader() {
+            swal.close();
+        }
+        //msg baraye button haye sweetalert zamane entekhab rang baraye axe jadid
+        var msg = "";
+        var warehouseTableRow;
+        var setProducts = [];
+        //message toastr
+        function toast(status,message){
+            toastr.options = {
+                timeOut: 3000,
+                progressBar: true,
+                showMethod: "slideDown",
+                hideMethod: "slideUp",
+                showDuration: 200,
+                hideDuration: 200
+            };
+
+            if (status == "1") {
+
+                toastr.success(message);
+            } else if (status == "0") {
+                toastr.error(message);
+            }
+        };
+        //FUNCTION gereftan e list e mahsoolat e warehouse
+        function getWarehouseProducts() {
+            loading();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetWareHouseProducts", "shopproducts")',
+                success: function (data) {
+                    $("#WareHouseProductsTable").DataTable().clear().draw();
+                    for (var i = 0; i < data.length; i++) {
+                        var product = data[i].product.name;
+                        if (product.length > 30) {
+                            product = product.substring(1, 30) + "...";
+                        };
+                        var category = data[i].categories;
+                        if (category.length > 60) {
+                            category = category.substring(1, 60) + "...";
+                        };
+                        $("#WareHouseProductsTable").DataTable().row.add([
+                            data[i].id,
+                            product,
+                            data[i].product.code,
+                            category,
+                            '<div class="chip chip-success"><div class="chip-body"><div class="chip-text font-regular">' + data[i].status + '</div></div></div>',
+                            data[i].date,
+                            '<button class="btn btn-success AddToShop" data-title="' + data[i].product.name + '"data-description="' + data[i].product.description + '"data-id="' + data[i].product.id + '"data-code="' + data[i].product.code + '"><i class="feather icon-plus"></i></button>',
+                        ]).draw();
+                    }
+
+                }
+            });
+            closeLoader();
+        }
+        //inpute tag ha
+        $("input.tagsinput-example").tagsinput('items');
+        //nemidoonam
+        $('.select2-example').select2({
+            placeholder: 'Select'
+        });
+
+        $("#setProducts").on("click", ".addToSet", function () {
+            var code = $(this).attr("data-code");
+            setProducts.push(code);
+            $(this).addClass("btn-outline-danger");
+            $(this).addClass("removeFromSet");
+            $(this).removeClass("btn-outline-info");
+            $(this).removeClass("addToSet");
+            $(this).text("حذف");
+            console.log(code);
+            console.log($(this));
+        });
+        $("#setProducts").on("click", ".removeFromSet", function () {
+            var code = $(this).attr("data-code");
+            $(this).removeClass("btn-outline-danger");
+            $(this).removeClass("removeFromSet");
+            $(this).addClass("btn-outline-info");
+            $(this).addClass("addToSet");
+            $(this).text("انتخاب");
+            console.log(code);
+            console.log($(this));
+            console.log(setProducts);
+        });
+
+        //Datatable
+        var table = $("#table").DataTable({
+            columnDefs: [{
+                orderable: false,
+                className: 'select-checkbox',
+                targets: 0,
+            }],
+            select: {
+                style:'multi',
+                selector: 'td:first-child'
+            },
+            order: [[1, 'asc']]
+        });
+        $("#WareHouseProductsTable").DataTable();
+
+        //Modals
+        //gereftan e list e mahsoolat e warehouse va baz shodane modal
+        $("#showWareHouseProducts").on("click", function () {
+            getWarehouseProducts();
+            $("#WareHouseProducts").modal();
+        });
+        //ezafe kardane mahsool az anbar be frushgah
+        $("#WareHouseProductsTable").on("click", ".AddToShop", function () {
+            var button = $(this);
+            //intialize
+            var id = button.attr("data-id");
+            var title = button.attr("data-title");
+            var description = button.attr("data-description");
+            var code = button.attr("data-code");
+            $("#itemId").val(id);
+            if (description == null) {
+                $("#description").val(description);
+            }
+            $("#itemId").val(title);
+            //$("#formCode").text(" محصول کد " + code);
+            GetSetProducts(0);
+            $("#formTitle").text(title);
+            $("input").prop('required', false);
+            var url = '@Url.Action("AddToShop", "ShopProducts").ToString()';
+            $('#form').attr('action', url);
+            $("#modalForm").modal();
+        });
+        //edite kardane mahsool ya mahsoolat e dar frushgah
+        $("#table").on("click", ".action-edit1", function () {
+            //check mikone ke tedad mahsoolate edit chand ta e AGE mosavie sefr bashe yani faqat ye mahsoole
+            if (table.rows('.selected').data().length == 0) {
+                var button = $(this);
+                var id = button.attr("data-code");
+                var title = button.attr("data-title");
+                var Description = button.attr("data-description");
+                var price = button.attr("data-price");
+                var discount = button.attr("data-discount");
+                var tags = button.attr("data-tags");
+                var status = button.attr("data-status");
+                if (status != "درفروشگاه") {
+                    document.getElementById("customCheckBoxInline1").setAttribute("checked", "checked");
+                }
+                if (discount != 0) {
+                    var originalPrice = (100 * price) / discount;
+                    $("#price").val(originalPrice);
+                } else {
+                    $("#price").val(price);
+                }
+                $("#itemId").val(title);
+                //type 0 yani ye mahsool
+                $("#type").val(0);
+                $("#description").val(Description);
+                $("#discountPrice").val(price);
+                $("#tags").val(tags);
+                $("#formTitle").text("ویرایش محصول");
+            }
+            //check mikone ke tedad mahsoolate edit chand ta e AGE mosavie sefr nabashe yani chand mahsoole
+            else {
+                var s = "";
+                for (var i = 0; i < table.rows('.selected').data().length; i++) {
+                    //gereftan code haye mahsoolate entekhab shode
+                    //split ba , har td ro bar migardoone
+                    //td e 3om code mahsoole
+                    s += table.rows('.selected').data()[i].toString().split(",")[2] + "_" ;
+                }
+                $("#itemId").val(s);
+                //type 1 yani chand mahsool
+                $("#type").val(1);
+                $("#price").val(0);
+                $("#description").val("");
+                $("#discountPrice").val(0);
+                $("#formTitle").text("");
+                $("#tags").val();
+            }
+            GetSetProducts(1);
+            var url = '@Url.Action("EditProduct", "ShopProducts").ToString()';
+            $('#form').attr('action', url);
+            $("#modalForm").modal();
+        });
+        //Modals
+        $(document).ready(function () {
+            //nemidoonam
+            $(".hide-data-sidebar, .cancel-data-btn, .overlay-bg").on("click", function () {
+                CloseSidebar();
+            });
+            //ersale form (mitoone CREATE , EDIT YA MULTIPITE EDIT bashe)
+            $('#form').submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+                var url = form.attr('action');
+                var formData = new FormData();
+                formData.append("Description", $("#description").val());
+                formData.append("Price", $("#price").val());
+                formData.append("DiscountPrice", $("#discountPrice").val());
+                formData.append("name", $("#itemId").val());
+                formData.append("tags", $("#tags").val());
+                formData.append("type", $("#type").val());
+          
+                formData.append("setProductsValue", $("#setProductsValue").val());
+                //status e 3 yani amade frush hast
+                if ($('#customCheckBoxInline1').is(":checked")) {
+                    formData.append("status", 3);
+                } else {
+                    //status e 2 yani amade frush nist
+                    formData.append("status", 2);
+                }
+                loading();
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function (data) {
+                        //EDIT
+                        if (data.method == "edit")
+                        {
+                            //data baraye td e ax va gallery DEFAULT : BEDOONE AX
+                            var a = '<button data-code="' + data.item.name + '" class="btn btn-info showGallery" style="position:absolute!important;bottom:0px;font-size:12px;right:0px">گالری</button>';
+                            // data e switch button ke az qabl entekhab shode ya na DEFAULT : TRUE
+                            var b = '<div style="cursor:pointer" data-item-id="' + data.item.code + '" class="custom-control custom-switch custom-checkbox-secondary addToSpecial"><input style="cursor:pointer" type="checkbox" class="custom-control-input" id="' + data.item.code + '" checked><label style="cursor:pointer" class="custom-control-label" for="customSwitch2"></label></div>';
+                            //BA AX
+                            if (data.item.imageUrl != null)
+                            {
+                                a = '<a class="image-popup" href="' + data.item.imageUrl + '"><img style="max-height:100%;max-width:100%" src="' + data.item.imageUrl + '" /></a><button data-code="' + data.item.name + '" class="btn btn-info showGallery" style="position:absolute!important;bottom:0px;font-size:12px;right:0px">گالری</button>';
+                            }
+                            //switch button FALSE
+                            if (data.item.specialSale == false)
+                            {
+                                b = '<div style="cursor:pointer" data-item-id="' + data.item.code + '" class="custom-control custom-switch custom-checkbox-secondary addToSpecial"><input style="cursor:pointer" type="checkbox" class="custom-control-input" id="' + data.item.code + '"><label style="cursor:pointer" class="custom-control-label" for="customSwitch2"></label></div>';
+                            }
+                            //dataye jadid
+                            var newData = ['', a, data.item.name, data.item.code, data.item.price, data.item.discount + "%", data.item.categories,b , data.item.status, data.item.date,
+                                '<button data-code="' + data.item.code + '" data-price="' + data.item.price /*+ '" data-QrCode="' + data.item.Qr*/ + '" data-description="' + data.item.description + '" data-tags="' + data.item.tags + '" data-discount="' + data.item.discount + '" data-status="' + data.item.status + '"class="btn btn-icon btn-sm btn-primary action-edit1"><i class="feather icon-edit"></i></button>|<button data-code="' + data.item.code + '" type="button" onclick="DeleteItem(this)" class="btn btn-icon btn-sm btn-danger"><i class="feather icon-trash-2"></i></button>'];
+                            table.row('#' + data.item.code).data(newData).draw();
+                            toast("1", 'با موفقیت انجام شد');
+                            $("#modalForm").modal('toggle');
+                        }
+                        //ERROR
+                        else if (data.method == "error")
+                        {
+                            toast(data.status, data.message);
+                        }
+                        //multipiteEdit
+                        else if (data.method == "multipiteEdit")
+                        {
+                            for (var i = 0; i < data.item.length; i++) {
+                                //data baraye td e ax va gallery DEFAULT : BEDOONE AX
+                                var a = '<button data-code="' + data.item[i].name + '" class="btn btn-info showGallery" style="position:absolute!important;bottom:0px;font-size:12px;right:0px">گالری</button>';
+                                // data e switch button ke az qabl entekhab shode ya na DEFAULT : TRUE
+                                var b = '<div style="cursor:pointer" data-item[i]-id="' + data.item[i].code + '" class="custom-control custom-switch custom-checkbox-secondary addToSpecial"><input style="cursor:pointer" type="checkbox" class="custom-control-input" id="' + data.item[i].code + '" checked><label style="cursor:pointer" class="custom-control-label" for="customSwitch2"></label></div>';
+                                //BA AX
+                                if (data.item[i].imageUrl != null) {
+                                    a = '<a class="image-popup" href="' + data.item[i].imageUrl + '"><img style="max-height:100%;max-width:100%" src="' + data.item[i].imageUrl + '" /></a><button data-code="' + data.item.code + '" class="btn btn-info showGallery" style="position:absolute!important;bottom:0px;font-size:12px;right:0px">گالری</button>';
+                                }
+                                //switch button FALSE
+                                if (data.item[i].specialSale == false) {
+                                    b = '<div style="cursor:pointer" data-item[i]-id="' + data.item[i].code + '" class="custom-control custom-switch custom-checkbox-secondary addToSpecial"><input style="cursor:pointer" type="checkbox" class="custom-control-input" id="' + data.item[i].code + '"><label style="cursor:pointer" class="custom-control-label" for="customSwitch2"></label></div>';
+                                }
+                                //dataye jadid
+                                var newData = ['', a, data.item[i].name, data.item[i].code, data.item[i].price, data.item[i].discount + "%", data.item[i].categories, b, data.item[i].status, data.item[i].date,
+                                    '<button data-code="' + data.item[i].code +/*'" data - code="' + data.item[i].Qr+*/ '" data-price="' + data.item[i].price + '" data-description="' + data.item[i].description + '" data-tags="' + data.item[i].tags + '" data-discount="' + data.item[i].discount + '" data-status="' + data.item[i].status + '"class="btn btn-icon btn-sm btn-primary action-edit1"><i class="feather icon-edit"></i></button>|<button data-code="' + data.item[i].code + '" type="button" onclick="DeleteItem(this)" class="btn btn-icon btn-sm btn-danger"><i class="feather icon-trash-2"></i></button>'];
+                                table.rows()
+                                table.row('#' + data.item[i].code).data(newData).draw();
+                            }
+                            $("#tbody").children().removeClass("selected");
+                            toast("1", 'با موفقیت انجام شد');
+                            $("#modalForm").modal('toggle');
+                        }
+                        else
+                        {
+                            document.getElementById("form").reset();
+                            //data baraye td e ax va gallery DEFAULT : BEDOONE AX
+                            var a = '<button data-code="' + data.item.name + '" class="btn btn-info showGallery" style="position:absolute!important;bottom:0px;font-size:12px;right:0px">گالری</button>';
+                            if (data.item.imageUrl != null)
+                            {
+                                //BA AX
+                                a = '<a class="image-popup" href="' + data.item.imageUrl + '"><img style="max-height:100%;max-width:100%" src="' + data.item.imageUrl + '" /></a><button data-code="' + data.item.code + '" class="btn btn-info showGallery" style="position:absolute!important;bottom:0px;font-size:12px;right:0px">گالری</button>';
+                            }
+                            table.row.add([
+                                "",
+                                a,
+                                data.item.name,
+                                data.item.code,
+                                data.item.price,
+                                data.item.discount + "%",
+                                data.item.categories,
+                                '<div style="cursor:pointer" data-item-id="' + data.item.code + '" class="custom-control custom-switch custom-checkbox-secondary addToSpecial"><input style="cursor:pointer" type="checkbox" class="custom-control-input" id="' + data.item.code + '"><label style="cursor:pointer" class="custom-control-label" for="customSwitch2"></label></div>',
+                                data.item.status,
+                                data.item.date,
+                                '<button data-code="' + data.item.code + '" data-price="' + data.item.price + '" data-description="' + data.item.description+/*'" data - code="' + data.item[i].Qr+*/ '" data-tags="' + data.item.tags + '" data-discount="' + data.item.discount + '" data-status="' + data.item.status + '"class="btn btn-icon btn-sm btn-primary action-edit1"><i class="feather icon-edit"></i></button>|<button data-code="' + data.item.code + '" type="button" onclick="DeleteItem(this)" class="btn btn-icon btn-sm btn-danger"><i class="feather icon-trash-2"></i></button>'
+                            ]).draw();
+                            $("#modalForm").modal('toggle');
+                            $("#WareHouseProducts").modal('toggle');
+                            getWarehouseProducts();
+                            $("#WareHouseProducts").modal();
+                            toast("1", 'با موفقیت انجام شد');
+                        }
+                        closeLoader();
+                    }
+                });
+            });
+        });
+
+        //Ad to special slider webapp index
+        $("body").on("click", ".addToSpecial", function () {
+            var button = $(this);
+            $(this).children('input').attr('checked', 'checked');
+            $(this).removeClass("addToSpecial");
+            $(this).addClass("removeFromSpecial");
+            var model = {
+                code: button.attr("data-item-id")
+            };
+            loading();
+            $.ajax({
+                url: '@Url.Action("AddProductToSpecial", "shopProducts")',
+                method: "POST",
+                data: model,
+                success: function (data) {
+                    console.log(data);
+                    toast(data.status, data.message);
+                }
+            });
+            closeLoader();
+        });
+        //Remove From Special slider webapp index
+        $("body").on("click", ".removeFromSpecial", function () {
+            var button = $(this);
+            $(this).children('input').removeAttr('checked');
+            $(this).addClass("addToSpecial");
+            $(this).removeClass("removeFromSpecial");
+            var model = {
+                code: button.attr("data-item-id")
+            };
+            loading();
+            $.ajax({
+                url: '@Url.Action("RemoveFromSpecial", "shopProducts")',
+                method: "POST",
+                data: model,
+                success: function (data) {
+                    toast(data.status, data.message);
+                }
+            });
+            closeLoader();
+        });
+        //delete
+        function DeleteItem(item) {
+            var button = $(item);
+            Swal.fire({
+                title: '',
+                text: "آیا مطمئن به حذف هستید؟",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'بله',
+                cancelButtonText: 'خیر',
+                confirmButtonClass: 'btn btn-primary',
+                cancelButtonClass: 'btn btn-danger ml-1',
+                buttonsStyling: false,
+            }).then(function (result) {
+                if (result.value) {
+                    var model = {
+                        code: button.attr("data-code")
+                    }
+                    @*$.ajax({
+                        type: "POST",
+                        url: '@Url.Action("delete","shopProducts")',
+                        data: model,
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                            $("#sample_1").DataTable().row(button.parents("tr")).remove().draw();
+                        }
+                    });
+
+                    Swal.fire({
+                        type: "success",
+                        title: '',
+                        text: 'با موفقیت حذف شد',
+                        confirmButtonClass: 'btn btn-success',
+                        confirmButtonText: 'باشه',
+                    });*@
+                }
+            });
+        }
+        function CloseSidebar() {
+            $(".add-new-data").removeClass("show")
+            $(".overlay-bg").removeClass("show")
+        }
+        //pop up e image
+        $('.image-popup').magnificPopup({
+            type: 'image',
+            zoom: {
+                enabled: true,
+                duration: 300,
+                easing: 'ease-in-out',
+                opener: function (openerElement) {
+                    return openerElement.is('img') ? openerElement : openerElement.find('img');
+                }
+            }
+        });
+    </script>
+    @*Gallery*@
+    <script>
+        //FUNCTION ezafe ax e jadid be gallery
+        function AddImgToGallery(image) {
+            $("Gallery").modal('toggle');
+            loading();
+            //gereftan code mahsoole (RANG) entekhab shode az cookie
+            var value = $.cookie('gallery');
+            var formData = new FormData();
+            formData.append("image", image);
+            formData.append("code", value);
+            $.ajax({
+                type: "POST",
+                url: "/shopProducts/AddImgToGallery",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function (data) {
+                    //ax jadid to modal
+                    //$("#gallerySpace").append('<div id="' + data.split("/")[3].split(".")[0] + '" class="col-xl-4 col-md-6 col-sm-12"><div class="card"><div class="card-content"> ' +
+                    //    '<img class="card-img-top img-fluid" src="' + data + '" alt="Card image cap"> ' +
+                    //    '<div class="card-body"><div class="card-btns d-flex justify-content-between mt-2">' +
+                    //    '<a data-id="' + data + '" href="#" class="btn btn-danger text-white waves-effect waves-light deleteImage">حدف</a>' +
+                    //    '</div></div></div></div></div>');\
+                    $('#Gallery').modal('toggle');
+                    showGallery(value);
+                    closeLoader();
+                }
+            });
+            $("Gallery").modal();
+        }
+        //sweetalert soal baraye entekhab e rang
+        $("#newImg").on('click', function () {
+
+                $('#file-input').click();
+
+        });
+        //entekhab e ax be onvan axe asli
+        $('#gallerySpace').on('click', ".mainPicture", function () {
+            var btn = $(this);
+            var url = $(this).attr("data-url");
+            var name = $("#galleryId").val();
+            var model = {
+                url: url,
+                name: name
+            };
+            loading();
+            $.ajax({
+                url: "/shopProducts/SetMainImage/",
+                method: "POST",
+                dataType: 'json',
+                data: model,
+                success: function (data) {
+                    //$("#" + model.name + "-Img").attr("src", data.url);
+                    //$("#پارچه 1-Img").attr("src", data.url);
+                    //console.log($("#پارچه 1-Img"));
+                    //taqire button e entekhab shode
+                    $(btn).addClass("btn-success").addClass("active").removeClass("mainPicture").text("انتخاب شده");
+                    toast(data.status, data.message);
+                    closeLoader();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    alert(errorThrown);
+                    console.log(errorThrown);
+                }
+            });
+        });
+        //hazfe ax
+        $(".deleteImg").on('click', function () {
+            alert();
+            var button = $(this);
+            var url = button.attr("data-url");
+            var formData = new FormData();
+            var value = $.cookie('gallery');
+            var modelId = value;
+            formData.append("name", modelId);
+            formData.append("url", url);
+            loading();
+            $.ajax({
+                type: "POST",
+                url: "/shopProducts/DeleteImgFromGallery",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.status == '0') {
+                        toast(data.status, data.message);
+                    } else {
+                        showGallery(value);
+                        closeLoader();
+                    }
+                }
+            });
+        });
+        //namayeshe modal e gallery e tasavir
+        function showGallery(elem)
+        {
+            var model = {
+                code: elem
+            };
+            $.cookie('gallery', model.code, { expires: 7, path: '/' });
+            console.log(model);
+            loading();
+            $.ajax({
+                url: "/shopProducts/GetProductImage/",
+                method: "GET",
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                data: model,
+                success: function (data) {
+                    console.log(data);
+                    $('#gallerySpace').empty();
+                    for (var i = 0; i < data.length; i++) {
+                        $("#gallerySpace").append('<div id="' + data[i].split("/")[3].split(".")[0] + '" class="col-xl-4 col-md-6 col-sm-12"><div class="card"><div class="card-content"> ' +
+                            '<img class="card-img-top img-fluid" src="' + data[i] + '" alt="Card image cap"> ' +
+                            '<div class="card-body"><div class="card-btns d-flex justify-content-between mt-2">' +
+                            '<a data-id="' + data[i] + '" href="#" class="btn btn-danger text-white waves-effect waves-light deleteImage">حدف</a>' +
+                            '</div></div></div></div></div>');
+                    }
+                    $('#Gallery').modal();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    alert(errorThrown);
+                    console.log(errorThrown);
+                }
+            });
+            //$.unblockUI();
+            closeLoader();
+        }
+        $("#table").on('click', ".showGallery", function () {
+            showGallery($(this).attr("data-code"));
+        });
+    </script>
+}
+@*@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })*@
+
+<button style="display:none" id="loaderUi" class="btn btn-primary" type="button" disabled>
+    <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+    درحال بارگذاری...
+</button>
+<div class="content-body">
+    <section id="basic-datatable" class="data-list-view-header">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        @*<h4 class="card-title">@ViewBag.Title</h4>*@
+                        <button id="showWareHouseProducts" class="btn btn-success" data-toggle="modal" data-target="#WareHouseProducts"><i class="feather icon-plus"></i>اضافه کردن از انبار </button>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body card-dashboard">
+                            <div class="table-responsive">
+                                <table id="table" class="table zero-configuration" style="width:130%!important">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>نام</th>
+                                            <th>کد</th>
+                                          @*  <th>واحد</th>*@
+                                            <th> قیمت واحد با تخفیف</th>
+                                            <th>درصد تخفیف</th>
+                                            <th>دسته بندی</th>
+                                            <th>فروش ویژه</th>
+                                            <th>وضعیت</th>
+                                            <th>تاریخ تغییر</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr id="@item.Product.Code">
+                                                <td><span style="display:none"> @item.Id</span></td>
+                                                <td style="width:100px!important;height:auto!important;position:relative">
+                                                    <a class="image-popup" href="@item.Product.ImageUrl">
+                                                        <img id="@item.Product.Name-Img" style="max-height:100%;max-width:100%" src="@item.Product.ImageUrl" />
+                                                    </a>
+                                                    <button data-code="@item.Product.Code" class="btn btn-info showGallery" style="position:absolute!important;bottom:0px;font-size:12px;right:0px">گالری</button>
+                                                </td>
+                                                <td>@item.Product.Name</td>
+                                                <td>@item.Product.Code</td>
+                                                @*<td>@item.Product.Unit.Name</td>*@
+                                                <td class="text-center">@string.Format("{0:n0}", item.Product.Price).ToPersianNumbers()</td>
+                                                <td>@item.Product.Discount%</td>
+                                                <td>@item.Categories</td>
+                                                <td class="text-center">
+                                                    <div class="form-check">
+                                                        @if (item.Product.SpecialSale == true)
+                                                        {
+                                                            <div style="cursor:pointer" data-item-id="@item.Product.Code" class="custom-control custom-switch custom-checkbox-secondary addToSpecial">
+                                                                <input style="cursor:pointer" type="checkbox" class="custom-control-input" id="@item.Product.Code" checked>
+                                                                <label style="cursor:pointer" class="custom-control-label" for="customSwitch2"></label>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div style="cursor:pointer" data-item-id="@item.Product.Code" class="custom-control custom-switch custom-checkbox-secondary addToSpecial">
+                                                                <input style="cursor:pointer" type="checkbox" class="custom-control-input" id="@item.Product.Code">
+                                                                <label style="cursor:pointer" class="custom-control-label" for="customSwitch2"></label>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </td>
+                                                <td>@item.Product.ProductStatus.ToString()</td>
+                                                <td>@item.Product.CreatedAt.ToPersianDateTextify()</td>
+                                                <td>
+                                                    <button data-title="@item.Product.Name" data-code="@item.Product.Code" data-price="@item.Product.Price" data-description="@item.Product.Description" data-tags="@item.Product.Tags" data-discount="@item.Product.Discount" data-status="@item.Product.ProductStatus" class="btn btn-icon btn-sm btn-primary action-edit1"><i class="feather icon-edit"></i></button>|<button data-code="@item.Product.Code" type="button" onclick="DeleteItem(this)" class="btn btn-icon btn-sm btn-danger"><i class="feather icon-trash-2"></i></button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+@* Modals *@
+@* WareHouseProducts *@
+<div class="modal fade" id="WareHouseProducts" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-xl" role="document">
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title w-100" id="myModalLabel">محصولات در انبار</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="WareHouseProductsTable" class="table zero-configuration" style="width:100%!important">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>نام</th>
+                            <th>کد</th>
+                            <th>دسته بندی</th>
+                            <th>وضعیت</th>
+                            <th>تاریخ تغییر</th>
+                            <th class="text-center">اضافه به فروشگاه</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">بستن</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* WareHouseProducts *@
+@* AddToShopForm *@
+<div class="modal fade right" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-full-height modal-left modal-lg" role="document">
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title w-100" id="formCode"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form" enctype="multipart/form-data" method="post" asp-action="#">
+                    <div class="div mt-2 px-2 d-flex new-data-title justify-content-between">
+                        <div>
+                            <h4 class="text-uppercase" id="formTitle"></h4>
+                        </div>
+                    </div>
+                    <div class="data-items pb-3">
+                        <div class="data-fields px-2 mt-3">
+                            <div class="row">
+                                <div class="col-sm-12 data-field-col">
+                                    <label for="data-name">توضیحات</label>
+                                    <textarea rows="3" class="form-control" name="description" id="description"></textarea>
+                                    <br />
+                                </div>
+                                <div class="col-sm-3 data-field-col">
+                                    <label for="data-name">قیمت</label>
+                                    <input class="form-control" name="price" id="price" />
+                                    <br />
+                                </div>
+                                <div class="col-sm-3 data-field-col">
+                                    <label for="data-name">قیمت با تخفیف</label>
+                                    <input class="form-control" name="discountPrice" id="discountPrice" />
+                                    <br />
+                                </div>
+                                <div class="col-sm-6 data-field-col">
+                                    <label for="data-name">تگ ها</label>
+                                    <input type="text" id="tags" class="form-control tagsinput-example" placeholder="Tags">
+                                    <br />
+                                    <br />
+                                </div>
+
+                                @*<div class="col-sm-12 data-field-col" style="border:1px dotted red">
+                                    <nav class="navbar navbar-expand-lg navbar-dark blue lighten-2 mb-4">
+                                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                                            <input id="searchInput" class="form-control" type="text" placeholder="Search" aria-label="Search">
+                                            <a id="searchButton" class="btn btn-mdb-color btn-rounded btn-sm my-0 ml-sm-2">Search</a>
+                                        </div>
+                                    </nav>
+
+                                    <div class="row" id="setProductList">
+                                        <div class="card col-lg-2">
+                                            <img style="max-width:100%!important;max-height:100%!important" src="/uploads/637271179956918306image.jpg" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Card title</h5>
+                                                <a href="#" class="btn btn-primary w-100" style="font-size:9px">انتخاب</a>
+                                            </div>
+                                        </div>
+                                        <div class="card col-lg-2">
+                                            <img style="max-width:100%!important;max-height:100%!important" src="/uploads/637271179956918306image.jpg" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Card title</h5>
+                                                <a href="#" class="btn btn-primary w-100" style="font-size:9px">انتخاب</a>
+                                            </div>
+                                        </div>
+                                        <div class="card col-lg-2">
+                                            <img style="max-width:100%!important;max-height:100%!important" src="/uploads/637271179956918306image.jpg" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Card title</h5>
+                                                <a href="#" class="btn btn-primary w-100" style="font-size:9px">انتخاب</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <nav aria-label="Page navigation example">
+                                            <ul id="paginationUl" class="pagination pg-blue justify-content-center"></ul>
+                                        </nav>
+                                    </div>
+                                </div>*@
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="col-sm-8 data-field-col">
+                                            <div style="margin-top:35px!important" class="custom-control custom-checkbox custom-control-inline">
+                                                <input type="checkbox" id="customCheckBoxInline1" name="customCheckboxInline1" class="custom-control-input">
+                                                <label style="font-size:16px!important" class="custom-control-label" for="customCheckBoxInline1">در فروشگاه توسط کاربران قابل مشاهده باشد؟</label>
+                                            </div>
+                                            <input id="itemId" type="hidden" />
+                                            <input id="type" type="hidden" value="0" />
+                                            <input id="setProductsValue" type="hidden" value="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="col-sm-12 data-field-col">
+                                        <label for="data-name">محصولات ست</label>
+                                        <button id="openSetModal" type="button" class="btn btn-outline-dark" style="display:block">انتخاب</button>
+                                        <br />
+                                    </div>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-data-footer d-flex px-3 mt-2 col-lg-4">
+                        <div class="row">
+                            <div class="add-data-btn">
+                                <button class="btn btn-primary" type="submit">ثبت </button>
+                            </div>
+                            <div class="cancel-data-btn">
+                                <button class="btn btn-outline-danger" data-dismiss="modal" aria-label="Close">بازگشت</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Full Height Modal Right -->
+@* AddToShopForm *@
+@* Modals *@
+
+
+<!-- .modal-xl -->
+<div class="modal fade" id="Gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+
+    <!-- Change class .modal-sm to change the size of the modal -->
+    <div class="modal-dialog modal-lg" role="document">
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title w-100" id="myModalLabel">گالری</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="row text-right">
+                    <div class="col-12-lg" id="gallerySpace">
+                        @*<div class="row">
+                                <p style="background-color:darkgray;color:black;margin-right:10px" class="w-100">aa</p>
+                                <div class="col-lg-3">
+                                    <img src="/uploads/637271179167230940image.jpg" class="card-img-top" alt="...">
+                                    <button style="position:relative!important;bottom: 41px;" class="btn btn-primary col-lg-6 text-center">انتخاب</button>
+                                </div>
+                                <div class="col-lg-3 text-center text-lg-center mt-1">
+                                    <button id="newImg" class="btn btn-success"> <i class="fa fa-plus"></i> عکس جدید</button>
+                                </div>
+                            </div>*@
+                    </div>
+                    @*<div class="col-lg-3 text-center text-lg-center mt-1 position-relative">
+                            <img style="max-height:100%;max-width:100%" src="/uploads/637271179167230940image.jpg" />
+                            <span class="badge badge-danger position-absolute mtk-delete">X</span>
+                        </div>
+                        <div class="col-lg-3 text-center text-lg-center mt-1">
+                            <img style="max-height:100%;max-width:100%" src="/uploads/637271179167230940image.jpg" />
+                            <span class="badge badge-danger position-absolute mtk-delete">X</span>
+                        </div>*@
+                </div>
+                <input type="file" id="file-input" style="visibility:hidden" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-danger">بستن</button>
+                <button id="newImg" class="btn btn-success">عکس جدید</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="progress">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+</div>
+<div class="alert" role="alert"></div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Crop the image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <img id="image" src="https://avatars0.githubusercontent.com/u/3456749">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="crop">Crop</button>
+                <button type="button" class="btn btn-danger" id="out">out</button>
+                <button type="button" class="btn btn-success" id="in">in</button>
+            </div>
+        </div>
+    </div>
+</div>

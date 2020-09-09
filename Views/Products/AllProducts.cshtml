@@ -1,0 +1,1390 @@
+﻿@model ICollection<KaraYadak.ViewModels.ProductForIndexVM>
+
+@{
+    ViewBag.Title = " ";
+    Layout = "_SiteLayout";
+    var next = ViewBag.CurrectPage + 1;
+    var prev = ViewBag.CurrectPage - 1;
+}
+@section vendorstyles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.min.css"
+          integrity="sha256-QaRlBIHoN1LIkxeziW34nknOVrCasnLJY6esf3ldv+k=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha256-aAr2Zpq8MZ+YA/D6JtRD3xtrwpEz2IqOS+pWD/7XKIw=" crossorigin="anonymous" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/css/swiper.min.css"
+          integrity="sha256-kGupfJ4zZb4/m0GPPVY0ng7FwSjZm1E0wMWG1aRYbwk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+          integrity="sha256-UhQQ4fxEeABh4JrcmAJ1+16id/1dnlOEVCFOxDef9Lw=" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="/css/style.css">
+}
+@section styles{
+    <style>
+        .bg-product {
+            background-size: 48% 60% !important;
+        }
+    </style>
+
+
+}
+@section vendors{
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha256-OFRAJNoaD8L3Br5lglV7VyLRf0itmoBzWUoM+Sji4/8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/js/fontawesome.min.js"
+            integrity="sha256-fjQmECvnpgwxO4TyEkO7CJeu97Lu+JKoGDCNEVDs7X0=" crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/js/mdb.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+            integrity="sha256-pTxD+DSzIwmwhOqTFN+DB+nHjO4iAsbgfyFq5K5bcE0=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/js/swiper.min.js"
+            integrity="sha256-NiMdnMv0WBAps3M8mcB7WHzlanETt0rnwMCgg67DgCk=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countdown/2.6.0/countdown.min.js"
+            integrity="sha512-FkM4ZGExuYz4rILLbNzw8f3HxTN9EKdXrQYcYfdluxJBjRLthYPxxZixV/787qjN3JLs2607yN5XknR/cQMU8w=="
+            crossorigin="anonymous"></script>
+    <script src="~/js/app.js"></script>
+
+
+}
+@section scripts{
+    <script>
+
+        // $(document).ready(() => {
+        //   var swiper = new Swiper('.swiper-container', {
+        //     cssMode: true,
+        //     navigation: {
+        //       nextEl: '.swiper-button-next',
+        //       prevEl: '.swiper-button-prev',
+        //     },
+        //     pagination: {
+        //       el: '.swiper-pagination'
+        //     },
+        //     mousewheel: true,
+        //     keyboard: true,
+        //   });
+
+        //   var swiper2 = new Swiper('.slider2', {
+        //     slidesPerView: 4,
+        //     spaceBetween: 30,
+        //     navigation: {
+        //       nextEl: '.swiper-button-next',
+        //       prevEl: '.swiper-button-prev',
+        //     },
+        //   });
+        // })
+        function likeOrDislike(item) {
+            if ($(item).children('i').hasClass('fa-heart-o')) {
+                $(item).children('i').animate().addClass('fa-heart');
+                $(item).children('i').attr('transform', 'scale(1.3)');
+                $(item).children('i').animate().removeClass('fa-heart-o');
+            } else {
+                $(item).children('i').animate().addClass('fa-heart-o');
+                $(item).children('i').attr('transform', 'scale(1.3)');
+                $(item).children('i').animate().removeClass('fa-heart');
+            }
+        }
+
+        $(".cta").mouseenter(function () {
+            $(this).addClass("active").delay(300).queue(function (next) {
+                $(this).removeClass("active");
+                next();
+            });
+
+        });
+                                                            // ------swiper-----
+
+
+    </script>
+
+}
+
+<!--header-->
+@Html.Partial("Header")
+
+<!-- ---list product---- -->
+<div class="container-fluid px-5">
+    @*<div class="row w-100 mx-auto text-right py-3">
+            <div class="col-6">
+                <h3 class="text-white"><b class="font-kalame">دسته بندی خودروها</b></h3>
+            </div>
+            <div class="col-6 ">
+                <h3 class="text-left"><img src="./img/brand2.png" class="img-fluid width-10 pl-2">هیوندا</h3>
+            </div>
+
+        </div>*@
+    <!-- --- -->
+    <div class="row w-100 mx-auto text-center mt-4">
+        <div class="col-3 bg-white mt-5 filter-PageList"></div>
+        <div class="col-9">
+            <div class="col-md-3">
+                <div class="card-Pagelist my-5 py-5 w-100  ">
+                    <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                    <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                        <h1 class="font-kalame text-center mx-auto">
+                            <b class=" font-kalame">لاستیک بارز</b>
+                        </h1>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                        <del class="w-100 original-pricePageList">
+                            <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">550.500</b></h4>
+                        </del>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-1 px-5 ">
+
+                        <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        <h6 class="text-center w-100"> تومان</h6>
+                    </div>
+                    <div class="row w-100 mx-auto text-center">
+                        <button type="button"
+                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                            <b>
+                                اطلاعات
+                                بیشتـر
+                            </b>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-Pagelist my-5 py-5 w-100  ">
+                    <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                    <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                        <h1 class="font-kalame text-center mx-auto">
+                            <b class=" font-kalame">لاستیک بارز</b>
+                        </h1>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                        <del class="w-100 original-pricePageList">
+                            <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">550.500</b></h4>
+                        </del>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-1 px-5 ">
+
+                        <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        <h6 class="text-center w-100"> تومان</h6>
+                    </div>
+                    <div class="row w-100 mx-auto text-center">
+                        <button type="button"
+                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                            <b>
+                                اطلاعات
+                                بیشتـر
+                            </b>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-Pagelist my-5 py-5 w-100  ">
+                    <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                    <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                        <h1 class="font-kalame text-center mx-auto">
+                            <b class=" font-kalame">لاستیک بارز</b>
+                        </h1>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                        <del class="w-100 original-pricePageList">
+                            <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">550.500</b></h4>
+                        </del>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-1 px-5 ">
+
+                        <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        <h6 class="text-center w-100"> تومان</h6>
+                    </div>
+                    <div class="row w-100 mx-auto text-center">
+                        <button type="button"
+                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                            <b>
+                                اطلاعات
+                                بیشتـر
+                            </b>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-Pagelist my-5 py-5 w-100  ">
+                    <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                    <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                        <h1 class="font-kalame text-center mx-auto">
+                            <b class=" font-kalame">لاستیک بارز</b>
+                        </h1>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                        <del class="w-100 original-pricePageList">
+                            <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">550.500</b></h4>
+                        </del>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-1 px-5 ">
+
+                        <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        <h6 class="text-center w-100"> تومان</h6>
+                    </div>
+                    <div class="row w-100 mx-auto text-center">
+                        <button type="button"
+                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                            <b>
+                                اطلاعات
+                                بیشتـر
+                            </b>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-Pagelist my-5 py-5 w-100  ">
+                    <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                    <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                        <h1 class="font-kalame text-center mx-auto">
+                            <b class=" font-kalame">لاستیک بارز</b>
+                        </h1>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                        <del class="w-100 original-pricePageList">
+                            <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">550.500</b></h4>
+                        </del>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-1 px-5 ">
+
+                        <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        <h6 class="text-center w-100"> تومان</h6>
+                    </div>
+                    <div class="row w-100 mx-auto text-center">
+                        <button type="button"
+                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                            <b>
+                                اطلاعات
+                                بیشتـر
+                            </b>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-Pagelist my-5 py-5 w-100  ">
+                    <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                    <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                        <h1 class="font-kalame text-center mx-auto">
+                            <b class=" font-kalame">لاستیک بارز</b>
+                        </h1>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                        <del class="w-100 original-pricePageList">
+                            <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">550.500</b></h4>
+                        </del>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-1 px-5 ">
+
+                        <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        <h6 class="text-center w-100"> تومان</h6>
+                    </div>
+                    <div class="row w-100 mx-auto text-center">
+                        <button type="button"
+                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                            <b>
+                                اطلاعات
+                                بیشتـر
+                            </b>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-Pagelist my-5 py-5 w-100  ">
+                    <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                    <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                        <h1 class="font-kalame text-center mx-auto">
+                            <b class=" font-kalame">لاستیک بارز</b>
+                        </h1>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                        <del class="w-100 original-pricePageList">
+                            <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">550.500</b></h4>
+                        </del>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-1 px-5 ">
+
+                        <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        <h6 class="text-center w-100"> تومان</h6>
+                    </div>
+                    <div class="row w-100 mx-auto text-center">
+                        <button type="button"
+                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                            <b>
+                                اطلاعات
+                                بیشتـر
+                            </b>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-Pagelist my-5 py-5 w-100  ">
+                    <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                    <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                        <h1 class="font-kalame text-center mx-auto">
+                            <b class=" font-kalame">لاستیک بارز</b>
+                        </h1>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                        <del class="w-100 original-pricePageList">
+                            <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">550.500</b></h4>
+                        </del>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-1 px-5 ">
+
+                        <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        <h6 class="text-center w-100"> تومان</h6>
+                    </div>
+                    <div class="row w-100 mx-auto text-center">
+                        <button type="button"
+                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                            <b>
+                                اطلاعات
+                                بیشتـر
+                            </b>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-Pagelist my-5 py-5 w-100  ">
+                    <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                    <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                        <h1 class="font-kalame text-center mx-auto">
+                            <b class=" font-kalame">لاستیک بارز</b>
+                        </h1>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                        <del class="w-100 original-pricePageList">
+                            <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">550.500</b></h4>
+                        </del>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-1 px-5 ">
+
+                        <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        <h6 class="text-center w-100"> تومان</h6>
+                    </div>
+                    <div class="row w-100 mx-auto text-center">
+                        <button type="button"
+                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                            <b>
+                                اطلاعات
+                                بیشتـر
+                            </b>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-Pagelist my-5 py-5 w-100  ">
+                    <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                    <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                        <h1 class="font-kalame text-center mx-auto">
+                            <b class=" font-kalame">لاستیک بارز</b>
+                        </h1>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                        <del class="w-100 original-pricePageList">
+                            <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">550.500</b></h4>
+                        </del>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-1 px-5 ">
+
+                        <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        <h6 class="text-center w-100"> تومان</h6>
+                    </div>
+                    <div class="row w-100 mx-auto text-center">
+                        <button type="button"
+                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                            <b>
+                                اطلاعات
+                                بیشتـر
+                            </b>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-Pagelist my-5 py-5 w-100  ">
+                    <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                    <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                        <h1 class="font-kalame text-center mx-auto">
+                            <b class=" font-kalame">لاستیک بارز</b>
+                        </h1>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                        <del class="w-100 original-pricePageList">
+                            <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">550.500</b></h4>
+                        </del>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-1 px-5 ">
+
+                        <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        <h6 class="text-center w-100"> تومان</h6>
+                    </div>
+                    <div class="row w-100 mx-auto text-center">
+                        <button type="button"
+                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                            <b>
+                                اطلاعات
+                                بیشتـر
+                            </b>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-Pagelist my-5 py-5 w-100  ">
+                    <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                    <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                        <h1 class="font-kalame text-center mx-auto">
+                            <b class=" font-kalame">لاستیک بارز</b>
+                        </h1>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                        <del class="w-100 original-pricePageList">
+                            <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">550.500</b></h4>
+                        </del>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-1 px-5 ">
+
+                        <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        <h6 class="text-center w-100"> تومان</h6>
+                    </div>
+                    <div class="row w-100 mx-auto text-center">
+                        <button type="button"
+                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                            <b>
+                                اطلاعات
+                                بیشتـر
+                            </b>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ---pagination--- -->
+    <div class="row w-100 mx-auto text-center py-5">
+        <nav aria-label="..." style="margin-right:55%">
+            <ul class="pagination">
+
+                @if (ViewBag.Page == ViewBag.CurrectPage)
+                {
+                    <li class="page-item disabled">
+                        <a class="page-link" asp-action="AllProducts" asp-route-page="@next">بعدی</a>
+                    </li>
+
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="AllProducts" asp-route-page="@next">بعدی</a>
+                    </li>
+
+                }
+
+                @if (ViewBag.Page > 1)
+                {
+                    @for (int i = 1; i <= ViewBag.Page; i++)
+                    {
+
+                        <li class="page-item"><a class="page-link" asp-action="AllProducts" asp-route-page="@i">@i</a></li>
+                    }
+                }
+                @if (ViewBag.CurrectPage == 1)
+                {
+                    <li class="page-item disabled ">
+                        <a class="page-link" asp-action="AllProducts" asp-route-page="@prev">قبلی</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item ">
+                        <a class="page-link" asp-action="AllProducts" asp-route-page="@prev">قبلی</a>
+                    </li>
+                }
+
+            </ul>
+        </nav>
+    </div>
+    <!-- ---end pagination--- -->
+</div>
+
+<!-- ---End list product---- -->
+<!-- ---service--- -->
+<div class="container-fluid p-0 my-5">
+    <div class="row w-100 mx-auto hj-Service">
+        <div class="col-4 py-3 mx-auto text-center">
+            <img src="./img/money (2).svg"
+                 class="img-fluid mx-auto pl-3">ضمانت بازگشت وجه
+        </div>
+        <div class="col-4 py-3 mx-auto text-center">
+            گارانتی<img src="./img/ribbon.svg"
+                        class="img-fluid mx-auto px-2">محصولات
+        </div>
+        <div class="col-4 py-3 mx-auto text-center">
+            ضمانت بازگشت کالا<img src="./img/Group 18.svg"
+                                  class="img-fluid mx-auto pr-3">
+        </div>
+    </div>
+
+</div>
+
+<!-- --end service--- -->
+<!-- ---OfferBox-- -->
+<div class="row  hj-gallery  m-0 p-0 mt-5">
+    <div class="col-lg-3  col-12 px-4">
+        <div class="row w-100 mx-auto  py-2 my-4">
+            <h2 class="text-right w-100 "><b class="hj-producttext">پیشنهاد های</b></h2>
+        </div>
+
+        <div class="row w-100 mx-auto  py-2 my-4">
+            <h1 class="text-center w-100 "><b class="hj-prouduct-Tslider"> ویژه</b></h1>
+        </div>
+        <div class="row w-100 mx-auto  py-2 my-4">
+            <h2 class="text-left w-100 ">
+                <b class="hj-producttext"> امروز</b>
+                <!--2-->
+            </h2>
+        </div>
+
+
+        <div class="row w-100 mx-auto text-center my-3 mb-5">
+            <span id="timer-offer1" class="timer-offer w-100 mx-auto" style="font-weight: bold;">00:00:56:46</span>
+        </div>
+
+    </div>
+    <div class="col-lg-9  col-12">
+        <div class="swiper-container swiper-container2 swiper-container-initialized swiper-container-horizontal swiper-container-free-mode swiper-container-rtl"
+             style="height:auto !important">
+            <div class="swiper-wrapper hj-img-swiper"
+                 style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+                <div class="swiper-slide swiper-slide-active" style="width: 226.25px; margin-left: 30px;">
+                    <div class="hj-card my-5 py-5 w-100  ">
+                        <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                        <div class="row w-100 mx-auto text-center pt-5 mt-2 px-5 ">
+                            <h1 class="font-kalame text-center mx-auto">
+                                <b class=" font-kalame">لاستیک بارز</b>
+                            </h1>
+                        </div>
+                        <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                            <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        </div>
+                        <div class="row w-100 mx-auto text-center">
+                            <button type="button"
+                                    class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                                <b>
+                                    اطلاعات
+                                    بیشتـر
+                                </b>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="swiper-slide swiper-slide-next" style="width: 226.25px; margin-left: 30px;">
+                    <div class="hj-card my-5 py-5 w-100  ">
+                        <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                        <div class="row w-100 mx-auto text-center pt-5 mt-2 px-5 ">
+                            <h1 class="font-kalame text-center mx-auto">
+                                <b class=" font-kalame">لاستیک بارز</b>
+                            </h1>
+                        </div>
+                        <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                            <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        </div>
+                        <div class="row w-100 mx-auto text-center">
+                            <button type="button"
+                                    class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                                <b>
+                                    اطلاعات
+                                    بیشتـر
+                                </b>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="swiper-slide" style="width: 226.25px; margin-left: 30px;">
+                    <div class="hj-card my-5 py-5 w-100  ">
+                        <img src="./img/a3.png" class="img-fluid hj-productImg w-75">
+                        <div class="row w-100 mx-auto text-center pt-5 mt-2 px-5 ">
+                            <h1 class="font-kalame text-center mx-auto">
+                                <b class=" font-kalame">لاستیک بارز</b>
+                            </h1>
+                        </div>
+                        <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                            <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        </div>
+                        <div class="row w-100 mx-auto text-center">
+                            <button type="button"
+                                    class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                                <b>
+                                    اطلاعات
+                                    بیشتـر
+                                </b>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="swiper-slide" style="width: 226.25px; margin-left: 30px;">
+                    <div class="hj-card my-5 py-5 w-100  ">
+                        <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                        <div class="row w-100 mx-auto text-center pt-5 mt-2 px-5 ">
+                            <h1 class="font-kalame text-center mx-auto">
+                                <b class=" font-kalame">لاستیک بارز</b>
+                            </h1>
+                        </div>
+                        <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                            <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        </div>
+                        <div class="row w-100 mx-auto text-center">
+                            <button type="button"
+                                    class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                                <b>
+                                    اطلاعات
+                                    بیشتـر
+                                </b>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="swiper-slide" style="width: 226.25px; margin-left: 30px;">
+                    <div class="hj-card my-5 py-5 w-100  ">
+                        <img src="./img/NoPath - Copy.png" class="img-fluid hj-productImg w-75">
+                        <div class="row w-100 mx-auto text-center pt-5 mt-2 px-5 ">
+                            <h1 class="font-kalame text-center mx-auto">
+                                <b class=" font-kalame">لاستیک بارز</b>
+                            </h1>
+                        </div>
+                        <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                            <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        </div>
+                        <div class="row w-100 mx-auto text-center">
+                            <button type="button"
+                                    class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                                <b>
+                                    اطلاعات
+                                    بیشتـر
+                                </b>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="swiper-slide" style="width: 226.25px; margin-left: 30px;">
+                    <div class="hj-card my-5 py-5 w-100  ">
+                        <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                        <div class="row w-100 mx-auto text-center pt-5 mt-2 px-5 ">
+                            <h1 class="font-kalame text-center mx-auto">
+                                <b class=" font-kalame">لاستیک بارز</b>
+                            </h1>
+                        </div>
+                        <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                            <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        </div>
+                        <div class="row w-100 mx-auto text-center">
+                            <button type="button"
+                                    class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                                <b>
+                                    اطلاعات
+                                    بیشتـر
+                                </b>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="swiper-slide" style="width: 226.25px; margin-left: 30px;">
+                    <div class="hj-card my-5 py-5 w-100  ">
+                        <img src="./img/a3.png" class="img-fluid hj-productImg w-75">
+                        <div class="row w-100 mx-auto text-center pt-5 mt-2 px-5 ">
+                            <h1 class="font-kalame text-center mx-auto">
+                                <b class=" font-kalame">لاستیک بارز</b>
+                            </h1>
+                        </div>
+                        <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                            <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                        </div>
+                        <div class="row w-100 mx-auto text-center">
+                            <button type="button"
+                                    class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                                <b>
+                                    اطلاعات
+                                    بیشتـر
+                                </b>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+<!-- ------End OfferBox-------------------------------------------------------- -->
+<!-- --titr-- -->
+<div class="row w-100 mx-auto text-center py-4 pt-5">
+    <div class="col-lg-5 col-3 text-left pt-4">
+        <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+    </div>
+    <div class="col-lg-2 col-6">
+        <h2><b class="font-kalameBlack"> محصولات دیگر</b></h2>
+    </div>
+    <div class="col-lg-5 col-3 text-right pt-4">
+        <img src="./img/Line 35.png"
+             class="img-fluid w-25 mx-auto border-titr">
+    </div>
+</div>
+<!-- --end titr-- -->
+<div class="container-fluid width-90">
+    <div class="row w-100 mx-auto text-center">
+
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- -- -->
+    <div class="row w-100 mx-auto text-center">
+
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <!-- --- -->
+    <div class="row w-100 mx-auto text-center">
+
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+<!-- ----end product---- -->
+<!-- ----bannner with offer---- -->
+
+<div class="container-fluid py-5">
+    <div class="row  mx-auto hj-banner position-relative">
+        <img src="./img/banner.png" class="img-fluid  position-relative">
+
+        <span id="baneertimer" class=" countdown" style="font-weight: bold;">00:00:59:26</span>
+
+    </div>
+</div>
+
+
+<!-- ---end banner with offer----- -->
+<div class="container-fluid width-90">
+    <div class="row w-100 mx-auto text-center">
+
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- -- -->
+    <div class="row w-100 mx-auto text-center">
+
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <!-- --- -->
+    <div class="row w-100 mx-auto text-center">
+
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class=" col-md-3 col-sm-4 col-12">
+            <div class="hj-card my-5 py-5 w-100  ">
+                <img src="./img/a2.png" class="img-fluid hj-productImg w-75">
+                <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    <h1 class="font-kalame text-center mx-auto">
+                        <b class=" font-kalame">لاستیک بارز</b>
+                    </h1>
+                </div>
+                <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <button type="button"
+                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                        <b>
+                            اطلاعات
+                            بیشتـر
+                        </b>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>

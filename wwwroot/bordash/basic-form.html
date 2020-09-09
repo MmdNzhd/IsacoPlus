@@ -1,0 +1,1734 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>بورداش - قالب داشبرد ادمین</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/media/image/favicon.png"/>
+
+    <!-- Plugin styles -->
+    <link rel="stylesheet" href="vendors/bundle.css" type="text/css">
+
+    <!-- Prism -->
+    <link rel="stylesheet" href="vendors/prism/prism.css" type="text/css">
+
+    <!-- App styles -->
+    <link rel="stylesheet" href="assets/css/app.min.css" type="text/css">
+</head>
+<body>
+
+<!-- begin::preloader-->
+<div class="preloader">
+    <div class="preloader-icon"></div>
+</div>
+<!-- end::preloader -->
+
+<!-- begin::header -->
+<div class="header">
+
+    <div>
+        <ul class="navbar-nav">
+
+            <!-- begin::navigation-toggler -->
+            <li class="nav-item navigation-toggler">
+                <a href="#" class="nav-link" title="Hide navigation">
+                    <i data-feather="arrow-left"></i>
+                </a>
+            </li>
+            <li class="nav-item navigation-toggler mobile-toggler">
+                <a href="#" class="nav-link" title="Show navigation">
+                    <i data-feather="menu"></i>
+                </a>
+            </li>
+            <!-- end::navigation-toggler -->
+
+            <li class="nav-item">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">ایجاد</a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a href="#" class="dropdown-item">کاربر</a>
+                    <a href="#" class="dropdown-item">دسته‌بندی</a>
+                    <a href="#" class="dropdown-item">محصول</a>
+                    <a href="#" class="dropdown-item">گزارش</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">اپ ها</a>
+                <div class="dropdown-menu dropdown-menu-big dropdown-menu-right">
+                    <div class="p-3">
+                        <div class="row row-xs">
+                            <div class="col-6">
+                                <a href="chat.html">
+                                    <div class="p-3 border-radius-1 border text-center mb-3">
+                                        <i class="width-23 height-23" data-feather="message-circle"></i>
+                                        <div class="mt-2">چت</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="inbox.html">
+                                    <div class="p-3 border-radius-1 border text-center mb-3">
+                                        <i class="width-23 height-23" data-feather="mail"></i>
+                                        <div class="mt-2">ایمیل</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="app-todo.html">
+                                    <div class="p-3 border-radius-1 border text-center">
+                                        <i class="width-23 height-23" data-feather="check-circle"></i>
+                                        <div class="mt-2">تو دو</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="file-manager.html">
+                                    <div class="p-3 border-radius-1 border text-center">
+                                        <i class="width-23 height-23" data-feather="file"></i>
+                                        <div class="mt-2">فایل منیجر</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <ul class="navbar-nav">
+
+            <li class="nav-item">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                    <img width="18" class="mr-2" src="assets/media/image/flags/261-china.png" alt="flag"> چین
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a href="#" class="dropdown-item">
+                        <img width="18" src="assets/media/image/flags/003-tanzania.png" class="mr-2" alt="flag">
+                        تانزانیا
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <img width="18" src="assets/media/image/flags/262-united-kingdom.png" class="mr-2"
+                             alt="flag"> انگلستان
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <img width="18" src="assets/media/image/flags/013-tunisia.png" class="mr-2" alt="flag">
+                        تونس
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <img width="18" src="assets/media/image/flags/044-spain.png" class="mr-2" alt="flag"> اسپانیا
+                    </a>
+                </div>
+            </li>
+
+            <!-- begin::header search -->
+            <li class="nav-item">
+                <a href="#" class="nav-link" title="جست‌و‌جو" data-toggle="dropdown">
+                    <i data-feather="search"></i>
+                </a>
+                <div class="dropdown-menu p-2 dropdown-menu-right">
+                    <form>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="جستجو">
+                            <div class="input-group-prepend">
+                                <button class="btn" type="button">
+                                    <i data-feather="search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </li>
+            <!-- end::header search -->
+
+            <!-- begin::header minimize/maximize -->
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link" title="تمام صفحه" data-toggle="fullscreen">
+                    <i class="maximize" data-feather="maximize"></i>
+                    <i class="minimize" data-feather="minimize"></i>
+                </a>
+            </li>
+            <!-- end::header minimize/maximize -->
+
+            <!-- begin::header messages dropdown -->
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link nav-link-notify" title="گفت‌گوها" data-toggle="dropdown">
+                    <i data-feather="message-circle"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-left dropdown-menu-big">
+                    <div class="p-4 text-center d-flex justify-content-between"
+                         data-backround-image="assets/media/image/image1.jpg">
+                        <h6 class="mb-0">گفت‌گوها</h6>
+                        <small class="font-size-11 opacity-7">2 گفت‌گو خوانده نشده</small>
+                    </div>
+                    <div>
+                        <ul class="list-group list-group-flush">
+                            <li>
+                                <a href="#" class="list-group-item d-flex hide-show-toggler">
+                                    <div>
+                                        <figure class="avatar avatar-sm m-r-15">
+                                            <img src="assets/media/image/user/man_avatar1.jpg"
+                                                 class="rounded-circle" alt="user">
+                                        </figure>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 line-height-20 d-flex justify-content-between">
+                                           علی احمدی
+                                            <i title="Mark as read" data-toggle="tooltip"
+                                               class="hide-show-toggler-item fa fa-circle-o font-size-11"></i>
+                                        </p>
+                                        <div class="small text-muted">
+                                            <span class="mr-2">02:30 بعدازظهر</span>
+                                            <span>آخرین تغییر رو کامیت کردم</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                   class="list-group-item d-flex align-items-center hide-show-toggler">
+                                    <div>
+                                        <figure class="avatar avatar-sm m-r-15">
+                                            <img src="assets/media/image/user/women_avatar5.jpg"
+                                                 class="rounded-circle" alt="user">
+                                        </figure>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 line-height-20 d-flex justify-content-between">
+                                            صنم صفایی
+                                            <i title="Mark as read" data-toggle="tooltip"
+                                               class="hide-show-toggler-item fa fa-circle-o font-size-11"></i>
+                                        </p>
+                                        <div class="small text-muted">
+                                            <span class="mr-2">08:36 بعدازظهر</span>
+                                            <span>فایل نهایی ارسال شد؟</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="text-divider small pb-2 pl-3 pt-3">
+                                <span>گفت‌گوهای قدیمی</span>
+                            </li>
+                            <li>
+                                <a href="#"
+                                   class="list-group-item d-flex align-items-center hide-show-toggler">
+                                    <div>
+                                        <figure class="avatar avatar-sm m-r-15">
+                                            <img src="assets/media/image/user/man_avatar3.jpg"
+                                                 class="rounded-circle" alt="user">
+                                        </figure>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 line-height-20 d-flex justify-content-between">
+                                            احمد رضایی
+                                            <i title="Mark as unread" data-toggle="tooltip"
+                                               class="hide-show-toggler-item fa fa-check font-size-11"></i>
+                                        </p>
+                                        <div class="small text-muted">
+                                            <span class="mr-2">11:09 بعدازظهر</span>
+                                            <span>آخرین تغییر رو کامیت کردم</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="list-group-item d-flex hide-show-toggler">
+                                    <div>
+                                        <figure class="avatar avatar-sm m-r-15">
+                                            <img src="assets/media/image/user/man_avatar2.jpg"
+                                                 class="rounded-circle" alt="user">
+                                        </figure>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 line-height-20 d-flex justify-content-between">
+                                            الهه جم
+                                            <i title="Mark as unread" data-toggle="tooltip"
+                                               class="hide-show-toggler-item fa fa-check font-size-11"></i>
+                                        </p>
+                                        <div class="small text-muted">
+                                            <span class="mr-2">دیروز</span>
+                                            <span>فایل نهایی ارسال شد؟</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                   class="list-group-item d-flex align-items-center hide-show-toggler">
+                                    <div>
+                                        <figure class="avatar avatar-sm m-r-15">
+                                            <img src="assets/media/image/user/women_avatar1.jpg"
+                                                 class="rounded-circle" alt="user">
+                                        </figure>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 line-height-20 d-flex justify-content-between">
+                                            نیلوفر فروهر
+                                            <i title="Mark as unread" data-toggle="tooltip"
+                                               class="hide-show-toggler-item fa fa-check font-size-11"></i>
+                                        </p>
+                                        <div class="small text-muted">
+                                            <span class="mr-2">دیروز</span>
+                                            <span>فایل نهایی ارسال شد؟</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="p-2 text-right">
+                        <ul class="list-inline small">
+                            <li class="list-inline-item">
+                                <a href="#">علامتگذاری به عنوان خوانده شده</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <!-- end::header messages dropdown -->
+
+            <!-- begin::header notification dropdown -->
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link nav-link-notify" title="اطلاعیه‌ها" data-toggle="dropdown">
+                    <i data-feather="bell"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-left dropdown-menu-big">
+                    <div class="p-4 text-center d-flex justify-content-between"
+                         data-backround-image="assets/media/image/image1.jpg">
+                        <h6 class="mb-0">اطلاعیه‌ها</h6>
+                        <small class="font-size-11 opacity-7">1 اطلاعیه خوانده نشده</small>
+                    </div>
+                    <div>
+                        <ul class="list-group list-group-flush">
+                            <li>
+                                <a href="#" class="list-group-item d-flex hide-show-toggler">
+                                    <div>
+                                        <figure class="avatar avatar-sm m-r-15">
+                                                <span class="avatar-title bg-success-bright text-success rounded-circle">
+                                                    <i class="ti-user"></i>
+                                                </span>
+                                        </figure>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 line-height-20 d-flex justify-content-between">
+                                            ثبت نام خریدار جدید
+                                            <i title="Mark as read" data-toggle="tooltip"
+                                               class="hide-show-toggler-item fa fa-circle-o font-size-11"></i>
+                                        </p>
+                                        <span class="text-muted small">20 دقیقه قبل</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="text-divider small pb-2 pl-3 pt-3">
+                                <span>اطلاعیه‌های قبلی</span>
+                            </li>
+                            <li>
+                                <a href="#" class="list-group-item d-flex hide-show-toggler">
+                                    <div>
+                                        <figure class="avatar avatar-sm m-r-15">
+                                                <span class="avatar-title bg-warning-bright text-warning rounded-circle">
+                                                    <i class="ti-package"></i>
+                                                </span>
+                                        </figure>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 line-height-20 d-flex justify-content-between">
+                                           سفارش جدید دریافت شد
+                                            <i title="Mark as unread" data-toggle="tooltip"
+                                               class="hide-show-toggler-item fa fa-check font-size-11"></i>
+                                        </p>
+                                        <span class="text-muted small">45 ثانیه قبل</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                   class="list-group-item d-flex align-items-center hide-show-toggler">
+                                    <div>
+                                        <figure class="avatar avatar-sm m-r-15">
+                                                <span class="avatar-title bg-danger-bright text-danger rounded-circle">
+                                                    <i class="ti-server"></i>
+                                                </span>
+                                        </figure>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 line-height-20 d-flex justify-content-between">
+                                           به سقف مجاز سرور نزدیک شده اید
+                                            <i title="Mark as unread" data-toggle="tooltip"
+                                               class="hide-show-toggler-item fa fa-check font-size-11"></i>
+                                        </p>
+                                        <span class="text-muted small">55 ثانیه قبل</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                   class="list-group-item d-flex align-items-center hide-show-toggler">
+                                    <div>
+                                        <figure class="avatar avatar-sm m-r-15">
+                                                <span class="avatar-title bg-info-bright text-info rounded-circle">
+                                                    <i class="ti-layers"></i>
+                                                </span>
+                                        </figure>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 line-height-20 d-flex justify-content-between">
+                                            اپ های دارای بروزسانی
+                                            <i title="Mark as unread" data-toggle="tooltip"
+                                               class="hide-show-toggler-item fa fa-check font-size-11"></i>
+                                        </p>
+                                        <span class="text-muted small">دیروز</span>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="p-2 text-right">
+                        <ul class="list-inline small">
+                            <li class="list-inline-item">
+                                <a href="#">علامتگذاری به عنوان خوانده شده</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <!-- end::header notification dropdown -->
+
+            <!-- begin::user menu -->
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link" title="User menu" data-toggle="dropdown">
+                    <i data-feather="settings"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-left dropdown-menu-big">
+                    <div class="p-4 text-center d-flex justify-content-between"
+                         data-backround-image="assets/media/image/image1.jpg">
+                        <h6 class="mb-0">تنظیمات</h6>
+                    </div>
+                    <div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
+                                    <label class="custom-control-label" for="customSwitch1">مجوز ارسال اطلاعیه</label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch2">
+                                    <label class="custom-control-label" for="customSwitch2">پنهان کردن درخواست ها</label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch3" checked>
+                                    <label class="custom-control-label" for="customSwitch3">افزایش سرعت انجام دستورات</label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch4" checked>
+                                    <label class="custom-control-label" for="customSwitch4">پنهان کردن منو</label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch5">
+                                    <label class="custom-control-label" for="customSwitch5">به خاطرسپاری بازدید</label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch6">
+                                    <label class="custom-control-label" for="customSwitch6">فعالسازی تولید گزارش خودکار</label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <!-- end::user menu -->
+        </ul>
+
+        <!-- begin::mobile header toggler -->
+        <ul class="navbar-nav d-flex align-items-center">
+            <li class="nav-item header-toggler">
+                <a href="#" class="nav-link">
+                    <i data-feather="arrow-down"></i>
+                </a>
+            </li>
+        </ul>
+        <!-- end::mobile header toggler -->
+    </div>
+
+</div>
+<!-- end::header -->
+
+<!-- begin::main -->
+<div id="main">
+
+    <!-- begin::navigation -->
+    <div class="navigation">
+
+        <div class="navigation-menu-tab">
+            <div>
+                <div class="navigation-menu-tab-header" data-toggle="tooltip" title="رکسانا رادمهر" data-placement="right">
+                    <a href="#" class="nav-link" data-toggle="dropdown" aria-expanded="false">
+                        <figure class="avatar avatar-sm">
+                            <img src="assets/media/image/user/women_avatar1.jpg" class="rounded-circle" alt="avatar">
+                        </figure>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-left dropdown-menu-big">
+                        <div class="p-3 text-center" data-backround-image="assets/media/image/image1.jpg">
+                            <figure class="avatar mb-3">
+                                <img src="assets/media/image/user/women_avatar1.jpg" class="rounded-circle" alt="image">
+                            </figure>
+                            <h6 class="d-flex align-items-center justify-content-center">
+                                رکسانا رادمهر
+                                <a href="#" class="btn btn-primary btn-sm ml-2" data-toggle="tooltip" title="ویرایش پروفایل">
+                                    <i data-feather="edit-2"></i>
+                                </a>
+                            </h6>
+                            <small>شارژ: <strong>1000 تومان</strong></small>
+                        </div>
+                        <div class="dropdown-menu-body">
+                            <div class="border-bottom p-4">
+                                <h6 class="text-uppercase font-size-11 d-flex justify-content-between">
+                                   حافظه
+                                    <span>%25</span>
+                                </h6>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 35%;"
+                                         aria-valuenow="35"
+                                         aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <a href="#" class="list-group-item">پروفایل</a>
+                                <a href="#" class="list-group-item d-flex">
+                                    دنبال‌کنندگان<span class="text-muted ml-auto">214</span>
+                                </a>
+                                <a href="#" class="list-group-item d-flex">
+                                    صندوق ورودی <span class="text-muted ml-auto">18</span>
+                                </a>
+                                <a href="#" class="list-group-item" data-sidebar-target="#settings">صورتحساب</a>
+                                <a href="#" class="list-group-item" data-sidebar-target="#settings">راهنمایی?</a>
+                                <a href="#" class="list-group-item text-danger" data-sidebar-target="#settings">خروج</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-grow-1">
+                <ul>
+                    <li>
+                        <a href="#" data-toggle="tooltip" data-placement="right" title="داشبردها"
+                           data-nav-target="#dashboards">
+                            <i data-feather="bar-chart-2"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-toggle="tooltip" data-placement="right" title="اپ ها" data-nav-target="#apps">
+                            <i data-feather="command"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="active" href="#" data-toggle="tooltip" data-placement="right" title="عناصر رابط کاربری"
+                           data-nav-target="#elements">
+                            <i data-feather="layers"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-toggle="tooltip" data-placement="right" title="صفحات" data-nav-target="#pages">
+                            <i data-feather="copy"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <ul>
+                    <li>
+                        <a href="#" data-toggle="tooltip" data-placement="right" title="تنظیمات">
+                            <i data-feather="settings"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="login.html" data-toggle="tooltip" data-placement="right" title="خروج">
+                            <i data-feather="log-out"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- begin::navigation menu -->
+        <div class="navigation-menu-body">
+
+            <!-- begin::navigation-logo -->
+            <div>
+                <div id="navigation-logo">
+                    <a href="index.html">
+                        <img class="logo" src="assets/media/image/logo-F.png" alt="logo">
+                        <img class="logo-light" src="assets/media/image/logo-light.png" alt="light logo">
+                    </a>
+                </div>
+            </div>
+            <!-- end::navigation-logo -->
+
+            <div class="navigation-menu-group">
+
+                <div id="dashboards">
+                    <ul>
+                        <li class="navigation-divider">داشبردها</li>
+                        <li><a href="index.html">CRM سیستم</a></li>
+                        <li><a href="dashboard-two.html">ایکامرس<span class="badge badge-danger">2</span></a></li>
+                        <li><a href="dashboard-three.html">آنالیستیک</a></li>
+                        <li><a href="dashboard-four.html">مدیریت پروژه</a></li>
+                        <li><a href="dashboard-five.html">مدیریت هلپ‌دسک</a></li>
+                        <li class="navigation-divider">مخاطبان</li>
+                        <li>
+                            <div class="list-group list-group-flush">
+                                <a href="#" class="list-group-item d-flex align-items-center">
+                                    <div>
+                                        <div class="avatar avatar-sm m-r-10">
+                                            <img src="assets/media/image/user/man_avatar1.jpg" class="rounded-circle" alt="image">
+                                        </div>
+                                    </div>
+                                    <span>علی احمدی</span>
+                                </a>
+                                <a href="#" class="list-group-item d-flex align-items-center">
+                                    <div>
+                                        <div class="avatar avatar-sm m-r-10">
+                                            <img src="assets/media/image/user/women_avatar2.jpg" class="rounded-circle" alt="image">
+                                        </div>
+                                    </div>
+                                    <span>الهه جم </span>
+                                </a>
+                                <a href="#" class="list-group-item d-flex align-items-center">
+                                    <div>
+                                        <div class="avatar avatar-sm m-r-10">
+                                            <img src="assets/media/image/user/women_avatar4.jpg" class="rounded-circle" alt="image">
+                                        </div>
+                                    </div>
+                                    <span>کیمیا فروزش</span>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="navigation-divider">دنبال‌کنندگان</li>
+                        <li>
+                            <div class="avatar-group ml-4">
+                                <a href="#" class="avatar">
+                                    <span class="avatar-title bg-success rounded-circle">آ</span>
+                                </a>
+                                <a href="#" class="avatar">
+                                    <img src="assets/media/image/user/women_avatar5.jpg" class="rounded-circle" alt="avatar">
+                                </a>
+                                <a href="#" class="avatar">
+                                    <img src="assets/media/image/user/women_avatar2.jpg" class="rounded-circle" alt="avatar">
+                                </a>
+                                <a href="#" class="avatar">
+                                    <span class="avatar-title bg-info rounded-circle">س</span>
+                                </a>
+                                <a href="#" class="avatar">
+                                    <span class="avatar-title bg-dark rounded-circle">+30</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div id="apps">
+                    <ul>
+                        <li class="navigation-divider">اپ های وب</li>
+                        <li>
+                            <a href="chat.html">
+                                <span>چت</span>
+                                <span class="badge badge-danger">5</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="inbox.html">
+                                <span>ایمیل</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="app-todo.html">
+                                <span>تو دو</span>
+                                <span class="badge badge-warning">2</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="active" href="file-manager.html">
+                                <span>فایل منیجر</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="calendar.html">
+                                <span>تقویم</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="open" id="elements">
+                    <ul>
+                        <li class="navigation-divider">عناصر رابط کاربری</li>
+                        <li>
+                            <a href="#">پایه</a>
+                            <ul>
+                                <li><a href="alerts.html">پیام</a></li>
+                                <li><a href="accordion.html">آکاردیون</a></li>
+                                <li><a href="buttons.html">دکمه‌ها</a></li>
+                                <li><a href="dropdown.html">دراپ‌داون</a></li>
+                                <li><a href="list-group.html">گروه لیستی</a></li>
+                                <li><a href="pagination.html">صفحه‌بندی</a></li>
+                                <li><a href="typography.html">تایپوگرافی</a></li>
+                                <li><a href="media-object.html">مدیا ابجکت</a></li>
+                                <li><a href="progress.html">وضعیت پیشرفت</a></li>
+                                <li><a href="modal.html"> مودال </a></li>
+                                <li><a href="spinners.html">اسنیپرز</a></li>
+                                <li><a href="navs.html">نویگیشن‌ها</a></li>
+                                <li><a href="tab.html">تب</a></li>
+                                <li><a href="tooltip.html">تولتیپ</a></li>
+                                <li><a href="popovers.html">پاپ‌اور ها</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">کارت‌ها</a>
+                            <ul>
+                                <li><a href="basic-cards.html">کارت‌های پایه </a></li>
+                                <li><a href="image-cards.html">کارت‌های تصویردار</a></li>
+                                <li><a href="card-scroll.html">کارت‌ همراه با اسکرول</a></li>
+                                <li><a href="other-cards.html">کارت‌های دیگر</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="avatar.html">آواتور</a></li>
+                        <li><a href="icons.html">ایکن‌ها</a></li>
+                        <li><a href="colors.html">رنگ‌ها</a></li>
+                        <li>
+                            <a href="#">پلاگین</a>
+                            <ul>
+                                <li><a href="sweet-alert.html">سوییت الرت</a></li>
+                                <li><a href="lightbox.html">لایت باکس</a></li>
+                                <li><a href="toast.html">توست</a></li>
+                                <li><a href="tour.html">تور</a></li>
+                                <li><a href="slick-slide.html">اسلیک اسلاید</a></li>
+                                <li><a href="nestable.html"> نست‌ایبل </a></li>
+                            </ul>
+                        </li>
+                        <li class="open">
+                            <a href="#">فرمها</a>
+                            <ul>
+                                <li><a class="active" href="basic-form.html">چینش فرم</a></li>
+                                <li><a href="custom-form.html">فرم سفارشی</a></li>
+                                <li><a href="advanced-form.html">فرم پیشرفته</a></li>
+                                <li><a href="form-validation.html">اعتبارسنجی</a></li>
+                                <li><a href="form-wizard.html">ویزارد</a></li>
+                                <li><a href="file-upload.html">آپلود فایل</a></li>
+                                <li><a href="datepicker.html">انتخابگر تاریخ</a></li>
+                                <li><a href="timepicker.html">انتخابگر زمان</a></li>
+                                <li><a href="colorpicker.html">انتخابگر رنگ</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">جدول‌ها</a>
+                            <ul>
+                                <li><a href="tables.html">جدول پایه</a></li>
+                                <li><a href="data-table.html">جدول داده‌ای</a></li>
+                                <li><a href="responsive-table.html">جدول رسپانسیو</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">نمودارها</a>
+                            <ul>
+                                <li><a href="apexchart.html">اپکس</a></li>
+                                <li><a href="chartjs.html">چارت جی‌اس</a></li>
+                                <li><a href="justgage.html">چارت جاستگیگ</a></li>
+                                <li><a href="morsis.html">چارت مورسیس</a></li>
+                                <li><a href="peity.html">چارت پتی</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">نقشه</a>
+                            <ul>
+                                <li><a href="google-map.html">گوگل</a></li>
+                                <li><a href="vector-map.html">وکتور</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div id="pages">
+                    <ul>
+                        <li class="navigation-divider">صفحات</li>
+                        <li><a href="login.html">ورود</a></li>
+                        <li><a href="register.html">ثبت‌نام</a></li>
+                        <li><a href="recover-password.html">بازگردانی رمزعبور</a></li>
+                        <li><a href="lock-screen.html">قفل صفحه</a></li>
+                        <li><a href="profile.html">پروفایل</a></li>
+                        <li><a href="timeline.html">تایملاین</a></li>
+                        <li><a href="invoice.html">صورت‌حساب</a></li>
+
+                        <li><a href="pricing-table.html">جدول قیمت</a></li>
+                        <li><a href="search-result.html">نتایج جستجو</a></li>
+                        <li>
+                            <a href="#">صفحات خطا</a>
+                            <ul>
+                                <li><a href="404.html">404</a></li>
+                                <li><a href="404-2.html">404ورژن2</a></li>
+                                <li><a href="503.html">503</a></li>
+                                <li><a href="mean-at-work.html">در حال ساخت</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="blank-page.html">صفحه شروع</a></li>
+                        <li>
+                            <a href="#">قالب ایمیل</a>
+                            <ul>
+                                <li><a href="email-template-basic.html">پایه</a></li>
+                                <li><a href="email-template-alert.html">پیام</a></li>
+                                <li><a href="email-template-billing.html">صورتحساب</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">سطح منو</a>
+                            <ul>
+                                <li>
+                                    <a href="#">سطح منو</a>
+                                    <ul>
+                                        <li>
+                                            <a href="#">سطح منو</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- end::navigation menu -->
+
+    </div>
+    <!-- end::navigation -->
+
+    <!-- begin::main-content -->
+    <div class="main-content">
+
+        <!-- begin::page-header -->
+        <div class="page-header">
+            <div class="container-fluid d-sm-flex justify-content-between">
+                <h4>چینش فرم</h4>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="#">داشبرد</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="#">فرمها</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">چینش فرم</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- end::page-header -->
+
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">نمای کلی</h6>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">آدرس ایمیل</label>
+                                            <input type="email" class="form-control" id="exampleInputEmail1"
+                                                   aria-describedby="emailHelp" placeholder="ایمیل خود را وارد نمایید">
+                                            <small id="emailHelp" class="form-text text-muted">اطلاعات شما به هیچ کس دیگری داده نمی‌شود
+                                            </small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">رمزعبور</label>
+                                            <input type="password" class="form-control" id="exampleInputPassword1"
+                                                   placeholder="رمزعبور">
+                                        </div>
+                                        <div class="form-group form-check">
+                                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                            <label class="form-check-label" for="exampleCheck1">مرا علامت بزنید</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">ارسال</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;form&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label for="exampleInputEmail1"&gt;Email address&lt;/label&gt;
+        &lt;input type="email" class="form-control" id="exampleInputEmail1"
+               aria-describedby="emailHelp" placeholder="ایمیل خود را وارد نمایید"&gt;
+        &lt;small id="emailHelp" class="form-text text-muted"&gt;We'll never share your email with
+            anyone else.
+        &lt;/small&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label for="exampleInputPassword1"&gt;رمزعبور&lt/label&gt;
+        &lt;input type="password" class="form-control" id="exampleInputPassword1"
+               placeholder="رمزعبور"&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group form-check"&gt;
+        &lt;input type="checkbox" class="form-check-input" id="exampleCheck1"&gt;
+        &lt;label class="form-check-label" for="exampleCheck1"&gt;مرا علامت بزنید&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;button type="submit" class="btn btn-primary"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">کنترل‌های فرم</h6>
+                            <form>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">آدرس ایمیل</label>
+                                    <input type="email" class="form-control" id="exampleFormControlInput1"
+                                           placeholder="name@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1">انتخابگر نمونه</label>
+                                    <select class="form-control" id="exampleFormControlSelect1">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect2">انتخابگر چندگانه نمونه</label>
+                                    <select multiple class="form-control" id="exampleFormControlSelect2">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">ناحیه متنی نمونه</label>
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                            </form>
+                            <p>برای فایلهای ورودی, تعویض کنید <code class="highlighter-rouge">.form-control</code>را با  <code
+                                    class="highlighter-rouge">.form-control-file</code>.</p>
+                            <form>
+                                <div class="form-group">
+                                    <label for="exampleFormControlFile1">نمونه ورودی فایل</label>
+                                    <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                                </div>
+                            </form>
+
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;!-- Input --&gt;
+&lt;div class="form-group"&gt;
+  &lt;label for="exampleFormControlInput1"&gt;Email address&lt;/label&gt;
+  &lt;input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com"&gt;
+&lt;/div&gt;
+
+&lt;!-- Select --&gt;
+&lt;div class="form-group"&gt;
+  &lt;label for="exampleFormControlSelect1"&gt;Example select&lt;/label&gt;
+  &lt;select class="form-control" id="exampleFormControlSelect1"&gt;
+    &lt;option&gt;1&lt;/option&gt;
+    &lt;option&gt;2&lt;/option&gt;
+    &lt;option&gt;3&lt;/option&gt;
+    &lt;option&gt;4&lt;/option&gt;
+    &lt;option&gt;5&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/div&gt;
+
+&lt;!-- Textarea --&gt;
+&lt;div class="form-group"&gt;
+  &lt;label for="exampleFormControlTextarea1"&gt;Example textarea&lt;/label&gt;
+  &lt;textarea class="form-control" id="exampleFormControlTextarea1" rows="3"&gt;&lt;/textarea&gt;
+&lt;/div&gt;
+
+&lt;!-- File input --&gt;
+&lt;div class="form-group"&gt;
+  &lt;label for="exampleFormControlFile1"&gt;Example file input&lt;/label&gt;
+  &lt;input type="file" class="form-control-file" id="exampleFormControlFile1"&gt;
+&lt;/div&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">اندازه ورودی‌ها</h6>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <input class="form-control form-control-lg" type="text"
+                                               placeholder=".form-control-lg">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" placeholder="Default input">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control form-control-sm" type="text"
+                                               placeholder=".form-control-sm">
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;input class="form-control form-control-lg" type="text" placeholder=".form-control-lg"&gt;
+&lt;input class="form-control" type="text" placeholder="Default input"&gt;
+&lt;input class="form-control form-control-sm" type="text" placeholder=".form-control-sm"&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">اندازه انتخابگر</h6>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <select class="form-control form-control-lg">
+                                            <option> انتخابگر بزرگ</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <select class="form-control">
+                                            <option> انتخابگر پیشفرض </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <select class="form-control form-control-sm">
+                                            <option> انتخابگر کوچک </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;select class="form-control form-control-lg"&gt;
+  &lt;option&gt;Large select&lt;/option&gt;
+&lt;/select&gt;
+&lt;select class="form-control"&gt;
+  &lt;option&gt;Default select&lt;/option&gt;
+&lt;/select&gt;
+&lt;select class="form-control form-control-sm"&gt;
+  &lt;option&gt;Small select&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">تنها خواندنی</h6>
+                            <input class="form-control" type="text" placeholder="ورودی تنها خواندنی" readonly>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;input class="form-control" type="text" placeholder="Readonly input here..." readonly&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">تنها خواندنی با متن جایگذاری شده</h6>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <form>
+                                        <div class="form-group row">
+                                            <label for="staticEmail2" class="col-sm-2 col-form-label">ایمیل</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" readonly class="form-control-plaintext"
+                                                       id="staticEmail2" value="email@example.com">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputPassword2" class="col-sm-2 col-form-label">رمزعبور</label>
+                                            <div class="col-sm-10">
+                                                <input type="password" class="form-control" id="inputPassword2"
+                                                       placeholder="رمزعبور">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;form&gt;
+  &lt;div class="form-group row"&gt;
+    &lt;label for="staticEmail" class="col-sm-2 col-form-label"&gt;ایمیل&lt;/label&gt;
+    &lt;div class="col-sm-10"&gt;
+      &lt;input type="text" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="form-group row"&gt;
+    &lt;label for="inputPassword" class="col-sm-2 col-form-label"&gt;رمزعبور&lt/label&gt;
+    &lt;div class="col-sm-10"&gt;
+      &lt;input type="password" class="form-control" id="inputPassword" placeholder="رمزعبور"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <form class="form-inline">
+                                        <div class="form-group mb-2">
+                                            <label for="staticEmail3" class="sr-only">ایمیل</label>
+                                            <input type="text" readonly class="form-control-plaintext" id="staticEmail3"
+                                                   value="email@example.com">
+                                        </div>
+                                        <div class="form-group mx-sm-3 mb-2">
+                                            <label for="inputPassword6" class="sr-only">رمزعبور</label>
+                                            <input type="password" class="form-control" id="inputPassword6"
+                                                   placeholder="رمزعبور">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mb-2">احراز هویت</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;form class="form-inline"&gt;
+  &lt;div class="form-group mb-2"&gt;
+    &lt;label for="staticEmail2" class="sr-only"&gt;ایمیل&lt;/label&gt;
+    &lt;input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="email@example.com"&gt;
+  &lt;/div&gt;
+  &lt;div class="form-group mx-sm-3 mb-2"&gt;
+    &lt;label for="inputPassword2" class="sr-only"&gt;رمزعبور&lt/label&gt;
+    &lt;input type="password" class="form-control" id="inputPassword2" placeholder="رمزعبور"&gt;
+  &lt;/div&gt;
+  &lt;button type="submit" class="btn btn-primary mb-2"&gt;Confirm identity&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">ورودی بازه‌ای</h6>
+                            <p>از کد روبه‌رو برای ورودی بازه‌ای استفاده کنید <code>.form-control-range</code>.</p>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="formControlRange">ورودی بازه‌ای نمونه</label>
+                                            <input type="range" class="form-control-range" id="formControlRange">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;form&gt;
+  &lt;div class="form-group"&gt;
+    &lt;label for="formControlRange"&gt;Example Range input&lt;/label&gt;
+    &lt;input type="range" class="form-control-range" id="formControlRange"&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">چک‌باکس و دکمه رادیویی</h6>
+                            <p>به طور پیش فرض ، هر تعداد چک‌باکس و دکمه رادیویی که در یک سطح هستند ، به صورت عمودی کنار هم می آیند.<code>.form-check</code>.</p>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
+                                        <label class="form-check-label" for="defaultCheck3">
+                                            چک‌باکس پیشفرض
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck4"
+                                               disabled>
+                                        <label class="form-check-label" for="defaultCheck4">
+                                            چک‌باکس غیرفعال
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input" type="checkbox" value="" id="defaultCheck1"&gt;
+  &lt;label class="form-check-label" for="defaultCheck1"&gt;
+    چک‌باکس پیشفرض
+  &lt;/label&gt;
+&lt;/div&gt;
+&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input" type="checkbox" value="" id="defaultCheck2" disabled&gt;
+  &lt;label class="form-check-label" for="defaultCheck2"&gt;
+    چک‌باکس غیرفعال
+  &lt;/label&gt;
+&lt;/div&gt;</code></pre>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="exampleRadios"
+                                               id="exampleRadios4" value="option1" checked>
+                                        <label class="form-check-label" for="exampleRadios4">
+                                           دکمه رادیویی پیشفرض
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="exampleRadios"
+                                               id="exampleRadios5" value="option2">
+                                        <label class="form-check-label" for="exampleRadios5">
+                                              رادیویی پیشفرض دو
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="exampleRadios"
+                                               id="exampleRadios6" value="option3" disabled>
+                                        <label class="form-check-label" for="exampleRadios6">
+                                           دکمه رادیویی غیرفعال
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked&gt;
+  &lt;label class="form-check-label" for="exampleRadios1"&gt;
+   دکمه رادیویی پیشفرض
+  &lt;/label&gt;
+&lt;/div&gt;
+&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2"&gt;
+  &lt;label class="form-check-label" for="exampleRadios2"&gt;
+    Secondدکمه رادیویی پیشفرض
+  &lt;/label&gt;
+&lt;/div&gt;
+&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" disabled&gt;
+  &lt;label class="form-check-label" for="exampleRadios3"&gt;
+   دکمه رادیویی غیرفعال
+  &lt;/label&gt;
+&lt;/div&gt;</code></pre>
+                            </div>
+                            <h3>خطی</h3>
+                            <p>یا افزودن کلاس روبه ‌رو به چک‌باکس و دکمه‌های رادیویی میتوانید آنها را خطی نمایید .form-check-inline 
+                                .form-check.</p>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox4"
+                                               value="option1">
+                                        <label class="form-check-label" for="inlineCheckbox4">1</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox5"
+                                               value="option2">
+                                        <label class="form-check-label" for="inlineCheckbox5">2</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox6"
+                                               value="option3" disabled>
+                                        <label class="form-check-label" for="inlineCheckbox6">3(غیرفعال)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;div class="form-check form-check-inline"&gt;
+  &lt;input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"&gt;
+  &lt;label class="form-check-label" for="inlineCheckbox1"&gt;1&lt;/label&gt;
+&lt;/div&gt;
+&lt;div class="form-check form-check-inline"&gt;
+  &lt;input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2"&gt;
+  &lt;label class="form-check-label" for="inlineCheckbox2"&gt;2&lt;/label&gt;
+&lt;/div&gt;
+&lt;div class="form-check form-check-inline"&gt;
+  &lt;input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" disabled&gt;
+  &lt;label class="form-check-label" for="inlineCheckbox3"&gt;3 (disabled)&lt;/label&gt;
+&lt;/div&gt;</code></pre>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                               id="inlineRadio1" value="option1">
+                                        <label class="form-check-label" for="inlineRadio1">1</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                               id="inlineRadio2" value="option2">
+                                        <label class="form-check-label" for="inlineRadio2">2</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                               id="inlineRadio3" value="option3" disabled>
+                                        <label class="form-check-label" for="inlineRadio3">3(غیرفعال)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;div class="form-check form-check-inline"&gt;
+  &lt;input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"&gt;
+  &lt;label class="form-check-label" for="inlineCheckbox1"&gt;1&lt;/label&gt;
+&lt;/div&gt;
+&lt;div class="form-check form-check-inline"&gt;
+  &lt;input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2"&gt;
+  &lt;label class="form-check-label" for="inlineCheckbox2"&gt;2&lt;/label&gt;
+&lt;/div&gt;
+&lt;div class="form-check form-check-inline"&gt;
+  &lt;input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" disabled&gt;
+  &lt;label class="form-check-label" for="inlineCheckbox3"&gt;3 (disabled)&lt;/label&gt;
+&lt;/div&gt;</code></pre>
+                            </div>
+                            <h3>بدون لیبل</h3>
+                            <p>از <code>.position-static</code> به ورودی های همراه <code>.form-check</code> برای نداشتن لیبل میتوانید استفاده کنید اما به خاطر داشته باشید استفاده از لیبل برای فهم درست کاربر ضروری است.</p>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-check">
+                                        <input class="form-check-input position-static" type="checkbox"
+                                               id="blankCheckbox" value="option1" aria-label="...">
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input position-static" type="radio" name="blankRadio"
+                                               id="blankRadio1" value="option1" aria-label="...">
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="option1" aria-label="..."&gt;
+&lt;/div&gt;
+&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input position-static" type="radio" name="blankRadio" id="blankRadio1" value="option1" aria-label="..."&gt;
+&lt;/div&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">چینش</h6>
+                            <h4>فرم افقی</h4>
+                            <p> میتوانید به جای <code>.row</code> از <code>.form-row</code>برای استفاده از چینش ردیفی یا افقی استفاده کنید</p>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <form>
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <input type="text" class="form-control" placeholder="نام">
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" class="form-control" placeholder="نام خانوادگی">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;form&gt;
+  &lt;div class="form-row"&gt;
+    &lt;div class="col"&gt;
+      &lt;input type="text" class="form-control" placeholder="نام"&gt;
+    &lt;/div&gt;
+    &lt;div class="col"&gt;
+      &lt;input type="text" class="form-control" placeholder="نام خانوادگی"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+                            </div>
+                            <p>از چینش های متفاوت و پیشرفته تری هم با استفاده از گرید سیستم میتوانید بهره ببرید</p>
+                            <form>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">ایمیل</label>
+                                        <input type="email" class="form-control" id="inputEmail4" placeholder="ایمیل ">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputPassword4">رمزعبور</label>
+                                        <input type="password" class="form-control" id="inputPassword4"
+                                               placeholder="رمزعبور">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputAddress">آدرس</label>
+                                    <input type="text" class="form-control" id="inputAddress"
+                                           placeholder="1234 خیابان اصلی ">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputAddress2">آدرس دوم</label>
+                                    <input type="text" class="form-control" id="inputAddress2"
+                                           placeholder="آپارتمان، طبقه، پلاک">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputCity">شهر</label>
+                                        <input type="text" class="form-control" id="inputCity">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inputState">استان</label>
+                                        <select id="inputState" class="form-control">
+                                            <option selected>انتخاب...</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="inputZip">کدپستی</label>
+                                        <input type="text" class="form-control" id="inputZip">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="gridCheck">
+                                        <label class="form-check-label" for="gridCheck">
+                                            مرا علامت بزنید
+                                        </label>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">ورود</button>
+                            </form>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;form&gt;
+  &lt;div class="form-row"&gt;
+    &lt;div class="form-group col-md-6"&gt;
+      &lt;label for="inputEmail4"&gt;ایمیل&lt;/label&gt;
+      &lt;input type="email" class="form-control" id="inputEmail4" placeholder="ایمیل "&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group col-md-6"&gt;
+      &lt;label for="inputPassword4"&gt;رمزعبورlt;/label&gt;
+      &lt;input type="password" class="form-control" id="inputPassword4" placeholder="رمزعبور"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="form-group"&gt;
+    &lt;label for="inputAddress"&gt;آدرس&lt;/label&gt;
+    &lt;input type="text" class="form-control" id="inputAddress" placeholder="1234 خیابان اصلی "&gt;
+  &lt;/div&gt;
+  &lt;div class="form-group"&gt;
+    &lt;label for="inputAddress2"&gt;آدرس دوم&lt;/label&gt;
+    &lt;input type="text" class="form-control" id="inputAddress2"  placeholder="آپارتمان، طبقه، پلاک"&gt;
+  &lt;/div&gt;
+  &lt;div class="form-row"&gt;
+    &lt;div class="form-group col-md-6"&gt;
+      &lt;label for="inputCity"&gt;شهر&lt;/label&gt;
+      &lt;input type="text" class="form-control" id="inputCity"&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group col-md-4"&gt;
+      &lt;label for="inputState"&gt;استان&lt;/label&gt;
+      &lt;select id="inputState" class="form-control"&gt;
+        &lt;option selected&gt;انتخاب...&lt;/option&gt;
+        &lt;option&gt;...&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group col-md-2"&gt;
+      &lt;label for="inputZip"&gt;کدپستی&lt;/label&gt;
+      &lt;input type="text" class="form-control" id="inputZip"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="form-group"&gt;
+    &lt;div class="form-check"&gt;
+      &lt;input class="form-check-input" type="checkbox" id="gridCheck"&gt;
+      &lt;label class="form-check-label" for="gridCheck"&gt;
+        مرا علامت بزنید
+      &lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;button type="submit" class="btn btn-primary"&gt;ورودlt;/button&gt;
+&lt;/form&gt;</code></pre>
+                            </div>
+                            <h4>فرم عمودی</h4>
+                            <form>
+                                <div class="form-group row">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">ایمیل</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="inputEmail3" placeholder="ایمیل ">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">رمزعبور</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="inputPassword3"
+                                               placeholder="رمزعبور">
+                                    </div>
+                                </div>
+                                <fieldset class="form-group">
+                                    <div class="row">
+                                        <div class="col-form-label col-sm-2 pt-0">رادیوباتن</div>
+                                        <div class="col-sm-10">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="gridRadios"
+                                                       id="gridRadios1" value="option1" checked>
+                                                <label class="form-check-label" for="gridRadios1">
+                                                    رادیوباتن یک
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="gridRadios"
+                                                       id="gridRadios2" value="option2">
+                                                <label class="form-check-label" for="gridRadios2">
+                                                    رادیوباتن دو
+                                                </label>
+                                            </div>
+                                            <div class="form-check disabled">
+                                                <input class="form-check-input" type="radio" name="gridRadios"
+                                                       id="gridRadios3" value="option3" disabled>
+                                                <label class="form-check-label" for="gridRadios3">
+                                                   دکمه رادیویی غیرفعال
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <div class="form-group row">
+                                    <div class="col-sm-2">چک‌باکس</div>
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="gridCheck1">
+                                            <label class="form-check-label" for="gridCheck1">
+                                                چک‌باکس نمونه                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-10">
+                                        <button type="submit" class="btn btn-primary">ورود</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;form&gt;
+  &lt;div class="form-group row"&gt;
+    &lt;label for="inputEmail3" class="col-sm-2 col-form-label"&gt;ایمیل&lt;/label&gt;
+    &lt;div class="col-sm-10"&gt;
+      &lt;input type="email" class="form-control" id="inputEmail3" placeholder="ایمیل "&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="form-group row"&gt;
+    &lt;label for="inputPassword3" class="col-sm-2 col-form-label"&gt;رمزعبور&lt/label&gt;
+    &lt;div class="col-sm-10"&gt;
+      &lt;input type="password" class="form-control" id="inputPassword3" placeholder="رمزعبور"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;fieldset class="form-group"&gt;
+    &lt;div class="row"&gt;
+      &lt;legend class="col-form-label col-sm-2 pt-0"&gt;دکمه رادیویی&lt/legend&gt;
+      &lt;div class="col-sm-10"&gt;
+        &lt;div class="form-check"&gt;
+          &lt;input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked&gt;
+          &lt;label class="form-check-label" for="gridRadios1"&gt;
+          دکمه رادیویی یک
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="form-check"&gt;
+          &lt;input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2"&gt;
+          &lt;label class="form-check-label" for="gridRadios2"&gt;
+          دکمه رادیویی دو
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="form-check disabled"&gt;
+          &lt;input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled&gt;
+          &lt;label class="form-check-label" for="gridRadios3"&gt;
+           دکمه رادیویی غیرفعال
+          &lt;/label&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/fieldset&gt;
+  &lt;div class="form-group row"&gt;
+    &lt;div class="col-sm-2"&gt;چک‌باکس&lt;/div&gt;
+    &lt;div class="col-sm-10"&gt;
+      &lt;div class="form-check"&gt;
+        &lt;input class="form-check-input" type="checkbox" id="gridCheck1"&gt;
+        &lt;label class="form-check-label" for="gridCheck1"&gt;
+        چک‌باکس نمونه   
+        &lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="form-group row"&gt;
+    &lt;div class="col-sm-10"&gt;
+      &lt;button type="submit" class="btn btn-primary"&gt;ورود&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+                            </div>
+                            <h4>فرم عمودی با سایز لیبل</h4>
+                            <p>میتوانید از <code>.col-form-label-sm</code> یا <code>.col-form-label-lg</code> در
+                                <code>&lt;label&gt;</code>ها یا <code>&lt;label&gt;</code>برای استفاده از سایز استفاده کنید  همچنین <code>.form-control-lg</code> و <code>.form-control-sm</code>.</p>
+                            <form>
+                                <div class="form-group row">
+                                    <label for="colFormLabelSm"
+                                           class="col-sm-2 col-form-label col-form-label-sm">ایمیل</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control form-control-sm" id="colFormLabelSm"
+                                               placeholder="col-form-label-sm">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="colFormLabel" class="col-sm-2 col-form-label">ایمیل</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="colFormLabel"
+                                               placeholder="col-form-label">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="colFormLabelLg"
+                                           class="col-sm-2 col-form-label col-form-label-lg">ایمیل</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control form-control-lg" id="colFormLabelLg"
+                                               placeholder="col-form-label-lg">
+                                    </div>
+                                </div>
+                            </form>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;form&gt;
+  &lt;div class="form-group row"&gt;
+    &lt;label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm"&gt;ایمیل&lt;/label&gt;
+    &lt;div class="col-sm-10"&gt;
+      &lt;input type="email" class="form-control form-control-sm" id="colFormLabelSm" placeholder="col-form-label-sm"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="form-group row"&gt;
+    &lt;label for="colFormLabel" class="col-sm-2 col-form-label"&gt;ایمیل&lt;/label&gt;
+    &lt;div class="col-sm-10"&gt;
+      &lt;input type="email" class="form-control" id="colFormLabel" placeholder="col-form-label"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="form-group row"&gt;
+    &lt;label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg"&gt;ایمیل&lt;/label&gt;
+    &lt;div class="col-sm-10"&gt;
+      &lt;input type="email" class="form-control form-control-lg" id="colFormLabelLg" placeholder="col-form-label-lg"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">متن راهنما</h6>
+                            <p>از این ویژگی میتوانید با استفاده از کلاس های روبه ‌رو استفاده کنید <code>.text-muted</code> و <code>.form-text</code> که در ورژن های قبلی به <code>.help-block</code> معروف بودند
+                                 </p>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label for="inputPassword5">رمزعبور</label>
+                                    <input type="password" id="inputPassword5" class="form-control"
+                                           aria-describedby="passwordHelpBlock">
+                                    <small id="passwordHelpBlock" class="form-text text-muted">
+                                        رمز عبور شما باید 8-20 نویسه داشته باشد ، حروف و اعداد داشته باشد و نباید حاوی فضاها ، کاراکترهای ویژه یا ایموجی باشد.
+                                    </small>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;label for="inputPassword5"&gt;رمزعبور&lt/label&gt;
+&lt;input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock"&gt;
+&lt;small id="passwordHelpBlock" class="form-text text-muted"&gt;
+رمز عبور شما باید 8-20 نویسه داشته باشد ، حروف و اعداد داشته باشد و نباید حاوی فضاها ، کاراکترهای ویژه یا ایموجی باشد.
+&lt;/small&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">فرم غیرفعال</h6>
+                            <p>برای استفاده از این ویژگی میتوانید از نمونه کد زیر استفاده نمایید</p>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <form>
+                                        <fieldset disabled>
+                                            <div class="form-group">
+                                                <label for="disabledTextInput">ورودی غیرفعال</label>
+                                                <input type="text" id="disabledTextInput" class="form-control"
+                                                       placeholder="ورودی غیرفعال">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="disabledSelect">انتخابگر غیرفعال</label>
+                                                <select id="disabledSelect" class="form-control">
+                                                    <option>انتخابگر غیرفعال</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox"
+                                                           id="disabledFieldsetCheck" disabled>
+                                                    <label class="form-check-label" for="disabledFieldsetCheck">
+                                                       نمی‌توانید این باکس را علامت بزنید 
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">ارسال</button>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                            <div data-label="کد نمونه" class="demo-code-preview">
+                                <pre><code class="language-html">&lt;form&gt;
+  &lt;fieldset disabled&gt;
+    &lt;div class="form-group"&gt;
+      &lt;label for="disabledTextInput"&gt;ورودی غیرفعال&lt;/label&gt;
+      &lt;input type="text" id="disabledTextInput" class="form-control" placeholder="ورودی غیرفعال"&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group"&gt;
+      &lt;label for="disabledSelect"&gt;انتخابگر غیرفعال&lt;/label&gt;
+      &lt;select id="disabledSelect" class="form-control"&gt;
+        &lt;option&gt;انتخابگر غیرفعال&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group"&gt;
+      &lt;div class="form-check"&gt;
+        &lt;input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" disabled&gt;
+        &lt;label class="form-check-label" for="disabledFieldsetCheck"&gt;
+         نمی‌توانید این باکس را علامت بزنید 
+        &lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;button type="submit" class="btn btn-primary"&gt;Submit&lt;/button&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- begin::footer -->
+        <footer>
+            <div class="container-fluid">
+                <div>© 1399 | قالب مدیریت بورداش ورژن 1.0.0 ارایه از  <a href="">AFARIDTEAM</a></div>
+
+                <div>
+                    <nav class="nav">
+                        <a href="https://www.rtl-theme.com/standard/" class="nav-link">لیسانس</a>
+                        <a href="#" class="nav-link">تغییر لاگ</a>
+                        <a href="#" class="nav-link">راهنمایی</a>
+                    </nav>
+                </div>
+            </div>
+        </footer>
+        <!-- end::footer -->
+
+    </div>
+    <!-- end::main-content -->
+
+</div>
+<!-- end::main -->
+
+<!-- Plugin scripts -->
+<script src="vendors/bundle.js"></script>
+
+<!-- Prism -->
+<script src="vendors/prism/prism.js"></script>
+
+<!-- App scripts -->
+<script src="assets/js/app.min.js"></script>
+</body>
+
+</html>

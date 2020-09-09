@@ -1,0 +1,32 @@
+/*================================================================================
+	Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+	Version: 2.0
+	Author: PIXINVENT
+	Author URL: http://www.themeforest.net/user/pixinvent
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+.swal2-content {
+    font-family: 'IRANSansWeb';
+}
+
+.dataTables_info {
+    font-family: 'IRANSansWeb';
+}
+
+.dataTables_processing {
+    font-family: 'IRANSansWeb';
+}
+.main-menu .navbar-header .navbar-brand .brand-logo {
+	background: url(../../favicon.png) -65px -54px no-repeat;
+}
+.select2 {
+	font-family: 'IRANSansWeb';
+}
+.toast-message {
+	font-family: 'IRANSansWeb';
+}

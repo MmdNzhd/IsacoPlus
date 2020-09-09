@@ -1,0 +1,31 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@section Styles{
+    <style>
+    </style>
+}
+<div class="container-fluid bg-white  mtk-menu" style="position: fixed;
+    bottom: 0;
+    box-shadow: 1px 1px 100px #000;
+    z-index: 111;
+    width: 100%;
+    max-width: 520px;">
+    <div class="row justify-content-center py-2">
+        <div class="col-3 text-center">
+            <a href="#">
+                <img src="~/mtk/images/icon/home.svg" width="23px" alt="" />
+            </a>
+        </div>
+        <div class="col-3 text-center">
+            <a asp-action="favorite">
+                <img src="~/mtk/images/icon/menuheart.svg" width="23px" alt="" />
+            </a>
+        </div>
+        <div class="col-3 text-center">
+            <a href="#">
+                <img src="~/mtk/images/icon/yarn.svg" width="23px" alt="" />
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+﻿@model IEnumerable<KaraYadak.Models.ProductCategory>
+<a href="#" class="position-relative d-inline-block h-100">
+@{
+    ViewData["Title"] = "Category";
+    Layout = "_WebAppLanding";
+}
+<div class="container-fluid p-0 m-0 bg-white mtk-category">
+    <div class="col-12">
+        <div class="row">
+            <partial name="_Back" />
+        </div>
+        <div class="row animated fadeInDown">
+            <h4 class="cat-header w-100">@ViewBag.cType</h4>
+        </div>
+        <!--Category Names-->
+        <div class="row mt-2 mb-4 pb-3 animated fadeInDown delay-1s">
+            @foreach (var item in Model)
+            {
+                <div class="col-6 my-2">
+                    <a asp-action="Products" asp-route-category="@item.Id" class="position-relative d-inline-block h-100 shadow">
+                        <img src="@item.Image" class="w-100 rounded" alt="Alternate Text" />
+                        <span class="position-absolute rounded">@item.Name</span>
+                    </a>
+                </div>
+
+            }
+
+        </div>
+        <div class="row">
+            <partial name="_Menu" />
+        </div>
+
+    </div>
+</div>

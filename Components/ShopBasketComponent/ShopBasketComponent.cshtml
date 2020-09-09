@@ -1,0 +1,54 @@
+﻿@model KaraYadak.ViewModels.SiteCartVM
+@section Styles{
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+}
+
+<div id="throbber" style="display:none;">
+    <img src="~/assets/iKSmF.gif" />
+</div>
+
+<table class="table table-bordered">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">ردیف</th>
+            <th scope="col">کد کالا</th>
+            <th scope="col">شرح کالا</th>
+            <th scope="col">متراژ</th>
+            <th scope="col">مبلغ واحد(ريال)</th>
+            <th scope="col">مبلغ کل(ريال)</th>
+            <th scope="col">تخفیف (ريال)</th>
+            <th scope="col">مبلغ کل پس از تخفیف (ريال)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int couneter = 0;};
+        @foreach (var item in Model.Products)
+        {
+            couneter++;
+            <tr style="text-align:center">
+                <th scope="row">@couneter</th>
+                <td>@item.Id</td>
+                <td>@item.Description</td>
+                <td>@item.Count</td>
+                <td>@item.Price</td>
+                <td>@(item.Count*item.Count)</td>
+                <td>@((item.Discount/100)*item.Price)</td>
+                <td>@((item.Count*item.Price)- (item.Discount / 100) * item.Price)</td>
+            </tr>
+        }
+
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5" style="text-align:center">هزینه ارسال:@Model.SendPrice </td>
+            <td colspan="3" style="text-align:center"> مبلغ کل:@Model.TotalPrice </td>
+        </tr>
+    </tfoot>
+</table>
+
+
+<!--Factor Modal-->
+
+
+

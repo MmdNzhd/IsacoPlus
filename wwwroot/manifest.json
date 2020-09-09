@@ -1,0 +1,16 @@
+
+{
+    "short_name": "Zarposh",
+    "name": "زرپوش",
+    "icons": [{
+        "src": "/assets/icons/logo.png",
+        "sizes": "256x256",
+        "type": "image/png"
+    }],
+    "start_url": ".",
+    "background_color": "#ffffff",
+    "orientation": "portrait-primary",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#feff00"
+}

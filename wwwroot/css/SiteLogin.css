@@ -1,0 +1,315 @@
+/*  CSS RESET  */
+
+*:before, *:after , html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre, a,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,input, textarea,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align:baseline;
+    background:transparent;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    line-height:1;
+    padding: 1px;
+    direction:rtl; 
+}
+
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section { 
+    display:block;
+}
+
+ol, ul {
+    list-style: none;
+}
+button{
+    outline: none   !important;
+}
+blockquote, q {
+    quotes:none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content:'';
+    content:none;
+}
+
+a {
+    text-decoration: none;
+    outline: none;
+}
+
+ins {
+    background-color:#ff9;
+    color:#000;
+    text-decoration:none;
+}
+
+mark {
+    background-color:#ff9;
+    color:#000; 
+    font-style:italic;
+    font-weight:bold;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+abbr[title], dfn[title] {
+    border-bottom:1px dotted;
+    cursor:help;
+}
+
+table {
+    border-collapse:collapse;
+    border-spacing:0;
+}
+
+hr {
+    display:block;
+    height:1px;
+    border:0;   
+    border-top:1px solid #cccccc;
+    margin:1em 0;
+    padding:0;
+}
+
+input, select {
+    vertical-align:middle;
+}
+
+@font-face {
+    font-family:"yekan";
+    src: url("../fonts/iranyekanweb.ttf");
+}
+/* Sign Tab Style */
+
+
+html , body{
+width:100%;
+height: 100%; 
+}
+body{
+    background: linear-gradient(45deg , rgb(212, 226, 255) 0% , rgb(200, 255, 250) 100%);
+    background-size: 120% 100%;
+    font-family:yekan;
+}
+
+
+.sign-wrapper{
+    width:900px;
+    height: 600px;
+    border-radius: 10px;
+    box-shadow: 0 9px 25px -6px rgba(0,0,0,0.2);
+    margin: 30px auto;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.sign-form-wrapper{
+    height: 100%;
+    position: relative;
+}
+
+.sign-form-login , .sign-form-register{
+    width:550px;
+    position: absolute;
+    top:0;
+    transform: translateX(0px);
+    transition: 1.5s;
+    background: #fff;
+    z-index: 3;
+    opacity: 1;
+}
+.sign-form-login{
+    right: 0;
+}
+.sign-form-register{
+    left: 0;
+}
+
+.sign-wrapper.show-login > .sign-form-wrapper >  .sign-form-register{
+    transform: translateX(200px);
+    opacity: 0;
+    z-index: 1;
+}
+.sign-wrapper.show-register > .sign-form-wrapper >  .sign-form-login{
+    transform: translateX(-200px);
+    opacity: 0;
+    z-index: 1;
+}
+
+/* Form style */
+.sign-form > h2{
+    font-size: 28px;
+    color: #2778f1;
+    text-align: center;
+    padding: 20px;
+    margin-top: 80px;
+    margin-bottom: 30px;
+}
+.sign-form > input[type=text],.sign-form > input[type=password]{
+    font-size: 16px;
+    color: #666;
+    border: none;
+    background: #eee;
+    padding: 15px;
+    width:300px;
+    display: block;
+    margin:10px auto;
+}
+.sign-form > a{
+    font-size: 14px;
+    color:#aaa;
+    display: block;
+    text-align: center;
+    margin:30px auto 0 ;
+}
+.sign-form > button{
+    font-size: 16px;
+    color:#fff;
+    display: block;
+    width:130px;
+    text-align: center;
+    border-radius: 45px;
+    height: 45px;
+    line-height: 45px;
+    font-family: yekan;
+    border:none;
+    background: #27c9f1;
+    margin:30px auto;
+    cursor: pointer;
+    
+}
+/* Sign head */
+.sign-wrapper > .sign-head{
+    width:350px;
+    height: 100%;
+    position: absolute;
+    background:linear-gradient(45deg,#2778f1 0% , #27c9f1 100%);
+    left: 0;
+    top: 0;
+    transition: 1.5s ;
+    transform: translateX(0); 
+    z-index: 10;
+    overflow: hidden;
+}
+
+.sign-wrapper.show-login > .sign-head{
+    transform: translateX(0px);
+}
+.sign-wrapper.show-register > .sign-head{
+    transform: translateX(550px);
+}
+.sign-wrapper > .sign-head.extra-width{
+    width:500px;
+}
+
+
+.sign-head >.sign-head-register ,
+ .sign-head >.sign-head-login{
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    top:180px;
+    transform: translateX(0);
+    transition: 1.5s;
+}
+
+/* Login mode on */
+.sign-wrapper.show-login > .sign-head > .sign-head-register {
+    transform: translateX(0);
+}
+.sign-wrapper.show-login > .sign-head >.sign-head-login{
+    transform: translateX(600px);
+}
+
+/* Register mode on */
+.sign-wrapper.show-register > .sign-head > .sign-head-register {
+    transform: translateX(-750px);
+}
+.sign-wrapper.show-register > .sign-head >.sign-head-login{
+    transform: translateX(0);
+}
+
+.sign-head >.sign-head-register> h2 ,
+ .sign-head >.sign-head-login> h2{
+    font-size: 24px;
+    text-align: center;
+    padding: 20px;
+    color: #fff;
+}
+.sign-head >.sign-head-register> p ,
+ .sign-head >.sign-head-login> p{
+    font-size: 14px;
+    text-align: center;
+    color: #b7fbff;
+}
+
+.sign-head >.btn-sign {
+    font-size: 18px;
+    text-align: center;
+    height: 50px;
+    line-height:50px;
+    color: #ecfeff;
+    border-radius: 50px;
+    display: block;
+    width:50%;
+    margin: 320px auto;
+    background: transparent;
+    border: 2px solid #d0fcff;
+    font-family: yekan;
+    cursor: pointer;
+    transition: .5s;
+    overflow: hidden;
+    position: relative;
+}
+.sign-head >.btn-sign:active {
+    transform: scale(0.8);
+}
+.sign-head >.btn-sign > span{
+    opacity: 0;
+    transition: 1.5s;
+    transform: translateX(0);
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+/* Login mode on */
+.sign-wrapper.show-register >.sign-head >.btn-sign > span:nth-child(1){
+    transform: translateX(-100px);
+}
+.sign-wrapper.show-register >.sign-head >.btn-sign > span:nth-child(2){
+    opacity: 1;
+}
+
+/* Register mode on */
+.sign-wrapper.show-login >.sign-head >.btn-sign > span:nth-child(2){
+    transform: translateX(100px);
+}
+.sign-wrapper.show-login >.sign-head >.btn-sign > span:nth-child(1){
+    opacity: 1;
+}

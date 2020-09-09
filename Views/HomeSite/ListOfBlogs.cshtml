@@ -1,0 +1,24 @@
+﻿@model ICollection<KaraYadak.Models.Blog>
+
+
+@foreach (var item in Model)
+{
+    <div class="swiper-slide">
+        <div class="hj-blog p-0">
+            <div class="row w-100 mx-auto titr-blog">
+                <h5 class="py-2 pr-4 pt-3"><b>@item.Title</b></h5>
+            </div>
+            <div class="row w-100 mx-auto py-2">
+                <div class="col-7 detalis-blog px-4 py-3">
+                    <h6 class="text-justify">
+                        @item.ShortDescription
+                    </h6>
+                </div>
+                <div class="col-5 pt-4">
+                    <img src="/uploads/Blogs/@item.Image" class="img-fluid w-100 mx-auto">
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

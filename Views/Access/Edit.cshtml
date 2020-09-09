@@ -1,0 +1,43 @@
+﻿@model KaraYadak.Models.Access
+
+@{
+    ViewBag.Title = "تغییر نام دسترسی";
+    Layout = "_AdminPanel";
+}
+
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "لیست دسترسی ها", ParentUrl = Url.Action("index") })
+
+<div class="content-body">
+    <section id="basic-vertical-layouts">
+        <div class="row match-height">
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">تغییر نام دسترسی</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form asp-action="Edit">
+                                <input type="hidden" asp-for="Id" />
+                                <div class="form-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="first-name-vertical">نام </label>
+                                                <input type="text" class="form-control" asp-for="Name" placeholder="نام دسترسی">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary mr-1 mb-1">ثبت تغییرات</button>
+                                            <a asp-action="index" class="btn btn-outline-warning mr-1 mb-1">بازگشت</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

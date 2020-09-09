@@ -1,0 +1,71 @@
+﻿@model KaraYadak.Models.Menu
+
+@{
+    ViewBag.Title = "تغییر مشخصات منو";
+    Layout = "_AdminPanel";
+}
+
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "لیست منو ها", ParentUrl = Url.Action("index") })
+
+<div class="content-body">
+    <section id="basic-vertical-layouts">
+        <div class="row match-height">
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">@ViewBag.Title</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form asp-action="Edit">
+                                <input type="hidden" asp-for="Id" />
+                                <div class="form-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="Name">نام</label>
+                                                <input type="text" class="form-control" asp-for="Name" placeholder="نام">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="Icon">آیکون</label>
+                                                <input type="text" dir="ltr" class="form-control" asp-for="Icon" placeholder="آیکون">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="Url">آدرس</label>
+                                                <select class="form-control" asp-for="Url" required>
+                                                    @foreach (var item in (List<string>)ViewBag.Routes)
+                                                    {
+                                                        <option value="@item">@item</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label asp-for="AccessId">دسترسی</label>
+                                                <select class="form-control" asp-for="AccessId" required>
+                                                    @foreach (var item in (List<KaraYadak.Models.Access>)ViewBag.Accesses)
+                                                    {
+                                                        <option value="@item.Id">@item.Name</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary mr-1 mb-1">ثبت تغییرات</button>
+                                            <a asp-action="index" class="btn btn-outline-warning mr-1 mb-1">بازگشت</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

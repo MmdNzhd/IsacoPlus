@@ -1,0 +1,110 @@
+﻿@*@model IEnumerable<KaraYadak.Models.Client>*@
+
+@{
+    ViewBag.Title = "تماس با ما";
+    Layout = "_SiteLayout";
+}
+@*@section vendorstyles{
+        <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css" />
+    }
+    @section styles{
+        <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css" />
+        <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+    }
+    @section vendors{
+        <script src="/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    }*@
+
+@section scripts{
+    <script>
+
+        $("#AddCommentForm").submit(function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var url = form.attr('action');
+            console.log(form);
+            $.blockUI({ message: '<h1>درحال ارسال درخواست...</h1>' });
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(),
+                success: function (data) {
+                    console.log(data);
+                    if (data.status == '1') {
+                        swal("", data.message, "success");
+                    }
+                    else {
+                        console.log(data.message);
+                    }
+                }
+
+            });
+            $.unblockUI();
+             
+            $("#Text").val("");
+            $("#Email").val("");
+            $("#Name").val("");
+
+        });
+
+
+    </script>
+
+}
+   
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+
+
+<div class="container py-5 mt-3">
+    <form id="AddCommentForm" class="ash-form" enctype="multipart/form-data" asp-action="AddContactusMessage" method="post" novalidate>
+
+        <div class="row w-100 mx-auto hj-contact p-md-5">
+            <div class="col-md-6 col-12">
+                <div class="row w-100 mx-auto text-center mt-4">
+                    <h5 class="text-center w-100  pb-5">تماس با ما</h5>
+                </div>
+                <div class="row w-100 mx-auto">
+                    <div class="form-group w-100">
+                        <input name="Name" id="Name" type="text" class="w-100 mx-auto py-2 px-2 hj-ContactName" placeholder=" نام ونام خانوادگی:">
+                    </div>
+                </div>
+
+                <div class="row w-100 mx-auto">
+                    <div class="form-group w-100">
+                        <input type="email" name="Email" id="Email" class="w-100 mx-auto py-2 px-2 hj-ContactName" placeholder="ایمیل :">
+                    </div>
+                </div>
+                <div class="row w-100 mx-auto">
+                    <div class="form-group w-100">
+                        <textarea class="w-100 mx-auto hj-ContactName " name="Text" id="Text" rows="4" cols="50" placeholder="پیغام خود را وارد کنید">
+         
+            </textarea>
+                    </div>
+                </div>
+                <div class="row w-100 mx-auto">
+                    <button type="submit" value="Submit" class="btn btn-primary w-100 mx-auto hj-btnContact">ارسال</button>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 pt-md-5">
+                <img src="~/img/contact.svg" class="img-fluid w-100 py-5">
+            </div>
+        </div>
+    </form>
+
+    <div class="row w-100 mx-auto mt-5 pt-5 mb-3  hj-loca">
+        <div class="col-md-6 col-12">
+            <div class="row w-100 mx-auto p-3 hj-address my-3"><h6><b>آدرس: </b></h6><h6>@ViewBag.Address </h6></div>
+            <div class="row w-100 mx-auto p-3 hj-address my-3"><h6><b>تلفن: </b></h6><h6>@ViewBag.PhoneNumber</h6></div>
+        </div>
+        <div class="col-md-6 col-12 pb-5"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d200.54844689933373!2d52.85763955692587!3d36.46298981218554!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f855d238c23c9f7%3A0x24c877c0c17b605c!2sMazandaran%20Province%2C%20Qaemshahr%2C%20Salehi%20Mazandarani%20St%2C%20Zeytoon%20Mall%2C%20Iran!5e0!3m2!1sen!2s!4v1595838228765!5m2!1sen!2s" width="100%" height="300" frameborder="0" style="border:0; border-radius: 10px;box-shadow: 1px 1px 9px #a09393b0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+
+    </div>
+</div>

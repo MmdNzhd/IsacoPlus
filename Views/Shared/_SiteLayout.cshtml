@@ -1,0 +1,360 @@
+﻿@inject KaraYadak.Data.ApplicationDbContext _context
+@{
+var Footer = _context.Settings.Where(x => x.Key.Equals("Footer")).Select(x => x.Value).SingleOrDefault();
+var Logo = _context.Settings.Where(x => x.Key.Equals("SiteLogo")).Select(x => x.Value).SingleOrDefault();
+var Instagram = _context.Settings.Where(x => x.Key.Equals("Instagram")).Select(x => x.Value).SingleOrDefault();
+var Telegram = _context.Settings.Where(x => x.Key.Equals("Telegram")).Select(x => x.Value).SingleOrDefault();
+var PhoneNumber = _context.Settings.Where(x => x.Key.Equals("PhoneNumber")).Select(x => x.Value).SingleOrDefault();
+var Whatsapp = _context.Settings.Where(x => x.Key.Equals("Whatsapp")).Select(x => x.Value).SingleOrDefault();
+var Phone = _context.Settings.Where(x => x.Key.Equals("Phone")).Select(x => x.Value).SingleOrDefault();
+var Email = _context.Settings.Where(x => x.Key.Equals("Email")).Select(x => x.Value).SingleOrDefault();
+var ContactUs = _context.Settings.Where(x => x.Key.Equals("MiniFooter")).Select(x => x.Value).SingleOrDefault();
+    Layout = null;
+}
+
+<html lang="en">
+
+<head>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کارایـــــــــــــــــدک</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.min.css"
+          integrity="sha256-QaRlBIHoN1LIkxeziW34nknOVrCasnLJY6esf3ldv+k=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha256-aAr2Zpq8MZ+YA/D6JtRD3xtrwpEz2IqOS+pWD/7XKIw=" crossorigin="anonymous" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/css/swiper.min.css"
+          integrity="sha256-kGupfJ4zZb4/m0GPPVY0ng7FwSjZm1E0wMWG1aRYbwk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+          integrity="sha256-UhQQ4fxEeABh4JrcmAJ1+16id/1dnlOEVCFOxDef9Lw=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css" integrity="sha512-f8gN/IhfI+0E9Fc/LKtjVq4ywfhYAVeMGKsECzDUHcFJ5teVwvKTqizm+5a84FINhfrgdvjX8hEJbem2io1iTA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" />
+
+    <!-- BEGIN: Vendor CSS-->
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/login.css" rel="stylesheet" />
+    @*<link href="~/css/mdb.min.css" rel="stylesheet" />*@
+
+    @RenderSection("vendorstyles", false)
+    <!-- END: Vendor CSS-->
+    <!-- BEGIN: Theme CSS-->
+    <!-- BEGIN: Page CSS-->
+    @RenderSection("styles", false)
+    <!-- END: Page CSS-->
+    <!-- BEGIN: Custom CSS-->
+    <!-- END: Custom CSS-->
+
+</head>
+
+<body>
+
+
+    <!-- --navbar-- -->
+    <!-- ---end navbar-- -->
+    <!-- ----intro--- -->
+    @RenderBody()
+    <!-- ---- -->
+    <!-- ----footer---- -->
+    <div class="container-fluid hj-footer pt-3" id="aboutUs">
+        <div class="row w-100 mx-auto px-3">
+            <div class="col-lg-5 col-md-6 col-12">
+                <div class="row w-100 mx-auto my-1">
+                    <img src="/uploads/@Logo" class="img-fluid ">
+                    <h2 class="pl-3 pt-3"><b class="font-kalame">کارا یدک</b></h2>
+                </div>
+                <div class="row w-100 mx-auto my-2 mr-2 pt-4">
+                    <h5 class="pr-3 pt-2"> <i class="fa fa-phone-square pl-2 icon-footer"></i>@Phone </h5>
+                </div>
+                <div class="row w-100 mx-auto my-2 mr-2">
+                    <h5 class="pr-3 pt-2"><i class="fa fa-envelope pl-2 icon-footer"></i>@Email</h5>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="row w-100 mx-auto">
+                    <h3 class="py-2 text-footer font-kalame pr-3 ">لینک ها</h3>
+                </div>
+                <div class="row w-100 mx-auto">
+                    <a href="#" class="text-white ">
+                        <li class="font-kalame size20"> فروشگاه</li>
+                    </a>
+                </div>
+                <div class="row w-100 mx-auto py-2">
+                    <a href="#" class="text-white">
+                        <li class="font-kalame size20"> انجمن تخصصی</li>
+                    </a>
+                </div>
+                <div class="row w-100 mx-auto py-2">
+                    <a href="#" class="text-white">
+                        <li class="font-kalame size20"> درباره ی ما</li>
+                    </a>
+                </div>
+                <div class="row w-100 mx-auto py-2">
+                    <a href="#" class="text-white">
+                        <li class="font-kalame size20"> تماس با ما</li>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6 col-6  text-center p-0">
+                <img src="~/img/namd.png" class="img-fluid mx-auto w-75 text-center pt-3 bg-namad">
+            </div>
+            <div class="col-lg-2 col-md-6 col-6  text-center p-0">
+                <img src="~/img/namad.png" class="img-fluid mx-auto w-75 text-center pt-3 bg-namad">
+            </div>
+        </div>
+        <!-- --- -->
+        <div class="row w-100 mx-auto pr-lg-4">
+            <div class="col-lg-4 col-12 py-3 pr-5 pr-lg-0">
+                <div class="row w-100 mx-auto">
+                    <h3 class="text-footer font-kalame">درباره ی ما</h3>
+                </div>
+                <div class="row w-100 mx-auto text-justify pt-2  ">
+                    <h5 class="line-28 font-kalame">
+                        @ContactUs
+                    </h5>
+                </div>
+
+            </div>
+            <div class="col-lg-1 col-0 py-3"></div>
+            <div class="col-lg-7  py-3">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51290.43744763979!2d52.641553507608016!3d36.538380980681794!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f8f88494db70a07%3A0xf3a380da3076a39!2sBabol%2C%20Mazandaran%20Province%2C%20Iran!5e0!3m2!1sen!2s!4v1597080938282!5m2!1sen!2s"
+                        width="100%" height="180" frameborder="0" style="border:0; border-radius: 10px;" allowfullscreen=""
+                        aria-hidden="false" tabindex="0"></iframe>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- -----end footer---- -->
+    <!-- ---MODAL--- -->
+    <!-- Central Modal Small -->
+    <!-- Central Modal Small -->
+    <!-- ---script--- -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha256-OFRAJNoaD8L3Br5lglV7VyLRf0itmoBzWUoM+Sji4/8=" crossorigin="anonymous"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js" integrity="sha512-MqEDqB7me8klOYxXXQlB4LaNf9V9S0+sG1i8LtPOYmHqICuEZ9ZLbyV3qIfADg2UJcLyCm4fawNiFvnYbcBJ1w==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countdown/2.6.0/countdown.min.js"
+            integrity="sha512-FkM4ZGExuYz4rILLbNzw8f3HxTN9EKdXrQYcYfdluxJBjRLthYPxxZixV/787qjN3JLs2607yN5XknR/cQMU8w=="
+            crossorigin="anonymous"></script>
+    <script src="~/js/app.js"></script>
+    <!-- ---end footer--- -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha256-OFRAJNoaD8L3Br5lglV7VyLRf0itmoBzWUoM+Sji4/8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/js/fontawesome.min.js"
+            integrity="sha256-fjQmECvnpgwxO4TyEkO7CJeu97Lu+JKoGDCNEVDs7X0=" crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/js/mdb.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+            integrity="sha256-pTxD+DSzIwmwhOqTFN+DB+nHjO4iAsbgfyFq5K5bcE0=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/js/swiper.min.js"
+            integrity="sha256-NiMdnMv0WBAps3M8mcB7WHzlanETt0rnwMCgg67DgCk=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/js/swiper.min.js"
+            integrity="sha256-NiMdnMv0WBAps3M8mcB7WHzlanETt0rnwMCgg67DgCk=" crossorigin="anonymous"></script>
+    <script src="~/app-assets/vendors/js/vendors.min.js"></script>
+    <script src="~/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+    <script src="~/js/app.js"></script>
+    <script src="~/js/mdb.min.js"></script>
+    <!-- Optional: include a polyfill for ES6 Promises for IE11 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/js/swiper.min.js" integrity="sha512-VHsNaV1C4XbgKSc2O0rZDmkUOhMKPg/rIi8abX9qTaVDzVJnrDGHFnLnCnuPmZ3cNi1nQJm+fzJtBbZU9yRCww==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
+    <!-- BEGIN Vendor JS-->
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="~/app-assets/vendors/js/ui/prism.min.js"></script>
+    @RenderSection("vendors", false)
+    <!-- END: Page Vendor JS-->
+    <!-- BEGIN: Theme JS-->
+    <script src="~/app-assets/js/core/app-menu.js"></script>
+    <script src="~/app-assets/js/core/app.js"></script>
+
+    <!-- END: Theme JS-->
+    <!-- BEGIN: Page JS-->
+    @RenderSection("scripts", false)
+    <!-- END: Page JS-->
+    <script src="~/assets/js/jquery.cookie.js"></script>
+    <script>
+        document.getElementById('searchItem').onkeypress = function (e) {
+            if (!e) e = window.event;
+            var keyCode = e.keyCode || e.which;
+            if (keyCode == '13') {
+                location.href = "/Search/" + $("#searchItem").val();
+            }
+        }
+        function Search() {
+            location.href = "/Search/" + $("#searchItem").val();
+        }
+        var oldCookieValue = $.cookie('cart');
+        if (oldCookieValue == "") {
+            $.removeCookie('cart', { path: '/' });
+        }
+        if (oldCookieValue != undefined) {
+            var productCount = oldCookieValue.split(",").length;
+            $('#cartCount').text(productCount);
+        }
+        $("#searchBox").keypress(function (event) {
+            if (event.keyCode === 13) {
+                window.location.href = "/Search/" + $("#searchBox").val();
+            }
+        });
+
+
+
+
+
+    </script>
+
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            onOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        $("#Register-form").submit(function (e) {
+            e.preventDefault();
+            var url = "/Account/Register"
+            let formData = new FormData();
+            formData.append("Nickname", $("#usernameForReg").val());
+            formData.append("Email", $("#email").val());
+            formData.append("Password", $("#passwordForReg").val());
+            formData.append("ConfirmPassword", $("#ConfirmPassword").val());
+            if ($("#ConfirmPassword").val() != $("#passwordForReg").val()) {
+                Toast.fire({
+                    icon: 'error',
+                    title: "عدم کلمه عبور همخوانی ندارد"
+                })
+            }
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+
+                    var errors = "";
+
+                    if (data.status == 1) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.message
+
+                        })
+                        $("#centralModalLogin").modal("hide");
+                        location.reload();
+
+                    }
+
+
+                    if (data.status == 2) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: data.error
+                        })
+                    }
+                    if (data.status == 0) {
+                        if (typeof (data.error) != "object") {
+                            Toast.fire({
+                                icon: 'error',
+                                title: data.error
+                            })
+
+                        }
+                        else {
+                            data.error.forEach((err) => {
+                                var er = `---${err}`;
+
+                                errors += er;
+
+                            })
+                            Toast.fire({
+                                icon: 'error',
+                                title: errors
+                            })
+
+                        }
+                    }
+
+
+                }
+            });
+        });
+        $("#login-form").submit(function (e) {
+            e.preventDefault();
+            let values = { 'Username': $("#username").val(), 'Password': $("#password").val() };
+            var url = "/Account/SignIn"
+            $.ajax({
+                type: "POST",
+                url: url,
+                dataType: 'json',
+                data: values,
+                success: function (data) {
+                    var errors = "";
+
+                    if (data.status == 1) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.message
+
+                        })
+                        $("#centralModalLogin").modal("hide");
+                        location.reload();
+
+                    }
+
+
+                    if (data.status == 2) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: data.error
+                        })
+                    }
+                    if (data.status == 0) {
+                        data.error.forEach((err) => {
+                            var er = `---${err}`;
+
+                            errors += er;
+
+                        })
+                        Toast.fire({
+                            icon: 'error',
+                            title: errors
+                        })
+
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
+
+
+

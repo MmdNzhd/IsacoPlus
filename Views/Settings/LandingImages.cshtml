@@ -1,0 +1,234 @@
+﻿@model KaraYadak.ViewModels.LandingPageImagesViewModel
+@{
+    ViewBag.Title = "تغییر عکس های صفحه اصلی";
+    Layout = "_AdminPanel";
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors-rtl.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/ui/prism.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/file-uploaders/dropzone.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/extensions/swiper.min.css">
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/plugins/file-uploaders/dropzone.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/plugins/extensions/swiper.css">
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/dropzone.min.js"></script>
+    <script src="/app-assets/vendors/js/ui/prism.min.js"></script>
+    <script src="/app-assets/vendors/js/extensions/swiper.min.js"></script>
+}
+@section scripts{
+    <script>
+        function DeleteImage(url) {
+            var form = {};
+            form['imageurl'] = url;
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("deleteimage")",
+                data: form,
+                success: function (data) {
+                    if (data == 'ok') {
+                        $('div[data-image-url="' + url + '"]').remove();
+                    }
+                }
+            });
+        }
+        var mySwiper = new Swiper('.swiper-default');
+        Dropzone.options.topsliderimages = {
+            paramName: "files", // The name that will be used to transfer the file
+            maxFilesize: 2, // MB
+            maxFiles: 10,
+            clickable: true,
+            maxThumbnailFilesize: 1,
+            acceptedFiles: 'image/*',
+            addRemoveLinks: true,
+            dictRemoveFile: " حذف",
+        };
+        Dropzone.options.laptopsliderimages = {
+            paramName: "files", // The name that will be used to transfer the file
+            maxFilesize: 2, // MB
+            maxFiles: 10,
+            clickable: true,
+            maxThumbnailFilesize: 1,
+            acceptedFiles: 'image/*',
+            addRemoveLinks: true,
+            dictRemoveFile: " حذف",
+        };
+        Dropzone.options.applicationsliderimages = {
+            paramName: "files", // The name that will be used to transfer the file
+            maxFilesize: 2, // MB
+            maxFiles: 10,
+            clickable: true,
+            maxThumbnailFilesize: 1,
+            acceptedFiles: 'image/*',
+            addRemoveLinks: true,
+            dictRemoveFile: " حذف",
+        };
+        Dropzone.options.trustusimage = {
+            paramName: "file", // The name that will be used to transfer the file
+            maxFilesize: 2, // MB
+            maxFiles: 1,
+            clickable: true,
+            maxThumbnailFilesize: 1,
+            acceptedFiles: 'image/*',
+            addRemoveLinks: true,
+            dictRemoveFile: " حذف",
+        };
+    </script>
+}
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "لیست تنظیمات", ParentUrl = Url.Action("index", "settings") })
+<div class="content-body">
+    <section id="basic-vertical-layouts">
+        <div class="row match-height">
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">اسلایدر بالا</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form class="dropzone dropzone-area" id="topsliderimages" asp-action="LandingImageTopSlider" method="post" enctype="multipart/form-data">
+                                <div class="dz-message font-regular">فایل ها را اینجا بندازید</div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">تصاویر</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+                                @foreach (var item in Model.topsliders)
+                                {
+                                    <div class="col-md-4 col-6 user-latest-img" data-image-url="@item">
+                                        <a href="javascript:DeleteImage('@item')">
+                                            <img src="@item" class="img-thumbnail img-fluid mb-1 rounded-sm" alt="avtar img holder" />
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row match-height">
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">اسلایدر لپتاپ</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form class="dropzone dropzone-area" id="laptopsliderimages" asp-action="LandingImageLaptopSlider" method="post" enctype="multipart/form-data">
+                                <div class="dz-message font-regular">فایل ها را اینجا بندازید</div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">تصاویر</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+                                @foreach (var item in Model.laptopsliders)
+                                {
+                                    <div class="col-md-4 col-6 user-latest-img" data-image-url="@item">
+                                        <a href="javascript:DeleteImage('@item')">
+                                            <img src="@item" class="img-thumbnail img-fluid mb-1 rounded-sm" alt="avtar img holder" />
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row match-height">
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">اسلایدر اپلیکیشن</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form class="dropzone dropzone-area" id="applicationsliderimages" asp-action="LandingImageApplicationSlider" method="post" enctype="multipart/form-data">
+                                <div class="dz-message font-regular">فایل ها را اینجا بندازید</div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">تصاویر</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+                                @foreach (var item in Model.applicationsliders)
+                                {
+                                    <div class="col-md-4 col-6 user-latest-img" data-image-url="@item">
+                                        <a href="javascript:DeleteImage('@item')">
+                                            <img src="@item" class="img-thumbnail img-fluid mb-1 rounded-sm" alt="avtar img holder" />
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row match-height">
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">تصویر به ما اعتماد کنید</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form class="dropzone dropzone-area" id="trustusimage" asp-action="LandingImageTrustus" method="post" enctype="multipart/form-data">
+                                <div class="dz-message font-regular">فایل را اینجا بندازید</div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">تصاویر</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+                                @if (Model.trustusimage != null)
+                                {
+                                    <div class="col-md-4 col-6 user-latest-img" data-image-url="@Model.trustusimage">
+                                        <a href="javascript:DeleteImage('@Model.trustusimage')">
+                                            <img src="@Model.trustusimage" class="img-thumbnail img-fluid mb-1 rounded-sm" alt="avtar img holder" />
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

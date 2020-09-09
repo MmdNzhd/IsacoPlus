@@ -1,0 +1,812 @@
+﻿@model KaraYadak.ViewModels.ProductWithCategoryVM
+@{
+    Layout = "_WebAppLanding";
+    ViewData["Title"] = "صفحه اصلی";
+}
+<div style="display:none" id="productCode" data-code="@Model.Product.Code"></div>
+<div class="container m-0 mt-5 mtk-main mtk-product-detail p-0">
+    <!--Banner-->
+    <section class="sec-1 container-fluid py-2">
+        <div class="row">
+            <partial name="_WebAppHeader" />
+        </div>
+        <div class="row mtk-product-image position-relative">
+            @{
+                var image = Model.Product.Images.FirstOrDefault() == null ? "/assets/noImg.png" : Model.Product.Images.FirstOrDefault().Url;
+            }
+            <img src="@image" class="w-100" alt="Alternate Text" />
+            <div class="mtk-product-price row w-100">
+                <span class=" col-6 text-right"><span>@string.Format("{0:n0}", Model.Product.Price)</span> تومان</span>
+                <span class=" col-6 text-left">@Model.Product.Name @Model.Categories?.Replace(",", "")</span>
+            </div>
+        </div>
+        <div class="row bg-dark-blue text-center mtk-product-services">
+            <div class="col-3 w-100 p-0 ">
+                <a href="#" id="compare" class="btn p-0 w-100 shadow-none">
+                    <img src="~/mtk/images/icon/compare.svg" class="text-center w-100 mx-auto" alt="Alternate Text" />
+                    <span class="text-white text-center">مقایسه</span>
+                </a>
+            </div>
+            @{
+                var likeImg = Model.IsFavorite == true ? "/mtk/images/icon/fullHeart.svg" : "/mtk/images/icon/blackheart.svg";
+            }
+            <div class="col-3 w-100 p-0">
+                <a data-title="@Model.Product.Name @Model.Categories?.Replace(",","")" data-item-id="@Model.Product.Code" data-isFavorite="@Model.IsFavorite" onclick="likeDislike(this)" class="btn p-0 w-100 shadow-none">
+                    <img id="like" src="@likeImg" class="ext-center w-100 mx-auto" alt="Alternate Text" />
+                    <span class="text-white text-center">علاقه مندی</span>
+                </a>
+            </div>
+            <div class="col-3 w-100 p-0">
+                <a href="#" class="btn p-0 w-100 shadow-none" data-toggle="modal" data-target="#meter">
+                    <img src="~/mtk/images/icon/meter (2) - Copy.svg" class="ext-center w-100 mx-auto" alt="Alternate Text" />
+                    <span class="text-white text-center">راهنمای متراژ</span>
+                </a>
+            </div>
+            <div class="col-3 w-100 p-0">
+                <a data-toggle="modal" data-target="#Share" href="#" class="btn p-0 w-100 shadow-none">
+                    <img id="likeImg" src="~/mtk/images/icon/share (2).svg" class="ext-center w-100 mx-auto" alt="Alternate Text" />
+                    <span class="text-white text-center">اشتتراک گذاری</span>
+                </a>
+            </div>
+        </div>
+        <div class="row my-2 justify-content-sm-end mx-auto">
+            @{
+                var list = Model.Codes.Split(",");
+            }
+            @foreach (var item in Model.ProductCategories)
+            {
+                <div class="col-2 my-2">
+                    <a asp-action="productDetail" asp-route-code="@list[Model.ProductCategories.IndexOf(item)]" asp-route-name="@Model.Product.Name">
+                        <div style="background-color:@item.Color" class="mtk-color"></div>
+                    </a>
+                </div>
+            }
+        </div>
+
+
+        <hr class="bg-dark" />
+        <div class="row">
+            <div class="col-6 align-middle p-0 px-2 text-right">
+                <a href="/" class="btn p-0 shadow-none">
+                    <img src="~/mtk/images/icon/coat.png" class="float-right" alt="Alternate Text" />
+                    <small class="d-inline-block px-2 text-white">لباس های مجلسی</small>
+                </a>
+            </div>
+            <div class="col-6 align-middle p-0 px-2 text-right">
+                <a href="/" class="btn p-0 shadow-none">
+                    <img src="~/mtk/images/icon/coat.png" class="float-right" alt="Alternate Text" />
+                    <small class="d-inline-block px-1 text-white">لباس های مجلسی</small>
+                </a>
+            </div>
+            <div class="col-6 align-middle p-0 px-2 text-right">
+                <a href="/" class="btn p-0 shadow-none">
+                    <img src="~/mtk/images/icon/coat.png" class="float-right" alt="Alternate Text" />
+                    <small class="d-inline-block px-2 text-white">لباس های مجلسی</small>
+                </a>
+            </div>
+            <div class="col-6 align-middle p-0 px-2 text-right">
+                <a href="/" class="btn p-0 shadow-none">
+                    <img src="~/mtk/images/icon/coat.png" class="float-right" alt="Alternate Text" />
+                    <small class="d-inline-block px-2 text-white">لباس های مجلسی</small>
+                </a>
+            </div>
+            <div class="col-6 align-middle p-0 px-2 text-right">
+                <a href="/" class="btn p-0 shadow-none">
+                    <img src="~/mtk/images/icon/coat.png" class="float-right" alt="Alternate Text" />
+                    <small class="d-inline-block px-2 text-white">لباس های مجلسی</small>
+                </a>
+            </div>
+            <div class="col-6 align-middle p-0 px-2 text-right">
+                <a href="/" class="btn p-0 shadow-none">
+                    <img src="~/mtk/images/icon/coat.png" class="float-right" alt="Alternate Text" />
+                    <small class="d-inline-block px-2 text-white">لباس های مجلسی</small>
+                </a>
+            </div>
+        </div>
+        <div class="row bg-light-gray">
+            <h5 class="text-dark px-2 py-2 d-block">@Model.Product.Name</h5>
+        </div>
+        <div class="row bg-light-gray">
+            <small class="text-dark px-2 d-block">#@Model.Product.Code</small>
+        </div>
+        <div class="row text-justify bg-light-gray text-white product-info px-3">
+            <p class="overflow-hidden text-dark" data-height="0">
+                @Model.Product.Description
+                <br />
+            </p>
+            <a class="btn btn-md btn-yellow text-dark rounded-pill mx-auto" onclick="raise(this)">مشاهده توضیحات</a>
+        </div>
+        <div class="row  product-services py-4">
+            <div class="col-12">
+                <div class="row justify-content-center">
+                    <small class="col-6 text-white text-center feat-1 p-0">
+                        مناسب لباس های مجلسی
+                    </small>
+                </div>
+                <hr class="bg-light" />
+                <div class="row justify-content-between">
+                    <small class="col-3 text-white text-center feat-2 p-0">
+                    </small>
+                    <small class="col-3  text-white text-center feat-3 p-0">
+                        دوخت عالی
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!--Comments-->
+        <div class="row comments py-2">
+            <button data-code="@Model.Product.Code" id="getComments" class="btn btn-md btn-info text-white rounded-pill mx-auto">نظرات کاربران</button>
+        </div>
+        <!--Slider-->
+
+        <div class="sec-5 container-fluid bg-gray  mx-0 p-0">
+            <div class="row title align-items-center">
+                <div class="col-8">
+                    <h5 class="text-white text-right py-3 position-relative">% تخفیف های امروز</h5>
+                </div>
+                <div class="col-4">
+                    <a href="#" class="text-white my-3">مشاهده همه ></a>
+                </div>
+            </div>
+            <div class="row bg-white">
+                <div class="swiper-container swiper-off ltr" id="off">
+                    <div class="swiper-wrapper">
+                        @foreach (var item in ViewBag.Similar)
+                        {
+                            <div class="swiper-slide position-relative p-2">
+
+                                @*****************************************************************************************@
+                                <a asp-action="productDetail" asp-route-code="@item.Product.Code" asp-route-name="@item.Product.Name">
+                                    @{
+                                        var img = item.Product.ImageUrl == null ? "/assets/noImg.png" : item.Product.ImageUrl;
+                                    }
+                                    <div class="card position-relative wow fadeInDown w-100" data-wow-duration="2s">
+                                        <img class="card-img-top w-100" src="@img" alt="Card image cap">
+                                        <div class="mtk-star position-absolute p-2">
+                                            <i class="fa fa-star text-white mt-1"></i><small class="text-white ml-3"> </small>
+                                        </div>
+                                        @*<div class="mtk-like position-absolute p-2 m-2 mr-3" onclick="likeDislike(this)">
+                                            <i class="fa fa-heart text-white "></i>
+                                        </div>*@
+                                        <div class="mtk-off-perc position-absolute">
+                                            @*<small class="text-dark"><span>3</span>% تخفیف</small>*@
+
+                                            @if (item.Product.Discount != 0)
+                                            {
+                                                <span>
+                                                    <small class="font-weight-bold">@item.Product.Discount%</small>
+                                                </span>
+                                            }
+                                        </div>
+                                        <div class="card-body p-0 px-2 py-1 bg-light-gray">
+                                            <!-- Title -->
+                                            <h6 class="card-title text-right p-0 m-0"><a>@item.Product.Name @item.Categories?.Replace(",", "")</a></h6>
+                                            <!-- Text -->
+                                            @*<span class="small d-inline-block w-100">مخصوص لباس مجلسی</span>*@
+                                            <!-- Proce -->
+                                            <span class="small d-inline-block w-100"> <span class="mtk-price">@string.Format("{0:n0}", item.Product.Price)</span>تومان</span>
+                                            <!--Buy-->
+                                            @*<div class="mtk-buy">
+                                                @if (!ViewBag.Cookie.Contains(item.Product.Code.ToString()))
+                                                {
+                                                    <a class="buyModal @item.Product.Code-00" data-item-id="@item.Product.Code" href="#">
+                                                        <img src="~/mtk/images/icon/cart.svg" />اضافه به سبد خرید
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="editModal @item.Product.Code-00" data-item-id="@item.Product.Code" href="#">
+                                                        <img src="~/mtk/images/icon/cart.svg" />اضافه به سبد خرید
+                                                    </a>
+                                                }
+
+                                            </div>*@
+                                        </div>
+                                    </div>
+                                </a>
+                                @**********************************************************************************@
+                            </div>
+
+                        }
+                    </div>
+                    <!-- Add Pagination -->
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </div>
+
+        <!--Off Products-->
+        <div class="sec-5 container-fluid bg-gray mb-5 mx-0 p-0">
+            <div class="row title align-items-center">
+                <div class="col-8">
+                    <h5 class="text-white text-right py-3 position-relative">% تخفیف های امروز</h5>
+                </div>
+                <div class="col-4">
+                    <a href="#" class="text-white my-3">مشاهده همه ></a>
+                </div>
+            </div>
+            <div class="row bg-white">
+                <div class="swiper-container swiper-off ltr" id="off-2">
+                    <div class="swiper-wrapper">
+                        @foreach (var item in ViewBag.Similar)
+                        {
+                            <div class="swiper-slide position-relative p-2">
+
+                                @*****************************************************************************************@
+                                <a asp-action="productDetail" asp-route-code="@item.Product.Code" asp-route-name="@item.Product.Name">
+                                    @{
+                                        var img = item.Product.ImageUrl == null ? "/assets/noImg.png" : item.Product.ImageUrl;
+                                    }
+                                    <div class="card position-relative wow fadeInDown w-100" data-wow-duration="2s">
+                                        <img class="card-img-top w-100" src="@img" alt="Card image cap">
+                                        <div class="mtk-star position-absolute p-2">
+                                            <i class="fa fa-star text-white mt-1"></i><small class="text-white ml-3"> </small>
+                                        </div>
+                                        @*<div class="mtk-like position-absolute p-2 m-2 mr-3" onclick="likeDislike(this)">
+                                            <i class="fa fa-heart text-white "></i>
+                                        </div>*@
+                                        <div class="mtk-off-perc position-absolute">
+                                            @*<small class="text-dark"><span>3</span>% تخفیف</small>*@
+
+                                            @if (item.Product.Discount != 0)
+                                            {
+                                                <span>
+                                                    <small class="font-weight-bold">@item.Product.Discount%</small>
+                                                </span>
+                                            }
+                                        </div>
+                                        <div class="card-body p-0 px-2 py-1 bg-light-gray">
+                                            <!-- Title -->
+                                            <h6 class="card-title text-right p-0 m-0"><a>@item.Product.Name @item.Categories?.Replace(",", "")</a></h6>
+                                            <!-- Text -->
+                                            @*<span class="small d-inline-block w-100">مخصوص لباس مجلسی</span>*@
+                                            <!-- Proce -->
+                                            <span class="small d-inline-block w-100"> <span class="mtk-price">@string.Format("{0:n0}", item.Product.Price)</span>تومان</span>
+                                            <!--Buy-->
+                                            @*<div class="mtk-buy">
+                                                @if (!ViewBag.Cookie.Contains(item.Product.Code.ToString()))
+                                                {
+                                                    <a class="buyModal @item.Product.Code-00" data-item-id="@item.Product.Code" href="#">
+                                                        <img src="~/mtk/images/icon/cart.svg" />اضافه به سبد خرید
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="editModal @item.Product.Code-00" data-item-id="@item.Product.Code" href="#">
+                                                        <img src="~/mtk/images/icon/cart.svg" />اضافه به سبد خرید
+                                                    </a>
+                                                }
+
+                                            </div>*@
+                                        </div>
+                                    </div>
+                                </a>
+                                @**********************************************************************************@
+                            </div>
+
+                        }
+                    </div>
+                    <!-- Add Pagination -->
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--Purchase-->
+        @if (!ViewBag.Cookie.Contains(Model.Product.Code.ToString()))
+        {
+            <div class="row purchase bg-transparent">
+                <button class="btn btn-lg btn-block btn-danger text-white rounded mx-auto buyModal @Model.Product.Code-00" data-item-id="@Model.Product.Code">اضافه کردن به سبد خرید</button>
+            </div>
+        }
+        else
+        {
+            <div class="row purchase bg-transparent">
+                <button class="btn btn-lg btn-block btn-danger text-white rounded mx-auto editModal @Model.Product.Code-00" data-item-id="@Model.Product.Code">اضافه کردن به سبد خرید</button>
+            </div>
+        }
+
+        <div class="row">
+            <div class="container-fluid bg-white  mtk-menu" style="position: fixed;
+    bottom: 0;
+    box-shadow: 1px 1px 100px #000;
+    z-index: 111;
+    width: 100%;
+    max-width: 520px;">
+                <div class="row justify-content-center py-2">
+                    <div class="col-3 text-center">
+                        <a href="#">
+                            <img src="~/mtk/images/icon/home.svg" width="23px" alt="" />
+                        </a>
+                    </div>
+                    <div class="col-3 text-center">
+                        <a asp-action="favorite">
+                            <img src="~/mtk/images/icon/menuheart.svg" width="23px" alt="" />
+                        </a>
+                    </div>
+                    <div class="col-3 text-center">
+                        <a href="#">
+                            <img src="~/mtk/images/icon/yarn.svg" width="23px" alt="" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Comments-->
+        <!-- Modal -->
+        <div class="modal fade" id="comments" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+
+            <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+            <div class="modal-dialog modal-dialog-centered pt-5" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">نظرات کاربران</h5>
+                        @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>*@
+                    </div>
+                    <div class="modal-body">
+                        <!--Comments-->
+                        <section class="product-comments">
+                        </section>
+                    </div>
+                    <div class="modal-footer justify-content-center row">
+                        <button type="button" class="btn btn-danger btn-block mx-3 my-2" data-dismiss="modal">بازگشت</button>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button type="button" class="btn btn-success btn-block mx-3" data-toggle="modal" data-target="#commentBox">ارسال نظر</button>
+
+                        }
+                        else
+                        {
+                            <a class="btn btn-success btn-block mx-3" asp-action="register" asp-route-call="productDetail/@Model.Product.Code/@Model.Product.Code">ارسال نظر</a>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--Add Comments Box-->
+        <div class="modal fade" id="commentBox" tabindex="-1" role="dialog" aria-labelledby="commentBox"
+             aria-hidden="true">
+
+            <!-- Add class .modal-full-height and then add class .modal-right (or other classes from list above) to set a position to the modal -->
+            <div class="modal-dialog modal-full-height" role="document">
+
+
+                <div class="modal-content pt-5 mt-5">
+                    <div class="modal-header text-right">
+                        <h4 class="modal-title w-100" id="myModalLabel">ارسال نظر</h4>
+                    </div>
+                    <form id="form" asp-action="addComment">
+                        <div class="modal-body">
+                            <div class="form-group text-right">
+                                <label for="title">عنوان</label>
+                                <input name="title" type="text" class="form-control" id="title" required>
+                            </div>
+                            <div class="form-group text-right">
+                                <label for="body">نظر خود را وارد کنید</label>
+                                <textarea class="form-control" name="body" id="body" rows="7" required></textarea>
+                            </div>
+                        </div>
+                        <input name="productCode" type="hidden" asp-for="Product.Code" />
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-danger btn-block mx-1 my-2" data-dismiss="modal">بازگشت</button>
+                            <button onclick="Submit()" type="button" class="btn btn-success btn-block mx-1">ارسال نظر</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--Meter Detail-->
+        <!-- Modal -->
+        <div class="modal fade" id="meter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+
+            <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+            <div class="modal-dialog modal-dialog-centered" role="document">
+
+
+                <div class="modal-content bg-danger">
+                    <div class="modal-header text-center">
+                        <h5 class="modal-title text-center" id="exampleModalLongTitle">راهنمای متراژ</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row py-2">
+                            <div class="col-6 text-center">
+                                <span>128cm</span>
+                            </div>
+                            <div class="col-6 text-center">
+                                <span> : XXX</span>
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col-6 text-center">
+                                <span>100cm</span>
+                            </div>
+                            <div class="col-6 text-center">
+                                <span> : XX</span>
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col-6 text-center">
+                                <span>80cm</span>
+                            </div>
+                            <div class="col-6 text-center">
+                                <span> : X</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+@* Share *@
+<div class="modal fade" id="Share" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog my-5" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">اشتراک گذاری</h5>
+            </div>
+            <div class="modal-body mx-auto">
+                <!-- AddToAny BEGIN -->
+                <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
+                    <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+                    <a class="a2a_button_facebook"></a>
+                    <a class="a2a_button_twitter"></a>
+                    <a class="a2a_button_email"></a>
+                    <a class="a2a_button_whatsapp"></a>
+                    <a class="a2a_button_telegram"></a>
+                    <a class="a2a_button_linkedin"></a>
+                    <a class="a2a_button_google_gmail"></a>
+                </div>
+                <script>
+                    var a2a_config = a2a_config || {};
+                    a2a_config.locale = "fa";
+                </script>
+                <script async src="https://static.addtoany.com/menu/page.js"></script>
+                <!-- AddToAny END -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">بازگشت</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Buy *@
+<div class="modal fade" id="buy" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+
+    <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+
+        <div class="modal-content  border border-yellow">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">خرید پارچه</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    @*<span aria-hidden="true">&times;</span>*@
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group text-right float-right w-50">
+                    <label for="meter">متر</label>
+                    <select class="form-control" id="meter">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                    </select>
+                </div>
+                <div class="form-group text-right float-right w-50">
+                    <label for="centimiter">سانتی متر</label>
+                    <select class="form-control" id="centimiter">
+                        <option value="0">0</option>
+                        <option value="10">10</option>
+                        <option>20</option>
+                        <option>40</option>
+                        <option>60</option>
+                        <option>80</option>
+                    </select>
+                </div>
+
+            </div>
+            <div id="modalFooter" class="modal-footer align-items-center ">
+                <button type="button" class="btn btn-red addToBascket" data-item-id=""><i class="fas fa-shopping-cart mt-2"></i><span>افزودن به سبد خرید</span></button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@* ********************************************************** *@
+<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+
+    <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+
+        <div class="modal-content  border border-yellow">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">خرید پارچه</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    @*<span aria-hidden="true">&times;</span>*@
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group text-right float-right w-50">
+                    <label for="meter">متر</label>
+                    <select class="form-control" id="eMeter">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                    </select>
+                </div>
+                <div class="form-group text-right float-right w-50">
+                    <label for="centimiter">سانتی متر</label>
+                    <select class="form-control" id="eCentimiter">
+                        <option value="0">0</option>
+                        <option value="10">10</option>
+                        <option>20</option>
+                        <option>40</option>
+                        <option>60</option>
+                        <option>80</option>
+                    </select>
+                </div>
+
+            </div>
+            <div id="modalFooter" class="modal-footer align-items-center">
+                <button type="button" class="btn btn-red changeLength" data-item-id=""><i class="fas fa-shopping-cart mt-2"></i><span>تغییر متراژ</span></button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="~/mtk/js/rating.min.js"></script>
+    <script>
+        function loading() {
+            Swal.fire({
+                //title: 'در حال ارسال؟',
+                //html: '<button style="display:none" id="loaderUi" class="btn btn-primary" type="button" disabled>< span class= "spinner-border spinner-border-sm mr-2" role="status" aria- hidden="true" ></span >درحال بارگذاری...</button >',
+                html: '<p>در حال بارگذاری</p><img src="/app-assets/load.gif"/>',
+                allowOutsideClick: false,
+                showCancelButton: false, // There won't be any cancel button
+                showConfirmButton: false // There won't be any confirm button
+            });
+        }
+        //bastan e loader
+        function closeLoader() {
+            swal.close();
+        }
+        var swiper3 = new Swiper('#off-2', {
+            slidesPerView: 2,
+            spaceBetween: 1,
+            coverflowEffect: {
+                rotate: 40,
+                slideShadows: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'progressbar',
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            },
+        });
+
+        $('#rateMe1').mdbRate();
+
+        $("body").on("click", "#compare", function () {
+            var value = $("#productCode").attr("data-code");
+            console.log(value);
+            $.cookie('compare', value, { expires: 7, path: '/' });
+
+            location.href = '@Url.Action("compare")';
+        });
+        function likeDislike(item) {
+            var value = $(item).attr("data-item-id");
+            var product = $(item).attr("data-title");
+            if ($("#like").attr("src") == "/mtk/images/icon/blackheart.svg") {
+                loading();
+                $.ajax({
+                    type: 'POST',
+                    url: '/webapp/AddToFavorite',
+                    data: {
+                        Id: value
+                    }
+                }).done(function (result) {
+                    console.log(result);
+                    if (result.status != '0') {
+                        //swal("", result.message, "success");
+                        closeLoader();
+                        Swal.fire({
+                            icon: "success",
+                            html: "</span>" + product + '<span> به لیست علاقه مندی شما اضافه شد. جهت مشاهده لیست علاقه مندی خود</a> اینجا <a  href="/webapp/Favorite  "> کلیک کنید ',
+                            confirmButtonText: "بستن",
+                        });
+                        $('#like').attr('src', '/mtk/images/icon/fullHeart.svg');
+                    }
+                });
+            } else {
+
+                loading();
+                $.ajax({
+                    type: 'POST',
+                    url: '/webapp/RemoveFromFavorites',
+                    data: {
+                        Id: value
+                    }
+                }).done(function (result) {
+                    if (result.status != '0') {
+                        //swal("", result.message, "success");
+                        $('#like').attr('src', '/mtk/images/icon/blackheart.svg');
+                    }
+                    console.log(result);
+
+                    closeLoader();
+                });
+            }
+
+            //if ($(item).children('svg').hasClass('text-white')) {
+            //    $(item).children('svg').animate().addClass('text-danger');
+            //    $(item).children('svg').attr('transform', 'scale(1.3)');
+            //    $(item).children('svg').animate().removeClass('text-white');
+
+
+            //}
+            //else/* if ($(item).children('svg').hasClass('text-danger')) */ {
+            //    $(item).children('svg').animate().addClass('text-white');
+            //    $(item).children('svg').attr('transform', 'scale(1)');
+            //    $(item).children('svg').animate().removeClass('text-danger');
+
+            //}
+        }
+
+        $("#getComments").on("click", function () {
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetComments")',
+                data: {
+                    code: $(this).attr("data-code"),
+                }
+            }).done(function (data) {
+                console.log(data);
+                if (data.status != '0') {
+                    $(".product-comments").empty();
+                    for (var i = 0; i < data.length; i++) {
+                        $(".product-comments").append('<div class="row bg-light-gray  mx-4 rounded my-3"><h5 class= "float-right w-100 bg-dark-blue text-white text-right px-2 py-1" > ' + data[i].title + '</h5 ><p class="text-justify px-2"> ' + data[i].body + '</p></div >')
+                    }
+                    $("#comments").modal();
+                }
+            });
+        })
+        function Submit() {
+            var form = $("#form");
+            var url = form.attr('action');
+            loading();
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: form.serialize(),
+                success: function (data) {
+                    console.log(data);
+                    closeLoader();
+                    $("#comments").modal("toggle");
+                    $("#commentBox").modal("toggle");
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'با موفقیت ثبت شد',
+                    });
+                },
+            });
+        }
+        var modals = [];
+        var products = [];
+        var goods = [];
+        $(".buyModal").on("click", function (e) {
+            e.preventDefault();
+            //if (modals.includes($(this).attr("data-item-id"))) {
+            //    $(".changeLength").attr("data-item-id", $(this).attr("data-item-id"));
+            //    $("#edit").modal();
+            //} else {
+            //    $(".addToBascket").attr("data-item-id", $(this).attr("data-item-id"));
+            //    $("#buy").modal();
+            //}
+            var pId = $("#productCode").attr("data-code") + "-" + 1;
+            $.cookie('cart', pId, { expires: 7, path: '/' });
+            location.href = "@Url.Action("cart")";
+        });
+        $(".editModal").on("click", function (e) {
+            e.preventDefault();
+            //$(".changeLength").attr("data-item-id", $(this).attr("data-item-id"));
+            //$("#edit").modal();
+            var pId = $("#productCode").attr("data-code") + "-" + 100;
+            $.cookie('cart', pId, { expires: 7, path: '/' });
+            location.href = "@Url.Action("cart")";
+        });
+        $(".addToBascket").on("click", function (e) {
+            var pId = $("#productCode").attr("data-code") + "-" + 100;
+            $.cookie('cart', pId, { expires: 7, path: '/' });
+            location.href = "@Url.Action("cart")";
+            //e.preventDefault();
+            //console.log($(this).attr('data-target', "#edit"));
+            //var meter = Number($("#meter").val() * 100);
+            //var centimeter = Number($("#centimiter").val());
+            //var val = meter + centimeter;
+            //console.log(meter);
+            //console.log(centimeter);
+            //console.log(val);
+            //var oldCookieValue = $.cookie('cart');
+            //var pId = $("#productCode").attr("data-code") + "-" + val;
+            //products.push(pId);
+            //if (oldCookieValue == undefined) {
+            //    $.cookie('cart', products.join('_'), { expires: 7, path: '/' });
+            //} else {
+            //    var value = oldCookieValue + "_" + products.join('_');
+            //    $.removeCookie('cart', { path: '/' });
+            //    //Create new cookie with same name and concatenate the old and new desired value.
+            //    $.cookie('cart', value, { expires: 7, path: '/' });
+            //}
+            //products = [];
+            //$('#buy').modal('toggle');
+            //$("." + $(this).attr("data-item-id") + "-00").addClass("editModal").removeClass("buyModal");
+            //modals.push($(this).attr("data-item-id"));
+            //let currentBascketCount = $('#cartCount').text();
+            //currentBascketCount = Number(currentBascketCount) + 1;
+            //$('#cartCount').text(currentBascketCount);
+        });
+        $(".changeLength").on("click", function (e) {
+            e.preventDefault();
+            var meter = parseInt($("#eMeter").val() * 100);
+            var centimeter = parseInt($("#eCentimiter").val());
+            var val = meter + centimeter;
+            var oldCookieValue = $.cookie('cart');
+            $.ajax({
+                type: 'POST',
+                url: '/webapp/ChangeLength',
+                data: {
+                    id: $(this).attr("data-item-id"),
+                    length: val
+                }
+            }).done(function (result) {
+                if (result.status != '0') {
+                    $.removeCookie('cart', { path: '/' });
+                    $.cookie("cart", result, { expires: 7, path: '/' });
+                    $("#edit").modal('toggle');
+                }
+            });
+        });
+
+
+        //$("#form").submit(function (e) {
+
+        //});
+    </script>
+}

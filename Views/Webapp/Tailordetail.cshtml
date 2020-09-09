@@ -1,0 +1,230 @@
+﻿
+@{
+    ViewData["Title"] = "DSA";
+    Layout = "~/Views/Shared/_WebAppLanding.cshtml";
+}
+
+    <div class="container m-0 mt-5 mtk-main mtk-product-detail p-0">
+        <div class="container-fluid  mtk-back bg-white m-0 p-0">
+            <div class="row justify-content-around mtk-navbar align-items-center px-4 m-0">
+                <div class="col-8 p-0 text-right py-2 animated fadeInDown">
+                    <a href="#" class="text-white">
+                        <span>صفحه طراح</span>
+                    </a>
+                </div>
+                <div class="col-4 p-0 py-2 animated fadeInDown">
+                    <a asp-action="index" class="align-middle">
+                        <img src="~/mtk/images/icon/arrow-left.svg" alt="Alternate Text" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        @*<div class="row mtk-back">
+            <i class="fa fa-arrow-left"></i>
+        </div>*@
+
+        <!--Tailors Work-->
+        <div class="row">
+            <div class="swiper-container tailor-works">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="/mtk/images/cloth.png" alt="Alternate Text" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/mtk/images/cloth.png" alt="Alternate Text" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/mtk/images/cloth.png" alt="Alternate Text" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/mtk/images/cloth.png" alt="Alternate Text" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Profile Image And Details-->
+        <div class="row mtk-profile text-center justify-content-center">
+            <div class="col-4">
+                <img src="/mtk/images/tailor.svg" alt="Alternate Text" />
+                <small class="text-center w-100 d-inline-block font-weight-bold py-2">احمد عزیزی</small>
+                <div class="row justify-content-center">
+                    <div class="col-2 p-0">
+                        <i class="fa fa-star checked"></i>
+                    </div>
+                    <div class="col-2 p-0">
+                        <i class="fa fa-star checked"></i>
+                    </div>
+                    <div class="col-2 p-0">
+                        <i class="fa fa-star checked"></i>
+                    </div>
+                    <div class="col-2 p-0">
+                        <i class="fa fa-star checked"></i>
+                    </div>
+                    <div class="col-2 p-0">
+                        <i class="fa fa-star checked"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Application-->
+        <div class="row mtk-application py-5 px-3">
+            <div class="col-3 my-2">
+                <a href="#" class="waves-effect waves-light">
+                    <img src="/mtk/images/icon/gown.svg" class="" alt="Alternate Text" />
+                </a>
+            </div>
+            <div class="col-3 my-2">
+                <a href="#" class="waves-effect waves-light">
+                    <img src="/mtk/images/icon/gown.svg" class="" alt="Alternate Text" />
+                </a>
+            </div>
+            <div class="col-3 my-2">
+                <a href="#" class="waves-effect waves-light">
+                    <img src="/mtk/images/icon/gown.svg" class="" alt="Alternate Text" />
+                </a>
+            </div>
+            <div class="col-3 my-2">
+                <a href="#" class="waves-effect waves-light">
+                    <img src="/mtk/images/icon/gown.svg" class="" alt="Alternate Text" />
+                </a>
+            </div>
+            <div class="col-3 my-2">
+                <a href="#" class="waves-effect waves-light">
+                    <img src="/mtk/images/icon/gown.svg" class="" alt="Alternate Text" />
+                </a>
+            </div>
+            <div class="col-3 my-2">
+                <a href="#" class="waves-effect waves-light">
+                    <img src="/mtk/images/icon/gown.svg" class="" alt="Alternate Text" />
+                </a>
+            </div>
+            <div class="col-3 my-2">
+                <a href="#" class="waves-effect waves-light">
+                    <img src="/mtk/images/icon/gown.svg" class="" alt="Alternate Text" />
+                </a>
+            </div>
+            <div class="col-3 my-2">
+                <a href="#" class="waves-effect waves-light">
+                    <img src="/mtk/images/icon/gown.svg" class="" alt="Alternate Text" />
+                </a>
+            </div>
+        </div>
+
+        <!--Contact-->
+        <div class="row my-2 align-items-center justify-content-around w-100">
+            <div class="col-6 rounded-pill shadow border-dark py-2 align-items-center">
+                <a href="#" class="">
+                    <img src="/mtk/images/icon/phone.svg" class="float-right" alt="Alternate Text" />
+                    <span class="my-2">09111234568</span>
+                </a>
+            </div>
+            <div class="col-1">
+                <a href="#" class="shadow">
+                    <img src="/mtk/images/icon/instagram-sketched.svg" alt="Alternate Text" />
+                </a>
+            </div>
+            <div class="col-1">
+                <a href="#" class="shadow">
+                    <img src="/mtk/images/icon/telegram.svg" alt="Alternate Text" />
+                </a>
+            </div>
+            <div class="col-1">
+                <a href="#" class="shadow">
+                    <img src="/mtk/images/icon/whatsapp.svg" alt="Alternate Text" />
+                </a>
+            </div>
+
+        </div>
+
+        <!--Price-->
+        <section class="bg-light">
+            <div class="row justify-content-between mtk-tailor-price py-2">
+                <div class="col-5 text-center">
+                    <img src="/mtk/images/icon/gown.svg" width="45px" alt="Alternate Text" />
+                    <span class="">کت : </span>
+                </div>
+                <div class="col-6 text-center">
+                    <small class="px-2">950,000</small>__<small class="px-2">1,000,000</small>
+                </div>
+            </div>
+            <div class="row justify-content-between mtk-tailor-price py-2">
+                <div class="col-5 text-center">
+                    <img src="/mtk/images/icon/gown.svg" width="45px" alt="Alternate Text" />
+                    <span class="">کت : </span>
+                </div>
+                <div class="col-6 text-center">
+                    <small class="px-2">950,000</small>__<small class="px-2">1,000,000</small>
+                </div>
+            </div>
+            <div class="row justify-content-between mtk-tailor-price py-2">
+                <div class="col-5 text-center">
+                    <img src="/mtk/images/icon/gown.svg" width="45px" alt="Alternate Text" />
+                    <span class="">کت : </span>
+                </div>
+                <div class="col-6 text-center">
+                    <small class="px-2">950,000</small>__<small class="px-2">1,000,000</small>
+                </div>
+            </div>
+        </section>
+
+        <!--Works-->
+        <section class="mtk-tailor-works mb-5">
+            <div class="row justify-content-between px-2 py-2">
+                <div class="col-5 text-right">
+                    <h5>نمونه کارها</h5>
+                </div>
+                <div class="col-5 text-left">
+                    <a href="#">مشاهده همه ></a>
+                </div>
+            </div>
+            <div class="row my-2">
+                <div class="col-4 my-1">
+                    <img src="~/mtk/images/icon/work-sample.svg" class="w-100 p-0" alt="Alternate Text" />
+                    <button class="btn btn-sm border border-info btn-block text-info rounded" data-toggle="modal" data-target="#pic-modal">مشاهده</button>
+                </div>
+                <div class="col-4 my-1">
+                    <img src="~/mtk/images/icon/work-sample.svg" class="w-100" alt="Alternate Text" />
+                    <button class="btn btn-sm border border-info btn-block text-info rounded">مشاهده</button>
+                </div>
+                <div class="col-4 my-1">
+                    <img src="~/mtk/images/icon/work-sample.svg" class="w-100" alt="Alternate Text" />
+                    <button class="btn btn-sm border border-info btn-block text-info rounded">مشاهده</button>
+                </div>
+
+                <div class="col-4 my-1">
+                    <img src="~/mtk/images/icon/work-sample.svg" class="w-100 p-0" alt="Alternate Text" />
+                    <button class="btn btn-sm border border-info btn-block text-info rounded">مشاهده</button>
+                </div>
+                <div class="col-4 my-1">
+                    <img src="~/mtk/images/icon/work-sample.svg" class="w-100" alt="Alternate Text" />
+                    <button class="btn btn-sm border border-info btn-block text-info rounded">مشاهده</button>
+                </div>
+                <div class="col-4 my-1">
+                    <img src="~/mtk/images/icon/work-sample.svg" class="w-100" alt="Alternate Text" />
+                    <button class="btn btn-sm border border-info btn-block text-info rounded">مشاهده</button>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Picture Modal -->
+        <div class="modal fade" id="pic-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+
+            <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+            <div class="modal-dialog modal-dialog-centered" role="document">
+
+
+                <div class="modal-content rounded">
+                    <div class="modal-body">
+                        <img src="/mtk/images/icon/work-sample.svg" class="w-100" alt="Alternate Text" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <partial name="_Menu" />
+    </div>

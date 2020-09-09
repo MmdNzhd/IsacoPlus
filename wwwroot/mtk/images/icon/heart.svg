@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="95" height="95" viewBox="0 0 95 95">
+  <defs>
+    <filter id="Ellipse_26" x="10" y="10" width="85" height="85" filterUnits="userSpaceOnUse">
+      <feOffset dx="5" dy="5" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="7.5" result="blur"/>
+      <feFlood flood-opacity="0.4"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Ellipse_27" x="0" y="0" width="85" height="85" filterUnits="userSpaceOnUse">
+      <feOffset dx="-5" dy="-5" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="7.5" result="blur-2"/>
+      <feFlood flood-color="#fff" flood-opacity="0.051"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_266" data-name="Group 266" transform="translate(-30.5 -315.5)">
+    <g id="Group_173" data-name="Group 173" transform="translate(3 -146)">
+      <g transform="matrix(1, 0, 0, 1, 27.5, 461.5)" filter="url(#Ellipse_26)">
+        <circle id="Ellipse_26-2" data-name="Ellipse 26" cx="20" cy="20" r="20" transform="translate(27.5 27.5)" fill="#2e3339"/>
+      </g>
+      <g transform="matrix(1, 0, 0, 1, 27.5, 461.5)" filter="url(#Ellipse_27)">
+        <circle id="Ellipse_27-2" data-name="Ellipse 27" cx="20" cy="20" r="20" transform="translate(27.5 27.5)" fill="#2e3339"/>
+      </g>
+    </g>
+    <path id="heart_1_" data-name="heart (1)" d="M3.113,4.562a5.337,5.337,0,0,1,7.549,0L11.69,5.591l1.029-1.029a5.338,5.338,0,0,1,7.549,7.549L19.24,13.14,11.69,20.689,4.141,13.14,3.113,12.111a5.337,5.337,0,0,1,0-7.549Z" transform="translate(66.951 351.502)" fill="none" stroke="#42e1ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+  </g>
+</svg>

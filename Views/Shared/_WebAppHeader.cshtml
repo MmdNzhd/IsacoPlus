@@ -1,0 +1,124 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    var cart = 0;
+    @if (HttpContextAccessor.HttpContext.Request.Cookies["cart"] != null)
+    {
+        cart = HttpContextAccessor.HttpContext.Request.Cookies["cart"].Split("_").Length;
+    }
+}
+
+@section Styles{
+    <link href="~/mtk/style.css" rel="stylesheet" />
+    <style>
+        .modal-content {
+            background: #000 !important;
+        }
+    </style>
+
+}
+<div class="container-fluid">
+    <div class="row justify-content-around mtk-navbar align-items-center px-2">
+        <div class="col-8 p-0 text-right py-2 animated fadeInDown">
+            <a href="#" class="text-white">
+                <img src="~/mtk/images/icon/menu.svg" class="pl-3" alt="Alternate Text" data-toggle="modal" data-target="#rightMenu" />پارچه سرای<span class="text-yellow-bold font-weight-bold"> زرپوش</span>
+            </a>
+        </div>
+        <div class="col-4 p-0 py-2 animated fadeInDown">
+            <a href="#" class="align-middle" data-toggle="modal" data-target="#centralModalSm">
+                <img src="/mtk/images/icon/search.svg" alt="Alternate Text" />
+            </a>
+            @if (User.Identity.Name == null)
+            {
+        <a asp-action="register" asp-controller="webapp" class="pr-2 position-relative">
+            <img src="~/mtk/images/icon/user (4).svg" /><span class="badge   position-absolute"></span>
+            @*<img src="~/images/icon/user-online.png" /><span class="badge   position-absolute"></span>*@
+        </a>
+            }
+            else
+            {
+        <a asp-action="editProfile" asp-controller="webapp" class="pr-2 position-relative">
+            
+            <img src="/mtk/images/icon/user (4).svg" alt="Alternate Text" />
+            @*<img src="~/images/icon/user-online.png" /><span class="badge   position-absolute"></span>*@
+        </a>
+            }
+
+            <a asp-action="cart" class="pr-2 position-relative">
+                <img src="~/mtk/images/icon/shopping-bag (1).svg" /><span id="cartCount" class="badge badge-danger position-absolute">@cart</span>
+            </a>
+        </div>
+    </div>
+
+
+    <!--Search Modal-->
+    <!-- Central Modal Small -->
+    <div class="modal fade mt-5" id="centralModalSm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+
+        <!-- Change class .modal-sm to change the size of the modal -->
+        <div class="modal-dialog modal-fluid w-100" role="document">
+
+
+            <div class="modal-content bg-dark">
+                <div class="modal-header align-items-center">
+                    <h4 class="modal-title w-100 text-right text-white" id="search">جستجو</h4>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <section class="webdesigntuts-workshop">
+                        <form asp-action="search" id="Search" method="post">
+                            <button>تایید</button>
+                            <input type="search" name="key" placeholder="محصول خود را جستجو کنید">
+                        </form>
+                    </section>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Central Modal Small -->
+    <!--Menu-->
+    <!-- Full Height Modal Right -->
+    <div class="modal fade right" id="rightMenu" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+
+        <!-- Add class .modal-full-height and then add class .modal-right (or other classes from list above) to set a position to the modal -->
+        <div class="modal-dialog modal-full-height modal-top  mt-5" role="document">
+
+
+            <div class="modal-content p-4 bg-dark">
+                @*<div class="modal-header">
+                        <h4 class="modal-title w-100" id="myModalLabel">Modal title</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>*@
+                <ul class="text-center">
+
+                    <li class="my-2">
+                        <a asp-action="index" class="text-white">خانه</a>
+                    </li>
+                    <li class="my-2">
+                        <a asp-action="aboutUs" class="text-white">درباره ما</a>
+                    </li>
+                    <li class="my-2">
+                        <a href="#" class="text-white">ارتباط ما</a>
+                    </li>
+                    <li class="my-2">
+                        <a href="#" class="text-white">پشتیبانی آنلاین</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Full Height Modal Right -->
+</div>

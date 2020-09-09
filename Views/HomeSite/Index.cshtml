@@ -1,0 +1,547 @@
+﻿@model KaraYadak.ViewModels.ListForIndexVM
+@{
+    ViewBag.Title = "کارایـــــــــــــــــدک";
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+    Baner baner = ViewBag.baner;
+
+}
+@inject KaraYadak.Data.ApplicationDbContext _context
+@{
+    var Logo = _context.Settings.Where(x => x.Key.Equals("SiteLogo")).Select(x => x.Value).SingleOrDefault();
+    var Instagram = _context.Settings.Where(x => x.Key.Equals("Instagram")).Select(x => x.Value).SingleOrDefault();
+    var FaceBook = _context.Settings.Where(x => x.Key.Equals("Facebook")).Select(x => x.Value).SingleOrDefault();
+    var Twitter = _context.Settings.Where(x => x.Key.Equals("Twitter")).Select(x => x.Value).SingleOrDefault();
+    var PhoneNumber = _context.Settings.Where(x => x.Key.Equals("PhoneNumber")).Select(x => x.Value).SingleOrDefault();
+    var Whatsapp = _context.Settings.Where(x => x.Key.Equals("Whatsapp")).Select(x => x.Value).SingleOrDefault();
+    //sliders
+    var Slider1 = _context.Settings.Where(x => x.Key.Equals("Slider1")).Select(x => x.Value).SingleOrDefault();
+    var Slider2 = _context.Settings.Where(x => x.Key.Equals("Slider2")).Select(x => x.Value).SingleOrDefault();
+    var Slider3 = _context.Settings.Where(x => x.Key.Equals("Slider3")).Select(x => x.Value).SingleOrDefault();
+}
+
+@section scripts{
+    <script src="~/js/mdb.min.js"></script>
+    <script src="~/js/app.js"></script>
+    <script src="~/js/CountDown.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            //$("#blogs").load("/HomeSite/ListOfBlogs")
+        });
+        function filter() {
+            let type1 = $("#selectBrand").val();
+            let type2 = $("#TypePiece").val();
+            location.href = "/Filtering/" + type1 + "/" + type2;
+        }
+        function Search() {
+            location.href = "/Search/" + $("#searchItem").val();
+        }
+        document.getElementById('searchItem').onkeypress = function (e) {
+            if (!e) e = window.event;
+            var keyCode = e.keyCode || e.which;
+            if (keyCode == '13') {
+                location.href = "/Search/" + $("#searchItem").val();
+            }
+        }
+        countDown('@ViewBag.timer');
+        //scroll
+        function smoothScrollTo(location) {
+        document.getElementById(location).scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+      }
+    </script>
+}
+
+<div class="container-fluid hj-header">
+
+    <!-- --navbar-- -->
+    <div class="row w-100 mx-auto">
+
+        <!--Navbar -->
+        <nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color w-100">
+            <a class="navbar-brand" href="/"><img src="~/uploads/@Logo" class="img-fluid w-75"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent-333" aria-controls="navbarSupportedContent-333"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-right" id="navbarSupportedContent-333">
+                <ul class="navbar-nav mx-auto p-0 ">
+
+                    <li class="nav-item px-md-3">
+                        @if (ViewBag.Username != null)
+                        {
+                            <a class="nav-link text-white">@ViewBag.Username</a>
+
+                        }
+                        else
+                        {
+                            <a class="nav-link text-white" href="#" data-toggle="modal" data-target="#centralModalLogin">ورود/ثبت نام</a>
+                        }
+                    </li>
+                    <li class="nav-item px-md-3">
+
+                        <a class="nav-link text-white" href="/ShopProduct/ShopBasket">سبد خرید <i id="cartCount"></i>   </a>
+                    </li>
+                    <li class="nav-item px-md-3">
+                        @if (ViewBag.Username != null)
+                        {
+                            <a class="nav-link text-white " href="/MyFavoriteProducts">علاقه مندی ها</a>
+                        }
+                    </li>
+                </ul>
+                <ul class="navbar-nav nav-flex-icons   p-0">
+                    <li class="nav-item px-2">
+                        <a href="@FaceBook" class="nav-link text-white"><i class="fa fa-facebook-f "></i></a>
+                    </li>
+                    <li class="nav-item px-2">
+                        <a href="@Twitter" class="nav-link text-white"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li class="nav-item px-2">
+                        <a href="@Instagram" class="nav-link text-white"><i class="fa fa-instagram"></i></a>
+                    </li>
+                    <li class="nav-item px-2">
+                        <a href="@Whatsapp" class="nav-link text-white"><i class="fa fa-whatsapp"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+    </div>
+    <!-- ---end navbar-- -->
+    <!-- ----intro--- -->
+    <div class="row width-60 hj-filtering mx-auto mt-5">
+        <div class="col-md-10 col-12">
+            <div class="form-group position-relative w-100 mx-auto">
+                <input id="searchItem" class=" hj-serachbox mx-auto d-block position-relative w-100 pr-5 text-white"
+                       placeholder="جستجو بر اساس اسم یا کد کالا">
+                <i class="fa fa-search hj-search-ab pt-1 color-zarposh"></i>
+                <button class="col-lg-2 col-4 hj-serchboxButton" onclick="Search()"> جستجو</button>
+            </div>
+        </div>
+        <div class="col-md-2 col-12 text-right">
+            <button type="button" class=" button-filter w-100" data-toggle="modal"
+                    data-target="#centralModalfilter">
+                <i class="fa fa-filter text-info"></i> فیلتر کردن
+            </button>
+        </div>
+    </div>
+    <!-- ---end intro--- -->
+    <div class="row w-100 mx-auto">
+        <!-- Swiper -->
+        <div class="swiper-container swiper-containerTitr">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="row w-50 py-5 slider-index">
+                        <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
+                            <b>
+                                ایساکــــــو پلـــــــــــــاس
+                            </b>
+                        </h1>
+                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
+                            @Html.Raw(@Slider1)
+                        </h6>
+                    </div>
+
+
+                </div>
+
+
+                <div class="swiper-slide">
+                    <div class="row w-50 py-5 slider-index">
+                        <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
+                            <b>
+                                ایساکــــــو پلـــــــــــــاس
+                            </b>
+                        </h1>
+                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
+                            @Html.Raw(@Slider2)
+                        </h6>
+                    </div>
+
+
+                </div>
+                <div class="swiper-slide">
+                    <div class="row w-50 py-5 slider-index">
+                        <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
+                            <b>
+                                ایساکــــــو پلـــــــــــــاس
+                            </b>
+                        </h1>
+                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
+                            @Html.Raw(@Slider3)
+                        </h6>
+                    </div>
+
+
+                </div>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination "></div>
+        </div>
+        <!-- ---- end swipwe--- -->
+
+    </div>
+
+    <!-- ---- -->
+    <div class="row w-75 mx-auto text-center pt-md-5 mt-md-5 hj-li-Index">
+        <div class="col-md-1 col-0 py-1"></div>
+        <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('grouping')"> دسته بندی</button></div>
+        <div class="col-md-2  py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('blogSec')"> وبلاگ</button></div>
+        <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100"> تماس با ما</button></div>
+        <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('aboutUs')"> درباره ما</button></div>
+        <div class="col-md-1 col-0 py-1"></div>
+    </div>
+    <!-- ---- -->
+
+</div>
+<!-- ------end header--- -->
+<!-- -----Grouping---- -->
+<div class="container-fluid mt-5 " id="grouping">
+    <div class="row w-100 mx-auto text-center py-4">
+        <div class="col-lg-5 col-3 text-left pt-4">
+            <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+        </div>
+        <div class="col-lg-2 col-6">
+            <h2><b class="font-kalameBlack">دسته بندی</b></h2>
+        </div>
+        <div class="col-lg-5 col-3 text-right pt-4">
+            <img src="./img/Line 35.png"
+                 class="img-fluid w-25 mx-auto border-titr">
+        </div>
+    </div>
+
+    <div class="row w-100 mx-auto text-center hj-grouping">
+        <div class="col-md-9 p-0">
+            <div class="row w-100 mx-auto text-center">
+                <div class="col-md-4 py-3 hj-category ">
+                    <a href="/Filtering/لوازم مصرفی"> <img src="./img/1.png" class="img-fluid w-100 mx-auto"></a>
+                    <b>
+                        <h4 class="STiter-Grouping">لوازم مصرفی</h4>
+                    </b>
+                </div>
+                <div class="col-md-4 py-3 hj-category">
+                    <a href="/listOfcars"> <img src="./img/2.png" class="img-fluid w-100 mx-auto"></a>
+                    <b>
+                        <h4 class="STiter-Grouping"> خودرو</h4>
+                    </b>
+                </div>
+                <div class="col-md-4 py-3 hj-category">
+                    <a href="/Filtering/لوازم جانبی"><img src="./img/3.png" class="img-fluid w-100 mx-auto"></a>
+                    <b>
+                        <h4 class="STiter-Grouping"> لوازم جانبی</h4>
+                    </b>
+                </div>
+
+            </div>
+            <div class="row w-100 mx-auto text-center">
+                <div class="col-md-4 py-3 hj-category">
+                    <a href="/Filtering/نگهداری و نظافت"><img src="./img/4.png" class="img-fluid w-100 mx-auto"></a>
+                    <b>
+                        <h4 class="STiter-Grouping"> نگهداری و نظافت</h4>
+                    </b>
+                </div>
+                <div class="col-md-4 py-3 hj-category">
+                    <a href="/Filtering/الکتریک و الکترونیک"><img src="./img/Group 5.png" class="img-fluid w-100 mx-auto"></a>
+                    <b>
+                        <h4 class="STiter-Grouping"> الکتریک و الکترونیک</h4>
+                    </b>
+                </div>
+                <div class="col-md-4 py-3 hj-category">
+                    <a href="/Filtering/لوکس و اسپرت"> <img src="./img/6.png" class="img-fluid w-100 mx-auto"></a>
+                    <b>
+                        <h4 class="STiter-Grouping"> لوکس و اسپرت</h4>
+                    </b>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-3 py-3 hj-category ">
+            <a href="/Filtering/قطعات"><img src="img/l1.png" class="img-fluid w-100 mx-auto"></a>
+            <b>
+                <h4 class="STiter-Grouping"> قطعات</h4>
+            </b>
+        </div>
+    </div>
+</div>
+<!-- -----end Grouping---- -->
+<!-- -----service----- -->
+<div class="container-fluid p-0 my-5">
+    <div class="row w-100 mx-auto hj-Service">
+        <div class="col-4 py-3 mx-auto text-center">
+            <img src="./img/money (2).svg"
+                 class="img-fluid mx-auto pl-3">ضمانت بازگشت وجه
+        </div>
+        <div class="col-4 py-3 mx-auto text-center">
+            گارانتی<img src="./img/ribbon.svg"
+                        class="img-fluid mx-auto px-2">محصولات
+        </div>
+        <div class="col-4 py-3 mx-auto text-center">
+            ضمانت بازگشت کالا<img src="./img/Group 18.svg"
+                                  class="img-fluid mx-auto pr-3">
+        </div>
+    </div>
+
+</div>
+<!-- -----end service----- -->
+<!-- ---blog---- -->
+<div class="container-fluid w-100 mx-atuo" id="blogSec">
+    <div class="row w-100 mx-auto text-center py-4 pt-5">
+        <div class="col-lg-5 col-3 text-left pt-4">
+            <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+        </div>
+        <div class="col-lg-2 col-6">
+            <h2><b class="font-kalameBlack"> اخرین های بلاگ</b></h2>
+        </div>
+        <div class="col-lg-5 col-3 text-right pt-4">
+            <img src="./img/Line 35.png"
+                 class="img-fluid w-25 mx-auto border-titr">
+        </div>
+    </div>
+
+    <div class="row w-100 mx-auto text-center py-5 mb-5">
+        <!-- --- -->
+        <!-- Swiper -->
+        <div class="swiper-container swiper-containerBlog">
+            <div class="swiper-wrapper" @*id="blogs"*@>
+                @foreach (var item in (List<KaraYadak.Models.Blog>)ViewBag.blogs)
+                {
+                    <div class="swiper-slide">
+                        <div class="hj-blog p-0">
+                            <div class="row w-100 mx-auto titr-blog">
+                                <h5 class="py-2 pr-4 pt-3"><b>@item.Title</b></h5>
+                            </div>
+                            <div class="row w-100 mx-auto py-2">
+                                <div class="col-7 detalis-blog px-4 py-3">
+                                    <h6 class="text-justify">
+                                        @item.ShortDescription
+                                    </h6>
+                                </div>
+                                <div class="col-5 pt-4">
+                                    <img src="/uploads/Blogs/@item.Image" class="img-fluid w-100 mx-auto">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+
+        </div>
+        <!-- ---- -->
+
+
+    </div>
+
+</div>
+<!-- ---End blog---- -->
+<!-- ---banner with offer--- -->
+
+@if (baner != null)
+{
+    <div class="container-fluid">
+        <a href="@baner.Url">
+
+            <div class="row  mx-auto hj-banner position-relative">
+                <img src="/uploads/@baner.Image" class="img-fluid  position-relative">
+                <span id="baneertimer" class=" countdown" style="font-weight: bold;"></span>
+            </div>
+        </a>
+    </div>
+
+}
+
+<!-- ---banner with offer--- -->
+<!-- ----Products---- -->
+
+<div class="container-fluid pt-5 p-0">
+    <div class="row w-100 mx-auto text-center py-4">
+        <div class="col-lg-5 col-3 text-left pt-4">
+            <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+        </div>
+        <div class="col-lg-2 col-6">
+            <h2><b class="font-kalameBlack">محصولات</b></h2>
+        </div>
+        <div class="col-lg-5 col-3 text-right pt-4">
+            <img src="./img/Line 35.png"
+                 class="img-fluid w-25 mx-auto border-titr">
+        </div>
+    </div>
+
+    @Html.Partial("SpecialOfferProduct", Model.Second)
+
+    <!-- -------------- -->
+    @Html.Partial("maxinDiscountProducts", Model.Third)
+
+    <!-- ----- -->
+
+
+    <div class="row w-100 mx-auto text-center py-4 pt-5">
+        <div class="col-lg-5 col-3 text-left pt-4">
+            <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+        </div>
+        <div class="col-lg-2 col-6">
+            <h2><b class="font-kalameBlack"> محصولات دیگر</b></h2>
+        </div>
+        <div class="col-lg-5 col-3 text-right pt-4">
+            <img src="./img/Line 35.png"
+                 class="img-fluid w-25 mx-auto border-titr">
+        </div>
+    </div>
+
+
+
+    @Html.Partial("OtherProducts", Model.Fourth);
+
+
+
+
+
+
+
+
+
+
+
+    <!-- --------- -->
+</div>
+<!-- ----end Products---- -->
+<!-- modal login -->
+<div class="modal fade" id="centralModalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+
+    <!-- Change class .modal-sm to change the size of the modal -->
+    <div class="modal-dialog modal-md login" role="document">
+
+
+        <div class="modal-content modal-login">
+
+            <div class="modal-body">
+
+                <div class="login-wrap">
+                    <div class="login-html">
+                        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">ورود </label>
+                        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"> ثبت نام</label>
+                        <div class="login-form mt-3">
+                            <form id="login-form" action="" method="post">
+                                <div class="sign-in-htm">
+                                    <div class="group">
+                                        <label for="username" class="label"> ایمبل  </label>
+                                        <input id="username" type="text" class="input" name="username">
+                                    </div>
+                                    <div class="group">
+                                        <label for="pass" class="label">رمزعبور</label>
+                                        <input id="password" type="password" class="input" data-type="password" name="password">
+                                    </div>
+                                    <div class="group">
+                                        <input id="check" type="checkbox" class="check" checked>
+                                        <label for="check"><span class="icon"></span> به یاد داشته باش </label>
+                                    </div>
+                                    <div class="group">
+                                        <input type="submit" class="button" value=" ورود">
+                                    </div>
+                                    <div class="hr"></div>
+                                    <div class="foot-lnk">
+                                        <a href="#forgot"> فراموشی رمزعبور؟</a>
+                                    </div>
+                                </div>
+                            </form>
+                            <form id="Register-form" action="" method="post">
+                                <div class="sign-up-htm">
+                                    <div class="group">
+                                        <label for="usernameForReg" class="label">نام نام خانوادگی</label>
+                                        <input id="usernameForReg" type="text" class="input" name="usernameForReg">
+                                    </div>
+                                    <div class="group">
+                                        <label for="passwordForReg" class="label">رمزعبور</label>
+                                        <input id="passwordForReg" type="password" class="input" data-type="password" name="passwordForReg">
+                                    </div>
+                                    <div class="group">
+                                        <label for="ConfirmPassword" class="label"> تایید رمزعبور</label>
+                                        <input id="ConfirmPassword" type="password" class="input" data-type="password" name="ConfirmPassword">
+                                    </div>
+                                    <div class="group">
+                                        <label for="email" class="label"> آدرس ایمیل</label>
+                                        <input id="email" type="text" class="input">
+                                    </div>
+                                    <div class="group">
+                                        <input type="submit" class="button" value=" ثبت نام">
+                                    </div>
+                                    <div class="foot-lnk">
+                                        <label for="tab-1"> قبلا ثبت نام کردید؟</label>
+                                    </div>
+
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end modal login -->
+<!--filter modal-->
+<div class="modal fade" id="centralModalfilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+
+    <!-- Change class .modal-sm to change the size of the modal -->
+    <div class="modal-dialog modal-lg" role="document">
+
+
+        <div class="modal-content modalfilter">
+            <div class="modal-header modal-header-filter">
+
+                <button type="button" class="close button-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form>
+                        <div class="form-group row pt-5 py-2">
+                            <label for=" TypePiece selectBrand" class="col-sm-2 col-form-label text-md-center text-right">نوع قطعه</label>
+                            <div class="col-sm-10">
+                                <select class="form-control view-filterInput" id="TypePiece">
+                                    <option value=""></option>
+
+                                    @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Categories)
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="form-group row py-2">
+                            <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">برند</label>
+                            <div class="col-sm-10">
+                                <select class="form-control view-filterInput" id="selectBrand">
+                                    <option value=" "> </option>
+
+                                    @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Brands)
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-warning btn-sm w-100 py-2 btn-filterModal" onclick="filter()">
+                    <i class="fa fa-filter "></i> فیلتر کردن
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--filter modal-->

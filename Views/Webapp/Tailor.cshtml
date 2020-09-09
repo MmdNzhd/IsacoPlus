@@ -1,0 +1,275 @@
+﻿@model IEnumerable<KaraYadak.Models.Product>
+@{
+    Layout = "_WebAppLanding";
+    ViewData["Title"] = "علاقه مندی ها";
+}
+
+@section styles{
+
+}
+
+<div class="container m-0 mtk-main p-0 py-1 bg-white pb-4">
+
+    @* Title *@
+
+    <div class="row justify-content-around mtk-navbar align-items-center px-4 m-0 mb-2">
+        <div class="col-8 p-0 text-right py-2 animated fadeInDown">
+            <a href="#" class="text-white">
+                طراحان
+            </a>
+        </div>
+        <div class="col-4 p-0 py-2 animated fadeInDown">
+            <a href="#" class="align-middle">
+                <img src="~/mtk/images/icon/arrow-left.svg" alt="Alternate Text" />
+                <span></span>
+            </a>
+        </div>
+    </div>
+    <!--Content-->
+    <div class="row mtk-search  pt-5 mt-2 justify-content-around compare-title px-3">
+        <div class="col-1">
+            <button class="btn btn-light p-2 border border-dark m-0 rounded">
+                <img src="/mtk/images/icon/place (2).svg" alt="Alternate Text" class=" mx-auto" />
+            </button>
+        </div>
+        <div class="col-10">
+            <input type="search" name="name" value="" class="w-100 d-inline-block shadow border border-dark px-4 rounded position-relative" placeholder="جستجو" style="padding:6px 0;" />
+        </div>
+    </div>
+
+    <!--Tailors Name-->
+    <div class="swiper-container my-4 tailor-slider">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide rounded-circle text-center">
+                <a asp-action="Tailordetail">
+                    <img src="/mtk/images/tailor.svg" class="d-block mx-auto" alt="Alternate Text" />
+                    <small>احمد عزیزی</small>
+                </a>
+            </div>
+            <div class="swiper-slide rounded-circle text-center">
+                <a asp-action="Tailordetail">
+                    <img src="/mtk/images/tailor.svg" class="d-block mx-auto" alt="Alternate Text" />
+                    <small>احمد عزیزی</small>
+                </a>
+            </div>
+            <div class="swiper-slide rounded-circle text-center">
+                <a asp-action="Tailordetail">
+                    <img src="/mtk/images/tailor.svg" class="d-block mx-auto" alt="Alternate Text" />
+                    <small>احمد عزیزی</small>
+                </a>
+            </div>
+            <div class="swiper-slide rounded-circle text-center">
+                <a asp-action="Tailordetail">
+                    <img src="/mtk/images/tailor.svg" class="d-block mx-auto" alt="Alternate Text" />
+                    <small>احمد عزیزی</small>
+                </a>
+            </div>
+            <div class="swiper-slide rounded-circle text-center">
+                <a asp-action="Tailordetail">
+                    <img src="/mtk/images/tailor.svg" class="d-block mx-auto" alt="Alternate Text" />
+                    <small>احمد عزیزی</small>
+                </a>
+            </div>
+            <div class="swiper-slide rounded-circle text-center">
+                <a asp-action="Tailordetail">
+                    <img src="/mtk/images/tailor.svg" class="d-block mx-auto" alt="Alternate Text" />
+                    <small>احمد عزیزی</small>
+                </a>
+            </div>
+            <div class="swiper-slide rounded-circle text-center">
+                <a asp-action="Tailordetail">
+                    <img src="/mtk/images/tailor.svg" class="d-block mx-auto" alt="Alternate Text" />
+                    <small>احمد عزیزی</small>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!--Filter-->
+    <section class="mtk-filter">
+        <div class="row justify-content-center">
+            <div class="col-5 text-center">
+                <select class="mdb-select md-form w-100">
+                    <option value="" disabled selected>مرتب سازی</option>
+                    <option value="1">نام</option>
+                    <option value="2">نمونه کار</option>
+                </select>
+            </div>
+            <div class="col-5 text-center">
+                <select class="mdb-select md-form w-100 text-center">
+                    <option value="" disabled selected>فیلتر</option>
+                    <option value="1">نام</option>
+                    <option value="2">مکان</option>
+                </select>
+            </div>
+        </div>
+    </section>
+    <!--Others-->
+    <section>
+        <div class="row mtk-others-title px-4">
+            <h5 class=" text-right">دیگر طراحان</h5>
+        </div>
+        <div class="row justify-content-center py-5 mtk-others my-2">
+            <div class="col-5 border border-light shadow rounded pb-2">
+                <a asp-action="Tailordetail">
+                    <div class="row tailor-img">
+                        <img src="/mtk/images/tailor.svg" class="w-100" width="80px" height="80px" alt="Alternate Text" />
+                        <small class="text-center w-100 d-inline-block font-weight-bold">احمد عزیزی</small>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between pt-4 pb-1 justify-content-around">
+                        <div class="col-4 text-center border border-light rounded shadow">
+                            <img src="/mtk/images/icon/jeans.svg" alt="Alternate Text" />
+                        </div>
+                        <div class="col-7 text-center border border-light rounded shadow">
+                            <img src="/mtk/images/icon/location.svg" alt="Alternate Text" />
+                            <small>ساری</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-5 border border-light shadow rounded pb-2">
+                <a asp-action="Tailordetail">
+                    <div class="row tailor-img">
+                        <img src="/mtk/images/tailor.svg" class="w-100" width="80px" height="80px" alt="Alternate Text" />
+                        <small class="text-center w-100 d-inline-block font-weight-bold">احمد عزیزی</small>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between pt-4 pb-1 justify-content-around">
+                        <div class="col-4 text-center border border-light rounded shadow">
+                            <img src="/mtk/images/icon/jeans.svg" alt="Alternate Text" />
+                        </div>
+                        <div class="col-7 text-center border border-light rounded shadow">
+                            <img src="/mtk/images/icon/location.svg" alt="Alternate Text" />
+                            <small>ساری</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row justify-content-center py-5 mtk-others my-2">
+            <div class="col-5 border border-light shadow rounded pb-2">
+                <a asp-action="Tailordetail">
+                    <div class="row tailor-img">
+                        <img src="/mtk/images/tailor.svg" class="w-100" width="80px" height="80px" alt="Alternate Text" />
+                        <small class="text-center w-100 d-inline-block font-weight-bold">احمد عزیزی</small>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between pt-4 pb-1 justify-content-around">
+                        <div class="col-4 text-center border border-light rounded shadow">
+                            <img src="/mtk/images/icon/jeans.svg" alt="Alternate Text" />
+                        </div>
+                        <div class="col-7 text-center border border-light rounded shadow">
+                            <img src="/mtk/images/icon/location.svg" alt="Alternate Text" />
+                            <small>ساری</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-5 border border-light shadow rounded pb-2">
+                <a asp-action="Tailordetail">
+                    <div class="row tailor-img">
+                        <img src="/mtk/images/tailor.svg" class="w-100" width="80px" height="80px" alt="Alternate Text" />
+                        <small class="text-center w-100 d-inline-block font-weight-bold">احمد عزیزی</small>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                        <div class="col-2 p-0">
+                            <i class="fa fa-star checked"></i>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between pt-4 pb-1 justify-content-around">
+                        <div class="col-4 text-center border border-light rounded shadow">
+                            <img src="/mtk/images/icon/jeans.svg" alt="Alternate Text" />
+                        </div>
+                        <div class="col-7 text-center border border-light rounded shadow">
+                            <img src="/mtk/images/icon/location.svg" alt="Alternate Text" />
+                            <small>ساری</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+    <partial name="_Menu" />
+</div>
+
+
+
+
+@section Scripts{
+    <script>
+        var swiper = new Swiper('.tailor-slider', {
+            slidesPerView: 5,
+            spaceBetween: 40,
+        });
+        var swiper2 = new Swiper('.tailors-name', {
+            slidesPerView: 2,
+            spaceBetween: 30,
+        });
+        var swiper3 = new Swiper('.tailors-name-2', {
+            slidesPerView: 2,
+            spaceBetween: 30,
+        });
+    </script>
+}
+

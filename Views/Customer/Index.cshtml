@@ -1,0 +1,97 @@
+﻿
+@model IEnumerable<KaraYadak.Models.QRCode>
+
+@{
+    ViewBag.Title = "پنل مشتری";
+    Layout = "_AdminPanel";
+}
+@section vendorstyles{
+    <style>
+    </style>
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css" />
+
+}
+@section styles{
+    <link href="~/app-assets/css/hjCss.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css" />
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" />
+
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.minKa.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+}
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
+    <script>
+        $.removeCookie('user', { path: '/' });
+        $("#searchByPhone").click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: url = "/Customer/SearchUserByPhoneNumber",
+                data: { phoneNumber: $("#phoneNumber").val() },
+                success: function (data) {
+                    if (data.status == "1") {
+                        var user = data.result.phoneNumber + "_" + data.result.firstName + " " + data.result.lastName;
+                        $.cookie('user', user, { expires: 7, path: '/' });
+                    }
+                    window.location.href = data.url;
+                }
+            });
+        });
+        $("#searchByCart").click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: url = "/Customer/SearchUserByCart",
+                data: {},
+                success: function (data) {
+                    if (data.status == "1") {
+                        var user = data.result.phoneNumber + "_" + data.result.firstName + " " + data.result.lastName;
+                        $.cookie('user', user, { expires: 7, path: '/' });
+                        window.location.href = data.url;
+                    }
+                    else {
+                        toastr.error(data.message)
+                    }
+
+
+
+                }
+            });
+        });
+    </script>
+}
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+
+<div class="content-body Customer">
+    <section id="basic-datatable" class="data-list-view-header">
+        <div class="row w-100 mx-auto">
+            <div class="col-md-4 mx-auto pr-md-0">
+                <a href="/Customer/AddCustomer" class="btn btn-info w-100 mx-auto">کابر جدید <i class="fa fa-plus"></i></a>
+            </div>
+            <div class="col-md-8 col-1"></div>
+        </div>
+        <div class="row w-100 mx-auto mt-5">
+            <div class="col-md-6 w-100 my-1"><input id="phoneNumber" type="text" class="form-control w-100 inputCustomer py-1" /></div>
+            <div class="col-md-3 w-100 my-1">
+                <button id="searchByPhone" style="height:49px" class="btn btn-info w-100">جستجو </button>
+                
+            </div>
+            <div class="col-md-3 w-100 my-1">
+                <button id="searchByCart" style="height:49px" class="btn btn-info w-100">جستجو در باشگاه </button>
+
+            </div>
+        </div>
+    </section>
+</div>

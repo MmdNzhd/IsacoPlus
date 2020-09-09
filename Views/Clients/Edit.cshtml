@@ -1,0 +1,97 @@
+﻿@model KaraYadak.Models.Client
+
+@{
+    ViewBag.Title = "ویرایش اطلاعات طرف حساب";
+    Layout = "_AdminPanel";
+}
+
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "طرف حساب ها", ParentUrl = Url.Action("index") })
+
+<div class="content-body">
+    <section id="basic-vertical-layouts">
+        <div class="row match-height">
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">@ViewBag.Title</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form asp-action="Edit">
+                                <input type="hidden" asp-for="Id" />
+                                <div class="form-body">
+                                    <div class="row">
+                                        <div class="col-12 data-field-col">
+                                            <div class="form-group">
+                                                <label for="data-name">نام</label>
+                                                <input type="text" asp-for="FirstName" required class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 data-field-col">
+                                            <div class="form-group">
+                                                <label for="data-name">نام خانوادگی</label>
+                                                <input type="text" asp-for="LastName" required class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 data-field-col">
+                                            <div class="form-group">
+                                                <label for="data-name">ایمیل</label>
+                                                <input type="email" asp-for="Email" required class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 data-field-col">
+                                            <div class="form-group">
+                                                <label for="data-name">شماره تلفن</label>
+                                                <input type="text" asp-for="Phone" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 data-field-col">
+                                            <div class="form-group">
+                                                <label for="data-name">آدرس</label>
+                                                <textarea asp-for="Address" rows="3" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 data-field-col">
+                                            <div class="form-group">
+                                                <ul class="list-unstyled mb-0">
+                                                    <li class="d-inline-block mr-2">
+                                                        <fieldset>
+                                                            <div class="vs-radio-con vs-radio-success">
+                                                                <input type="radio" asp-for="Status" value="@(ClientStatus.فعال)">
+                                                                <span class="vs-radio">
+                                                                    <span class="vs-radio--border"></span>
+                                                                    <span class="vs-radio--circle"></span>
+                                                                </span>
+                                                                <span class="">@(ClientStatus.فعال.ToString())</span>
+                                                            </div>
+                                                        </fieldset>
+                                                    </li>
+                                                    <li class="d-inline-block mr-2">
+                                                        <fieldset>
+                                                            <div class="vs-radio-con vs-radio-danger">
+                                                                <input type="radio" asp-for="Status" value="@(ClientStatus.غیرفعال)">
+                                                                <span class="vs-radio">
+                                                                    <span class="vs-radio--border"></span>
+                                                                    <span class="vs-radio--circle"></span>
+                                                                </span>
+                                                                <span class="">@(ClientStatus.غیرفعال.ToString())</span>
+                                                            </div>
+                                                        </fieldset>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary mr-1 mb-1">ثبت تغییرات</button>
+                                            <a asp-action="index" class="btn btn-outline-warning mr-1 mb-1">بازگشت</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

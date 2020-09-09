@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSRF Token -->
+
+  <meta name="description" content="قالب مدیریتی اچ تی ام ال بورداش - پنل مدیریتی">
+
+  <title>پیش نمایش - قالب داشبرد ادمین </title>
+
+  <!-- Bootstrap -->
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+
+  <link rel="stylesheet" href="./vendors/bundle.css">
+  <!-- Fonts -->
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"> -->
+
+  <!-- Styles -->
+  <!-- <link href="http://laborasyon.com/css/app.css" rel="stylesheet"> -->
+  <style>
+    @font-face {
+      font-family: iransans-light;
+      font-style: normal;
+      font-weight: normal;
+      src: url("./assets/fonts/fonts/IRANSansWeb.eot");
+      src: url("./assets/fonts/fonts/IRANSansWeb_Light.eot?#iefix") format("embedded-opentype"), url("./assets/fonts/fonts/IRANSansWeb_Light.woff2") format("woff2"), url("./assets/fonts/fonts/IRANSansWeb_Light.woff") format("woff"), url("./assets/fonts/fonts/IRANSansWeb_Light.ttf") format("truetype");
+    }
+
+
+    body {
+      font-family: "Iransans", sans-serif;
+      direction: rtl;
+    }
+
+    a:focus,
+    a:hover {
+      text-decoration: none;
+    }
+
+    .btn {
+      border: none;
+    }
+
+    .btn-success {
+      background-color: #0abb87;
+    }
+
+    .btn-success:active,
+    .btn-success:focus,
+    .btn-success:hover {
+      background-color: #0abb87 !important;
+    }
+
+    .btn-primary {
+      background-color: #5867dd;
+    }
+
+    .btn-primary:active,
+    .btn-primary:focus,
+    .btn-primary:hover {
+      background-color: #5867dd !important;
+    }
+
+    .btn-danger {
+      background-color: #fd397a;
+    }
+
+    .btn-danger:active,
+    .btn-danger:focus,
+    .btn-danger:hover {
+      background-color: #fd397a !important;
+    }
+
+    .btn-info {
+      background-color: #4097ca;
+    }
+
+    .btn-info:active,
+    .btn-info:focus,
+    .btn-info:hover {
+      background-color: #4097ca !important;
+    }
+
+    .btn-dark {
+      background-color: #1e1e2d;
+    }
+
+    .btn-dark:active,
+    .btn-dark:focus,
+    .btn-dark:hover {
+      background-color: #1e1e2d !important;
+    }
+
+    .btn-warning {
+      background-color: #ffb822;
+    }
+
+    .btn-warning:active,
+    .btn-warning:focus,
+    .btn-warning:hover {
+      background-color: #ffb822 !important;
+    }
+
+    header.main-header {
+      box-shadow: 0px 0 20px -10px rgba(0, 0, 0, 0.6509803922);
+      z-index: 999;
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      background: white;
+    }
+
+    header.main-header .logo a {
+      display: block;
+      font-size: 25px;
+      height: 80px;
+      line-height: 80px;
+      padding: 0 30px;
+      font-weight: 700;
+      color: #6b6b83;
+    }
+
+    header.main-header .logo a:hover,
+    header.main-header .logo a:focus {
+      color: black;
+    }
+
+    header.main-header .container {
+      display: -webkit-box;
+      display: flex;
+    }
+
+    header.main-header ul.navbar-nav {
+      display: -webkit-box;
+      display: flex;
+      -webkit-box-align: center;
+      align-items: center;
+      margin-left: auto;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      flex-direction: row;
+    }
+
+    header.main-header ul.navbar-nav li a {
+      font-size: 14px;
+      height: 60px;
+      line-height: 60px;
+      padding: 0 20px;
+      display: block;
+      color: #323232;
+    }
+
+    header.main-header ul.navbar-nav li a.btn {
+      margin-left: 20px;
+      height: 35px;
+      line-height: 35px;
+      padding: 0 20px;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    header.main-header ul.navbar-nav li a.btn:hover,
+    header.main-header ul.navbar-nav li a.btn:focus {
+      color: white;
+    }
+
+    header.main-header ul.navbar-nav li a:hover,
+    header.main-header ul.navbar-nav li a:focus {
+      color: black;
+    }
+
+    section {
+      padding: 80px 0;
+      position: relative;
+    }
+
+    section.cover {
+      padding: 130px 0;
+      color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+    }
+
+    section.cover:after {
+      content: "";
+      display: block;
+      height: 50px;
+      bottom: -1px;
+      position: absolute;
+      background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIydnciIHZpZXdCb3g9IjAgMCAxMjgwIDE0MCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJ3aGl0ZSI+PHBhdGggZD0iTTEyODAgODZjLTE5LjktMTcuMjEtNDAuMDgtMzkuNjktNzkuODktMzkuNjktNTcuNDkgMC01Ni45MyA0Ni41OS0xMTUgNDYuNTktNTMuNjEgMC01OS43Ni0zOS42Mi0xMTUuNi0zOS42MkM5MjMuNyA1My4yNyA5MjQuMjYgODcgODUzLjg5IDg3Yy04OS4zNSAwLTc4Ljc0LTg3LTE4OC4yLTg3QzU1NCAwIDU0My45NSAxMjEuOCA0MjMuMzIgMTIxLjhjLTEwMC41MiAwLTExNy44NC01NC44OC0xOTEuNTYtNTQuODgtNzcuMDYgMC0xMDAgNDguNTctMTUxLjc1IDQ4LjU3LTQwIDAtNjAtMTIuMjEtODAtMjkuNTF2NTRIMTI4MHoiLz48L2c+PC9zdmc+);
+      right: 0;
+      left: 0;
+    }
+
+    section.cover h1 {
+      margin-bottom: 10px;
+      font-size: 40px;
+      font-weight: 700;
+    }
+
+    section.cover h1+p {
+      opacity: 0.8;
+    }
+
+    section.cover p.description {
+      line-height: 32px;
+      margin: 35px 0;
+      font-weight: 400;
+      font-size: 18px;
+    }
+
+    section.cover ul li a {
+      background: white;
+      color: black;
+      padding: 10px 20px;
+    }
+
+    section header {
+      margin-bottom: 70px;
+      text-align: center;
+      color: #505050;
+    }
+
+    section header h3 {
+      font-size: 28px;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    section header p {
+      color: #646464;
+      margin-bottom: 0;
+      font-style: italic;
+    }
+
+    section.portfolio {
+      padding: 40px 0;
+    }
+
+    section.demos {
+      padding-bottom: 20px;
+    }
+
+    section.feature {
+      padding-bottom: 30px;
+    }
+
+    section.cover .container .cover-preview {
+      display: -webkit-box;
+      display: flex;
+      -webkit-box-align: center;
+      align-items: center;
+      position: relative;
+    }
+
+    section.cover .container .cover-preview img {
+      right: 0;
+      border-radius: 5px;
+      box-shadow: 0px 0 20px -5px black;
+    }
+
+    section.cover .container .cover-preview img:nth-child(1) {
+      width: 230px;
+      margin-right: -100px;
+      -webkit-transition: -webkit-transform 0.3s;
+      transition: -webkit-transform 0.3s;
+      transition: transform 0.3s;
+      transition: transform 0.3s, -webkit-transform 0.3s;
+      position: relative;
+      z-index: 1;
+    }
+
+    section.cover .container .cover-preview img:nth-child(1):hover {
+      -webkit-transform: translateX(-5px);
+      transform: translateX(-5px);
+    }
+
+    section.cover .container .cover-preview img:nth-child(2) {
+      width: 350px;
+      position: relative;
+      -webkit-transition: -webkit-transform 0.3s;
+      transition: -webkit-transform 0.3s;
+      transition: transform 0.3s;
+      transition: transform 0.3s, -webkit-transform 0.3s;
+      z-index: 2;
+    }
+
+    section.cover .container .cover-preview img:nth-child(2):hover {
+      -webkit-transform: scale(1.02);
+      transform: scale(1.02);
+    }
+
+    section.cover .container .cover-preview img:nth-child(3) {
+      width: 230px;
+      margin-left: -100px;
+      -webkit-transition: -webkit-transform 0.3s;
+      transition: -webkit-transform 0.3s;
+      transition: transform 0.3s;
+      transition: transform 0.3s, -webkit-transform 0.3s;
+      position: relative;
+      z-index: 1;
+    }
+
+    section.cover .container .cover-preview img:nth-child(3):hover {
+      -webkit-transform: translateX(5px);
+      transform: translateX(5px);
+    }
+
+    .feature-box {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .feature-box .icon-wrap {
+      width: 100px;
+      height: 80px;
+      background: #f5f5f5;
+      text-align: center;
+      margin: auto;
+      margin-bottom: 20px;
+      display: -webkit-box;
+      display: flex;
+      -webkit-box-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      justify-content: center;
+      border-radius: 5px;
+      box-shadow: 0px 2px 5px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-box i {
+      font-size: 40px;
+      background: -webkit-linear-gradient(rgba(255, 106, 0, 0.5215686275), rgba(124, 16, 222, 0.6588235294));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .demo-block {
+      margin-bottom: 50px;
+    }
+
+    .demo-block .demo-block-in {
+      position: relative;
+      overflow: hidden;
+      border-radius: 5px;
+      border: 1px solid #fff;
+      box-shadow: 0px 0px 0px 1px #d0d0d0;
+      height: 250px;
+    }
+
+    .demo-block .demo-block-in:hover {
+      box-shadow: 0px 0px 0px 1px #999;
+    }
+
+    .demo-block .demo-block-title {
+      font-size: 18px;
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: 500;
+      color: black;
+    }
+
+    .demo-block .demo-block-title:hover {
+      color: #777;
+    }
+
+    .demo-block img {
+      width: 100%;
+      -webkit-transition: -webkit-transform 0.3s;
+      transition: -webkit-transform 0.3s;
+      transition: transform 0.3s;
+      transition: transform 0.3s, -webkit-transform 0.3s;
+    }
+
+    .demo-block:hover img {
+      -webkit-transform: scale(1.1);
+      transform: scale(1.1);
+    }
+
+    .demo-block:hover .hover-effect {
+      opacity: 1;
+    }
+
+    .demo-block .hover-effect {
+      position: absolute;
+      right: 0;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.7);
+      display: -webkit-box;
+      display: flex;
+      -webkit-box-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      justify-content: center;
+      -webkit-transition: opacity 0.3s;
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+
+    .demo-block .hover-effect a.btn {
+      background: black;
+      padding: 10px 25px;
+      color: white;
+    }
+
+    .demo-block .hover-effect a.btn:hover,
+    .demo-block .hover-effect a.btn:focus {
+      background: #555 !important;
+    }
+  </style>
+
+  <style>
+    header.main-header ul.navbar-nav li a {
+      font-size: 13px;
+      padding: 0 15px
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+
+
+
+    <header class="main-header">
+      <div class="container">
+        <!-- <div class="logo">
+                <a href="#">Laborasyon</a>
+            </div> -->
+        <ul class="navbar-nav">
+          <li>
+            <a href="">خانه</a>
+          </li>
+          <li>
+            <a href="#dashboards">داشبردها</a>
+          </li>
+          <li>
+            <a href="#layouts">چینش ها</a>
+          </li>
+          <li>
+            <a href="#apps">اپلیکیشن‌ها</a>
+          </li>
+          <li>
+            <a target="_blank" style="background:#1565c0" href="" class="btn">خرید</a>
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <section class="cover" style="background: #1565c0">
+      <div class="container">
+        <div class="row">
+          <div class="row">
+            <div class="col"></div>
+            <div class="col-8">
+              <div>
+                <h1>بورداش</h1>
+                <p>قالب مدیریتی اچ‌تی‌ام‌ال واکنش‌گرا بوت‌سترپ</p>
+              </div>
+              <p class="description">قالب مدیریتی بورداش، یک قالب پنل مدیریتی کاملا واکنش‌گرا، مدرن، مینیمال و با استفاده
+                از آخرین ویژگی های توسعه وب است و با Bootstrap 4 Framework ، HTML5 ، CSS3 و SCSS ساخته شده است.</p>
+              <ul class="list-inline">
+                <li class="list-inline-item">
+                  <a href="#demos" target="_blank" class="btn btn-primary scroll-btn">مشاهده </a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="" target="_blank" class="btn btn-info">خرید</a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="https://www.rtl-theme.com/author/afaridteam/" target="_blank" class="btn btn-success">نمونه
+                    کارها</a>
+                </li>
+              </ul>
+            
+            </div>
+            <div class="col"></div>
+          </div>
+        </div>
+    </section>
+
+
+    <section class="demos" id="demos">
+      <div class="container">
+
+
+        <header id="dashboards">
+          <h3 style="color:#1565c0">داشبردها</h3>
+          <p class="text-muted small"></p>
+        </header>
+
+        <div class="row mb-5">
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/crm.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="index.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="index.html" class="demo-block-title">CRM سیستم</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/ecommers.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="dashboard-two.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="dashboard-two.html" class="demo-block-title">ایکامرس</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/analistic.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="dashboard-three.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="dashboard-three.html" class="demo-block-title">آنالیستیک</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/project-magment.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="dashboard-four.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="dashboard-four.html" class="demo-block-title">مدیریت پروژه</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/helpdesk.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="dashboard-five.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="dashboard-five.html" class="demo-block-title"> مدیریت هلپ‌دسک</a>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <header id="layouts">
+          <h3 style="color:#1565c0">چینش‌ها و تم‌های متفاوت</h3>
+          <p class="text-muted small"></p>
+        </header>
+
+        <div class="row mb-5">
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="preview/dark.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="demos/dark/index.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="demos/dark/index.html" class="demo-block-title">تیره</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/semidark.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="demos/semi-dark/index.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="demos/semi-dark/index.html" class="demo-block-title">نیمه تاریک</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/smallnavigation.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="demos/small-navigation/index.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="demos/small-navigation/index.html" class="demo-block-title">نویگیشن کوچک</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/hiddennavighation.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="demos/hidden-navigation/index.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="demos/hidden-navigation/index.html" class="demo-block-title">نویگیشن مخفی</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/def.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="demos/sticky-header/index.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="demos/sticky-header/index.html" class="demo-block-title">هدر چسبان</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/def.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="demos/sticky-footer/index.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="demos/sticky-footer/index.html" class="demo-block-title">فوتر چسبان</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/def.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="demos/sticky-page-header/index.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="demos/sticky-page-header/index.html" class="demo-block-title">هدر چسبان صفحه </a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/dark.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="demos/sticky-page-header-and-dark/index.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="demos/sticky-page-header-and-dark/index.html" class="demo-block-title">هدر چسبان و تیره</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/def.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="demos/sticky-header-and-page-header/index.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="demos/sticky-header-and-page-header/index.html" class="demo-block-title">هدر کاملا چسبان</a>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <header id="apps">
+          <h3 style="color:#1565c0">اپلیکیشن‌ها</h3>
+          <p class="text-muted small"></p>
+        </header>
+
+        <div class="row mb-5">
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/chats.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="chat.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="chat.html" class="demo-block-title">چت</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/email.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="inbox.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="inbox.html" class="demo-block-title">ایمیل</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/filemaneger.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="file-manager.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="file-manager.html" class="demo-block-title">فایل منیجر</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/calendar.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="calendar.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="calendar.html" class="demo-block-title">تقویم</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="demo-block">
+              <div class="demo-block-in">
+                <img src="./preview/todo.png" alt="Bordash">
+                <div class="hover-effect">
+                  <a target="_blank" href="app-todo.html" class="btn">مشاهده</a>
+                </div>
+              </div>
+              <a href="app-todo.html" class="demo-block-title">تودو</a>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </section>
+
+
+
+    <!-- <section class="portfolio bg-dark text-white">
+      <div class="container d-md-flex align-items-center justify-content-between">
+        <h4 class="mb-0">Would you like to see our other works?</h4>
+        <a href="https://themeforest.net/user/laborasyon/portfolio" target="_blank"
+          class="btn btn-primary btn-lg">Portfolio</a>
+      </div>
+    </section> -->
+
+
+
+  </div>
+
+  <!-- Scripts -->
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script> -->
+    <script src="./vendors/bundle.js"></script>
+  <!-- <script src="http://laborasyon.com/js/app.js" defer></script> -->
+  <script>
+    $(function () {
+      $('header.main-header ul li a, a.scroll-btn').on('click', function () {
+        var href = $(this).attr('href');
+        $('html, body').animate({
+          scrollTop: $(href).offset().top - 100
+        }, 300);
+        return false;
+      });
+    });
+  </script>
+
+</body>
+
+</html>

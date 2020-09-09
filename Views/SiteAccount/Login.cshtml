@@ -1,0 +1,152 @@
+﻿@*@model IEnumerable<KaraYadak.Models.Client>*@
+
+@{
+    ViewBag.Title = " ";
+    Layout = "_SiteLayout";
+}
+@*
+    @section vendorstyles{
+            <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css" />
+        }*@
+@section styles{
+    <link href="~/css/SiteLogin.css" rel="stylesheet" />
+    <link href="~/css/stylewithback.css" rel="stylesheet" />
+}
+@*@section vendors{
+        <script src="/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+        <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    }*@
+
+@section scripts{
+    <script src="~/js/jquery-3.1.1.min.js"></script>
+    <script>
+                function setTimer() {
+                    var timer_interval = setInterval(function () {
+                        seconds = new Number($("#second").text());
+                        minutes = new Number($("#minut").text());
+
+                        if (seconds == 0 && minutes != 0) {
+                            minutes = minutes - 1;
+                            seconds = 59;
+                        }
+                        else if (seconds <= 59 && seconds!=0) {
+                            seconds = seconds - 1;
+                        }
+                        else  {
+                            //swal("", "زمان شما به پایان رسیده لطفا مجددا امتحان کنید", "error");
+                            $(".sign-wrapper").removeClass("show-register").addClass("show-login");
+                            clearInterval(timer_interval);
+                        }
+                        $("#second").text(seconds);
+                        $("#minut").text(minutes);
+                    }, 1000);
+
+
+        }
+        $(document).ready(function () {
+
+        });
+        $("#register").click(function (e) {
+            e.preventDefault();
+            $("#second").text("00");
+            $("#minut").text("2");
+            var regex = new RegExp('^(\\+98|0)?9\\d{9}$');
+            var result = regex.test($("#cellphone").val());
+            var validate = $("#cellphone").val().startsWith("09", 0)&&result;
+            if (!validate) {
+                swal("", "شماره تلفن معتبر نمی باشد", "error");
+                return;
+            }
+            var url = "/SiteAccount/Register";
+            var model = {
+                username: $("#cellphone").val()
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: model
+            }).done(function (result) {
+                console.log(result);
+                $(".sign-wrapper").removeClass("show-login").addClass("show-register");
+                setTimer();
+
+            });
+        });
+                $("#verify").click(function (e) {
+            e.preventDefault();
+
+            var url = "/SiteAccount/Verify";
+            var model = {
+                Code: $("#Code").val(),
+                Username: $("#cellphone").val(),
+                callBack:$("#retUrl").val(),
+                    }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: model
+            }).done(function (result) {
+                console.log(result);
+                if (result.status == '1') {
+                    location.href = result.returnUrl
+                } else if (result.status == '0') {
+                    swal("", result.message, "error")
+                }
+
+            });
+        });
+
+    </script>
+
+
+}
+
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+
+
+
+
+
+
+
+<input  type="hidden" value="@ViewBag.Call" id="retUrl"/>
+
+<section class="sign-wrapper show-login">
+    <div class="sign-form-wrapper">
+        <div class="sign-form sign-form-login">
+
+            <h2>ورود به سامانه</h2>
+
+            <input type="text" id="cellphone" placeholder="شماره تلفن" />
+
+            <button id="register">ورود</button>
+        </div>
+        <div class="sign-form sign-form-register">
+
+            <h2>    دریافت کد تایید     <span id="minut">0</span>:<span id="second">10</span></h2>
+
+            <input type="text" id="Code" placeholder="کد تایید" />
+
+            <button id="verify">تایید</button>
+        </div>
+    </div>
+    <div class="sign-head">
+        <div class="sign-head-register">
+            <h2>خوش آمدید</h2>
+
+        </div>
+        <div class="sign-head-login">
+
+        </div>
+
+    </div>
+</section>
+
+

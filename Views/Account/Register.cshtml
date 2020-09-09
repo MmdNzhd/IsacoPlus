@@ -1,0 +1,112 @@
+﻿@model KaraYadak.ViewModels.RegisterViewModel
+@{
+    Layout = "_Account";
+    ViewBag.Title = "ثبت نام";
+}
+@section scripts{
+    <script>
+        function RefreshCaptcha() {
+            var d = new Date();
+            $("#imgcpatcha").attr("src", "/Captcha/Get?" + d.getTime());
+        }
+        $('form').submit(function (e) {
+            $('#form_alert').addClass('hidden');
+            e.preventDefault();
+            var form = $(this);
+            var url = form.attr('action');
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(),
+                success: function (data) {
+                    if (data.status == 0) {
+                        $('#form_alert').addClass('alert-danger');
+                        $('#form_alert').removeClass('hidden');
+                        $('#form_alert p').html(data.error);
+                    }
+                    else if (data.status == 1) {
+                        $('#form_alert').addClass('alert-success');
+                        $('#form_alert').removeClass('hidden');
+                        $('#form_alert p').html("ثبت نام با موفقیت انجام شد");
+                        setTimeout(function () {
+                            window.location.replace(data.returnUrl);
+                        }, 500);
+                    }
+                    else {
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 500);
+                    }
+                }
+            });
+        });
+    </script>
+}
+
+<div class="col-lg-6 d-lg-block d-none text-center align-self-center pl-0 pr-3 py-0">
+    <img src="/app-assets/images/pages/register.jpg" alt="branding logo">
+</div>
+<div class="col-lg-6 col-12 p-0 font-regular">
+    <div class="card rounded-0 mb-0 p-2">
+        <div class="card-header pt-50 pb-1">
+            <div class="card-title">
+                <h4 class="mb-0">ثبت نام</h4>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="card-body pt-0">
+                <form role="form" asp-action="register" method="post">
+                    <input type="hidden" class="hidden hide" asp-for="ReturnUrl" />
+                    <div class="form-label-group">
+                        <input type="text" asp-for="Nickname" id="inputName" class="form-control" placeholder="نام" required>
+                        <label for="inputName">نام</label>
+                    </div>
+                    <div class="form-label-group">
+                        <input type="email" asp-for="Email" id="inputEmail" class="form-control" placeholder="ایمیل" required>
+                        <label for="inputEmail">ایمیل</label>
+                    </div>
+                    <div class="form-label-group">
+                        <input type="password" asp-for="Password" id="inputPassword" class="form-control" placeholder="کلمه عبور" required>
+                        <label for="inputPassword">کلمه عبور</label>
+                    </div>
+                    <div class="form-label-group">
+                        <input type="password" asp-for="ConfirmPassword" id="inputConfPassword" class="form-control" placeholder="تایید کلمه عبور" required>
+                        <label for="inputConfPassword">تایید کلمه عبور</label>
+                    </div>
+
+                    <fieldset class="form-label-group form-group position-relative has-icon-left">
+                        <img alt="Captcha" class="float-right mx-1" onclick="RefreshCaptcha()" id="imgcpatcha" src="@Url.Action("Get","Captcha")" style="" />
+                        <div class="form-control-position" onclick="RefreshCaptcha()">
+                            <i class="fa fa-refresh"></i>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-label-group form-group position-relative has-icon-left">
+                        @*<input type="text" asp-for="Captcha" class="form-control" id="captcha" placeholder="پاسخ متن درون تصویر" required>*@
+                        <div class="form-control-position">
+                            <i class="feather icon-user"></i>
+                        </div>
+                        <label for="captcha">پاسخ متن درون تصویر</label>
+                    </fieldset>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <fieldset class="checkbox">
+                                <div class="vs-checkbox-con vs-checkbox-primary">
+                                    <input type="checkbox" checked>
+                                    <span class="vs-checkbox">
+                                        <span class="vs-checkbox--check">
+                                            <i class="vs-icon feather icon-check"></i>
+                                        </span>
+                                    </span>
+                                    <span class=""> قوانین و مقررات را میپذیرم.</span>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <a asp-action="login" class="btn btn-outline-primary float-left btn-inline mb-50">ورود</a>
+                    <button type="submit" class="btn btn-primary float-right btn-inline mb-50">ثبت نام</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,175 @@
+﻿@model IEnumerable<KaraYadak.Models.ProductCategoryType>
+
+@{
+    ViewBag.Title = "انواع دسته بندی های محصولات";
+    Layout = "_AdminPanel";
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css" />
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css" />
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+                var url = form.attr('action');
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: form.serialize(),
+                    success: function (data) {
+                        $('.modal').modal('toggle');
+                        oTable.draw();
+                    }
+                });
+                $(this).trigger('reset');
+            });
+        });
+        function DeleteItem(id){
+            Swal.fire({
+                title: '',
+                text: "آیا مطمئن به حذف هستید؟",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'بله',
+                cancelButtonText: 'خیر',
+                confirmButtonClass: 'btn btn-primary',
+                cancelButtonClass: 'btn btn-danger ml-1',
+                buttonsStyling: false,
+            }).then(function (result) {
+                if (result.value) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("delete","productcategorytypes")',
+                        data: "id=" + id,
+                        success: function (data) {
+                            oTable.draw();
+                        }
+                    });
+
+                    Swal.fire({
+                        type: "success",
+                        title: '',
+                        text: 'با موفقیت حذف شد',
+                        confirmButtonClass: 'btn btn-success',
+                        confirmButtonText: 'باشه',
+                    });
+                }
+            });
+        }
+        var oTable = $('.zero-configuration').DataTable({
+            processing: true,
+            serverSide: true,
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Persian.json"
+            },
+            ajax: {
+                url: '@Url.Action("index","productcategorytypes")',
+                type: "POST",
+                dataType: "json",
+                delay: 1000,
+                data: function (d) {
+                    //d._token = $('meta[name="csrf-token"]').attr('content');
+                    //d.created_start = $('input[name=created_start]').val();
+                }
+            },
+            columns: [
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'updatedAt',
+                    name: 'updatedAt'
+                },
+                {
+                    data: 'id',
+                    name: 'id'
+                },
+            ],
+            columnDefs: [
+                {
+                    targets: 2,
+                    render: function (data, type, row) {
+                        return '<button type="button" onclick="DeleteItem('+ data +')" class="btn btn-icon btn-sm btn-warning"><i class="feather icon-trash-2"></i></button>';
+                    }
+                },
+            ],
+        });
+    </script>
+}
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+
+<div class="content-body">
+    <section id="basic-datatable">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">@ViewBag.Title</h4>
+
+                        <button class="btn btn-success" type="button" data-toggle="modal" data-backdrop="false" data-target="#backdrop"><i class="feather icon-plus"></i>ثبت جدید </button>
+                        <!-- Modal -->
+                        <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">ثبت جدید</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form asp-action="create" asp-controller="productcategorytypes" method="post">
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <input type="text" placeholder="نام" name="Name" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <input type="file" name="Image" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">ثبت</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body card-dashboard">
+                            <div class="table-responsive">
+                                <table class="table zero-configuration">
+                                    <thead>
+                                        <tr>
+                                            <th>نام</th>
+                                            <th>تاریخ تغییر</th>
+                                            <th>عملیات</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

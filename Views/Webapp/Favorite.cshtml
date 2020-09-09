@@ -1,0 +1,120 @@
+﻿@model IEnumerable<KaraYadak.Models.Product>
+@{
+    Layout = "_WebAppLanding";
+    ViewData["Title"] = "علاقه مندی ها";
+}
+
+@section styles{
+
+}
+    <div id="throbber" style="display:none;">
+        <img src="~/assets/iKSmF.gif" />
+    </div>
+<div class="container m-0 mtk-main p-0 py-1 bg-white">
+
+    @* Title *@
+
+    <div class="row justify-content-around mtk-navbar align-items-center px-4 m-0 mb-2">
+        <div class="col-8 p-0 text-right py-2 animated fadeInDown">
+            <a href="#" class="text-white">
+                علاقه مندی ها
+            </a>
+        </div>
+        <div class="col-4 p-0 py-2 animated fadeInDown">
+            <a href="@ViewBag.P" class="align-middle">
+                <img src="~/mtk/images/icon/arrow-left.png" alt="Alternate Text" />
+            </a>
+        </div>
+    </div>
+
+
+    <div id="favoriteList" class="sec-1 bg-white mb-5 mt-5 pb-25">
+
+        @* Product *@
+        @foreach (var item in Model)
+        {
+            if(item != null) { 
+            <div id="@item.Code-row" class="row m-0 p-0 border border-dark mx-2 p-2 align-items-center rounded mt-2">
+                <div class="col-12">
+                    <div class="row align-items-center">
+                        <div class="col-6 rounded p-2">
+                            <a href="#">
+                                <img src="@item.ImageUrl" class="w-100" alt="Alternate Text" />
+                            </a>
+                        </div>
+                        <div class="col-6 rounded py-2">
+                            @* Name *@
+                            <div class="row mt-1 px-2">
+                                <div class="col-6 text-center">
+                                    <small class="row font-weight-bold">نام پارچه :</small>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <small class="row font-weight-bold">@item.Name</small>
+                                </div>
+                            </div>
+
+                            @* Color *@
+                            @*<div class="row mt-2 wow fadeInDown px-2">
+                                <div class="col-6 text-center">
+                                    <small class="row font-weight-bold">رنگ پارچه :</small>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <small class="row font-weight-bold text-success">سبز</small>
+                                </div>
+                            </div>*@
+
+                            @* Price *@
+                            <div class="row mt-2  px-2">
+                                <div class="col-6 text-center">
+                                    <small class="row font-weight-bold"> قیمت واحد :</small>
+                                </div>
+                                <div class="col-6 text-right p-0">
+                                    <small class="row font-weight-bold text-danger"><span class="pl-2">@string.Format("{0:n0}", item.Price)</span>تومان</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-6 px-2">
+                            <a asp-action="productDetails" class="btn btn-sm btn-info-empty btn-block">جزییات</a>
+                        </div>
+                        <div class="col-6 px-2">
+                            <button data-item-id="@item.Code" class="btn btn-sm btn-danger-empty btn-block removeProduct">حذف از لیست</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        }
+
+    </div>
+
+    <partial name="_Menu"/>
+</div>
+
+@section Scripts{
+    <script>
+        $(".js-range-slider").ionRangeSlider();
+
+        $("#favoriteList").on("click", ".removeProduct", function () {
+            $.blockUI({ message: $('#throbber') });
+            var id = $(this).attr("data-item-id");
+            $.ajax({
+                    type: 'POST',
+                    url: '/webapp/RemoveFromFavorites',
+                    data: {
+                        Id: id
+                    }
+                }).done(function (result) {
+                    if (result.status != '0') {
+                        $("#" + id + "-row").remove();
+                        swal("", result.message, "success");
+                    }
+                });
+            $.unblockUI();
+        });
+    </script>
+
+
+
+}

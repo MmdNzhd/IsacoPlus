@@ -1,0 +1,155 @@
+﻿@model IEnumerable<KaraYadak.Models.Comment>
+@using DNTPersianUtils.Core;
+
+@{
+    ViewBag.Title = "نظر کاربران";
+    Layout = "_AdminPanel";
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors-rtl.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css">
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+<style>
+    .swal-button-container{
+        margin-right:100px;
+    }
+</style>
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/dropzone.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/dataTables.select.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
+
+}
+@section scripts{
+    <script src="/app-assets/js/scripts/ui/data-list-view.js"></script>
+    <script>
+        //sleep
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        var ids = [];
+        $("tr").on(
+            "click", function () {
+                sleep(5000);
+                $("#events").removeClass("hidden")
+                var selectedItem = $(".selected");
+                let count = selectedItem.length;
+                for (var i = 0; i < count; i++) {
+                    var id = selectedItem[i].id;
+                    if (id && !ids.includes(id)) {
+                        ids.push(id);
+                    }
+                }
+            });
+        $("#acsept").click(function () {
+
+            $.ajax({
+                type: "POST",
+                url: "AcceptComment",
+                data: { "ids": ids },
+                //cache: false,
+                success: function (data) {
+                    console.log(data)
+                    if (data.status == '1') {
+                        toastr.success(data.message);
+                        location.reload();
+                    } else {
+                        toastr.error(data.message);
+                    }
+                },
+                error: function (data) {
+                    toastr.warning("خطا در ثبت اطلاعات");
+                    console.log(data);
+                }
+            });
+        })
+        $("#reject").click(function () {
+            swal({
+                title: "نظرات",
+                text: "با رد کردن نظرات نمایش داده نخواهند شد! ",
+                icon: "warning",
+                buttons: {
+                    catch: {
+                        text: "ادامه",
+                        value: "catch",
+                    }
+                    ,
+                    cancle: {
+                        text: "انصراف",
+                        value: "catch",
+                    }
+                }
+                , dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete =="catch") {
+                        $.ajax({
+                            type: "POST",
+                            url: "AcceptComment",
+                            data: { "ids": ids },
+                            //cache: false,
+                            success: function (data) {
+                                if (data.status == '1') {
+                                    toastr.success(data.message);
+                                    location.reload();
+                                } else {
+                                    toastr.error(data.message);
+                                }
+                            },
+                            error: function (data) {
+                                toastr.warning("خطا در ثبت اطلاعات");
+                                console.log(data);
+                            }
+                        });
+                    } else {
+
+                    }
+                });
+
+        })
+    </script>
+}
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+<div class="content-body">
+    <section id="data-list-view" class="data-list-view-header">
+        <div class="table-responsive">
+            <table class="table data-list-view datatable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>ایمیل کابر</th>
+                        <th>نظر کابر</th>
+                        <th>تاریخ درج</th>
+                        <th id="events" class="hidden">
+                            <i class="fa fa-check" style="font-size:45px" id="acsept"></i>
+                            <i class="fa fa-close" style="font-size:45px" id="reject"></i>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr id="@item.Id">
+                            <th></th>
+                            <td>@item.Username</td>
+                            <td style="max-width:400px">@item.Text</td>
+                            <td>@item.Date.ToFriendlyPersianDateTextify()</td>
+                            <th></th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+

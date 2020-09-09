@@ -1,0 +1,312 @@
+﻿@model ICollection<KaraYadak.ViewModels.ProductForIndexVM>
+
+@{
+    ViewBag.Title = "علاقه مندی ها ";
+    Layout = "_SiteLayout";
+    var next = ViewBag.CurrectPage + 1;
+    var prev = ViewBag.CurrectPage - 1;
+    Baner baner = ViewBag.baner;
+
+}
+@section vendorstyles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.min.css"
+          integrity="sha256-QaRlBIHoN1LIkxeziW34nknOVrCasnLJY6esf3ldv+k=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha256-aAr2Zpq8MZ+YA/D6JtRD3xtrwpEz2IqOS+pWD/7XKIw=" crossorigin="anonymous" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/css/swiper.min.css"
+          integrity="sha256-kGupfJ4zZb4/m0GPPVY0ng7FwSjZm1E0wMWG1aRYbwk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+          integrity="sha256-UhQQ4fxEeABh4JrcmAJ1+16id/1dnlOEVCFOxDef9Lw=" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="/css/style.css">
+}
+@section styles{
+    <style>
+        .bg-product {
+            background-size: 48% 60% !important;
+        }
+    </style>
+
+
+}
+@section vendors{
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha256-OFRAJNoaD8L3Br5lglV7VyLRf0itmoBzWUoM+Sji4/8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/js/fontawesome.min.js"
+            integrity="sha256-fjQmECvnpgwxO4TyEkO7CJeu97Lu+JKoGDCNEVDs7X0=" crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/js/mdb.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+            integrity="sha256-pTxD+DSzIwmwhOqTFN+DB+nHjO4iAsbgfyFq5K5bcE0=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/js/swiper.min.js"
+            integrity="sha256-NiMdnMv0WBAps3M8mcB7WHzlanETt0rnwMCgg67DgCk=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countdown/2.6.0/countdown.min.js"
+            integrity="sha512-FkM4ZGExuYz4rILLbNzw8f3HxTN9EKdXrQYcYfdluxJBjRLthYPxxZixV/787qjN3JLs2607yN5XknR/cQMU8w=="
+            crossorigin="anonymous"></script>
+    <script src="~/js/app.js"></script>
+
+    <script src="~/js/CountDown.js"></script>
+}
+@section scripts{
+    <script>
+
+        // $(document).ready(() => {
+        //   var swiper = new Swiper('.swiper-container', {
+        //     cssMode: true,
+        //     navigation: {
+        //       nextEl: '.swiper-button-next',
+        //       prevEl: '.swiper-button-prev',
+        //     },
+        //     pagination: {
+        //       el: '.swiper-pagination'
+        //     },
+        //     mousewheel: true,
+        //     keyboard: true,
+        //   });
+
+        //   var swiper2 = new Swiper('.slider2', {
+        //     slidesPerView: 4,
+        //     spaceBetween: 30,
+        //     navigation: {
+        //       nextEl: '.swiper-button-next',
+        //       prevEl: '.swiper-button-prev',
+        //     },
+        //   });
+        // })
+        function likeOrDislike(item) {
+            if ($(item).children('i').hasClass('fa-heart-o')) {
+                $(item).children('i').animate().addClass('fa-heart');
+                $(item).children('i').attr('transform', 'scale(1.3)');
+                $(item).children('i').animate().removeClass('fa-heart-o');
+            } else {
+                $(item).children('i').animate().addClass('fa-heart-o');
+                $(item).children('i').attr('transform', 'scale(1.3)');
+                $(item).children('i').animate().removeClass('fa-heart');
+            }
+        }
+
+        $(".cta").mouseenter(function () {
+            $(this).addClass("active").delay(300).queue(function (next) {
+                $(this).removeClass("active");
+                next();
+            });
+
+        });
+        // ------swiper-----
+
+        countDown('@ViewBag.timer');
+
+    </script>
+
+}
+
+<!--header-->
+@Html.Partial("Header")
+
+<!-- ---list product---- -->
+<div class="container-fluid px-5">
+    @*<div class="row w-100 mx-auto text-right py-3">
+            <div class="col-6">
+                <h3 class="text-white"><b class="font-kalame">دسته بندی خودروها</b></h3>
+            </div>
+            <div class="col-6 ">
+                <h3 class="text-left"><img src="./img/brand2.png" class="img-fluid width-10 pl-2">هیوندا</h3>
+            </div>
+
+        </div>*@
+    <!-- --- -->
+    <div class="row w-100 mx-auto text-center mt-4">
+        <div class="col-3 bg-white mt-5 filter-PageList"></div>
+        <div class="col-9">
+            @if (Model.Count > 0)
+            {
+                @foreach (var item in Model)
+                {
+                    var offerPrice = item.Price - item.Price * item.Off / 100;
+                    <div class="col-md-3">
+                        <div class="card-Pagelist my-5 py-5 w-100  ">
+                            <img src="@item.Picture" class="img-fluid hj-productImg w-75">
+                            <div class="row w-100 mx-auto text-center pt-4 px-2 ">
+                                <h1 class="font-kalame text-center mx-auto">
+                                    <b class=" font-kalame">@item.Title </b>
+                                </h1>
+                            </div>
+                            <div class="row w-100 mx-auto text-center pb-2 pt-2 px-5 ">
+                                <del class="w-100 original-pricePageList">
+                                    <h4 class="font-kalame text-center mx-auto"> <b class="font-kalame">@item.Price</b></h4>
+                                </del>
+                            </div>
+                            <div class="row w-100 mx-auto text-center pb-1 px-5 ">
+
+                                <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame"></b>@offerPrice</h2>
+                                <h6 class="text-center w-100"> تومان</h6>
+                            </div>
+                            <div class="row w-100 mx-auto text-center">
+                                <button type="button" onclick="document.location='/Products/ProductDetail?code=@item.Code'"
+                                        class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                                    <b>
+                                        اطلاعات
+                                        بیشتـر
+                                    </b>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <h1 style="margin-left:40%">محصولی یافت نشد</h1>
+            }
+
+        </div>
+    </div>
+    <!-- ---pagination--- -->
+    <div class="row w-100 mx-auto text-center py-5">
+        <nav aria-label="..." style="margin-right:55%">
+            <ul class="pagination">
+
+                @if (ViewBag.Page == ViewBag.CurrectPage)
+                {
+                    <li class="page-item disabled">
+                        <a class="page-link" href="/MyFavoriteProducts/@next">بعدی</a>
+                    </li>
+
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="/MyFavoriteProducts/@next">بعدی</a>
+                    </li>
+
+                }
+
+                @if (ViewBag.Page > 1)
+                {
+                    @for (int i = 1; i <= ViewBag.Page; i++)
+                    {
+
+                        <li class="page-item"><a class="page-link" href="MyFavoriteProducts/@i">@i</a></li>
+                    }
+                }
+                @if (ViewBag.CurrectPage == 1)
+                {
+                    <li class="page-item disabled ">
+                        <a class="page-link" href="/MyFavoriteProducts/@prev">قبلی</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item ">
+                        <a class="page-link" href="/MyFavoriteProducts/@prev">قبلی</a>
+                    </li>
+                }
+
+            </ul>
+        </nav>
+    </div>
+    <!-- ---end pagination--- -->
+</div>
+
+<!-- ---End list product---- -->
+<!-- ---service--- -->
+<div class="container-fluid p-0 my-5">
+    <div class="row w-100 mx-auto hj-Service">
+        <div class="col-4 py-3 mx-auto text-center">
+            <img src="~/img/money (2).svg"
+                 class="img-fluid mx-auto pl-3">ضمانت بازگشت وجه
+        </div>
+        <div class="col-4 py-3 mx-auto text-center">
+            گارانتی<img src="~/img/ribbon.svg"
+                        class="img-fluid mx-auto px-2">محصولات
+        </div>
+        <div class="col-4 py-3 mx-auto text-center">
+            ضمانت بازگشت کالا<img src="~/img/Group 18.svg"
+                                  class="img-fluid mx-auto pr-3">
+        </div>
+    </div>
+
+</div>
+
+<!-- --end service--- -->
+<!-- ---OfferBox-- -->
+@Html.Partial("SpecialOfferProduct", (List<KaraYadak.ViewModels.ProductForIndexVM>)ViewBag.BestOfferProduct)
+
+<!-- ------End OfferBox-------------------------------------------------------- -->
+<!-- ---banner with offer--- -->
+
+@if (baner != null)
+{
+    <div class="container-fluid">
+        <a href="@baner.Url">
+
+            <div class="row  mx-auto hj-banner position-relative">
+                <img src="/uploads/@baner.Image" class="img-fluid  position-relative">
+                <span id="baneertimer" class=" countdown" style="font-weight: bold;"></span>
+            </div>
+        </a>
+    </div>
+
+}
+
+<!-- ---banner with offer--- -->
+<!-- --titr-- -->
+<div class="row w-100 mx-auto text-center py-4 pt-5">
+    <div class="col-lg-5 col-3 text-left pt-4">
+        <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+    </div>
+    <div class="col-lg-2 col-6">
+        <h2><b class="font-kalameBlack"> محصولات دیگر</b></h2>
+    </div>
+    <div class="col-lg-5 col-3 text-right pt-4">
+        <img src="./img/Line 35.png"
+             class="img-fluid w-25 mx-auto border-titr">
+    </div>
+</div>
+<!-- --end titr-- -->
+<div class="container-fluid width-90">
+    <div class="row w-100 mx-auto text-center">
+        @foreach (var item in (List<KaraYadak.ViewModels.ProductForIndexVM>)ViewBag.segustProduct)
+        {
+            var productRealPrice = item.Price - (item.Off * item.Price / 100);
+
+            <div class=" col-md-3 col-sm-4 col-12">
+                <div class="hj-card my-5 py-5 w-100  ">
+                    <img src="@item.Picture" class="img-fluid hj-productImg w-75">
+                    <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                        <h1 class="font-kalame text-center mx-auto">
+                            <b class=" font-kalame">@item.Title</b>
+                        </h1>
+                    </div>
+                    <div class="row w-100 mx-auto text-center pb-3 px-5 ">
+                        <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">@productRealPrice</b></h2>
+                    </div>
+                    <div class="row w-100 mx-auto text-center">
+                        <button type="button" onclick="document.location='/Products/ProductDetail?code=@item.Code'"
+                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                            <b>
+                                اطلاعات
+                                بیشتـر
+                            </b>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

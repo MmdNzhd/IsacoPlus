@@ -1,0 +1,484 @@
+﻿@model IEnumerable<KaraYadak.ViewModels.ProductWithCategoryVM>
+@{
+    Layout = "_WebAppLanding";
+    ViewData["Title"] = "صفحه اصلی";
+}
+
+
+<div class="container m-0 mt-5 mtk-main mtk-product-detail p-0">
+    <!--Banner-->
+    <section class="sec-1 container-fluid py-2">
+        <div class="row">
+            <partial name="_WebAppHeader" />
+        </div>
+        <div class="row mtk-product-image position-relative">
+            <img src="~/mtk/images/fiber.png" class="w-100" alt="Alternate Text" />
+            <div class="mtk-product-price row w-100">
+                @*<span class=" col-6 text-right">@string.Format("{0:n0}", Model.Price) تومان</span>
+                <span class=" col-6 text-left">@Model.Name</span>*@
+            </div>
+        </div>
+        <div class="row bg-dark-blue text-center mtk-product-services">
+            <div class="col-3 w-100 p-0 ">
+                <a href="#" class="btn p-0 w-100 shadow-none">
+                    <img src="~/mtk/images/icon/Group 272.png" class="text-center my-3 d-block mx-auto" alt="Alternate Text" />
+                    <span class="text-white text-center my-3">مقایسه</span>
+                </a>
+            </div>
+            <div class="col-3 w-100 p-0">
+                <a href="#" class="btn p-0 w-100 shadow-none">
+                    <img src="~/mtk/images/icon/Group 273.png" class="text-center my-3 d-block mx-auto" alt="Alternate Text" />
+                    <span class="text-white text-center my-3">علاقه مندی</span>
+                </a>
+            </div>
+            <div class="col-3 w-100 p-0">
+                <a href="#" class="btn p-0 w-100 shadow-none">
+                    <img src="~/mtk/images/icon/Group 275.png" class="text-center my-3 d-block mx-auto" alt="Alternate Text" />
+                    <span class="text-white text-center my-3">راهنمای متراژ</span>
+                </a>
+            </div>
+            <div class="col-3 w-100 p-0">
+                <a href="#" class="btn p-0 w-100 shadow-none">
+                    <img src="~/mtk/images/icon/Group 277.png" class="text-center my-3 d-block mx-auto" alt="Alternate Text" />
+                    <span class="text-white text-center my-3">اشتتراک گزاری</span>
+                </a>
+            </div>
+        </div>
+        <div id="colors" class="row my-2 justify-content-sm-end mx-auto">
+            @foreach (var item in Model)
+            {
+                <div class="col-2 my-2 colorImage">
+                    <div>
+                        @*<div data-url="@item.Images" style="color:@item.Color!important;background-color:@item.Color!important" class="mtk-color"></div>*@
+                    </div>
+                </div>
+            }
+
+        </div>
+        <hr class="bg-dark" />
+        <div class="row">
+            <div class="col-6 align-middle p-0 px-2 text-right">
+                <a href="/" class="btn p-0 shadow-none">
+                    <img src="~/mtk/images/icon/coat.png" class="float-right" alt="Alternate Text" />
+                    <small class="d-inline-block px-1">لباس های مجلسی</small>
+                </a>
+            </div>
+            <div class="col-6 align-middle p-0 px-2 text-right">
+                <a href="/" class="btn p-0 shadow-none">
+                    <img src="~/mtk/images/icon/coat.png" class="float-right" alt="Alternate Text" />
+                    <small class="d-inline-block px-1">لباس های مجلسی</small>
+                </a>
+            </div>
+            <div class="col-6 align-middle p-0 px-2 text-right">
+                <a href="/" class="btn p-0 shadow-none">
+                    <img src="~/mtk/images/icon/coat.png" class="float-right" alt="Alternate Text" />
+                    <small class="d-inline-block px-1">لباس های مجلسی</small>
+                </a>
+            </div>
+            <div class="col-6 align-middle p-0 px-2 text-right">
+                <a href="/" class="btn p-0 shadow-none">
+                    <img src="~/mtk/images/icon/coat.png" class="float-right" alt="Alternate Text" />
+                    <small class="d-inline-block px-1">لباس های مجلسی</small>
+                </a>
+            </div>
+            <div class="col-6 align-middle p-0 px-2 text-right">
+                <a href="/" class="btn p-0 shadow-none">
+                    <img src="~/mtk/images/icon/coat.png" class="float-right" alt="Alternate Text" />
+                    <small class="d-inline-block px-1">لباس های مجلسی</small>
+                </a>
+            </div>
+            <div class="col-6 align-middle p-0 px-2 text-right">
+                <a href="/" class="btn p-0 shadow-none">
+                    <img src="~/mtk/images/icon/coat.png" class="float-right" alt="Alternate Text" />
+                    <small class="d-inline-block px-1">لباس های مجلسی</small>
+                </a>
+            </div>
+        </div>
+        <div class="row bg-light-gray">
+            @*<h5 class="text-dark px-2 py-2 d-block">@Model.Name</h5>*@
+        </div>
+        <div class="row bg-light-gray">
+            @*<small class="text-dark px-2 d-block">@Model.Code</small>*@
+        </div>
+        <div class="row text-justify bg-light-gray text-white product-info px-3">
+            <p class="overflow-hidden text-dark" data-height="0">
+            @*@Model.Description*@</p>
+            <a style="height: 40px!important" class="btn btn-md btn-yellow text-dark rounded-pill mx-auto" onclick="raise(this)">مشاهده توضیحات</a>
+        </div>
+        <div class="row  product-services py-4">
+            <div class="col-12">
+                <div class="row justify-content-center">
+                    <small class="col-6 text-white text-center feat-1 p-0">
+                        مناسب لباس های مجلسی
+                    </small>
+                </div>
+                <hr class="bg-light" />
+                <div class="row justify-content-between">
+                    <small class="col-3 text-white text-center feat-2 p-0">
+                        جنس حریر
+                    </small>
+                    <small class="col-3  text-white text-center feat-3 p-0">
+                        دوخت عالی
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!--Comments-->
+        <div class="row comments py-2">
+            <button class="btn btn-md btn-info text-white rounded-pill mx-auto" data-toggle="modal" data-target="#comments">نظرات کاربران</button>
+        </div>
+        <!--Slider-->
+
+        <div class="sec-6 container-fluid bg-gray w-100 p-0 m-0">
+            <div class="row title align-items-center">
+                <div class="col-8">
+                    <h5 class="text-white text-right py-3 position-relative">محصولات مرتبط</h5>
+                </div>
+                <div class="col-4">
+                    <a href="#" class="text-white my-3">مشاهده همه</a>
+                </div>
+            </div>
+            <div class="row bg-white">
+                <div class="swiper-container swiper-off ltr" id="slider-1">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide position-relative p-2">
+                            <div class="card position-relative wow fadeInDown overflow-hidden w-100" data-wow-duration="1s">
+                                <img class="card-img-top w-100" src="~/mtk/images/NoPath - Copy (6).png" alt="Card image cap">
+                                <div class="mtk-star position-absolute p-2">
+                                    <i class="fa fa-star text-white mt-1"></i><small class="text-white ml-3"> </small>
+                                </div>
+                                <div class="mtk-like position-absolute p-2 m-2 mr-3">
+                                    <i class="fa fa-heart text-white "></i>
+                                </div>
+                                <div class="mtk-off-perc position-absolute">
+                                    <small class="text-dark">ته طاقه<img src="~/mtk/images/icon/restriction-ends.png" class="pl-2" /></small>
+                                </div>
+                                <div class="row  align-items-center bg-gray">
+                                    <div class="col-6 text-white"><h5 class="d-inline-block">73000</h5><br /><small>تومان</small></div>
+                                    <div class="col-6 text-white bg-dark py-4 rounded-left">حریر</div>
+                                </div>
+                            </div>
+                        </div>
+                        @******************************************************************************@
+                        <div class="swiper-slide position-relative p-2">
+                            <div class="card position-relative wow fadeInDown overflow-hidden w-100" data-wow-duration="2s">
+                                <img class="card-img-top w-100" src="~/images/NoPath - Copy (6).png" alt="Card image cap">
+                                <div class="mtk-star position-absolute p-2" onclick="fav(this)">
+                                    <i class="fa fa-star text-white mt-1"></i><small class="text-white ml-3"> </small>
+                                </div>
+                                <div class="mtk-like position-absolute p-2 m-2 mr-3" onclick="likeDislike(this)">
+                                    <i class="fa fa-heart text-white "></i>
+                                </div>
+                                <div class="mtk-off-perc position-absolute">
+                                    @*<small class="text-dark"><span>3</span>% تخفیف</small>*@
+                                    <span>
+                                        <small>30%</small>
+                                    </span>
+                                    <span>
+                                        <small>ته طاقه</small>
+                                    </span>
+                                </div>
+                                <div class="row  align-items-center bg-gray">
+                                    <div class="col-6 text-white"><h5 class="d-inline-block px-2">73000</h5><br /><small>تومان</small></div>
+                                    <div class="col-6 text-white bg-dark py-4 rounded-left">حریر</div>
+                                </div>
+                            </div>
+                        </div>
+                        @*********************************************************************************@
+                        <div class="swiper-slide position-relative">
+                            <div class="card position-relative wow fadeInDown overflow-hidden w-100" data-wow-duration="3s">
+                                <img class="card-img-top w-100" src="~/images/NoPath - Copy (6).png" alt="Card image cap">
+                                <div class="mtk-star position-absolute p-2">
+                                    <i class="fa fa-star text-white mt-1"></i><small class="text-white ml-3"> </small>
+                                </div>
+                                <div class="mtk-like position-absolute p-2 m-2 mr-3">
+                                    <i class="fa fa-heart text-white "></i>
+                                </div>
+                                <div class="mtk-off-perc position-absolute">
+                                    <small class="text-dark">ته طاقه<img src="~/images/icon/restriction-ends.png" class="pl-2" /></small>
+                                </div>
+                                <div class="row  align-items-center bg-gray">
+                                    <div class="col-6 text-white"><h5 class="d-inline-block">73000</h5><br /><small>تومان</small></div>
+                                    <div class="col-6 text-white bg-dark py-4 rounded-left">حریر</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide position-relative">
+                            <div class="card position-relative wow fadeInDown overflow-hidden w-100" data-wow-duration="4s">
+                                <img class="card-img-top w-100" src="~/images/NoPath - Copy (6).png" alt="Card image cap">
+                                <div class="mtk-star position-absolute p-2">
+                                    <i class="fa fa-star text-white mt-1"></i><small class="text-white ml-3"> </small>
+                                </div>
+                                <div class="mtk-like position-absolute p-2 m-2 mr-3">
+                                    <i class="fa fa-heart text-white "></i>
+                                </div>
+                                <div class="mtk-off-perc position-absolute">
+                                    <small class="text-dark">ته طاقه<img src="~/images/icon/restriction-ends.png" class="pl-2" /></small>
+                                </div>
+                                <div class="row  align-items-center bg-gray">
+                                    <div class="col-6 text-white"><h5 class="d-inline-block">73000</h5><br /><small>تومان</small></div>
+                                    <div class="col-6 text-white bg-dark py-4 rounded-left">حریر</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Add Pagination -->
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </div>
+
+        <!--Off Products-->
+        <div class="sec-5 container-fluid bg-gray mb-5 mx-0 p-0">
+            <div class="row title align-items-center">
+                <div class="col-8">
+                    <h5 class="text-white text-right py-3 position-relative">% تخفیف های امروز</h5>
+                </div>
+                <div class="col-4">
+                    <a href="#" class="text-white my-3">مشاهده همه ></a>
+                </div>
+            </div>
+            <div class="row bg-white">
+                <div class="swiper-container swiper-off ltr" id="off-2">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide position-relative p-2">
+
+                            @*****************************************************************************************@
+                            <div class="card position-relative wow fadeInDown w-100" data-wow-duration="2s">
+                                <img class="card-img-top w-100" src="~/images/fiber.png" alt="Card image cap">
+                                <div class="mtk-star position-absolute p-2" onclick="fav(this)">
+                                    <i class="fa fa-star text-white mt-1"></i><small class="text-white ml-3"> </small>
+                                </div>
+                                <div class="mtk-like position-absolute p-2 m-2 mr-3" onclick="likeDislike(this)">
+                                    <i class="fa fa-heart text-white "></i>
+                                </div>
+                                <div class="mtk-off-perc position-absolute">
+                                    @*<small class="text-dark"><span>3</span>% تخفیف</small>*@
+
+                                    <span>
+                                        <small class="font-weight-bold">10%</small>
+                                    </span>
+
+                                    <span>
+                                        <small>ته طاقه</small>
+                                    </span>
+                                    }
+                                </div>
+                                <div class="card-body p-0 px-2 py-1 bg-light-gray">
+                                    <!-- Title -->
+                                    <h6 class="card-title text-right p-0 m-0"><a>Good</a></h6>
+                                    <!-- Text -->
+                                    @*<span class="small d-inline-block w-100">مخصوص لباس مجلسی</span>*@
+                                    <!-- Proce -->
+                                    <span class="small d-inline-block w-100 p-0"> <span class="mtk-price">40,000</span>تومان</span>
+                                    <!--Buy-->
+                                    <div class="mtk-buy">
+
+                                        <a class="buyModal" href="#">
+                                            <img src="~/images/icon/Group 72.png" style="width:19px !important;" />اضافه به سبد خرید
+                                        </a>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            @**********************************************************************************@
+                        </div>
+                        <div class="swiper-slide position-relative p-2">
+
+                            @*****************************************************************************************@
+                            <div class="card position-relative wow fadeInDown w-100" data-wow-duration="2s">
+                                <img class="card-img-top w-100" src="~/images/fiber.png" alt="Card image cap">
+                                <div class="mtk-star position-absolute p-2" onclick="fav(this)">
+                                    <i class="fa fa-star text-white mt-1"></i><small class="text-white ml-3"> </small>
+                                </div>
+                                <div class="mtk-like position-absolute p-2 m-2 mr-3" onclick="likeDislike(this)">
+                                    <i class="fa fa-heart text-white "></i>
+                                </div>
+                                <div class="mtk-off-perc position-absolute">
+                                    @*<small class="text-dark"><span>3</span>% تخفیف</small>*@
+
+                                    <span>
+                                        <small class="font-weight-bold">10%</small>
+                                    </span>
+
+                                    <span>
+                                        <small>ته طاقه</small>
+                                    </span>
+                                    }
+                                </div>
+                                <div class="card-body p-0 px-2 py-1 bg-light-gray">
+                                    <!-- Title -->
+                                    <h6 class="card-title text-right p-0 m-0"><a>Good</a></h6>
+                                    <!-- Text -->
+                                    @*<span class="small d-inline-block w-100">مخصوص لباس مجلسی</span>*@
+                                    <!-- Proce -->
+                                    <span class="small d-inline-block w-100 p-0"> <span class="mtk-price">40,000</span>تومان</span>
+                                    <!--Buy-->
+                                    <div class="mtk-buy">
+                                        <a class="buyModal" href="#">
+                                            <img src="~/images/icon/Group 72.png" style="width:19px !important;" />اضافه به سبد خرید
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            @**********************************************************************************@
+                        </div>
+                        <div class="swiper-slide position-relative p-2">
+
+                            @*****************************************************************************************@
+                            <div class="card position-relative wow fadeInDown w-100" data-wow-duration="2s">
+                                <img class="card-img-top w-100" src="~/images/fiber.png" alt="Card image cap">
+                                <div class="mtk-star position-absolute p-2" onclick="fav(this)">
+                                    <i class="fa fa-star text-white mt-1"></i><small class="text-white ml-3"> </small>
+                                </div>
+                                <div class="mtk-like position-absolute p-2 m-2 mr-3" onclick="likeDislike(this)">
+                                    <i class="fa fa-heart text-white "></i>
+                                </div>
+                                <div class="mtk-off-perc position-absolute">
+                                    @*<small class="text-dark"><span>3</span>% تخفیف</small>*@
+
+                                    <span>
+                                        <small class="font-weight-bold">10%</small>
+                                    </span>
+
+                                    <span>
+                                        <small>ته طاقه</small>
+                                    </span>
+
+                                </div>
+                                <div class="card-body p-0 px-2 py-1 bg-light-gray">
+                                    <!-- Title -->
+                                    <h6 class="card-title text-right p-0 m-0"><a>Good</a></h6>
+                                    <!-- Text -->
+                                    @*<span class="small d-inline-block w-100">مخصوص لباس مجلسی</span>*@
+                                    <!-- Proce -->
+                                    <span class="small d-inline-block w-100 p-0"> <span class="mtk-price">40,000</span>تومان</span>
+                                    <!--Buy-->
+                                    <div class="mtk-buy">
+
+                                        <a class="buyModal" href="#">
+                                            <img src="~/images/icon/Group 72.png" style="width:19px !important;" />اضافه به سبد خرید
+                                        </a>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            @**********************************************************************************@
+                        </div>
+                    </div>
+                    <!-- Add Pagination -->
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--Purchase-->
+        <div class="row purchase bg-transparent">
+            <button class="btn btn-lg btn-block btn-danger text-white rounded mx-auto">اضافه کردن به سبد خرید</button>
+        </div>
+
+        <!--Comments-->
+        <!-- Modal -->
+        <div class="modal fade" id="comments" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+
+            <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">نظرات کاربران</h5>
+                        @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>*@
+                    </div>
+                    <div class="modal-body">
+                        <!--Comments-->
+                        <section class="product-comments">
+                            <div class="row bg-light-gray  mx-4 rounded my-3">
+                                <h5 class="float-right w-100 bg-dark-blue text-white text-right px-2 py-1">محمود</h5>
+                                <p class="text-justify px-2">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با اسستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
+                            </div>
+                            <div class="row bg-light-gray  mx-4 rounded my-3">
+                                <h5 class="float-right w-100 bg-dark-blue text-white text-right px-2 py-1">محمود</h5>
+                                <p class="text-justify px-2">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با اسستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
+                            </div>
+                            <div class="row bg-light-gray  mx-4 rounded my-3">
+                                <h5 class="float-right w-100 bg-dark-blue text-white text-right px-2 py-1">محمود</h5>
+                                <p class="text-justify px-2">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با اسستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">بازگشت</button>
+                        <button type="button" class="btn btn-success " data-toggle="modal" data-target="#commentBox">ارسال نظر</button>
+                    </div>
+           
+                </div>
+            </div>
+        </div>
+
+        <!--Add Comments Box-->
+        <div class="modal fade" id="commentBox" tabindex="-1" role="dialog" aria-labelledby="commentBox"
+             aria-hidden="true">
+
+            <!-- Add class .modal-full-height and then add class .modal-right (or other classes from list above) to set a position to the modal -->
+            <div class="modal-dialog modal-full-height" role="document">
+
+
+                <div class="modal-content">
+                    <div class="modal-header text-right">
+                        <h4 class="modal-title w-100" id="myModalLabel">ارسال نظر</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group text-right">
+                            <label for="formGroupExampleInput2">نام و نام خانوادگی</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput2">
+                        </div>
+                        <div class="form-group text-right">
+                            <label for="exampleFormControlTextarea3">نظر خود را وارد کنید</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea3" rows="7"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">بازگشت</button>
+                        <button type="button" class="btn btn-success">ارسال نظر</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section scripts{
+    <script src="~/js/rating.min.js"></script>
+    <script>
+        var swiper3 = new Swiper('#off-2', {
+            slidesPerView: 2,
+            spaceBetween: 1,
+            coverflowEffect: {
+                rotate: 40,
+                slideShadows: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'progressbar',
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            },
+        });
+
+        $('#rateMe1').mdbRate();
+        $("#colors").on("click",".colorImage", function () {
+            var color = $(this).attr("data-url");
+            console.log(color);
+        });
+    </script>
+}

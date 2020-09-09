@@ -1,0 +1,10 @@
+﻿.inputCustomer {
+    border-radius: 7px;
+    border: 0;
+    box-shadow: 1px 1px 9px #97a6d3;
+}
+.Customer{
+    background: #fff;
+    box-shadow: 1px 1px 6px #eae1e1;
+    padding: 37px;
+}

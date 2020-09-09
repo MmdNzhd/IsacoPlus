@@ -1,0 +1,236 @@
+﻿@using KaraYadak.Helper;
+@model IEnumerable<KaraYadak.Models.Product>
+
+@{
+    ViewBag.Title = " ثبت سبد خرید";
+    Layout = "_AdminPanel";
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css" />
+}
+@section styles{
+    <style>
+        .table-content {
+            margin-right: 0 !important;
+        }
+
+        .inputInTable {
+            border: none;
+            text-align: center;
+            background: inherit;
+            width: 100%;
+        }
+
+        .trash:hover {
+            transform: scale(1.06);
+            transition:.2s;
+            cursor: pointer;
+        }
+
+
+        .edit:hover {
+            transform: scale(1.06);
+            cursor: pointer;
+            transition: .2s;
+        }
+    </style>
+
+    <link href="~/app-assets/css/hjCss.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css" />
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" />
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+}
+@section scripts{
+
+    <script>
+        var user = $.cookie('user');
+        var username = user.split('_');
+        $("#userName").html(" نام و نام خانوادگی :" + username[1] );
+        //toastr.error('Are you the 6 fingered man?')
+        let counter = 0;
+        let productIds = [];
+        $('#form').submit(function (e) {
+            e.preventDefault();
+            if (productIds.indexOf($("#qrCode").val()) != -1) {
+                $("#qrCode").val("");
+                toastr(0, " محصول اضافه شده است  ");
+            }
+            else {
+                  var url = "/customer/ProductSales"
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { qrCode: $("#qrCode").val() },
+                success: function (data) {
+                    if (data.status == "0") {
+                        $("#qrCode").val("");
+                        toastr(0, " محصولی یافت نشد   ");
+
+                    }
+                    counter++;
+                    if (data.result.descrip == null || data.result.descrip == "null") {
+                        data.result.descrip = "-----";
+                    }
+                    let element = `<tr data-qr-code=${$('#qrCode').val()}" style = "text-align:center" >
+                                <td  id="counter"><input class="inputInTable" type="text" value="${counter}"/></td>
+                                <td id="product"> <input class="inputInTable productId" type="text" value="${data.result.productId}"/></td>
+                                <td>${data.result.descrip}</td>
+                                <td><input class="inputInTable quantity" type="text" value="${data.result.quantity}"/></td>
+                                <td><input class="inputInTable price" type="text" value="${data.result.price}"/></td>
+                                <td><input class="inputInTable" type="text" value="${data.result.price * data.result.quantity}"/></td>
+                                <td><input class="inputInTable discount" type="text" value="${data.result.discount}"/></td>
+                                <td class="totalPrice"><input class="inputInTable" type="text" value="${(data.result.price * data.result.quantity) - ((data.result.price * data.result.quantity) * data.result.discount)}"/></td>
+                                <td>
+                                     <i class="fa fa-edit edit " data-qr="${data.result.qr}" style="font-size:35px ;color:aqua"</i>
+                                </td>
+                                <td>
+                                      <i class="fa fa-trash trash" data-qr="${data.result.qr}" style="font-size:35px ;color:red"></i>
+                                </td>
+
+                            </tr>`;
+                    $(".tbody").append(element);
+                    productIds.push($("#qrCode").val());
+                    $("#qrCode").val("");
+                    //set Total Price
+                    let totalPrice = 0;
+
+                    $(".totalPrice").each(function (e) {
+                        totalPrice += isNaN($(this).children("input").val()) === true ? 0 : Number(($(this).children("input").val()));
+                    });
+                    totalPrice += @ViewBag.sendPrice;
+                    $("#totalPrice").html(`مبلغ کل (ريال): ${totalPrice}`)
+                }
+
+
+
+            });
+            }
+            //$("#qrCode").val("");
+
+
+        });
+        $(".table").on("click",".trash", function () {
+            let qr = $(this).attr('data-qr');
+            let el = this;
+            $.ajax({
+                type: "POST",
+                url: "/Customer/DeleteCartItem",
+                data: { qrCode: qr },
+                success: function (data) {
+                    $(el).parents("tr")[0].remove();
+                    toastr("");
+                }
+            });
+        });
+        $(".table").on("click",".edit", function () {
+            let id = $(this).attr('data-qr');
+            let el = this;
+            let row = $(el).parents("tr")[0];
+            let productId = $(row).find("td > .productId").val();
+            let price = $(row).find("td > .price").val();
+            let quantity = $(row).find("td > .quantity").val();
+            let discount = $(row).find("td > .discount").val();
+            let cartItemForSaler = {
+                "ProductId":productId,
+                "Price":price,
+                "Quantity":quantity,
+                "Discount": discount,
+                "QR": id
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Customer/EditCartItem",
+                data: cartItemForSaler,
+                success: function (data) {
+                    console.log(data);
+                    toastr("");
+
+                }
+            });
+        });
+
+
+                      //set Total Price
+            let totalPrice = 0;
+
+            $(".totalPrice").each(function (e) {
+                  totalPrice += isNaN($(this).children("input").val()) === true ? 0 : Number(($(this).children("input").val()));
+            });
+            totalPrice += @ViewBag.sendPrice;
+             $("#totalPrice").html(`مبلغ کل (ريال): ${totalPrice}`)
+    </script>
+
+}
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+<div class="content table-content">
+    <form id="form">
+        <div class="content-body Customer">
+            <section id="basic-datatable" class="data-list-view-header">
+                <div class="row w-100 mx-auto ">
+                    <div class="col-md-6 w-100 my-1"><input id=qrCode type="text" class="form-control w-100 inputCustomer py-1" /></div>
+                    <div class="col-md-6 w-100 my-1">
+                        <button type="submit" style="height:49px" id="search" class="btn btn-info w-100">ثبت </button>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </form>
+    <table class="table table-bordered editable">
+        <thead class="thead-light">
+            <tr>
+                <th style="text-align:center;" colspan="6">تاریخ:@DateTime.Now.ToShamsi()</th>
+                <th style="text-align:center;" colspan="4" id="userName">نام و نام خانوادگی:</th>
+            </tr>
+        </thead>
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">ردیف</th>
+                <th scope="col">کد کالا</th>
+                <th scope="col">شرح کالا</th>
+                <th scope="col">متراژ</th>
+                <th scope="col">مبلغ واحد(ريال)</th>
+                <th scope="col">مبلغ کل(ريال)</th>
+                <th scope="col">تخفیف (ريال)</th>
+                <th scope="col">مبلغ کل پس از تخفیف (ريال)</th>
+                <th scope="col">ویرایش</th>
+                <th scope="col">حذف</th>
+
+
+
+            </tr>
+        </thead>
+        <tbody class="tbody">
+        </tbody>
+        <tfoot style="background: #e6e6e6">
+            <tr>
+                <td colspan="6" style="text-align:center" id="sendPrice">هزینه ارسال (ريال):@ViewBag.sendPrice </td>
+                <td colspan="4" style="text-align:center" id="totalPrice"> مبلغ کل:0 </td>
+            </tr>
+        </tfoot>
+    </table>
+    <form id="formSubmit">
+        <div class="row w-100 mx-auto ">
+            <div class="col-md-4 w-100 my-1 "></div>
+            <div class="col-md-4 w-100 my-1 ">
+                <button type="submit" style="height:49px" id="peyment" class="btn btn-info w-100">پرداخت </button>
+
+            </div>
+        </div>
+    </form>
+
+</div>
+
