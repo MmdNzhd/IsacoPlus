@@ -55,11 +55,10 @@
 
             $.ajax({
                 type: "POST",
-                url: "AcceptComment",
+                url: "Comments/AcceptComment",
                 data: { "ids": ids },
                 //cache: false,
                 success: function (data) {
-                    console.log(data)
                     if (data.status == '1') {
                         toastr.success(data.message);
                         location.reload();
@@ -95,7 +94,7 @@
                     if (willDelete =="catch") {
                         $.ajax({
                             type: "POST",
-                            url: "AcceptComment",
+                            url: "Comments/AcceptComment",
                             data: { "ids": ids },
                             //cache: false,
                             success: function (data) {

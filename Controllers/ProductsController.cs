@@ -325,7 +325,7 @@ namespace KaraYadak.Controllers
 
             var finalModel = new ProductDetailSVM();
 
-            var productWithCars = await (from p in _context.Products.Where(x => x.Code.Equals(code))
+            var items = (from p in _context.Products.Where(x => x.Code.Equals(code))
                                          join c in _context.ProductCategories.DefaultIfEmpty() on p.CategoryIdLvl1 equals c.Id
                                          into cpTbles
                                          from cp in cpTbles.DefaultIfEmpty()
@@ -339,7 +339,8 @@ namespace KaraYadak.Controllers
                                              carModel = cp.Name,
                                              carBrand = p.CategoryIdLvl2
                                          }
-                                 ).ToListAsync();
+                                 ).AsQueryable();
+            var productWithCars = await items.ToListAsync();
             foreach (var item in productWithCars)
             {
                 if (!brandWithCars.ContainsKey(item.carBrand))
@@ -355,7 +356,7 @@ namespace KaraYadak.Controllers
                     brandWithCars[item.carBrand] = newCarModelsList.Distinct().ToList();
                 }
             }
-            var product = _context.Products.Where(x => x.Code.Equals(code)).Select(x => new ProductDetailVM
+            var product =  _context.Products.Where(x => x.Code.Equals(code)).Select(x => new ProductDetailVM
             {
                 Code = x.Code,
                 Description = x.Description,
@@ -988,7 +989,11 @@ namespace KaraYadak.Controllers
                     Status = CommentStatus.در_حال_بررسی,
                     Text = text,
                     Username = username,
+<<<<<<< Updated upstream
                     Rate=(!string.IsNullOrEmpty(rate))?int.Parse(rate):0
+=======
+                    Rate = (!string.IsNullOrEmpty(rate)) ? int.Parse(rate) : 0
+>>>>>>> Stashed changes
                 };
                 await _context.Comments.AddAsync(comment);
                 await _context.SaveChangesAsync();

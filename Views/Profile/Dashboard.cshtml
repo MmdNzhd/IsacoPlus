@@ -1,0 +1,265 @@
+﻿@model KaraYadak.ViewModels.DashboardVM
+@using DNTPersianUtils.Core;
+
+
+@{
+    ViewBag.Title = "داشبورد ";
+    Layout = "_layout";
+
+
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css" />
+    <link rel="stylesheet" href="https://z9t4u9f6.stackpathcdn.com/wp-content/themes/mdbootstrap4/css/compiled-4.19.0.min.css?ver=4.19.0" />
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css" />
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+    <link rel="stylesheet" href="~/bordash/vendors/tagsinput/bootstrap-tagsinput.css" type="text/css">
+    <link rel="stylesheet" href="~/bordash/vendors/select2/css/select2.min.css" type="text/css">
+    <link rel="stylesheet" href="~/bordash/vendors/lightbox/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="~/assets/cropper/css/cropper.css" type="text/css">
+    <style>
+    @*style For Order Count Chart*@
+    #orderCount {
+        height: 450px;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #EBEBEB;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+    </style>
+
+}
+@section scripts{
+
+    <script src="~/assets/Chart/chart.min.js"></script>
+    <script src="~/assets/Chart/apex-irregular-data-series.js"></script>
+    <script src="~/assets/Chart/apexcharts.min.js"></script>
+    <script src="~/assets/Chart/circle-progress.min.js"></script>
+    <script src="~/assets/Chart/dashboard.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script>
+        var data = '@Html.Raw(Json.Serialize(ViewBag.orderCountForChart))';
+        var dataForOrders = JSON.parse(data).value;
+        $('#orderCount').highcharts({
+            chart: {
+                type: 'area'
+            },
+            accessibility: {
+                description: '',
+            },
+            title: {
+                text: 'تعداد سفارشات'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: dataForOrders.date,
+                lineColor: '#999',
+                lineWidth: 1,
+                tickColor: '#666',
+                tickLength: 3,
+                title: {
+                    text: 'تاریخ'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'تعداد'
+                },
+
+            },
+            tooltip: {
+            },
+            plotOptions: {
+            },
+            series: [{
+                name: "سفارش",
+                data: dataForOrders.count
+            }]
+        });
+    </script>
+}
+
+
+<div class="content-body">
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="row">
+                    <div class="col-3">
+                        <div class="card bg-primary-bright text-primary ">
+                            <div class="card-body text-center">
+                                <h2 class="font-weight-bold">@Model.SellerCounts</h2>
+                                <div>فروش‌ها</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card bg-secondary-bright text-secondary">
+                            <div class="card-body text-center">
+                                <h2 class="font-weight-bold">@Model.OrderCounts</h2>
+                                <div>سفارشات</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card bg-success-bright text-success">
+                            <div class="card-body text-center">
+                                <h2 class="font-weight-bold">@Model.ProductCounts</h2>
+                                <div>محصولات</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card bg-info-bright text-info">
+                            <div class="card-body text-center">
+                                <h2 class="font-weight-bold">@Model.CustomerCounts</h2>
+                                <div>مشتریان</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="card-title">تعداد سفارشات</h6>
+                                </div>
+                                <figure class="highcharts-figure">
+                                    <div id="orderCount"></div>
+
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="card-title mb-0">بالاترین فروش</h6>
+
+                                </div>
+                            </div>
+                            <table class="table table-striped">
+                                @foreach (var item in Model.TopSellProducts)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="/Products/ProductDetail?code=@item.Code">@item.Title</a>
+                                        </td>
+                                        <td>@item.Count</td>
+                                    </tr>
+                                    @*<tr>
+                                            <td>
+                                                <a href="/Products/ProductDetail?code=@item.Code">@item.Title</a>
+                                            </td>
+                                            <td>@item.Count</td>
+                                        </tr>*@
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="card-title">سفارشات اخیر</h6>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-right">شناسه سفارش</th>
+                                                <th>محصول</th>
+                                                <th>تاریخ</th>
+                                                <th>قیمت</th>
+                                                <th>وضعیت</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.LastOrders)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <b>@item.RequestCode</b>
+                                                    </td>
+
+                                                    <td>
+                                                        <b>@item.UserName</b>
+                                                    </td>
+                                                    <td>@item.Date.ToFriendlyPersianDateTextify()</td>
+                                                    <td>@item.Price</td>
+                                                    <td>
+                                                        @if (item.Status.Equals(RequestStatus.Confirmed))
+                                                        {
+                                                            <span class="badge badge-success">موفقیت</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge badge-danger">موفقیت</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+      
+
+            </div>
+        </div>
+    </div>
+
+
+</div>

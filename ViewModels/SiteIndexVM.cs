@@ -23,6 +23,7 @@ namespace KaraYadak.ViewModels
         public DateTime CreatingDate { get; set; }
         public string Code { get; set; }
         public string Brand { get; set; }
+        public double Count { get; set; }//just Use in Dashboard
     }
     
     public class ListForIndexVM
