@@ -324,7 +324,7 @@ namespace KaraYadak.Controllers
             var brandWithCars = new Dictionary<int, List<string>>();
 
             var finalModel = new ProductDetailSVM();
-
+            //
             var items = (from p in _context.Products.Where(x => x.Code.Equals(code))
                                          join c in _context.ProductCategories.DefaultIfEmpty() on p.CategoryIdLvl1 equals c.Id
                                          into cpTbles
