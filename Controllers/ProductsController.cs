@@ -989,11 +989,7 @@ namespace KaraYadak.Controllers
                     Status = CommentStatus.در_حال_بررسی,
                     Text = text,
                     Username = username,
-<<<<<<< Updated upstream
-                    Rate=(!string.IsNullOrEmpty(rate))?int.Parse(rate):0
-=======
-                    Rate = (!string.IsNullOrEmpty(rate)) ? int.Parse(rate) : 0
->>>>>>> Stashed changes
+                    Rate=(!string.IsNullOrEmpty(rate))?int.Parse(rate):0,
                 };
                 await _context.Comments.AddAsync(comment);
                 await _context.SaveChangesAsync();
