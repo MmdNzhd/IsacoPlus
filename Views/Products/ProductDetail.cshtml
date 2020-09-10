@@ -55,7 +55,6 @@
 @section scripts{
     <script src="~/assets/js/jquery.cookie.js"></script>
     <script>
-
         //IsFav
         function IsFav() {
             let code = $("#like").attr("data-id");
@@ -266,7 +265,7 @@
                     </div>
                 </div>
                 <div class="row w-100 mx-auto pb-5 pt-4">
-                    <div data-id="@Model.Product.Code" onclick="addToFav(this)"><i id="like" data-id="@Model.Product.Code" class="fa fa-heart-o col-2 " style="font-size:45px"></i></div>
+                    <div data-id="@Model.Product.Code" onclick="addToFav(this)"><i id="like" data-id="@Model.Product.Code" class="fa fa-heart-o col-2 text-danger" style="font-size:45px"></i></div>
                     <button type="button" data-item-id="@Model.Product.Code" id="addToShopBascket" class="ml-3 col-8 btn btn-warning w-100 button-addCart">افزودن به سبد خرید</button>
                 </div>
             </div>
@@ -293,34 +292,47 @@
 <div class="container modelCar">
     <div class="row w-100 mx-auto text-center py-3">
         @*<div class="col-4">
-                <img src="~/img/21.png" class="img-fluid w-25">
-            </div>
-            <div class="col-4">
-                <img src="~/img/Kia-1.png" class="img-fluid w-25">
-            </div>
-            <div class="col-4">
-                <img src="~/img/Iran-Khodro-2.png" class="img-fluid w-25">
-            </div>*@
-        @foreach (var item in Model.CarCategoriesForProduct)
-        {
-            <div class="col-4">
-                <img src=@item.Key class="img-fluid w-25">
-            </div>
-        }
-    </div>
-    @foreach (var item in Model.CarCategoriesForProduct)
-    {
-        <div class="row w-100 mx-auto text-center py-3">
+            <img src="~/img/21.png" class="img-fluid w-25">
+        </div>
+        <div class="col-4">
+            <img src="~/img/Kia-1.png" class="img-fluid w-25">
+        </div>
+        <div class="col-4">
+            <img src="~/img/Iran-Khodro-2.png" class="img-fluid w-25">
+        </div>*@
 
-            @foreach (var val in item.Value)
+        <div class="col-12 col-lg-3 mb-3">
+            <a class="btn shadow-none border-0 mx-auto" data-toggle="collapse" href="#carsCompeny" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <img class="d-block w-75 mx-auto" src="~/uploads/637346444688243449brand7.png" />
+            </a>
+
+            <div class="collapse" id="carsCompeny">
+                <div class="card card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                </div>
+            </div>
+        </div>
+
+        @*@foreach (var item in Model.CarCategoriesForProduct)
             {
                 <div class="col-4">
-                    <h5> <b>@val</b></h5>
+                    <img src=@item.Key class="img-fluid w-25">
                 </div>
             }
         </div>
-    }
-</div>
+        @foreach (var item in Model.CarCategoriesForProduct)
+        {
+            <div class="row w-100 mx-auto text-center py-3">
+
+                @foreach (var val in item.Value)
+                {
+                    <div class="col-4">
+                        <h5> <b>@val</b></h5>
+                    </div>
+                }
+            </div>
+        }*@
+    </div>
 <!-- --model car-- -->
 <!--Comments-->
 @if (comments.Count > 0)

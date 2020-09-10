@@ -23,39 +23,41 @@
 }
 
 <!--Cart-->
-<div class="container w-100 mx-auto pt-5 mt-5">
-    <div id="totalPriceDiv" class="row w-100 mx-auto">
-        <div class="col-md-7 cost-cart  mt-2">
-            <div class="row w-100 py-3">
-                <div class="col-6 "><h5>قیمت کل سبد خرید شما</h5></div>
-                <div class="col-6"><h5 id="totalPrice"></h5></div>
-            </div>
-        </div>
-        <div class="col-md-1 col-0  mt-2"></div>
-        <div class="col-md-4 text-center pay-cart py-3 mt-2">
-            @if (User.Identity.Name != null)
-            {
-                if (ViewBag.profileIsComplete)
-                {
-                    <h5 id="submit">تایید و ادامه خرید</h5>
+<div class="bg-product">
+    @*Header*@
 
+    <div class="container w-100 mx-auto my-5 py-5">
+        <div id="totalPriceDiv" class="row w-100 mx-auto">
+            <div class="col-md-7 cost-cart  mt-2">
+                <div class="row w-100 py-3">
+                    <div class="col-6 "><h5>قیمت کل سبد خرید شما</h5></div>
+                    <div class="col-6"><h5 id="totalPrice"></h5></div>
+                </div>
+            </div>
+            <div class="col-md-1 col-0  mt-2"></div>
+            <div class="col-md-4 text-center pay-cart py-3 mt-2">
+                @if (User.Identity.Name != null)
+                {
+                    if (ViewBag.profileIsComplete)
+                    {
+                        <h5 id="submit">تایید و ادامه خرید</h5>
+
+                    }
+                    else
+                    {
+                        <h5 id="notComplete">تایید و ادامه خرید</h5>
+
+                    }
                 }
                 else
                 {
-                    <h5 id="notComplete">تایید و ادامه خرید</h5>
-
+                    <h5 id="notLogin">تایید و ادامه خرید</h5>
                 }
-            }
-            else
-            {
-                <h5 id="notLogin">تایید و ادامه خرید</h5>
-            }
+            </div>
         </div>
     </div>
-
-
-
 </div>
+
 <!--EndCart-->
 <!-- Central Modal Small -->
 <div class="modal fade mt-5 pt-5" id="factor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -76,7 +78,7 @@
             <div class="modal-footer   row">
                 <button class="btn btn-success col-2 " onclick="updateCookie()" id="submitShop">ادامه</button>
                 <div class="col-6"></div>
-                <button      id="return" type="button" class="btn btn-danger col-2" data-dismiss="modal">بازگشت</button>
+                <button id="return" type="button" class="btn btn-danger col-2" data-dismiss="modal">بازگشت</button>
 
             </div>
         </div>
@@ -322,10 +324,10 @@
 <div class="row w-100 mx-auto">
 <h6 class="text-left w-100 pl-1"><b>تعداد</b></h6>
 <form class="input-Number position-relative">
-                                                                                                        <div class="value-button button-cartPlus increase"  onclick="increaseValue(${element.id})" value="Increase Value">+</div>
+                                                                                                            <div class="value-button button-cartPlus increase"  onclick="increaseValue(${element.id})" value="Increase Value">+</div>
 
-                                                                                                        <input type="number" class="number" id="number${element.id}" value="1" />
-                                                                                                        <div class="value-button button-minus decrease"  onclick="decreaseValue(${element.id})" value="Decrease Value">-</div>
+                                                                                                            <input type="number" class="number n-style" id="number${element.id}" value="1" />
+                                                                                                            <div class="value-button button-minus decrease"  onclick="decreaseValue(${element.id})" value="Decrease Value">-</div>
 </form>
 </div>
 </div>
@@ -650,7 +652,7 @@
                         location.href = '/SiteAccount/EditProfile';
                     }
 
-                   
+
                 }
             });
         })

@@ -1,21 +1,21 @@
 ﻿@model ICollection<KaraYadak.ViewModels.ProductForIndexVM>
-    <div class="row  hj-gallery  m-0 p-0 mt-5">
-        <div class="col-lg-3  col-12 px-4">
-            <div class="row w-100 mx-auto  py-2 my-4">
-                <h2 class="text-right w-100 "><b class="hj-producttext">پیشنهاد های</b></h2>
+    <div class="row  hj-gallery py-5 m-0 p-0 mt-5">
+        <div class="col-lg-3 mv-g-title col-12 px-4 d-flex flex-column justify-content-center">
+            <div class="row w-100 mx-auto mb-3">
+                <h2 class="text-right w-100"><b class="hj-producttext text-white">پیشنهاد های</b></h2>
             </div>
 
-            <div class="row w-100 mx-auto  py-2 my-4">
+            <div class="row w-100 mx-auto mb-3">
                 <h1 class="text-center w-100 "><b class="hj-prouduct-Tslider"> ویژه</b></h1>
             </div>
-            <div class="row w-100 mx-auto  py-2 my-4">
-                <h2 class="text-left w-100 "><b class="hj-producttext"> امروز</b></2>
+            <div class="row w-100 mx-auto mb-0 text-white">
+                <h2 class="text-left w-100 "><b class="hj-producttext text-white"> امروز</b></2>
             </div>
 
 
-            <div class="row w-100 mx-auto text-center my-3 mb-5">
+            @*<div class="row w-100 mx-auto text-center my-3 mb-5">
                 <span id="timer-offer1" class="timer-offer w-100 mx-auto" style="font-weight: bold;"></span>
-            </div>
+            </div>*@
 
         </div>
         <div class="col-lg-9  col-12">
@@ -29,13 +29,15 @@
                         <div class="swiper-slide swiper-slide-active" style="width: 311.667px; margin-left: 30px;">
                             <div class="hj-card my-5 py-5 w-100  ">
                                 <img src="@item.Picture" class="img-fluid hj-productImg w-75">
-                                <div class="row w-100 mx-auto text-center pt-5 mt-2 px-5 ">
-                                    <h1 class="font-kalame text-center mx-auto">
-                                        <b class=" font-kalame">@item.Title</b>
+
+                                <div class="row w-100 mx-auto text-center mt-2 mv-title">
+                                    <h1 class="font-kalameBlack text-center mx-auto">
+                                        <b class=" font-kalameBlack text-dark">@item.Title</b>
                                     </h1>
                                 </div>
+
                                 <div class="row w-100 mx-auto text-center pb-3 px-5 ">
-                                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame">450.500</b></h2>
+                                    <h2 class="font-kalame text-center mx-auto"> <b class="font-kalame text-success">450.500</b></h2>
                                 </div>
                                 <div class="row w-100 mx-auto text-center">
 
