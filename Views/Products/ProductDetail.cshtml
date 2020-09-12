@@ -47,10 +47,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/js/swiper.min.js"
             integrity="sha256-NiMdnMv0WBAps3M8mcB7WHzlanETt0rnwMCgg67DgCk=" crossorigin="anonymous"></script>
-
-
-
-
+    <script src="~/js/starrr.js"></script>
 }
 @section scripts{
     <script src="~/assets/js/jquery.cookie.js"></script>
@@ -225,6 +222,26 @@
             }
             return realValue;
         }
+
+        $(".mv-collapse-btn").on("click", function () {
+            if ($(this).siblings().hasClass("mv-opened")) {
+                $(this).siblings().removeClass("mv-opened");
+            } else {
+                $(this).siblings().addClass("mv-opened");
+            }
+        });
+
+        $('#user1').starrr({
+            rating: 2,
+            readOnly: true,
+        });
+
+
+        $('#sendComment').starrr();
+
+        $('#sendComment').on('starrr:change', function (e, value) {
+            alert('new rating is ' + value);
+        })
     </script>
 
 }
@@ -291,154 +308,119 @@
 <!-- --model car-- -->
 <div class="container modelCar">
     <div class="row w-100 mx-auto text-center py-3">
-        @*<div class="col-4">
-            <img src="~/img/21.png" class="img-fluid w-25">
-        </div>
-        <div class="col-4">
-            <img src="~/img/Kia-1.png" class="img-fluid w-25">
-        </div>
-        <div class="col-4">
-            <img src="~/img/Iran-Khodro-2.png" class="img-fluid w-25">
-        </div>*@
 
-        <div class="col-12 col-lg-3 mb-3">
-            <a class="btn shadow-none border-0 mx-auto" data-toggle="collapse" href="#carsCompeny" role="button" aria-expanded="false" aria-controls="collapseExample">
-                <img class="d-block w-75 mx-auto" src="~/uploads/637346444688243449brand7.png" />
-            </a>
 
-            <div class="collapse" id="carsCompeny">
-                <div class="card card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-                </div>
-            </div>
-        </div>
-
-        @*@foreach (var item in Model.CarCategoriesForProduct)
-            {
-                <div class="col-4">
-                    <img src=@item.Key class="img-fluid w-25">
-                </div>
-            }
-        </div>
         @foreach (var item in Model.CarCategoriesForProduct)
         {
-            <div class="row w-100 mx-auto text-center py-3">
-
-                @foreach (var val in item.Value)
-                {
-                    <div class="col-4">
-                        <h5> <b>@val</b></h5>
+            <div class="col-12 col-lg-3 mb-3">
+                <a class="btn shadow-none border-0 mv-collapse-btn">
+                    <img class="d-block w-75 mx-auto" src=@item.Key />
+                </a>
+                <div class="mv-collapse-content">
+                    <div class="card card-body border-0">
+                        <ul class="list-group ">
+                            @foreach (var val in item.Value)
+                            {
+                                <li class="list-group-item font-kalame border-right-0 border-left-0"> @val</li>
+                            }
+                        </ul>
                     </div>
-                }
+                </div>
             </div>
-        }*@
+        }
     </div>
-<!-- --model car-- -->
-<!--Comments-->
-@if (comments.Count > 0)
-{
+    <!-- --model car-- -->
+    <!--Comments-->
+    @if (comments.Count > 0)
+    {
 
-    <div class="row w-100 mx-auto text-center py-4 mt-5 pt-5">
-        <div class="col-lg-4 col-3 text-left pt-4">
-            <img src="~/img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+        <div class="row w-100 mx-auto text-center py-4 mt-5 pt-5">
+            <div class="col-lg-4 col-3 text-left pt-4">
+                <img src="~/img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+            </div>
+            <div class="col-lg-4 col-6">
+                <h2><b class="font-kalameBlack"> نظر کاربران </b></h2>
+            </div>
+            <div class="col-lg-4 col-3 text-right pt-4">
+                <img src="~/img/Line 35.png"
+                     class="img-fluid w-25 mx-auto border-titr">
+            </div>
         </div>
-        <div class="col-lg-4 col-6">
-            <h2><b class="font-kalameBlack"> نظر کاربران </b></h2>
-        </div>
-        <div class="col-lg-4 col-3 text-right pt-4">
-            <img src="~/img/Line 35.png"
-                 class="img-fluid w-25 mx-auto border-titr">
-        </div>
-    </div>
 
 
-    <div class="row w-100 mx-auto text-center py-5 mb-5">
-        <!-- --- -->
-        <!-- Swiper -->
-        <div class="swiper-container swiper-containerBlog swiper-container-initialized swiper-container-horizontal swiper-container-rtl">
-            <div class="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px);">
-                @foreach (var item in comments)
-                {
-                    <div class="swiper-slide" style="width: 476.667px; margin-left: 30px;">
-                        <div class=" hj-blog p-0">
-                            <div class="row w-100 mx-auto  bgComment">
-                                <div class="col-6 text-right ">
-                                    <h6 class="py-2 pr-4 pt-3"><b> نظر کاربران </b></h6>
+        <div class="row w-100 mx-auto text-center py-5 mb-5">
+            <!-- --- -->
+            <!-- Swiper -->
+            <div class="swiper-container swiper-containerBlog swiper-container-initialized swiper-container-horizontal swiper-container-rtl">
+                <div class="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px);">
+                    @foreach (var item in comments)
+                    {
+                        <div class="swiper-slide" style="width: 476.667px; margin-left: 30px;">
+                            <div class="hj-blog w-100">
+                                <div class="bgComment d-flex justify-content-between align-items-center p-2">
+                                    <h6>نظر کاربران</h6>
+                                    <div class="mv-starrr" id="user1"></div>
                                 </div>
-                                <div class="col-6 text-left pt-2">
-                                    <div class="star-rating">
-                                        <input id="star-5" type="radio" name="rating" value="star-5" />
-                                        <label for="star-5" title="5 stars">
-                                            <i class="active fa fa-star" aria-hidden="true"></i>
-                                        </label>
-                                        <input id="star-4" type="radio" name="rating" value="star-4" />
-                                        <label for="star-4" title="4 stars">
-                                            <i class="active fa fa-star" aria-hidden="true"></i>
-                                        </label>
-                                        <input id="star-3" type="radio" name="rating" value="star-3" />
-                                        <label for="star-3" title="3 stars">
-                                            <i class="active fa fa-star" aria-hidden="true"></i>
-                                        </label>
-                                        <input id="star-2" type="radio" name="rating" value="star-2" />
-                                        <label for="star-2" title="2 stars">
-                                            <i class="active fa fa-star" aria-hidden="true"></i>
-                                        </label>
-                                        <input id="star-1" type="radio" name="rating" value="star-1" />
-                                        <label for="star-1" title="1 star">
-                                            <i class="active fa fa-star" aria-hidden="true"></i>
-                                        </label>
+                                <div class="row w-100 mx-auto py-2">
+                                    <div class="col-12 detalis-blog px-4 py-3">
+                                        <h6 class="text-right"><b>@item.UserFullName</b></h6><br>
+                                        <h6 class="text-justify">
+                                            @item.Text
+                                        </h6>
                                     </div>
-                                </div>
 
-                            </div>
-                            <div class="row w-100 mx-auto py-2">
-                                <div class="col-12 detalis-blog px-4 py-3">
-                                    <h6 class="text-right"><b>@item.UserFullName</b></h6><br>
-                                    <h6 class="text-justify">
-                                        @item.Text
-                                    </h6>
                                 </div>
-
                             </div>
                         </div>
+
+                    }
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
+                    <span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button"
+                          aria-label="Go to slide 1"></span>
+                    <span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span>
+                    <span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 3"></span>
+                </div>
+
+                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+            </div>
+            <!-- ---- -->
+
+
+        </div>
+    }
+    <!--Comments-->
+    <form id="commentSubmit">
+        <div class="row my-5">
+            <div class="col-12 col-lg-6 mx-auto">
+                <div class="form-group d-block w-100">
+                    <span class="d-block text-center text-dark mb-3">در این قسمت می‌توانید نظر خود را راجع به این محصول ثبت کنید.</span>
+                    <textarea id="text" class="form-control mb-3" placeholder="نظر خود را در این قسمت بنویسید..."></textarea>
+
+                    <div class="text-center">
+                        امتیاز شما به این محصول: <div class="mv-starrr mb-3 d-inline-block mr-2" id="sendComment"></div>
                     </div>
 
-                }
-            </div>
-            <!-- Add Pagination -->
-            <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
-                <span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button"
-                      aria-label="Go to slide 1"></span><span class="swiper-pagination-bullet" tabindex="0" role="button"
-                                                              aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet" tabindex="0" role="button"
-                                                                                                      aria-label="Go to slide 3"></span>
-            </div>
+                </div>
 
-            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                <button type="submit" class="d-block mx-auto btn btn-success mb-0">ثبت نظر</button>
+            </div>
         </div>
-        <!-- ---- -->
+        <div class="row">
+        </div>
+    </form>
 
+    <!--product-->
+    <div class="row w-100 mx-auto text-center py-4 pt-2">
+        <div class="col-lg-5 col-3 text-left pt-4">
+            <img src="~/img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+        </div>
+        <div class="col-lg-2 col-6">
+            <h2><b class="font-kalameBlack"> محصولات دیگر</b></h2>
+        </div>
+        <div class="col-lg-5 col-3 text-right pt-4"> <img src="~/img/Line 35.png" class="img-fluid w-25 mx-auto border-titr"></div>
+    </div>
 
-    </div>
-}
-<!--Comments-->
-<form id="commentSubmit">
-    <div class="row">
-        <textarea id="text" class="form-control col-10 m-auto"></textarea>
-    </div>
-    <div class="row">
-        <button class="btn btn-success col-2 m-auto mt-1">ثبت نظر</button>
-    </div>
-</form>
-
-<!--product-->
-<div class="row w-100 mx-auto text-center py-4 pt-2">
-    <div class="col-lg-5 col-3 text-left pt-4">
-        <img src="~/img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
-    </div>
-    <div class="col-lg-2 col-6">
-        <h2><b class="font-kalameBlack"> محصولات دیگر</b></h2>
-    </div>
-    <div class="col-lg-5 col-3 text-right pt-4"> <img src="~/img/Line 35.png" class="img-fluid w-25 mx-auto border-titr"></div>
-</div>
-
-@Html.Partial("OtherProducts", Model.OtherProduct)
+    @Html.Partial("OtherProducts", Model.OtherProduct)

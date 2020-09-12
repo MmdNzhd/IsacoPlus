@@ -19,275 +19,277 @@
 </div>
 
 
-<div class="row w-100 mx-auto pt-5 mt-5">
-    <div class="col-lg-5">
-        <div class="row w-100 mx-auto">
-            <div class="col-lg-4 col-md-6  text-center mx-auto">
-                @if (!string.IsNullOrWhiteSpace(Model.ImageProfile))
-                {
-                    <img src='~/uploads/UserImg/@Model.ImageProfile' class="img-fluid w-75 mx-auto" style="border-radius:50%">
-                }
-                else
-                { <img src="~/img/profile.png" class="img-fluid w-75 mx-auto">}
-            </div>
-            <div class="col-lg-4  col-md-3 mx-auto text-center  pt-5">
-                <h4 class="text-white name-profile">@fullName</h4>
-            </div>
-            <div class="col-lg-4 col-md-3 mx-auto text-center  pt-5">
-                <h4 class="number-profile">@Model.PhoneNumber</h4>
+<div class="container-fluid bg-product">
+
+    <div class="row w-100 mx-auto pt-5 mt-5">
+        <div class="col-lg-5">
+            <div class="row w-100 mx-auto">
+                <div class="col-lg-4 col-md-6  text-center mx-auto">
+                    @if (!string.IsNullOrWhiteSpace(Model.ImageProfile))
+                    {
+                        <img src='~/uploads/UserImg/@Model.ImageProfile' class="img-fluid w-75 mx-auto" style="border-radius:50%">
+                    }
+                    else
+                    { <img src="~/img/profile.png" class="img-fluid w-75 mx-auto">}
+                </div>
+                <div class="col-lg-4  col-md-3 mx-auto text-center  pt-5">
+                    <h4 class="text-white name-profile">@fullName</h4>
+                </div>
+                <div class="col-lg-4 col-md-3 mx-auto text-center  pt-5">
+                    <h4 class="number-profile">@Model.PhoneNumber</h4>
+                </div>
             </div>
         </div>
+        <div class="col-lg-1 col-0"></div>
+        <div class="col-lg-6">
+            <div class="row w-100 p-0 mx-auto ">
+
+                <div class="col-md-5 mx-auto text-center pt-5">
+                    <a href="#">
+                        <h5 class="edit-profile pb-2">بخش فروش </h5>
+                    </a>
+                </div>
+                <div class="col-7 mx-auto text-center pt-5">
+                    <h4 class="exit">خروج</h4>
+                </div>
+            </div>
+        </div>
+
+
     </div>
-    <div class="col-lg-1 col-0"></div>
-    <div class="col-lg-6">
-        <div class="row w-100 p-0 mx-auto ">
 
-            <div class="col-md-5 mx-auto text-center pt-5">
-                <a href="#">
-                    <h5 class="edit-profile pb-2">بخش فروش </h5>
-                </a>
-            </div>
-            <div class="col-7 mx-auto text-center pt-5">
-                <h4 class="exit">خروج</h4>
-            </div>
-        </div>
-    </div>
+    <!-- ---end profile-- -->
+    <!-- ----EDIT PROFILE--- -->
+    <div class="Personal-Information">
+        <div class="row w-100 mx-auto text-center py-5">
 
+            <div class="col-md-10 mx-auto">
+                <h5 class="text-right py-2 text-white ">اطلاعات شخصی</h5>
+                <table class="table table-bordered profile">
 
-</div>
-
-<!-- ---end profile-- -->
-<!-- ----EDIT PROFILE--- -->
-<div class="Personal-Information">
-    <div class="row w-100 mx-auto text-center py-5">
-
-        <div class="col-md-10 mx-auto">
-            <h5 class="text-right py-2 text-white ">اطلاعات شخصی</h5>
-            <table class="table table-bordered profile">
-
-                <tbody>
-                    <tr>
-
-                        <td class="Bleft-profile Btop-pro w-50">
-                            <div class="form-group">
-                                <label for="name" class="lableEditeProfile">نام و نام خانوادگی: </label>
-                                <div>@fullName</div>
-
-                            </div>
-                        </td>
-                        <td class="Btop-pro w-50">
-                            <div class="form-group ">
-                                <label for="name" class="lableEditeProfile">پست الکترونیک:</label>
-                                <div>@Model.Email</div>
-
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-
-                        <td class="Bleft-profile">
-                            <div class="form-group">
-                                <label for="name" class="lableEditeProfile">شماره تلفن همراه :</label>
-                                <div>@Model.PhoneNumber</div>
-
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-group">
-                                <label for="name" class="lableEditeProfile">کدملی :</label>
-                                <div>@Model.NationalCode</div>
-
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-
-                        <td class="Bleft-profile">
-                            <div class="form-group">
-                                <label for="name" class="lableEditeProfile">آدرس :</label>
-                                <div>@Model.Address</div>
-
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-group">
-                                <label for="name" class="lableEditeProfile"> شماره کارت:</label>
-                                <div>6025 2553 2458 6974</div>
-
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="row w-100 mx-auto text-center">
-                <a href="#" class="w-100" data-toggle="modal" data-target="#centralModalEditProfile">
-                    <h6 class="text-center w-100"><i class="fa fa-pencil" aria-hidden="true"></i> ویرایش اطلاعات شخصی</h6>
-                </a>
-            </div>
-        </div>
-
-
-
-
-
-        <!-- --------last order----- -->
-        <div class="row w-100 mx-auto text-center pb-5 pt-5 mt-5">
-            <div class="col-md-10 mx-auto table-responsive">
-                <h5 class="text-right py-2 "> آخرین سفارشات</h5>
-                <table class="table profile text-center">
-                    <thead>
-                        <tr class="titr-order">
-                            <th scope="col">#</th>
-                            <th scope="col">شماره سفارش</th>
-                            <th scope="col">تاریخ ثبت سفارش</th>
-                            <th scope="col">مبلغ قابل پرداخت</th>
-                            <th scope="col">مبلغ کل</th>
-                            <th scope="col"> عملیات پرداخت</th>
-                            <th scope="col"> جزییات </th>
-                        </tr>
-                    </thead>
                     <tbody>
+                        <tr>
 
-
-                        @foreach (var item in ViewBag.Transaction)
-                        {
-                            DateTime date = item.Date;
-                            <tr>
-                                <th scope="row">3</th>
-                                <td class="text-primary">@item.RequestCode</td>
-                                <td class="text-warning">@date.ToShamsi()</td>
-                                <td>0</td>
-                                <td>
-                                    @item.Price
-                                    تومان
-                                </td>
-                                @if (item.Status == RequestStatus.Confirmed)
-                                {
-                                    <td class="text-success">پرداخت موفق</td>
-                                }
-                                else
-                                {
-                                    <td class="text-danger">پرداخت موفق</td>
-
-                                }
-                                <td><a href=#>بیشتر</a></td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- --- -->
-</div>
-
-<!-- ----End end profile---- -->
-<!-- ----product-registration----- -->
-<!-- ----end product-registration----- -->
-<!-- --service-- -->
-<div class="container-fluid p-0 mt-3">
-    <div class="row w-100 mx-auto hj-Service">
-        <div class="col-4 py-3 mx-auto text-center">
-            <img src="~/img/money (2).svg" class="img-fluid mx-auto pl-3">ضمانت
-            بازگشت وجه
-        </div>
-        <div class="col-4 py-3 mx-auto text-center">
-            گارانتی<img src="~/img/ribbon.svg"
-                        class="img-fluid mx-auto px-2">محصولات
-        </div>
-        <div class="col-4 py-3 mx-auto text-center">
-            ضمانت بازگشت کالا<img src="~/img/Group 18.svg"
-                                  class="img-fluid mx-auto pr-3">
-        </div>
-    </div>
-
-</div>
-
-<div class="modal fade" id="centralModalEditProfile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-
-    <!-- Change class .modal-sm to change the size of the modal -->
-    <div class="modal-dialog modal-lg" role="document">
-
-
-        <div class="modal-content">
-            <div class="modal-header">
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <section class="card card-body border mb-0 body current" id="wizard-example-p-0" role="tabpanel" aria-labelledby="wizard-example-h-0" aria-hidden="false">
-                    <div class="profile-tab text-right">
-
-                        <div class="profile-tab__detail profile-tab__detail-active">
-                            <div class="profile-tab__container">
-                                <h4 class="profile-tab__title">ویرایش پروفایل</h4>
-                                <div class="profile-tab__row">
-                                    <div class="row w-100 mx-auto">
-                                        <div class="col-md-6">
-                                            <div class="profile-tab__col-left">
-                                                <div class="display-avarta__img">
-                                                    @if (!string.IsNullOrWhiteSpace(Model.ImageProfile))
-                                                    {
-                                                        <img src='~/uploads/UserImg/@Model.ImageProfile'>
-                                                    }
-                                                    else
-                                                    { <img src="~/img/profile.png">}
-                                                </div>
-                                                <form class="text-center">
-                                                    <label class="profile-upload">
-                                                        انتخاب تصویر
-                                                        <input type="file" name="fileToUpload" id="fileToUpload">
-                                                    </label>
-                                                </form>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="profile-tab__col-right">
-                                                <form class="profile-form  mt-3">
-                                                    <label> نام و نام خانوادگی </label>
-                                                    <input type="text" id="fullName" value="@fullName">
-                                                    <label> شماره تلفن </label>
-                                                    <input type="text" id="phone" value="@Model.PhoneNumber">
-                                                    <label>پست الکترونیک</label>
-                                                    <input type="email" id="email1" required="" value="@Model.Email">
-                                                    <label>  کدملی </label>
-                                                    <input type="text" id="nationalCode" value="@Model.NationalCode">
-                                                    <label>  شماره کارت </label>
-                                                    <input type="text" id="cartNumber" value="@Model.CartNumber">
-                                                    <label>  آدرس </label>
-                                                    <textarea id="address">@Model.Address</textarea>
-                                                </form>
-                                                <div class="profile-footer ">
-                                                    <button id="editProfileSubmit" class="profile-button profile-button--save text-center w-100">ثبت</button>
-
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
+                            <td class="Bleft-profile Btop-pro w-50">
+                                <div class="form-group">
+                                    <label for="name" class="lableEditeProfile">نام و نام خانوادگی: </label>
+                                    <div>@fullName</div>
 
                                 </div>
-                            </div>
-                        </div>
+                            </td>
+                            <td class="Btop-pro w-50">
+                                <div class="form-group ">
+                                    <label for="name" class="lableEditeProfile">پست الکترونیک:</label>
+                                    <div>@Model.Email</div>
 
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
 
-                    </div>
-                </section>
+                            <td class="Bleft-profile">
+                                <div class="form-group">
+                                    <label for="name" class="lableEditeProfile">شماره تلفن همراه :</label>
+                                    <div>@Model.PhoneNumber</div>
 
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label for="name" class="lableEditeProfile">کدملی :</label>
+                                    <div>@Model.NationalCode</div>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td class="Bleft-profile">
+                                <div class="form-group">
+                                    <label for="name" class="lableEditeProfile">آدرس :</label>
+                                    <div>@Model.Address</div>
+
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label for="name" class="lableEditeProfile"> شماره کارت:</label>
+                                    <div>6025 2553 2458 6974</div>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row w-100 mx-auto text-center">
+                    <a href="#" class="w-100" data-toggle="modal" data-target="#centralModalEditProfile">
+                        <h6 class="text-center w-100"><i class="fa fa-pencil" aria-hidden="true"></i> ویرایش اطلاعات شخصی</h6>
+                    </a>
+                </div>
             </div>
 
+
+
+
+
+            <!-- --------last order----- -->
+            <div class="row w-100 mx-auto text-center pb-5 pt-5 mt-5">
+                <div class="col-md-10 mx-auto table-responsive">
+                    <h5 class="text-right py-2 "> آخرین سفارشات</h5>
+                    <table class="table profile text-center">
+                        <thead>
+                            <tr class="titr-order">
+                                <th scope="col">#</th>
+                                <th scope="col">شماره سفارش</th>
+                                <th scope="col">تاریخ ثبت سفارش</th>
+                                <th scope="col">مبلغ قابل پرداخت</th>
+                                <th scope="col">مبلغ کل</th>
+                                <th scope="col"> عملیات پرداخت</th>
+                                <th scope="col"> جزییات </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                            @foreach (var item in ViewBag.Transaction)
+                            {
+                                DateTime date = item.Date;
+                                <tr>
+                                    <th scope="row">3</th>
+                                    <td class="text-primary">@item.RequestCode</td>
+                                    <td class="text-warning">@date.ToShamsi()</td>
+                                    <td>0</td>
+                                    <td>
+                                        @item.Price
+                                        تومان
+                                    </td>
+                                    @if (item.Status == RequestStatus.Confirmed)
+                                    {
+                                        <td class="text-success">پرداخت موفق</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-danger">پرداخت موفق</td>
+
+                                    }
+                                    <td><a href=#>بیشتر</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
         </div>
+
+        <!-- --- -->
     </div>
 
-</div>
+    <!-- ----End end profile---- -->
+    <!-- ----product-registration----- -->
+    <!-- ----end product-registration----- -->
+    <!-- --service-- -->
+    <div class="container-fluid p-0 mt-3">
+        <div class="row w-100 mx-auto hj-Service">
+            <div class="col-4 py-3 mx-auto text-center">
+                <img src="~/img/money (2).svg" class="img-fluid mx-auto pl-3">ضمانت
+                بازگشت وجه
+            </div>
+            <div class="col-4 py-3 mx-auto text-center">
+                گارانتی<img src="~/img/ribbon.svg"
+                            class="img-fluid mx-auto px-2">محصولات
+            </div>
+            <div class="col-4 py-3 mx-auto text-center">
+                ضمانت بازگشت کالا<img src="~/img/Group 18.svg"
+                                      class="img-fluid mx-auto pr-3">
+            </div>
+        </div>
 
+    </div>
+
+    <div class="modal fade" id="centralModalEditProfile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+
+        <!-- Change class .modal-sm to change the size of the modal -->
+        <div class="modal-dialog modal-lg" role="document">
+
+
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <section class="card card-body border mb-0 body current" id="wizard-example-p-0" role="tabpanel" aria-labelledby="wizard-example-h-0" aria-hidden="false">
+                        <div class="profile-tab text-right">
+
+                            <div class="profile-tab__detail profile-tab__detail-active">
+                                <div class="profile-tab__container">
+                                    <h4 class="profile-tab__title">ویرایش پروفایل</h4>
+                                    <div class="profile-tab__row">
+                                        <div class="row w-100 mx-auto">
+                                            <div class="col-md-6">
+                                                <div class="profile-tab__col-left">
+                                                    <div class="display-avarta__img">
+                                                        @if (!string.IsNullOrWhiteSpace(Model.ImageProfile))
+                                                        {
+                                                            <img src='~/uploads/UserImg/@Model.ImageProfile'>
+                                                        }
+                                                        else
+                                                        { <img src="~/img/profile.png">}
+                                                    </div>
+                                                    <form class="text-center">
+                                                        <label class="profile-upload">
+                                                            انتخاب تصویر
+                                                            <input type="file" name="fileToUpload" id="fileToUpload">
+                                                        </label>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="profile-tab__col-right">
+                                                    <form class="profile-form  mt-3">
+                                                        <label> نام و نام خانوادگی </label>
+                                                        <input type="text" id="fullName" value="@fullName">
+                                                        <label> شماره تلفن </label>
+                                                        <input type="text" id="phone" value="@Model.PhoneNumber">
+                                                        <label>پست الکترونیک</label>
+                                                        <input type="email" id="email1" required="" value="@Model.Email">
+                                                        <label>  کدملی </label>
+                                                        <input type="text" id="nationalCode" value="@Model.NationalCode">
+                                                        <label>  شماره کارت </label>
+                                                        <input type="text" id="cartNumber" value="@Model.CartNumber">
+                                                        <label>  آدرس </label>
+                                                        <textarea id="address">@Model.Address</textarea>
+                                                    </form>
+                                                    <div class="profile-footer ">
+                                                        <button id="editProfileSubmit" class="profile-button profile-button--save text-center w-100">ثبت</button>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </section>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
 @section Scripts{
     <script>
         const sleep = (milliseconds) => {
