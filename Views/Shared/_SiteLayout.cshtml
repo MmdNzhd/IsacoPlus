@@ -208,6 +208,10 @@ var ContactUs = _context.Settings.Where(x => x.Key.Equals("MiniFooter")).Select(
             $.removeCookie('cart', { path: '/' });
         }
         if (oldCookieValue != undefined) {
+            if (oldCookieValue.includes(",,")) {
+                oldCookieValue= oldCookieValue.replace(",,", ",");
+                $.cookie('cart', oldCookieValue, { expires: 7, path: '/' });
+            }
             var productCount = oldCookieValue.split(",").length;
             $('#cartCount').text(productCount);
         }

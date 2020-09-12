@@ -132,7 +132,7 @@ namespace KaraYadak.Controllers
                     s.Product.Name,
                     s.Product.ProductStatus,
                     Status = s.Product.ProductStatus.ToString(),
-                    s.Product.Description,
+                    //s.Product.Description,
                     s.Product.CategoryIdLvl1,
                     s.Product.CategoryIdLvl2,
                     s.Product.CategoryIdLvl3,
@@ -141,7 +141,8 @@ namespace KaraYadak.Controllers
                     //UnitId = s.Product.Unit.Id,
                     //Unit = s.Product.Unit.Name,
                     s.Categories,
-                    UpdatedAt = s.Product.UpdatedAt.ToFriendlyPersianDateTextify()
+                    UpdatedAt = s.Product.UpdatedAt.ToFriendlyPersianDateTextify(),
+                    SpecialSale=   (s.Product.SpecialSale)?"فعال":"غیر فعال"
                 }).OrderByDescending(x => x.Code)
                 //.Skip((int)itemsPerPage * (page.Value - 1))
                 //.Take((int)itemsPerPage)
@@ -289,6 +290,47 @@ namespace KaraYadak.Controllers
             return Json("ok");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddProductToSpecial(int? id)
+        {
+            if (id == null)
+            {
+                return new JsonResult(new { status = "0", message = "محصولی یافت نشد" });
+            }
+
+            var item = await _context.Products
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (item == null)
+            {
+                return new JsonResult(new { status = "0", message = "محصولی یافت نشد" });
+            }
+            item.SpecialSale = true;
+            _context.Products.Update(item);
+            await _context.SaveChangesAsync();
+
+            return new JsonResult(new { status = "1", message = "به پیشنهاد ویژه اضافه شد" });
+        }
+        [HttpPost]
+        public async Task<IActionResult> RemoveProductFromSpecial(int? id)
+        {
+            if (id == null)
+            {
+                return new JsonResult(new { status = "0", message = "محصولی یافت نشد" });
+            }
+
+            var item = await _context.Products
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (item == null)
+            {
+                return new JsonResult(new { status = "0", message = "محصولی یافت نشد" });
+            }
+            item.SpecialSale = false;
+            _context.Products.Update(item);
+            await _context.SaveChangesAsync();
+
+            return new JsonResult(new { status = "1", message = "از پیشنهاد ویژه حذف شد" });
+        }
+
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.Id == id);
@@ -309,15 +351,15 @@ namespace KaraYadak.Controllers
         }
         public async Task<IActionResult> ProductDetail(string code)
         {
-           
+
             //Comment
-            ViewBag.comments = await _context.Comments.Where(x => x.Status.Equals(CommentStatus.تایید_شده) && x.ProductCode.Equals(code)).OrderByDescending(x=>x.Date).Select(
-                x=>new CommentVm
+            ViewBag.comments = await _context.Comments.Where(x => x.Status.Equals(CommentStatus.تایید_شده) && x.ProductCode.Equals(code)).OrderByDescending(x => x.Date).Select(
+                x => new CommentVm
                 {
-                    code=code,
-                    Text=x.Text,
-                    Rate=x.Rate,
-                    UserFullName= _context.Users.FirstOrDefault(i=>i.UserName.Equals(x.Username)).FirstName+" "+_context.Users.FirstOrDefault(i => i.UserName.Equals(x.Username)).LastName
+                    code = code,
+                    Text = x.Text,
+                    Rate = x.Rate,
+                    UserFullName = _context.Users.FirstOrDefault(i => i.UserName.Equals(x.Username)).FirstName + " " + _context.Users.FirstOrDefault(i => i.UserName.Equals(x.Username)).LastName
                 }
                 ).Take(15).ToListAsync();
 
@@ -326,19 +368,19 @@ namespace KaraYadak.Controllers
             var finalModel = new ProductDetailSVM();
             //
             var items = (from p in _context.Products.Where(x => x.Code.Equals(code))
-                                         join c in _context.ProductCategories.DefaultIfEmpty() on p.CategoryIdLvl1 equals c.Id
-                                         into cpTbles
-                                         from cp in cpTbles.DefaultIfEmpty()
-                                         join ct in _context.ProductCategoryTypes
-                                         on cp.ProductCategoryType equals ct.Id
-                                         into table2
-                                         from t in table2.DefaultIfEmpty()
-                                         where t.Id.Equals(5)
-                                         select new
-                                         {
-                                             carModel = cp.Name,
-                                             carBrand = p.CategoryIdLvl2
-                                         }
+                         join c in _context.ProductCategories.DefaultIfEmpty() on p.CategoryIdLvl1 equals c.Id
+                         into cpTbles
+                         from cp in cpTbles.DefaultIfEmpty()
+                         join ct in _context.ProductCategoryTypes
+                         on cp.ProductCategoryType equals ct.Id
+                         into table2
+                         from t in table2.DefaultIfEmpty()
+                         where t.Id.Equals(5)
+                         select new
+                         {
+                             carModel = cp.Name,
+                             carBrand = p.CategoryIdLvl2
+                         }
                                  ).AsQueryable();
             var productWithCars = await items.ToListAsync();
             foreach (var item in productWithCars)
@@ -356,7 +398,7 @@ namespace KaraYadak.Controllers
                     brandWithCars[item.carBrand] = newCarModelsList.Distinct().ToList();
                 }
             }
-            var product =  _context.Products.Where(x => x.Code.Equals(code)).Select(x => new ProductDetailVM
+            var product = _context.Products.Where(x => x.Code.Equals(code)).Select(x => new ProductDetailVM
             {
                 Code = x.Code,
                 Description = x.Description,
@@ -398,7 +440,7 @@ namespace KaraYadak.Controllers
 
             return View(finalModel);
         }
-       
+
         [Route("Search/{key?}/{Page?}")]
         public IActionResult SearchProduct(string key, int page)
         {
@@ -485,7 +527,7 @@ namespace KaraYadak.Controllers
                   Rate = x.Product.Rate.GetValueOrDefault(),
                   Code = x.Product.Code
               }).OrderByDescending(x => x.CreatingDate).Distinct().ToList();
-            ViewBag.Page = (products.Count / 12) + 1;
+            ViewBag.Page = Math.Ceiling(Convert.ToDecimal(products.Count / 12));
             ViewBag.CurrectPage = page;
             //OferBox
             ViewBag.BestOfferProduct = groupByCodeProduct.Select(x => new ProductForIndexVM
@@ -540,7 +582,7 @@ namespace KaraYadak.Controllers
                 Price = x.Product.Price,
                 Rate = x.Product.Rate.GetValueOrDefault(),
             }).OrderByDescending(x => x.CreatingDate).ToList();
-            ViewBag.Page = (products.Count / 12) + 1;
+            ViewBag.Page = Math.Ceiling(Convert.ToDecimal(products.Count / 12));
             ViewBag.CurrectPage = page;
             return View(products.Skip((page - 1) * 12).Take(12).ToList());
 
@@ -725,7 +767,7 @@ namespace KaraYadak.Controllers
                 Rate = x.Product.Rate.GetValueOrDefault(),
                 Code = x.Product.Code
             }).OrderByDescending(x => x.CreatingDate).Distinct().ToList();
-            ViewBag.Page = (products.Count / 12) + 1;
+            ViewBag.Page = Math.Ceiling(Convert.ToDecimal(products.Count / 12));
             ViewBag.CurrectPage = page;
             //OferBox
             ViewBag.BestOfferProduct = groupByCodeProduct.Select(x => new ProductForIndexVM
@@ -948,9 +990,9 @@ namespace KaraYadak.Controllers
                 Picture = x.Product.ImageUrl,
                 Price = x.Product.Price,
                 Rate = x.Product.Rate.GetValueOrDefault(),
-                Code=x.Product.Code,
+                Code = x.Product.Code,
             }).OrderByDescending(x => x.CreatingDate).ToList();
-            ViewBag.Page = (products.Count / 12) + 1;
+            ViewBag.Page = Math.Ceiling(Convert.ToDecimal(products.Count / 12));
             ViewBag.CurrectPage = page;
             //oferbox
             ViewBag.BestOfferProduct = groupByCodeProduct.Select(x => new ProductForIndexVM
@@ -973,7 +1015,7 @@ namespace KaraYadak.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCommentInProduct(string code, string text,string rate)
+        public async Task<IActionResult> AddCommentInProduct(string code, string text, string rate)
         {
             if (string.IsNullOrEmpty(code)) return new JsonResult(new { status = "0", message = "محصولی یافت نشد" });
             var username = User.Identity.Name;
@@ -989,7 +1031,7 @@ namespace KaraYadak.Controllers
                     Status = CommentStatus.در_حال_بررسی,
                     Text = text,
                     Username = username,
-                    Rate=(!string.IsNullOrEmpty(rate))?int.Parse(rate):0,
+                    Rate = (!string.IsNullOrEmpty(rate)) ? int.Parse(rate) : 0,
                 };
                 await _context.Comments.AddAsync(comment);
                 await _context.SaveChangesAsync();

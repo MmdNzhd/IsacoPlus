@@ -25,6 +25,7 @@
 <!--Cart-->
 <div class="bg-product">
     @*Header*@
+    @Html.Partial("Header")
 
     <div class="container w-100 mx-auto my-5 py-5">
         <div id="totalPriceDiv" class="row w-100 mx-auto">
@@ -35,19 +36,18 @@
                 </div>
             </div>
             <div class="col-md-1 col-0  mt-2"></div>
-            <div class="col-md-4 text-center pay-cart py-3 mt-2">
+            <div class="col-md-4 text-center pay-cart py-3 mt-2" id="goNext">
                 @if (User.Identity.Name != null)
                 {
-                    if (ViewBag.profileIsComplete)
-                    {
-                        <h5 id="submit">تایید و ادامه خرید</h5>
+                    //if (ViewBag.profileIsComplete)
+                    //{
 
-                    }
-                    else
-                    {
+                    //}
+                    //else
+                    //{
                         <h5 id="notComplete">تایید و ادامه خرید</h5>
 
-                    }
+                    //}
                 }
                 else
                 {
@@ -179,61 +179,120 @@
             <div class="modal-body">
                 <section class="card card-body border mb-0 body current" id="wizard-example-p-0" role="tabpanel" aria-labelledby="wizard-example-h-0" aria-hidden="false">
                     <div class="profile-tab text-right">
-
-                        <div class="profile-tab__detail profile-tab__detail-active">
-                            <div class="profile-tab__container">
-                                <h4 class="profile-tab__title">ویرایش پروفایل</h4>
-                                <div class="profile-tab__row">
-                                    <div class="row w-100 mx-auto">
-                                        <div class="col-md-6">
-                                            <div class="profile-tab__col-left">
-                                                <div class="display-avarta__img">
-                                                    @if (!string.IsNullOrWhiteSpace(Model.ImageProfile))
-                                                    {
-                                                        <img src='~/uploads/UserImg/@Model.ImageProfile'>
-                                                    }
-                                                    else
-                                                    { <img src="~/img/profile.png">}
-                                                </div>
-                                                <form class="text-center">
-                                                    <label class="profile-upload">
-                                                        انتخاب تصویر
-                                                        <input type="file" name="fileToUpload" id="fileToUpload">
-                                                    </label>
-                                                </form>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="profile-tab__col-right">
-                                                <form class="profile-form  mt-3">
-                                                    <label> نام و نام خانوادگی </label>
-                                                    <input type="text" id="fullName" value="@fullName">
-                                                    <label> شماره تلفن </label>
-                                                    <input type="text" id="phone" value="@Model.PhoneNumber">
-                                                    <label>پست الکترونیک</label>
-                                                    <input type="email" id="email1" required="" value="@Model.Email">
-                                                    <label>  کدملی </label>
-                                                    <input type="text" id="nationalCode" value="@Model.NationalCode">
-                                                    <label>  شماره کارت </label>
-                                                    <input type="text" id="cartNumber" value="@Model.CartNumber">
-                                                    <label>  آدرس </label>
-                                                    <textarea id="address">@Model.Address</textarea>
-                                                </form>
-                                                <div class="profile-footer ">
-                                                    <button id="editProfileSubmit" class="profile-button profile-button--save text-center w-100">ثبت</button>
+                        @if (ViewBag.profileIsComplete)
+                        {
+                            <div class="profile-tab__detail profile-tab__detail-active">
+                                <div class="profile-tab__container">
+                                    <h4 class="profile-tab__title">ویرایش پروفایل</h4>
+                                    <div class="profile-tab__row">
+                                        <div class="row w-100 mx-auto">
+                                            <div class="col-md-6">
+                                                <div class="profile-tab__col-left">
+                                                    <div class="display-avarta__img">
+                                                        @if (!string.IsNullOrWhiteSpace(Model.ImageProfile))
+                                                        {
+                                                            <img src='~/uploads/UserImg/@Model.ImageProfile'>
+                                                        }
+                                                        else
+                                                        { <img src="~/img/profile.png">}
+                                                    </div>
+                                                    <form class="text-center">
+                                                        <label class="profile-upload">
+                                                            انتخاب تصویر
+                                                            <input type="file" name="fileToUpload" id="fileToUpload">
+                                                        </label>
+                                                    </form>
 
                                                 </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="profile-tab__col-right">
+                                                    <form class="profile-form  mt-3">
+                                                        <label> نام و نام خانوادگی </label>
+                                                        <input readonly type="text" id="fullName" value="@fullName">
+                                                        <label> شماره تلفن </label>
+                                                        <input type="text" id="phone" value="@Model.PhoneNumber">
+                                                        <label>پست الکترونیک</label>
+                                                        <input readonly type="email" id="email1" required="" value="@Model.Email">
+                                                        <label>  کدملی </label>
+                                                        <input readonly type="text" id="nationalCode" value="@Model.NationalCode">
+                                                        <label>  شماره کارت </label>
+                                                        <input readonly type="text" id="cartNumber" value="@Model.CartNumber">
+                                                        <label>  آدرس </label>
+                                                        <textarea id="address">@Model.Address</textarea>
+                                                    </form>
+                                                    <div class="profile-footer ">
+                                                        <button id="editProfileSubmit" class="profile-button profile-button--save text-center w-100">ثبت</button>
 
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
+
+
                                     </div>
-
-
                                 </div>
                             </div>
-                        </div>
 
+                        }
+                        else
+                        {
+                            <div class="profile-tab__detail profile-tab__detail-active">
+                                <div class="profile-tab__container">
+                                    <h4 class="profile-tab__title">ویرایش پروفایل</h4>
+                                    <div class="profile-tab__row">
+                                        <div class="row w-100 mx-auto">
+                                            <div class="col-md-6">
+                                                <div class="profile-tab__col-left">
+                                                    <div class="display-avarta__img">
+                                                        @if (!string.IsNullOrWhiteSpace(Model.ImageProfile))
+                                                        {
+                                                            <img src='~/uploads/UserImg/@Model.ImageProfile'>
+                                                        }
+                                                        else
+                                                        { <img src="~/img/profile.png">}
+                                                    </div>
+                                                    <form class="text-center">
+                                                        <label class="profile-upload">
+                                                            انتخاب تصویر
+                                                            <input type="file" name="fileToUpload" id="fileToUpload">
+                                                        </label>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="profile-tab__col-right">
+                                                    <form class="profile-form  mt-3">
+                                                        <label> نام و نام خانوادگی </label>
+                                                        <input type="text" id="fullName" value="@fullName">
+                                                        <label> شماره تلفن </label>
+                                                        <input type="text" id="phone" value="@Model.PhoneNumber">
+                                                        <label>پست الکترونیک</label>
+                                                        <input type="email" id="email1" required="" value="@Model.Email">
+                                                        <label>  کدملی </label>
+                                                        <input type="text" id="nationalCode" value="@Model.NationalCode">
+                                                        <label>  شماره کارت </label>
+                                                        <input type="text" id="cartNumber" value="@Model.CartNumber">
+                                                        <label>  آدرس </label>
+                                                        <textarea id="address">@Model.Address</textarea>
+                                                    </form>
+                                                    <div class="profile-footer ">
+                                                        <button id="editProfileSubmit" class="profile-button profile-button--save text-center w-100">ثبت</button>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
 
                     </div>
                 </section>
@@ -309,7 +368,7 @@
 </div>
 <div class="row w-100 mx-auto text-center pt-3">
 <div class="col-6"><h5 class="text-right"><b>قیمت :</b></h5></div>
-<div  class="col-6 textcart price1" data-price="${element.price}"><h4 class="text-right"><b >"${element.price}" تومان</b></h4></div>
+<div  class="col-6 textcart price1" data-price="${element.price - element.off * element.price / 100}"><h4 class="text-right"><b >"${element.price - element.off * element.price / 100}" تومان</b></h4></div>
 </div>
 <div class="row w-100 mx-auto text-center pt-3">
 <div class="col-6"><h5 class="text-right"><b> برند:</b></h5></div>
@@ -324,10 +383,10 @@
 <div class="row w-100 mx-auto">
 <h6 class="text-left w-100 pl-1"><b>تعداد</b></h6>
 <form class="input-Number position-relative">
-                                                                                                            <div class="value-button button-cartPlus increase"  onclick="increaseValue(${element.id})" value="Increase Value">+</div>
+                                                                                                                <div class="value-button button-cartPlus increase"  onclick="increaseValue(${element.id})" value="Increase Value">+</div>
 
-                                                                                                            <input type="number" class="number n-style" id="number${element.id}" value="1" />
-                                                                                                            <div class="value-button button-minus decrease"  onclick="decreaseValue(${element.id})" value="Decrease Value">-</div>
+                                                                                                                <input type="number" class="number n-style" id="number${element.id}" value="1" />
+                                                                                                                <div class="value-button button-minus decrease"  onclick="decreaseValue(${element.id})" value="Decrease Value">-</div>
 </form>
 </div>
 </div>
@@ -542,10 +601,17 @@
 
         });
         $("#notComplete").click(function () {
+            if ('@ViewBag.profileIsComplete') {
+                Toast.fire({
+                    icon: 'info',
+                    title: "در صورت تغییر شماره تماس و یا آدرس پروفایل خود را ویرایش کنید"
+                })
+            }
             $("#centralModalEditProfile").modal("toggle");
 
 
-            $("#editProfileSubmit").click(function () {
+            $("#editProfileSubmit").click(function (e) {
+                e.preventDefault();
                 var fdata = new FormData();
                 var fileUpload = $("#fileToUpload").get(0);
                 var files = fileUpload.files;
@@ -587,7 +653,8 @@
 
                             })
                             sleep(2000).then(() => {
-                                location.reload();
+                                //location.reload();
+                                $("#goNext").html(` <h5 id="submit">تایید و ادامه خرید</h5>`);
                             })
                         }
                         else {
@@ -609,6 +676,22 @@
                 });
             });
         })
+        $(".container").on("click", "#submit", function (e) {
+
+            updateCookie();
+            var url = "/ShopProduct/cart"
+            $.ajax({
+                type: "Get",
+                url: url,
+                dataType: "html",
+                data: {},
+                success: function (data) {
+
+                    $("#factor").modal();
+                    $(".modal-body").html(data);
+                }
+            });
+        } )
         $("#submit").click(function (e) {
 
             updateCookie();
@@ -649,7 +732,7 @@
                         })
                         $.removeCookie('tempcart', { path: '/' });
                         $.removeCookie('cart', { path: '/' });
-                        location.href = '/SiteAccount/EditProfile';
+                        location.href = '/SiteAccount/EditProfile#lastOrders';
                     }
 
 
