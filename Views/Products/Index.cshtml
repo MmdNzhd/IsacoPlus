@@ -89,7 +89,10 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-            $(".card").on("change", ".round", function () {
+            $(".card").on("click", ".round", function (e) {
+                console.log($(e.target))
+                var x = $(e.target).siblings('input').prop('checked');
+                console.log(x)
                 alert();
             })
             var code = "";
