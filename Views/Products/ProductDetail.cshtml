@@ -52,6 +52,238 @@
 @section scripts{
     <script src="~/assets/js/jquery.cookie.js"></script>
     <script>
+        var oldCookieValue = "";
+        //IsFav
+        function IsFav() {
+            let code = $("#like").attr("data-id");
+            $.ajax({
+                type: "Post",
+                url: "/Products/IsFavoriteForThisUser ",
+                data: { "code": code },
+                success: function (data) {
+
+                    if (data.status == "0") {
+                        toastr.error(data.message);
+                    }
+                    else {
+                        var isFav = data.result;
+                        if (isFav) {
+                            $("#like").removeClass("fa-heart-o").addClass("fa-heart")
+                        }
+                        else {
+                            $("#like").removeClass("fa-heart").addClass("fa-heart-o")
+
+                        }
+                    }
+
+
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            })
+        }
+        $(document).ready(function () {
+            let code = $("#like").attr("data-id");
+            var cooki = $.cookie('cart');
+            if (cooki.includes(",,")) {
+                cooki.replace(",,", ",");
+                $.cookie('cart', cooki, { expires: 7, path: '/' });
+            }
+
+            if (cooki && cooki.includes(code)) {
+                $("#addToShopBascket").css("background", "#ff4000");
+                $("#addToShopBascket").html("حذف از سبد خرید");
+            }
+            else {
+                $("#addToShopBascket").css("background", "#00FF00");
+                $("#addToShopBascket").html(" افزودن یه سبد خرید");
+            }
+            IsFav();
+        });
+
+        //addToFavorite
+        function addToFav(e) {
+            let code = $(e).attr("data-id");
+            $.ajax({
+                type: "Post",
+                url: "/Products/AddToFavorite ",
+                data: { "code": code },
+                success: function (data) {
+                    if (data.status == "0") {
+                        toastr.error(data.message);
+                    } if (data.status == "2") {
+                        toastr.warning(data.message);
+                        $("#centralModalLogin").modal("toggle");
+                    }
+                    if (data.status == "1") {
+                        toastr.warning(data.message);
+                        IsFav();
+                    }
+
+
+                },
+                error: function (data) {
+                    toastr.warning("خطایی رخ داده است");
+                    console.log(data);
+                }
+            });
+        }
+
+
+        $(".cta").mouseenter(function () {
+            $(this).addClass("active").delay(300).queue(function (next) {
+                $(this).removeClass("active");
+                next();
+            });
+
+        });
+        // ------swiper-----
+        var galleryThumbs = new Swiper('.gallery-thumbs', {
+            spaceBetween: 10,
+            slidesPerView: 4,
+            freeMode: true,
+            watchSlidesVisibility: true,
+            watchSlidesProgress: true,
+        });
+        var galleryTop = new Swiper('.gallery-top', {
+            spaceBetween: 10,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            thumbs: {
+                swiper: galleryThumbs
+            }
+        });
+
+        $("#commentSubmit").submit(function (e) {
+            e.preventDefault();
+            let code = $("#like").attr("data-id");
+            let text = $("#text").val();
+            if (text.length < 1) {
+                toastr.error("لطفا نظر خود را وارد کنید")
+                return;
+            }
+
+            $.ajax({
+                type: "Post",
+                url: "/Products/AddCommentInProduct ",
+                data: { "code": code, "text": text },
+                success: function (data) {
+                    if (data.status == "0") {
+                        toastr.error(data.message);
+                    } if (data.status == "2") {
+                        toastr.warning(data.message);
+                    }
+                    if (data.status == "1") {
+                        toastr.info(data.message);
+                    }
+
+
+                },
+                error: function (data) {
+                    toastr.warning("خطایی رخ داده است");
+                    console.log(data);
+                }
+            });
+        })
+
+        $("#addToShopBascket").on("click", function (e) {
+            var exsist = 0;
+            e.preventDefault();
+
+            oldCookieValue = $.cookie('cart');
+            var pId = $(this).attr("data-item-id");
+            if (oldCookieValue == undefined) {
+                addToBasket(pId);
+                return;
+            }
+            if (oldCookieValue.includes(pId)) exsist = 1;
+            if (exsist == 0) {
+                addToBasket(pId);
+                return;
+            }
+
+            else {
+                removeFrombasket(pId);
+                return;
+            }
+
+        });
+        function addToBasket(pId) {
+            var products = [];
+            products[0] = pId;
+            if (oldCookieValue == undefined) {
+                $.cookie('cart', products, { expires: 7, path: '/' });
+            } else {
+                if (oldCookieValue.endsWith(",")) {
+                    var value = oldCookieValue + new String(products);
+                }
+                else {
+                    var value = oldCookieValue + "," + new String(products);
+                }
+
+                value = removeDuolicate(value);
+                $.removeCookie('cart', { path: '/' });
+                //Create new cookie with same name and concatenate the old and new desired value.
+                $.cookie('cart', value, { expires: 7, path: '/' });
+            }
+            products = [];
+            var cooki = $.cookie('cart');
+            var productCount = cooki.split(",").length;
+            $('#cartCount').text(productCount);
+            $("#addToShopBascket").css("background", "#ff4000");
+            $("#addToShopBascket").html("حذف از سبد خرید");
+            toastr.success("به سبد خرید شما اضافه شد");
+        }
+        function removeFrombasket(pId) {
+            //check position of this id in cookie and thne delete it
+            if (oldCookieValue.includes(",")) {
+                if (oldCookieValue.includes(pId + ",")) {
+                    oldCookieValue = oldCookieValue.replace((pId + ","), "");
+                }
+                else {
+                    oldCookieValue = oldCookieValue.replace((",", pId), "");
+
+                }
+            }
+            else {
+                $.removeCookie('cart', { path: '/' });
+            }
+
+            if ($.cookie('cart')) {
+                $.cookie('cart', oldCookieValue, { expires: 7, path: '/' });
+            }
+            var productCount = "";
+            var cooki = $.cookie('cart');
+            if (cooki && cooki.includes(",")) {
+                productCount = cooki.split(",").length;
+            }
+            if (cooki) {
+                productCount = 1;
+            }
+            $('#cartCount').text(productCount);
+            $("#addToShopBascket").css("background", "#00FF00");
+            $("#addToShopBascket").html(" افزودن یه سبد خرید");
+            toastr.info("از سبد خرید شما حذف شد");
+
+        }
+        function removeDuolicate(a) {
+            var cookieVal = a.split(",");
+            var realValue = [];
+            for (i = 0; i < cookieVal.length; i++) {
+                if (jQuery.inArray(cookieVal[i], realValue) !== -1) {
+                    continue;
+                }
+                else {
+                    realValue.push(cookieVal[i]);
+                }
+            }
+            return realValue;
+        }
+    </script>
+    <script>
         //IsFav
         function IsFav() {
             let code = $("#like").attr("data-id");

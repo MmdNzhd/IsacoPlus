@@ -21,9 +21,11 @@ namespace KaraYadak.ViewModels
         public double Price { get; set; }
         public float Rate { get; set; }
         public DateTime CreatingDate { get; set; }
+        public DateTime UpdateDate { get; set; }
         public string Code { get; set; }
         public string Brand { get; set; }
         public double Count { get; set; }//just Use in Dashboard
+        public bool Special { get; set; }
     }
     
     public class ListForIndexVM
