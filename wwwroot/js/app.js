@@ -123,7 +123,6 @@ var swiper = new Swiper('.swiper-containerBlog', {
 
 
 var swiper = new Swiper('.swiper-container4', {
-    slidesPerView: 6,
     spaceBetween: 30,
     loop:true,
     freeMode: true,
@@ -138,12 +137,12 @@ var swiper = new Swiper('.swiper-container4', {
             spaceBetweenSlides: 30
         },
         600: {
-            slidesPerView: 2,
+            slidesPerView: 1,
             spaceBetweenSlides: 40
         },
    
         1000: {
-            slidesPerView: 6,
+            slidesPerView: 4,
             spaceBetweenSlides: 40
         }
     }
