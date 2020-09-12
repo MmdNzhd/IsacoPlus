@@ -133,10 +133,11 @@ namespace KaraYadak.Controllers
             return View(vm);
         }
         [HttpGet]
+        [Route("LogOut")]
         public async Task<IActionResult> Logout(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
-            returnUrl = returnUrl ?? Url.Content("/SiteAccount/Login");
+            returnUrl = returnUrl ?? Url.Content("/");
             return LocalRedirect(returnUrl);
         }
 

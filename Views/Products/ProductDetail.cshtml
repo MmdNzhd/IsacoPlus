@@ -86,7 +86,7 @@
         $(document).ready(function () {
             let code = $("#like").attr("data-id");
             var cooki = $.cookie('cart');
-            if (cooki.includes(",,")) {
+            if (cooki&&cooki.includes(",,")) {
                 cooki.replace(",,", ",");
                 $.cookie('cart', cooki, { expires: 7, path: '/' });
             }
@@ -192,84 +192,75 @@
         $("#addToShopBascket").on("click", function (e) {
             var exsist = 0;
             e.preventDefault();
+            var products = [];
 
             oldCookieValue = $.cookie('cart');
             var pId = $(this).attr("data-item-id");
-            if (oldCookieValue == undefined) {
-                addToBasket(pId);
-                return;
-            }
             if (oldCookieValue && oldCookieValue.includes(pId)) exsist = 1;
+
             if (exsist == 0) {
-                addToBasket(pId);
-                return;
+                if (oldCookieValue == undefined) {
+                    products[0] = pId;
+                    $.cookie('cart', products, { expires: 7, path: '/' });
+                } else {
+                    if (oldCookieValue.endsWith(",")) {
+                        var value = oldCookieValue + new String(products);
+                    }
+                    else {
+                        var value = oldCookieValue + "," + new String(products);
+                    }
+
+                    value = removeDuolicate(value);
+                    $.removeCookie('cart', { path: '/' });
+                    $.cookie('cart', value, { expires: 7, path: '/' });
+                }
+                var cooki = $.cookie('cart');
+
+                var productCount = cooki.split(",").length;
+                $('#cartCount').text(productCount);
+                $("#addToShopBascket").css("background", "#ff4000");
+                $("#addToShopBascket").html("حذف از سبد خرید");
+                toastr.success("به سبد خرید شما اضافه شد");
             }
 
+
             else {
-                removeFrombasket(pId);
-                return;
+                var cookies = $.cookie('cart');
+                $.removeCookie('cart', { path: '/' });
+
+
+                cookies = cookies.replace(pId, "");
+                if (cookies == "," || cookies == "" || cookies == null) {
+
+                    //$.removeCookie('cart', { path: '/' });
+                }
+                if (cookies.length>1) {
+                    if (cookies.includes(",,")) {
+                        cookies = cookies.replace(",,", ",");
+                        $.cookie('cart', cookies, { expires: 7, path: '/' });
+                    }
+                    else {
+                        $.cookie('cart', cookies, { expires: 7, path: '/' });
+                    }
+                }
+
+                var productCount = "";
+
+                if (cookies) {
+                    productCount = cookies.split(",").length;
+                }
+
+                $('#cartCount').html(productCount);
+
+                $("#addToShopBascket").css("background", "#00FF00");
+                $("#addToShopBascket").html(" افزودن یه سبد خرید");
+                toastr.info("از سبد خرید شما حذف شد");
+
             }
 
         });
-        function addToBasket(pId) {
-            var products = [];
-            products[0] = pId;
-            if (oldCookieValue == undefined) {
-                $.cookie('cart', products, { expires: 7, path: '/' });
-            } else {
-                if (oldCookieValue.endsWith(",")) {
-                    var value = oldCookieValue + new String(products);
-                }
-                else {
-                    var value = oldCookieValue + "," + new String(products);
-                }
 
-                value = removeDuolicate(value);
-                $.removeCookie('cart', { path: '/' });
-                //Create new cookie with same name and concatenate the old and new desired value.
-                $.cookie('cart', value, { expires: 7, path: '/' });
-            }
-            products = [];
-            var cooki = $.cookie('cart');
-            var productCount = cooki.split(",").length;
-            $('#cartCount').text(productCount);
-            $("#addToShopBascket").css("background", "#ff4000");
-            $("#addToShopBascket").html("حذف از سبد خرید");
-            toastr.success("به سبد خرید شما اضافه شد");
-        }
-        function removeFrombasket(pId) {
-            //check position of this id in cookie and thne delete it
-            var cookies = $.cookie('cart');
-            $.removeCookie('cart', { path: '/' });
 
-            if (cookies) {
-                cookies = cookies.replace(pId, "");
-                if (cookies == "," || cookies == "" || olcookiesdCookieValue == null) {
-
-                    $.removeCookie('cart', { path: '/' });
-                }
-                if (cookies.includes(",,")) {
-                    cookies = cookies.replace(",,", ",");
-                    $.cookie('cart', cookies, { expires: 7, path: '/' });
-                }
-            }
-            else {
-
-                $.removeCookie('cart', { path: '/' });
-            }
-            var productCount = "";
-
-            if (cookies) {
-                productCount = cooki.split(",").length;
-            }
-
-            $('#cartCount').html(productCount);
-
-            $("#addToShopBascket").css("background", "#00FF00");
-            $("#addToShopBascket").html(" افزودن یه سبد خرید");
-            toastr.info("از سبد خرید شما حذف شد");
-
-        }
         function removeDuolicate(a) {
             var cookieVal = a.split(",");
             var realValue = [];
