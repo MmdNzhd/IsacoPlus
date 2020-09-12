@@ -9,6 +9,15 @@
         Username = user.FirstName + " " + user.LastName;
     }
 }
+
+@section scripts{ 
+    <script>
+        var $counter = $("#cartCount");
+        var cartVal = $counter.html().parseInt;
+        cartVal <= 0 ? $counter.hide() : $counter.css("display","inline-block");
+    </script>
+}
+
 <div class="container-fluid p-0 w-100 mx-auto">
     <div class="row w-100 mx-auto">
 
@@ -34,7 +43,7 @@
                         <a class="nav-link text-white mx-2 text-right" href="/#grouping"> دسته بندی</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white mx-2 text-right" href="/ShopProduct/ShopBasket">سبدخرید <span class="text-center mr-1 bg-success d-inline-block mv-cart-counter" id="cartCount"></span></a>
+                        <a class="nav-link text-white mx-2 text-right" href="/ShopProduct/ShopBasket">سبدخرید <span class="text-center mr-1 bg-success mv-cart-counter" id="cartCount" style="display:inline-block;"></span></a>
                     </li>
                     <li class="nav-item">
                         @if (!string.IsNullOrWhiteSpace(Username))
