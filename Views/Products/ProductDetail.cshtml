@@ -55,6 +55,7 @@
 @section scripts{
     <script src="~/assets/js/jquery.cookie.js"></script>
     <script>
+var oldCookieValue = "";
         //IsFav
         function IsFav() {
             let code = $("#like").attr("data-id");
@@ -86,6 +87,21 @@
             })
         }
         $(document).ready(function () {
+            let code = $("#like").attr("data-id");
+            var cooki = $.cookie('cart');
+            if (cooki.includes(",,")) {
+                cooki.replace(",,", ",");
+                $.cookie('cart', cooki, { expires: 7, path: '/' });
+            }
+
+            if (cooki && cooki.includes(code)) {
+                $("#addToShopBascket").css("background", "#ff4000");
+                $("#addToShopBascket").html("حذف از سبد خرید");
+            }
+            else {
+                $("#addToShopBascket").css("background", "#00FF00");
+                $("#addToShopBascket").html(" افزودن یه سبد خرید");
+            }
             IsFav();
         });
 
@@ -117,17 +133,6 @@
             });
         }
 
-        function likeOrDislike(item) {
-            if ($(item).children('i').hasClass('fa-heart-o')) {
-                $(item).children('i').animate().addClass('fa-heart');
-                $(item).children('i').attr('transform', 'scale(1.3)');
-                $(item).children('i').animate().removeClass('fa-heart-o');
-            } else {
-                $(item).children('i').animate().addClass('fa-heart-o');
-                $(item).children('i').attr('transform', 'scale(1.3)');
-                $(item).children('i').animate().removeClass('fa-heart');
-            }
-        }
 
         $(".cta").mouseenter(function () {
             $(this).addClass("active").delay(300).queue(function (next) {
@@ -188,18 +193,40 @@
         })
 
         $("#addToShopBascket").on("click", function (e) {
-            var products = [];
+            var exsist = 0;
             e.preventDefault();
 
-            var oldCookieValue = $.cookie('cart');
+            oldCookieValue = $.cookie('cart');
             var pId = $(this).attr("data-item-id");
+            if (oldCookieValue == undefined) {
+                addToBasket(pId);
+                return;
+            }
+            if (oldCookieValue.includes(pId)) exsist = 1;
+            if (exsist == 0) {
+                addToBasket(pId);
+                return;
+            }
+
+            else {
+                removeFrombasket(pId);
+                return;
+            }
+
+        });
+        function addToBasket(pId) {
+            var products = [];
             products[0] = pId;
             if (oldCookieValue == undefined) {
                 $.cookie('cart', products, { expires: 7, path: '/' });
-
             } else {
+                if (oldCookieValue.endsWith(",")) {
+                    var value = oldCookieValue + new String(products);
+                }
+                else {
+                    var value = oldCookieValue + "," + new String(products);
+                }
 
-                var value = oldCookieValue + "," + new String(products);
                 value = removeDuolicate(value);
                 $.removeCookie('cart', { path: '/' });
                 //Create new cookie with same name and concatenate the old and new desired value.
@@ -209,9 +236,42 @@
             var cooki = $.cookie('cart');
             var productCount = cooki.split(",").length;
             $('#cartCount').text(productCount);
+            $("#addToShopBascket").css("background", "#ff4000");
+            $("#addToShopBascket").html("حذف از سبد خرید");
+            toastr.success("به سبد خرید شما اضافه شد");
+        }
+        function removeFrombasket(pId) {
+            //check position of this id in cookie and thne delete it
+            if (oldCookieValue.includes(",")) {
+                if (oldCookieValue.includes(pId + ",")) {
+                    oldCookieValue = oldCookieValue.replace((pId + ","), "");
+                }
+                else {
+                    oldCookieValue = oldCookieValue.replace((",", pId), "");
 
-        });
+                }
+            }
+            else {
+                $.removeCookie('cart', { path: '/' });
+            }
 
+            if ($.cookie('cart')) {
+                $.cookie('cart', oldCookieValue, { expires: 7, path: '/' });
+            }
+            var productCount = "";
+            var cooki = $.cookie('cart');
+            if (cooki && cooki.includes(",")) {
+                productCount = cooki.split(",").length;
+            }
+            if (cooki) {
+                productCount = 1;
+            }
+            $('#cartCount').text(productCount);
+            $("#addToShopBascket").css("background", "#00FF00");
+            $("#addToShopBascket").html(" افزودن یه سبد خرید");
+            toastr.info("از سبد خرید شما حذف شد");
+
+        }
         function removeDuolicate(a) {
             var cookieVal = a.split(",");
             var realValue = [];
@@ -292,14 +352,14 @@
 <div class="container modelCar">
     <div class="row w-100 mx-auto text-center py-3">
         @*<div class="col-4">
-            <img src="~/img/21.png" class="img-fluid w-25">
-        </div>
-        <div class="col-4">
-            <img src="~/img/Kia-1.png" class="img-fluid w-25">
-        </div>
-        <div class="col-4">
-            <img src="~/img/Iran-Khodro-2.png" class="img-fluid w-25">
-        </div>*@
+                <img src="~/img/21.png" class="img-fluid w-25">
+            </div>
+            <div class="col-4">
+                <img src="~/img/Kia-1.png" class="img-fluid w-25">
+            </div>
+            <div class="col-4">
+                <img src="~/img/Iran-Khodro-2.png" class="img-fluid w-25">
+            </div>*@
 
         <div class="col-12 col-lg-3 mb-3">
             <a class="btn shadow-none border-0 mx-auto" data-toggle="collapse" href="#carsCompeny" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -314,131 +374,131 @@
         </div>
 
         @*@foreach (var item in Model.CarCategoriesForProduct)
-            {
-                <div class="col-4">
-                    <img src=@item.Key class="img-fluid w-25">
-                </div>
-            }
-        </div>
-        @foreach (var item in Model.CarCategoriesForProduct)
-        {
-            <div class="row w-100 mx-auto text-center py-3">
-
-                @foreach (var val in item.Value)
                 {
                     <div class="col-4">
-                        <h5> <b>@val</b></h5>
+                        <img src=@item.Key class="img-fluid w-25">
                     </div>
                 }
             </div>
-        }*@
+            @foreach (var item in Model.CarCategoriesForProduct)
+            {
+                <div class="row w-100 mx-auto text-center py-3">
+
+                    @foreach (var val in item.Value)
+                    {
+                        <div class="col-4">
+                            <h5> <b>@val</b></h5>
+                        </div>
+                    }
+                </div>
+            }*@
     </div>
-<!-- --model car-- -->
-<!--Comments-->
-@if (comments.Count > 0)
-{
+    <!-- --model car-- -->
+    <!--Comments-->
+    @if (comments.Count > 0)
+    {
 
-    <div class="row w-100 mx-auto text-center py-4 mt-5 pt-5">
-        <div class="col-lg-4 col-3 text-left pt-4">
-            <img src="~/img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+        <div class="row w-100 mx-auto text-center py-4 mt-5 pt-5">
+            <div class="col-lg-4 col-3 text-left pt-4">
+                <img src="~/img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+            </div>
+            <div class="col-lg-4 col-6">
+                <h2><b class="font-kalameBlack"> نظر کاربران </b></h2>
+            </div>
+            <div class="col-lg-4 col-3 text-right pt-4">
+                <img src="~/img/Line 35.png"
+                     class="img-fluid w-25 mx-auto border-titr">
+            </div>
         </div>
-        <div class="col-lg-4 col-6">
-            <h2><b class="font-kalameBlack"> نظر کاربران </b></h2>
-        </div>
-        <div class="col-lg-4 col-3 text-right pt-4">
-            <img src="~/img/Line 35.png"
-                 class="img-fluid w-25 mx-auto border-titr">
-        </div>
-    </div>
 
 
-    <div class="row w-100 mx-auto text-center py-5 mb-5">
-        <!-- --- -->
-        <!-- Swiper -->
-        <div class="swiper-container swiper-containerBlog swiper-container-initialized swiper-container-horizontal swiper-container-rtl">
-            <div class="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px);">
-                @foreach (var item in comments)
-                {
-                    <div class="swiper-slide" style="width: 476.667px; margin-left: 30px;">
-                        <div class=" hj-blog p-0">
-                            <div class="row w-100 mx-auto  bgComment">
-                                <div class="col-6 text-right ">
-                                    <h6 class="py-2 pr-4 pt-3"><b> نظر کاربران </b></h6>
-                                </div>
-                                <div class="col-6 text-left pt-2">
-                                    <div class="star-rating">
-                                        <input id="star-5" type="radio" name="rating" value="star-5" />
-                                        <label for="star-5" title="5 stars">
-                                            <i class="active fa fa-star" aria-hidden="true"></i>
-                                        </label>
-                                        <input id="star-4" type="radio" name="rating" value="star-4" />
-                                        <label for="star-4" title="4 stars">
-                                            <i class="active fa fa-star" aria-hidden="true"></i>
-                                        </label>
-                                        <input id="star-3" type="radio" name="rating" value="star-3" />
-                                        <label for="star-3" title="3 stars">
-                                            <i class="active fa fa-star" aria-hidden="true"></i>
-                                        </label>
-                                        <input id="star-2" type="radio" name="rating" value="star-2" />
-                                        <label for="star-2" title="2 stars">
-                                            <i class="active fa fa-star" aria-hidden="true"></i>
-                                        </label>
-                                        <input id="star-1" type="radio" name="rating" value="star-1" />
-                                        <label for="star-1" title="1 star">
-                                            <i class="active fa fa-star" aria-hidden="true"></i>
-                                        </label>
+        <div class="row w-100 mx-auto text-center py-5 mb-5">
+            <!-- --- -->
+            <!-- Swiper -->
+            <div class="swiper-container swiper-containerBlog swiper-container-initialized swiper-container-horizontal swiper-container-rtl">
+                <div class="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px);">
+                    @foreach (var item in comments)
+                    {
+                        <div class="swiper-slide" style="width: 476.667px; margin-left: 30px;">
+                            <div class=" hj-blog p-0">
+                                <div class="row w-100 mx-auto  bgComment">
+                                    <div class="col-6 text-right ">
+                                        <h6 class="py-2 pr-4 pt-3"><b> نظر کاربران </b></h6>
                                     </div>
-                                </div>
+                                    <div class="col-6 text-left pt-2">
+                                        <div class="star-rating">
+                                            <input id="star-5" type="radio" name="rating" value="star-5" />
+                                            <label for="star-5" title="5 stars">
+                                                <i class="active fa fa-star" aria-hidden="true"></i>
+                                            </label>
+                                            <input id="star-4" type="radio" name="rating" value="star-4" />
+                                            <label for="star-4" title="4 stars">
+                                                <i class="active fa fa-star" aria-hidden="true"></i>
+                                            </label>
+                                            <input id="star-3" type="radio" name="rating" value="star-3" />
+                                            <label for="star-3" title="3 stars">
+                                                <i class="active fa fa-star" aria-hidden="true"></i>
+                                            </label>
+                                            <input id="star-2" type="radio" name="rating" value="star-2" />
+                                            <label for="star-2" title="2 stars">
+                                                <i class="active fa fa-star" aria-hidden="true"></i>
+                                            </label>
+                                            <input id="star-1" type="radio" name="rating" value="star-1" />
+                                            <label for="star-1" title="1 star">
+                                                <i class="active fa fa-star" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
 
-                            </div>
-                            <div class="row w-100 mx-auto py-2">
-                                <div class="col-12 detalis-blog px-4 py-3">
-                                    <h6 class="text-right"><b>@item.UserFullName</b></h6><br>
-                                    <h6 class="text-justify">
-                                        @item.Text
-                                    </h6>
                                 </div>
+                                <div class="row w-100 mx-auto py-2">
+                                    <div class="col-12 detalis-blog px-4 py-3">
+                                        <h6 class="text-right"><b>@item.UserFullName</b></h6><br>
+                                        <h6 class="text-justify">
+                                            @item.Text
+                                        </h6>
+                                    </div>
 
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                }
-            </div>
-            <!-- Add Pagination -->
-            <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
-                <span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button"
-                      aria-label="Go to slide 1"></span><span class="swiper-pagination-bullet" tabindex="0" role="button"
-                                                              aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet" tabindex="0" role="button"
-                                                                                                      aria-label="Go to slide 3"></span>
-            </div>
+                    }
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
+                    <span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button"
+                          aria-label="Go to slide 1"></span><span class="swiper-pagination-bullet" tabindex="0" role="button"
+                                                                  aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet" tabindex="0" role="button"
+                                                                                                          aria-label="Go to slide 3"></span>
+                </div>
 
-            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+            </div>
+            <!-- ---- -->
+
+
         </div>
-        <!-- ---- -->
+    }
+    <!--Comments-->
+    <form id="commentSubmit">
+        <div class="row">
+            <textarea id="text" class="form-control col-10 m-auto"></textarea>
+        </div>
+        <div class="row">
+            <button class="btn btn-success col-2 m-auto mt-1">ثبت نظر</button>
+        </div>
+    </form>
 
+    <!--product-->
+    <div class="row w-100 mx-auto text-center py-4 pt-2">
+        <div class="col-lg-5 col-3 text-left pt-4">
+            <img src="~/img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+        </div>
+        <div class="col-lg-2 col-6">
+            <h2><b class="font-kalameBlack"> محصولات دیگر</b></h2>
+        </div>
+        <div class="col-lg-5 col-3 text-right pt-4"> <img src="~/img/Line 35.png" class="img-fluid w-25 mx-auto border-titr"></div>
+    </div>
 
-    </div>
-}
-<!--Comments-->
-<form id="commentSubmit">
-    <div class="row">
-        <textarea id="text" class="form-control col-10 m-auto"></textarea>
-    </div>
-    <div class="row">
-        <button class="btn btn-success col-2 m-auto mt-1">ثبت نظر</button>
-    </div>
-</form>
-
-<!--product-->
-<div class="row w-100 mx-auto text-center py-4 pt-2">
-    <div class="col-lg-5 col-3 text-left pt-4">
-        <img src="~/img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
-    </div>
-    <div class="col-lg-2 col-6">
-        <h2><b class="font-kalameBlack"> محصولات دیگر</b></h2>
-    </div>
-    <div class="col-lg-5 col-3 text-right pt-4"> <img src="~/img/Line 35.png" class="img-fluid w-25 mx-auto border-titr"></div>
-</div>
-
-@Html.Partial("OtherProducts", Model.OtherProduct)
+    @Html.Partial("OtherProducts", Model.OtherProduct)

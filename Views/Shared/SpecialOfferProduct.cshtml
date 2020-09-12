@@ -28,8 +28,14 @@
                     {
                         <div class="swiper-slide swiper-slide-active" style="width: 311.667px; margin-left: 30px;">
                             <div class="hj-card my-5 py-5 w-100  ">
-                                <img src="@item.Picture" class="img-fluid hj-productImg w-75">
-
+                                @if (!string.IsNullOrEmpty(item.Picture))
+                                {
+                                    <img src="@item.Picture" class="img-fluid hj-productImg w-75">
+                                }
+                                else
+                                {
+                                    <img src="~/img/DefualtProduct.png" class="img-fluid hj-productImg w-75" />
+                                }
                                 <div class="row w-100 mx-auto text-center mt-2 mv-title">
                                     <h1 class="font-kalameBlack text-center mx-auto">
                                         <b class=" font-kalameBlack text-dark">@item.Title</b>
@@ -41,13 +47,13 @@
                                 </div>
                                 <div class="row w-100 mx-auto text-center">
 
-                                        <button type="button" onclick="document.location='/Products/ProductDetail?code=@item.Code'"
-                                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2">
-                                            <b>
-                                                اطلاعات
-                                                بیشتـر
-                                            </b>
-                                        </button>
+                                    <button type="button" onclick="document.location='/Products/ProductDetail?code=@item.Code'"
+                                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2">
+                                        <b>
+                                            اطلاعات
+                                            بیشتـر
+                                        </b>
+                                    </button>
                                 </div>
 
                             </div>

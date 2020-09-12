@@ -10,8 +10,14 @@
                     {
                         <div class="swiper-slide" style="width: 226.25px; margin-left: 30px;">
                             <div class="hj-card my-5 py-5 w-100  ">
-                                <img src="@item.Picture" class="img-fluid hj-productImg w-75">
-                                <div class="row w-100 mx-auto text-center pt-5 mt-2 px-5 ">
+                                @if (!string.IsNullOrEmpty(item.Picture))
+                                {
+                                    <img src="@item.Picture" class="img-fluid hj-productImg w-75">
+                                }
+                                else
+                                {
+                                    <img src="~/img/DefualtProduct.png" class="img-fluid hj-productImg w-75" />
+                                }                                     <div class="row w-100 mx-auto text-center pt-5 mt-2 px-5 ">
                                     <h1 class="font-kalame text-center mx-auto">
                                         <b class=" font-kalameBlack text-dark">@item.Title</b>
                                     </h1>

@@ -485,7 +485,7 @@ namespace KaraYadak.Controllers
                   Rate = x.Product.Rate.GetValueOrDefault(),
                   Code = x.Product.Code
               }).OrderByDescending(x => x.CreatingDate).Distinct().ToList();
-            ViewBag.Page = (products.Count / 12) + 1;
+            ViewBag.Page = Math.Ceiling(Convert.ToDecimal(products.Count / 12));
             ViewBag.CurrectPage = page;
             //OferBox
             ViewBag.BestOfferProduct = groupByCodeProduct.Select(x => new ProductForIndexVM
@@ -540,7 +540,7 @@ namespace KaraYadak.Controllers
                 Price = x.Product.Price,
                 Rate = x.Product.Rate.GetValueOrDefault(),
             }).OrderByDescending(x => x.CreatingDate).ToList();
-            ViewBag.Page = (products.Count / 12) + 1;
+            ViewBag.Page = Math.Ceiling(Convert.ToDecimal(products.Count / 12));
             ViewBag.CurrectPage = page;
             return View(products.Skip((page - 1) * 12).Take(12).ToList());
 
@@ -725,7 +725,7 @@ namespace KaraYadak.Controllers
                 Rate = x.Product.Rate.GetValueOrDefault(),
                 Code = x.Product.Code
             }).OrderByDescending(x => x.CreatingDate).Distinct().ToList();
-            ViewBag.Page = (products.Count / 12) + 1;
+            ViewBag.Page = Math.Ceiling(Convert.ToDecimal(products.Count / 12));
             ViewBag.CurrectPage = page;
             //OferBox
             ViewBag.BestOfferProduct = groupByCodeProduct.Select(x => new ProductForIndexVM
@@ -950,7 +950,7 @@ namespace KaraYadak.Controllers
                 Rate = x.Product.Rate.GetValueOrDefault(),
                 Code=x.Product.Code,
             }).OrderByDescending(x => x.CreatingDate).ToList();
-            ViewBag.Page = (products.Count / 12) + 1;
+            ViewBag.Page = Math.Ceiling(Convert.ToDecimal(products.Count / 12));
             ViewBag.CurrectPage = page;
             //oferbox
             ViewBag.BestOfferProduct = groupByCodeProduct.Select(x => new ProductForIndexVM

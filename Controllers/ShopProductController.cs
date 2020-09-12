@@ -117,7 +117,8 @@ namespace KaraYadak.Controllers
                                              Brand = cp.Name ?? "بدون برند",
                                              Picture = p.ImageUrl,
                                              Price = p.Price,
-                                             Code = p.Code
+                                             Code = p.Code,
+                                             Off=p.Discount
                                          }
                                    ).FirstOrDefaultAsync();
                     products.Add(product);

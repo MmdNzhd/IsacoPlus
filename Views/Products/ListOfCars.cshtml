@@ -188,8 +188,14 @@
 
             <div class=" col-md-3 col-sm-4 col-12">
                 <div class="hj-card my-5 py-5 w-100  ">
-                    <img src="@item.Picture" class="img-fluid hj-productImg w-75">
-                    <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
+                    @if (!string.IsNullOrEmpty(item.Picture))
+                    {
+                        <img src="@item.Picture" class="img-fluid hj-productImg w-75">
+                    }
+                    else
+                    {
+                        <img src="~/img/DefualtProduct.png" class="img-fluid hj-productImg w-75" />
+                    }                    <div class="row w-100 mx-auto text-center pt-5 mt-5 px-5 ">
                         <h1 class="font-kalame text-center mx-auto">
                             <b class=" font-kalame">@item.Title</b>
                         </h1>
