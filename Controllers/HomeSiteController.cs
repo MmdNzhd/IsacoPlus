@@ -105,7 +105,8 @@ namespace KaraYadak.Controllers
                 Code = p.Code,
                 Off = p.Discount,
                 Picture = p.ImageUrl,
-                Price = p.Price
+                Price = p.Price,
+                Special=p.SpecialSale
 
             }).ToList();
 
@@ -121,20 +122,21 @@ namespace KaraYadak.Controllers
                 Title = x.FirstOrDefault().Title,
                 Off = x.FirstOrDefault().Off,
                 Picture = x.FirstOrDefault().Picture,
-                Price = x.FirstOrDefault().Price,
+                Price = x.FirstOrDefault().Price - x.FirstOrDefault().Off * x.FirstOrDefault().Price / 100,
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
             }).Take(1).ToList();
 
-            var specialOfferProducts = groupByCodeProduct/*.Where()*/.Select(x => new ProductForIndexVM
+            var specialProducts = groupByCodeProduct.Select(x => new ProductForIndexVM
             {
                 Code = x.FirstOrDefault().Code,
-                CreatingDate = x.FirstOrDefault().CreatingDate,
                 Title = x.FirstOrDefault().Title,
                 Off = x.FirstOrDefault().Off,
                 Picture = x.FirstOrDefault().Picture,
-                Price = x.FirstOrDefault().Price,
+                Price = x.FirstOrDefault().Price- x.FirstOrDefault().Off* x.FirstOrDefault().Price/100,
+                Special=x.FirstOrDefault().Special,
+                UpdateDate=x.FirstOrDefault().UpdateDate
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
-            }).Where(e => e.Picture != null).OrderByDescending(x => x.Off).Take(10).ToList();
+            }).OrderByDescending(x => x.UpdateDate).Take(10).ToList();
             var maxinDiscountProducts = groupByCodeProduct/*.Where()*/.Select(x => new ProductForIndexVM
             {
                 Code = x.FirstOrDefault().Code,
@@ -142,7 +144,7 @@ namespace KaraYadak.Controllers
                 Title = x.FirstOrDefault().Title,
                 Off = x.FirstOrDefault().Off,
                 Picture = x.FirstOrDefault().Picture,
-                Price = x.FirstOrDefault().Price,
+                Price = x.FirstOrDefault().Price - x.FirstOrDefault().Off * x.FirstOrDefault().Price / 100,
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
             }).Where(e => e.Picture != null).OrderByDescending(x => x.Off).Take(10).ToList();
             var product = groupByCodeProduct/*.Where()*/.Select(x => new ProductForIndexVM
@@ -152,7 +154,7 @@ namespace KaraYadak.Controllers
                 Title = x.FirstOrDefault().Title,
                 Off = x.FirstOrDefault().Off,
                 Picture = x.FirstOrDefault().Picture,
-                Price = x.FirstOrDefault().Price,
+                Price = x.FirstOrDefault().Price - x.FirstOrDefault().Off * x.FirstOrDefault().Price / 100,
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
             }).Where(e => e.Picture != null).OrderByDescending(x => x.CreatingDate).Take(12).ToList();
 
@@ -160,16 +162,15 @@ namespace KaraYadak.Controllers
             var finalmodel = new ListForIndexVM
             {
                 First = bestOfferProduct,
-                Second = specialOfferProducts,
+                Second = specialProducts,
                 Third = maxinDiscountProducts,
                 Fourth = product
             };
 
             products.Add(bestOfferProduct);
-            products.Add(specialOfferProducts);
+            products.Add(specialProducts);
             products.Add(maxinDiscountProducts);
             products.Add(product);
-
 
 
             return View(finalmodel);
