@@ -91,9 +91,18 @@
         $(document).ready(function () {
             $(".card").on("click", ".round", function (e) {
                 console.log($(e.target))
-                var x = $(e.target).siblings('input').prop('checked');
-                console.log(x)
-                alert();
+                var isEnable = $(e.target).siblings('input').prop('checked');
+                var code = $(e.target).siblings('input').attr('data-id');
+                url = "";
+                if (isEnable) url = "products/RemoveProductFromSpecial"; else url = "products/AddProductToSpecial";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {"code":code},
+                    success: function (data) {
+                        toastr.success("با موفقیت انجام شد");
+                        }
+                    });
             })
             var code = "";
             $(".hide-data-sidebar, .cancel-data-btn, .overlay-bg").on("click", function () {
@@ -214,7 +223,7 @@
                 {
                     data: "specialSale",
                     name: "specialSale",
-                   
+
                 },
                 //{
                 //    data: 'id',
@@ -240,13 +249,13 @@
                     render: function (data, type, row) {
                         if (data == "فعال") {
                             return `<label class="switch">
-                                    <input type="checkbox" checked data-id=`+code+`class=specialSale>
+                                    <input type="checkbox" checked data-id="`+code+`" class=specialSale>
                                     <span class="slider round"></span>
                                     </label>`;
                         }
                         else {
                             return `<label class="switch">
-                                    <input type="checkbox"  data-id=`+ code + `class=specialSale>
+                                    <input type="checkbox"  data-id="`+ code + `" class=specialSale>
                                     <span class="slider round"></span>
                                     </label>`;
                         }

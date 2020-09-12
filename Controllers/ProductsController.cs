@@ -291,41 +291,47 @@ namespace KaraYadak.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProductToSpecial(int? id)
+        public async Task<IActionResult> AddProductToSpecial(string code)
         {
-            if (id == null)
+            if (code == null)
             {
                 return new JsonResult(new { status = "0", message = "محصولی یافت نشد" });
             }
 
-            var item = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var item =  _context.Products.Where(m => m.Code == code).ToList();
             if (item == null)
             {
                 return new JsonResult(new { status = "0", message = "محصولی یافت نشد" });
             }
-            item.SpecialSale = true;
-            _context.Products.Update(item);
+            foreach (var i in item)
+            {
+                i.SpecialSale = true;
+                _context.Products.Update(i);
+            }
             await _context.SaveChangesAsync();
 
             return new JsonResult(new { status = "1", message = "به پیشنهاد ویژه اضافه شد" });
         }
         [HttpPost]
-        public async Task<IActionResult> RemoveProductFromSpecial(int? id)
+        public async Task<IActionResult> RemoveProductFromSpecial(string code)
         {
-            if (id == null)
+            if (code == null)
             {
                 return new JsonResult(new { status = "0", message = "محصولی یافت نشد" });
             }
 
-            var item = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var item = _context.Products.Where(m => m.Code == code).ToList();
+
             if (item == null)
             {
                 return new JsonResult(new { status = "0", message = "محصولی یافت نشد" });
             }
-            item.SpecialSale = false;
-            _context.Products.Update(item);
+            foreach (var i in item)
+            {
+                i.SpecialSale = false;
+                _context.Products.Update(i);
+            }
+
             await _context.SaveChangesAsync();
 
             return new JsonResult(new { status = "1", message = "از پیشنهاد ویژه حذف شد" });
