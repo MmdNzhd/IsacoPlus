@@ -907,3 +907,10 @@ input[type=number]::-webkit-outer-spin-button {
     textarea{
         resize:none;
     }
+
+    em.error{
+        display:block;
+        margin-top:10px;
+        text-align:right;
+        color: red;
+    }

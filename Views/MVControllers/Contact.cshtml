@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewData["Title"] = "Contact";
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+
+
+
+
+
+@model KaraYadak.ViewModels.ProductDetailSVM
+
+
+@section vendors{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+            integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+            crossorigin="anonymous"></script>
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha256-OFRAJNoaD8L3Br5lglV7VyLRf0itmoBzWUoM+Sji4/8=" crossorigin="anonymous"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/js/fontawesome.min.js"
+            integrity="sha256-fjQmECvnpgwxO4TyEkO7CJeu97Lu+JKoGDCNEVDs7X0=" crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/js/mdb.min.js"></script>
+}
+@section scripts{
+    <script src="~/assets/js/jquery.cookie.js"></script>
+    <script src="~/js/jquery-validation.js"></script>
+    <script>
+        $("#contactForm").validate({
+            rules: {
+                fullName: {
+                    required: true
+                },
+                email: {
+                    required: true,
+                },
+                description: {
+                    required: true
+                }
+            },
+
+            messages: {
+                fullName: {
+                    required: "لطفا نام و نام خانوادگی خود را وارد کنید",
+                },
+                email: {
+                    required: "لطفا ایمیل خود را وارد کنید",
+                    email: "لطفا ایمیل خود را به درستی وارد کنید."
+                },
+                description: {
+                    required: "این قسمت نمیتواند خالی باشد."
+                }
+            },
+            errorElement: "em",
+        });
+
+        $.validator.setDefaults({
+            submitHandler: function () {
+                let fName = $("#fullName").val(),
+                    email = $("#email").val(),
+                    description = $("#description").val();
+                $.post(
+                    "http://localhost:4000/order",
+                    {
+                        fullName: fName,
+                        phoneNumber: phNumber,
+                        productType: productType,
+                        description: description,
+                    },
+                    function (orderOk) {
+                        if (orderOk = true) window.location.replace("http://127.0.0.1:5500/successful.html");
+                    }).fail(function () {
+                        window.location.replace("http://127.0.0.1:5500/failure.html");
+                    });
+            }
+        });
+    </script>
+}
+@*header*@
+<div class="container-fluid p-0 mx-auto  bg-product">
+
+    <partial name="Header" />
+
+    <div class="my-5 row">
+        <div class="col-lg-6 mx-auto">
+            <h1 class="d-block text-center font-kalameBlack">تماس با ما</h1>
+
+            <form id="contactForm" class="shadow rounded bg-white p-3" method="post" action="">
+                <div class="form-group mb-3">
+                    <label class="d-block text-right" for="fullName">لطفا نام و نام خانوادگی خود را وارد کنید:</label>
+                    <input required type="text" class="form-control" id="fullName" aria-describedby="emailHelp" placeholder="نام و نام خانوادگی">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="d-block text-right" for="email">لطفا ایمیل خود را وادر کنید:</label>
+                    <input required type="email" class="form-control" id="email" placeholder="ایمیل">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="d-block text-right" for="description">لطفا نظر و انتقادات و پیشنهادات خود را اینجا بنویسید:</label>
+                    <textarea required rows="4" class="form-control" id="description" placeholder="ایمیل"></textarea>
+                </div>
+
+                <button id="contactSubmit" type="submit" class="d-block btn btn-success px-3 mb-0">ارسال</button>
+            </form>
+        </div>
+    </div>
+</div>
