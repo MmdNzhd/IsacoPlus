@@ -92,12 +92,15 @@
             }
 
             if (cooki && cooki.includes(code)) {
-                $("#addToShopBascket").css("background", "#ff4000");
-                $("#addToShopBascket").html("حذف از سبد خرید");
+                console.log("yes")
+                $("#addToShopBascket").css("display", "none");
+                $("#removeFromShopBascket").css("display", "inline-block");
             }
             else {
-                $("#addToShopBascket").css("background", "#00FF00");
-                $("#addToShopBascket").html(" افزودن یه سبد خرید");
+                console.log("no")
+
+                $("#removeFromShopBascket").css("display", "none");
+                $("#addToShopBascket").css("display", "inline-block");
             }
             IsFav();
         });
@@ -188,78 +191,8 @@
                 }
             });
         })
-
-        $("#addToShopBascket").on("click", function (e) {
-            var exsist = 0;
-            e.preventDefault();
-            var products = [];
-
-            oldCookieValue = $.cookie('cart');
-            var pId = $(this).attr("data-item-id");
-            if (oldCookieValue && oldCookieValue.includes(pId)) exsist = 1;
-
-            if (exsist == 0) {
-                if (oldCookieValue == undefined) {
-                    products[0] = pId;
-                    $.cookie('cart', products, { expires: 7, path: '/' });
-                } else {
-                    if (oldCookieValue.endsWith(",")) {
-                        var value = oldCookieValue + new String(products);
-                    }
-                    else {
-                        var value = oldCookieValue + "," + new String(products);
-                    }
-
-                    value = removeDuolicate(value);
-                    $.removeCookie('cart', { path: '/' });
-                    $.cookie('cart', value, { expires: 7, path: '/' });
-                }
-                var cooki = $.cookie('cart');
-
-                var productCount = cooki.split(",").length;
-                $('#cartCount').text(productCount);
-                $("#addToShopBascket").css("background", "#ff4000");
-                $("#addToShopBascket").html("حذف از سبد خرید");
-                toastr.success("به سبد خرید شما اضافه شد");
-            }
-
-
-            else {
-                var cookies = $.cookie('cart');
-                $.removeCookie('cart', { path: '/' });
-
-
-                cookies = cookies.replace(pId, "");
-                if (cookies == "," || cookies == "" || cookies == null) {
-
-                    //$.removeCookie('cart', { path: '/' });
-                }
-                if (cookies.length>1) {
-                    if (cookies.includes(",,")) {
-                        cookies = cookies.replace(",,", ",");
-                        $.cookie('cart', cookies, { expires: 7, path: '/' });
-                    }
-                    else {
-                        $.cookie('cart', cookies, { expires: 7, path: '/' });
-                    }
-                }
-
-                var productCount = "";
-
-                if (cookies) {
-                    productCount = cookies.split(",").length;
-                }
-
-                $('#cartCount').html(productCount);
-
-                $("#addToShopBascket").css("background", "#00FF00");
-                $("#addToShopBascket").html(" افزودن یه سبد خرید");
-                toastr.info("از سبد خرید شما حذف شد");
-
-            }
-
-        });
-
+    
+     
 
         function removeDuolicate(a) {
             var cookieVal = a.split(",");
@@ -274,140 +207,6 @@
             }
             return realValue;
         }
-    </script>
-    <script>
-        //IsFav
-        function IsFav() {
-            let code = $("#like").attr("data-id");
-            $.ajax({
-                type: "Post",
-                url: "/Products/IsFavoriteForThisUser ",
-                data: { "code": code },
-                success: function (data) {
-
-                    if (data.status == "0") {
-                        toastr.error(data.message);
-                    }
-                    else {
-                        var isFav = data.result;
-                        if (isFav) {
-                            $("#like").removeClass("fa-heart-o").addClass("fa-heart")
-                        }
-                        else {
-                            $("#like").removeClass("fa-heart").addClass("fa-heart-o")
-
-                        }
-                    }
-
-
-                },
-                error: function (data) {
-                    console.log(data);
-                }
-            })
-        }
-        $(document).ready(function () {
-            IsFav();
-        });
-
-        //addToFavorite
-        function addToFav(e) {
-            let code = $(e).attr("data-id");
-            $.ajax({
-                type: "Post",
-                url: "/Products/AddToFavorite ",
-                data: { "code": code },
-                success: function (data) {
-                    if (data.status == "0") {
-                        toastr.error(data.message);
-                    } if (data.status == "2") {
-                        toastr.warning(data.message);
-                        $("#centralModalLogin").modal("toggle");
-                    }
-                    if (data.status == "1") {
-                        toastr.warning(data.message);
-                        IsFav();
-                    }
-
-
-                },
-                error: function (data) {
-                    toastr.warning("خطایی رخ داده است");
-                    console.log(data);
-                }
-            });
-        }
-
-        function likeOrDislike(item) {
-            if ($(item).children('i').hasClass('fa-heart-o')) {
-                $(item).children('i').animate().addClass('fa-heart');
-                $(item).children('i').attr('transform', 'scale(1.3)');
-                $(item).children('i').animate().removeClass('fa-heart-o');
-            } else {
-                $(item).children('i').animate().addClass('fa-heart-o');
-                $(item).children('i').attr('transform', 'scale(1.3)');
-                $(item).children('i').animate().removeClass('fa-heart');
-            }
-        }
-
-        $(".cta").mouseenter(function () {
-            $(this).addClass("active").delay(300).queue(function (next) {
-                $(this).removeClass("active");
-                next();
-            });
-
-        });
-        // ------swiper-----
-        var galleryThumbs = new Swiper('.gallery-thumbs', {
-            spaceBetween: 10,
-            slidesPerView: 4,
-            freeMode: true,
-            watchSlidesVisibility: true,
-            watchSlidesProgress: true,
-        });
-        var galleryTop = new Swiper('.gallery-top', {
-            spaceBetween: 10,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            thumbs: {
-                swiper: galleryThumbs
-            }
-        });
-
-        $("#commentSubmit").submit(function (e) {
-            e.preventDefault();
-            let code = $("#like").attr("data-id");
-            let text = $("#text").val();
-            if (text.length < 1) {
-                toastr.error("لطفا نظر خود را وارد کنید")
-                return;
-            }
-
-            $.ajax({
-                type: "Post",
-                url: "/Products/AddCommentInProduct ",
-                data: { "code": code, "text": text },
-                success: function (data) {
-                    if (data.status == "0") {
-                        toastr.error(data.message);
-                    } if (data.status == "2") {
-                        toastr.warning(data.message);
-                    }
-                    if (data.status == "1") {
-                        toastr.info(data.message);
-                    }
-
-
-                },
-                error: function (data) {
-                    toastr.warning("خطایی رخ داده است");
-                    console.log(data);
-                }
-            });
-        })
-
         $("#addToShopBascket").on("click", function (e) {
             var products = [];
             e.preventDefault();
@@ -423,30 +222,59 @@
                 var value = oldCookieValue + "," + new String(products);
                 value = removeDuolicate(value);
                 $.removeCookie('cart', { path: '/' });
-                //Create new cookie with same name and concatenate the old and new desired value.
                 $.cookie('cart', value, { expires: 7, path: '/' });
             }
             products = [];
             var cooki = $.cookie('cart');
             var productCount = cooki.split(",").length;
             $('#cartCount').text(productCount);
+            $(e.target).css("display", "none");
+            $("#removeFromShopBascket").css("display", "inline-block");
+            toastr.success("یه سبد خرید شما اضافه شد");
 
         });
+        $("#removeFromShopBascket").on("click", function (e) {
+            var products = [];
+            e.preventDefault();
 
-        function removeDuolicate(a) {
-            var cookieVal = a.split(",");
-            var realValue = [];
-            for (i = 0; i < cookieVal.length; i++) {
-                if (jQuery.inArray(cookieVal[i], realValue) !== -1) {
-                    continue;
-                }
-                else {
-                    realValue.push(cookieVal[i]);
+            var oldCookieValue = $.cookie('cart');
+            var pId = $(this).attr("data-item-id");
+
+            if (oldCookieValue && oldCookieValue.includes(pId)) {
+                oldCookieValue = oldCookieValue.replace(pId, "");
+                if (oldCookieValue.includes(",")) {
+                    if (oldCookieValue.endsWith(",")) {
+                        oldCookieValue = oldCookieValue.substring(oldCookieValue.length - 1);
+                    }
+                    if (oldCookieValue.startsWith(",")) {
+                        oldCookieValue = oldCookieValue.substring(1);
+                    }
+                    if (oldCookieValue.includes(",,")) {
+                        oldCookieValue = oldCookieValue.replace(",,", ",");
+                    }
                 }
             }
-            return realValue;
-        }
+            if (oldCookieValue && oldCookieValue.length > 1) {
+                $.removeCookie('cart', { path: '/' });
+                $.cookie('cart', oldCookieValue, { expires: 7, path: '/' });
+            }
+            else {
+                $.removeCookie('cart', { path: '/' });
+            }
+            var cooki = $.cookie('cart');
+            var productCount = "";
+            if (cooki) {
+                productCount = cooki.split(",").length;
+            }
+            $('#cartCount').text(productCount);
+            if (productCount == 0) $('#cartCount').html("");
 
+            $(e.target).css("display", "none");
+            $("#addToShopBascket").css("display", "inline-block");
+            toastr.success("از سبد خرید شما حذف شد");
+
+
+        });
         $(".mv-collapse-btn").on("click", function () {
             if ($(this).siblings().hasClass("mv-opened")) {
                 $(this).siblings().removeClass("mv-opened");
@@ -487,7 +315,15 @@
 
         <div class="row w-100 mx-auto all-pruDetalis py-5">
             <div class="col-md-6 mx-auto text-md-right text-center">
-                <img src="@Model.Product.Images" class="img-fluid mx-auto width-60 mb-5 pb-5">
+                @if (string.IsNullOrEmpty(Model.Product.Images))
+                {
+                    <img src="~/img/DefualtProduct.png" class="img-fluid mx-auto width-60 mb-5 pb-5">
+
+                }
+                else
+                {
+                    <img src="@Model.Product.Images" class="img-fluid mx-auto width-60 mb-5 pb-5">
+                }
             </div>
             <div class="col-md-6">
                 <div class="row w-100 mx-auto">
@@ -507,7 +343,8 @@
                 </div>
                 <div class="row w-100 mx-auto pb-5 pt-4">
                     <div data-id="@Model.Product.Code" onclick="addToFav(this)"><i id="like" data-id="@Model.Product.Code" class="fa fa-heart-o col-2 text-danger" style="font-size:45px"></i></div>
-                    <button type="button" data-item-id="@Model.Product.Code" id="addToShopBascket" class="ml-3 col-8 btn btn-warning w-100 button-addCart">افزودن به سبد خرید</button>
+                    <button type="button" data-item-id="@Model.Product.Code" id="addToShopBascket" class="ml-3 col-8 btn btn-success w-100 button-addCart">افزودن به سبد خرید</button>
+                    <button type="button" data-item-id="@Model.Product.Code" id="removeFromShopBascket" class="ml-3 col-8 btn btn-danger w-100 button-addCart">حذف از سبد خرید</button>
                 </div>
             </div>
         </div>

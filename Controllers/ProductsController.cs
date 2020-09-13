@@ -450,6 +450,26 @@ namespace KaraYadak.Controllers
         [Route("Search/{key?}/{Page?}")]
         public IActionResult SearchProduct(string key, int page)
         {
+            //filter side
+            var categories = (from c in _context.ProductCategories
+                              join ct in _context.ProductCategoryTypes
+                              on c.ProductCategoryType equals ct.Id
+                              into tble
+                              from t in tble
+                              select new FilteringVM
+                              {
+                                  CatId=t.Id,
+                                  SubCategory = t.Name,
+                                  Categories = c.Name
+                              }).ToList();
+           
+
+            ViewBag.Filter = categories.GroupBy(x => x.CatId).Select(x =>
+            new FilterVM{
+                SubCategory= x.FirstOrDefault().SubCategory ,
+                Categories = x.ToList().Select(y => y.Categories).ToList(),
+                CatId = x.Key
+            }).ToList();
 
 
             var baner = _context.Baners.OrderByDescending(x => x.Date).FirstOrDefault();
@@ -1051,6 +1071,16 @@ namespace KaraYadak.Controllers
         {
             bool IsExsist = _context.Comments.Any(x => x.Username.Equals(userName) && x.ProductCode.Equals(code));
             return IsExsist;
+        }
+
+        //side filter
+
+        public async Task<IActionResult> GetFilterMenu()
+        {
+          
+            return PartialView();
+                           
+            //return new JsonResult(new { status = "1", message = "شما قبلا نظر خود را ثبت کرده اید!" });
         }
     }
 }

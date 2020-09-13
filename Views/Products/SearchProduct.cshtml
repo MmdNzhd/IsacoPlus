@@ -142,23 +142,19 @@
             <div class="col-12 col-lg-3 bg-white mt-5 filter-PageList">
                 <div class="col-12 py-3 text-right"><span class="font-kalame size-20 pr-1 "> دسته بندی</span></div>
                 <div class="col-12 py-3 text-right"><i class="fa fa-chevron-left  category"><span class="font-kalameBlack size-20 pr-1">لوازم یدکی</span></i></div>
-                <div class="child-list d-none">
-                    <div class="col-8 py-1 text-right">لاستیک</div>
-                    <div class="col-8 py-1 text-right">لاستیک</div>
-                    <div class="col-8 py-1 text-right">لاستیک</div>
-                </div>
-                <div class="col-12 py-3 text-right"><i class="fa fa-chevron-left  category"><span class="font-kalameBlack size-20 pr-1">لوازم یدکی</span></i></div>
-                <div class="child-list d-none">
-                    <div class="col-8 py-1 text-right">لاستیک</div>
-                    <div class="col-8 py-1 text-right">لاستیک</div>
-                    <div class="col-8 py-1 text-right">لاستیک</div>
-                </div>
-                <div class="col-12 py-3 text-right"><i class="fa fa-chevron-left  category"><span class="font-kalameBlack size-20 pr-1">لوازم یدکی</span></i></div>
-                <div class="child-list d-none">
-                    <div class="col-8 py-1 text-right">لاستیک</div>
-                    <div class="col-8 py-1 text-right">لاستیک</div>
-                    <div class="col-8 py-1 text-right">لاستیک</div>
-                </div>
+                @foreach (var item in (List<KaraYadak.ViewModels.FilterVM>)ViewBag.Filter)
+                {
+                    <div class="col-12 py-3 text-right"><i class="fa fa-chevron-left  category"><span class="font-kalameBlack size-20 pr-1">@item.SubCategory</span></i></div>
+
+                    <div class="child-list d-none">
+                        @foreach (var i in item.Categories)
+                        {
+                            <div class="col-8 py-1 text-right">@i</div>
+                        }
+                    </div>
+
+                }
+
             </div>
 
             <div class="col-12 col-lg-9">
@@ -168,41 +164,41 @@
                         @foreach (var item in Model)
                         {
                             var offerPrice = item.Price - item.Price * item.Off / 100;
-                    <div class="col-lg-4">
+                            <div class="col-lg-4">
 
 
 
-                        <div class="hj-card my-5 py-5 w-100">
-                            <a class="d-block w-100 text-decoration-none" href="/Products/ProductDetail?code=@item.Code">
-                                @if (!string.IsNullOrEmpty(item.Picture))
-                                {
-                                    <img src="@item.Picture" class="img-fluid hj-productImg w-75">
-                                }
-                                else
-                                {
-                                    <img src="~/img/DefualtProduct.png" class="img-fluid hj-productImg w-75" />
-                                }
+                                <div class="hj-card my-5 py-5 w-100">
+                                    <a class="d-block w-100 text-decoration-none" href="/Products/ProductDetail?code=@item.Code">
+                                        @if (!string.IsNullOrEmpty(item.Picture))
+                                        {
+                                            <img src="@item.Picture" class="img-fluid hj-productImg w-75">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/img/DefualtProduct.png" class="img-fluid hj-productImg w-75" />
+                                        }
 
-                                <div class="pt-5 mt-2 px-3 ">
-                                    <h3 class="d-block font-kalameBlack text-center text-truncate text-dark" style="max-width:100%;">@item.Title</h3>
+                                        <div class="pt-5 mt-2 px-3 ">
+                                            <h3 class="d-block font-kalameBlack text-center text-truncate text-dark" style="max-width:100%;">@item.Title</h3>
+                                        </div>
+                                        <div class="pb-3 px-5 ">
+                                            <span class="font-kalame text-center mx-auto text-danger" style="font-size:1.5em; text-decoration:line-through;">@item.Price تومان</span>
+                                        </div>
+
+                                        <div class="pb-3 px-5 ">
+                                            <span class="font-kalame text-center mx-auto text-success" style="font-size:1.5em;">@offerPrice تومان</span>
+                                        </div>
+                                    </a>
+
+                                    <div class="">
+                                        <button type="button" onclick=""
+                                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                                            افزودن به سبد خرید
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="pb-3 px-5 ">
-                                    <span class="font-kalame text-center mx-auto text-danger" style="font-size:1.5em; text-decoration:line-through;">@item.Price تومان</span>
-                                </div>
-
-                                <div class="pb-3 px-5 ">
-                                    <span class="font-kalame text-center mx-auto text-success" style="font-size:1.5em;">@offerPrice تومان</span>
-                                </div>
-                            </a>
-
-                            <div class="">
-                                <button type="button" onclick=""
-                                        class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
-                                    افزودن به سبد خرید
-                                </button>
                             </div>
-                        </div>
-                    </div>
                         }
                     }
                     else
