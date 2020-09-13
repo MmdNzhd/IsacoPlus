@@ -696,6 +696,27 @@ namespace KaraYadak.Controllers
         [Route("Filtering/{type1?}/{type2?}/{Page?}")]
         public IActionResult IndexFilterProduct(string type1, string type2, int page)
         {
+            //filter side
+            var categories = (from c in _context.ProductCategories
+                              join ct in _context.ProductCategoryTypes
+                              on c.ProductCategoryType equals ct.Id
+                              into tble
+                              from t in tble
+                              select new FilteringVM
+                              {
+                                  CatId = t.Id,
+                                  SubCategory = t.Name,
+                                  Categories = c.Name
+                              }).ToList();
+
+
+            ViewBag.Filter = categories.GroupBy(x => x.CatId).Select(x =>
+            new FilterVM
+            {
+                SubCategory = x.FirstOrDefault().SubCategory,
+                Categories = x.ToList().Select(y => y.Categories).ToList(),
+                CatId = x.Key
+            }).ToList();
             if (type2 == "cars")
             {
                 ViewBag.IsCar = true;
@@ -938,6 +959,27 @@ namespace KaraYadak.Controllers
         [Route("MyFavoriteProducts/{Page?}")]
         public async Task<IActionResult> MyFavoriteProducts(int page)
         {
+            //filter side
+            var categories = (from c in _context.ProductCategories
+                              join ct in _context.ProductCategoryTypes
+                              on c.ProductCategoryType equals ct.Id
+                              into tble
+                              from t in tble
+                              select new FilteringVM
+                              {
+                                  CatId = t.Id,
+                                  SubCategory = t.Name,
+                                  Categories = c.Name
+                              }).ToList();
+
+
+            ViewBag.Filter = categories.GroupBy(x => x.CatId).Select(x =>
+            new FilterVM
+            {
+                SubCategory = x.FirstOrDefault().SubCategory,
+                Categories = x.ToList().Select(y => y.Categories).ToList(),
+                CatId = x.Key
+            }).ToList();
             //baner
             var baner = _context.Baners.OrderByDescending(x => x.Date).FirstOrDefault();
             ViewBag.baner = baner;
