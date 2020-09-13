@@ -914,3 +914,7 @@ em.error {
     text-align: right;
     color: red;
 }
+
+.blog-single .post-content img{
+    max-width:100% !important;
+}

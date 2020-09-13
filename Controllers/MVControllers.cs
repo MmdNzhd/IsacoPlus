@@ -12,5 +12,10 @@ namespace KaraYadak.Controllers
         {
             return View();
         }
+
+        public IActionResult BlogSingle()
+        {
+            return View();
+        }
     }
 }
