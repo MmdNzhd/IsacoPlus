@@ -367,7 +367,7 @@ namespace KaraYadak.Controllers
                     Rate = x.Rate,
                     UserFullName = _context.Users.FirstOrDefault(i => i.UserName.Equals(x.Username)).FirstName + " " + _context.Users.FirstOrDefault(i => i.UserName.Equals(x.Username)).LastName
                 }
-                ).Take(15).ToListAsync();
+                ).Distinct().Take(15).ToListAsync();
 
             var brandWithCars = new Dictionary<int, List<string>>();
 

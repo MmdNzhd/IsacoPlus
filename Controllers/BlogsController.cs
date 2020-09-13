@@ -112,7 +112,21 @@ namespace KaraYadak.Controllers
             }
             return new JsonResult(new { status = "0", message = "خطایی رخ داده است" });
         }
+        public async Task<IActionResult> BlogDetails(int id)
+        {
 
+            var blog = _context.Blogs.Find(id);
+            if (blog != null)
+            {
+                return View(blog);
+            }
+            else
+            {
+                return View(null);
+            }
+
+        }
+        
 
         public async Task<IActionResult> Delete(int? id)
         {

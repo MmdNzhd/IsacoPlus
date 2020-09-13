@@ -3,7 +3,6 @@
 @{
     ViewBag.Title = " ";
     Layout = "_SiteLayout";
-    List<KaraYadak.ViewModels.CommentVm> comments = ViewBag.comments;
 }
 @section vendorstyles{
 
@@ -52,6 +51,7 @@
 @section scripts{
     <script src="~/assets/js/jquery.cookie.js"></script>
     <script>
+        var rate = 0;
         var oldCookieValue = "";
         //IsFav
         function IsFav() {
@@ -160,37 +160,7 @@
             }
         });
 
-        $("#commentSubmit").submit(function (e) {
-            e.preventDefault();
-            let code = $("#like").attr("data-id");
-            let text = $("#text").val();
-            if (text.length < 1) {
-                toastr.error("لطفا نظر خود را وارد کنید")
-                return;
-            }
-
-            $.ajax({
-                type: "Post",
-                url: "/Products/AddCommentInProduct ",
-                data: { "code": code, "text": text },
-                success: function (data) {
-                    if (data.status == "0") {
-                        toastr.error(data.message);
-                    } if (data.status == "2") {
-                        toastr.warning(data.message);
-                    }
-                    if (data.status == "1") {
-                        toastr.info(data.message);
-                    }
-
-
-                },
-                error: function (data) {
-                    toastr.warning("خطایی رخ داده است");
-                    console.log(data);
-                }
-            });
-        })
+       
     
      
 
@@ -288,11 +258,49 @@
             readOnly: true,
         });
 
+        var ratingElement = $(".star");
 
+        for (let el of ratingElement) {
+            console.log($(el).attr('data-id'));
+            $(el).starrr({
+                rating: $(el).attr('data-id'),
+                readOnly: true,
+            });
+        }
         $('#sendComment').starrr();
 
         $('#sendComment').on('starrr:change', function (e, value) {
-            alert('new rating is ' + value);
+            rate = value;
+        })
+        $("#commentSubmit").submit(function (e) {
+            e.preventDefault();
+            let code = $("#like").attr("data-id");
+            let text = $("#text").val();
+            if (text.length < 1) {
+                toastr.error("لطفا نظر خود را وارد کنید")
+                return;
+            }
+            $.ajax({
+                type: "Post",
+                url: "/Products/AddCommentInProduct ",
+                data: { "code": code, "text": text, "rate": rate },
+                success: function (data) {
+                    if (data.status == "0") {
+                        toastr.error(data.message);
+                    } if (data.status == "2") {
+                        toastr.warning(data.message);
+                    }
+                    if (data.status == "1") {
+                        toastr.info(data.message);
+                    }
+
+
+                },
+                error: function (data) {
+                    toastr.warning("خطایی رخ داده است");
+                    console.log(data);
+                }
+            });
         })
     </script>
 
@@ -392,7 +400,7 @@
     </div>
     <!-- --model car-- -->
     <!--Comments-->
-    @if (comments.Count > 0)
+    @if (ViewBag.comments!=null)
     {
 
         <div class="row w-100 mx-auto text-center py-4 mt-5 pt-5">
@@ -414,13 +422,13 @@
             <!-- Swiper -->
             <div class="swiper-container swiper-containerBlog swiper-container-initialized swiper-container-horizontal swiper-container-rtl">
                 <div class="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px);">
-                    @foreach (var item in comments)
+                    @foreach (var item in (List<KaraYadak.ViewModels.CommentVm>)ViewBag.comments)
                     {
                         <div class="swiper-slide" style="width: 476.667px; margin-left: 30px;">
                             <div class="hj-blog w-100">
                                 <div class="bgComment d-flex justify-content-between align-items-center p-2">
                                     <h6>نظر کاربران</h6>
-                                    <div class="mv-starrr" id="user1"></div>
+                                    <div class="mv-starrr star" data-id="@item.Rate"></div>
                                 </div>
                                 <div class="row w-100 mx-auto py-2">
                                     <div class="col-12 detalis-blog px-4 py-3">

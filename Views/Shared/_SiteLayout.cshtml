@@ -1,14 +1,14 @@
 ﻿@inject KaraYadak.Data.ApplicationDbContext _context
 @{
-var Footer = _context.Settings.Where(x => x.Key.Equals("Footer")).Select(x => x.Value).SingleOrDefault();
-var Logo = _context.Settings.Where(x => x.Key.Equals("SiteLogo")).Select(x => x.Value).SingleOrDefault();
-var Instagram = _context.Settings.Where(x => x.Key.Equals("Instagram")).Select(x => x.Value).SingleOrDefault();
-var Telegram = _context.Settings.Where(x => x.Key.Equals("Telegram")).Select(x => x.Value).SingleOrDefault();
-var PhoneNumber = _context.Settings.Where(x => x.Key.Equals("PhoneNumber")).Select(x => x.Value).SingleOrDefault();
-var Whatsapp = _context.Settings.Where(x => x.Key.Equals("Whatsapp")).Select(x => x.Value).SingleOrDefault();
-var Phone = _context.Settings.Where(x => x.Key.Equals("Phone")).Select(x => x.Value).SingleOrDefault();
-var Email = _context.Settings.Where(x => x.Key.Equals("Email")).Select(x => x.Value).SingleOrDefault();
-var ContactUs = _context.Settings.Where(x => x.Key.Equals("MiniFooter")).Select(x => x.Value).SingleOrDefault();
+    var Footer = _context.Settings.Where(x => x.Key.Equals("Footer")).Select(x => x.Value).SingleOrDefault();
+    var Logo = _context.Settings.Where(x => x.Key.Equals("SiteLogo")).Select(x => x.Value).SingleOrDefault();
+    var Instagram = _context.Settings.Where(x => x.Key.Equals("Instagram")).Select(x => x.Value).SingleOrDefault();
+    var Telegram = _context.Settings.Where(x => x.Key.Equals("Telegram")).Select(x => x.Value).SingleOrDefault();
+    var PhoneNumber = _context.Settings.Where(x => x.Key.Equals("PhoneNumber")).Select(x => x.Value).SingleOrDefault();
+    var Whatsapp = _context.Settings.Where(x => x.Key.Equals("Whatsapp")).Select(x => x.Value).SingleOrDefault();
+    var Phone = _context.Settings.Where(x => x.Key.Equals("Phone")).Select(x => x.Value).SingleOrDefault();
+    var Email = _context.Settings.Where(x => x.Key.Equals("Email")).Select(x => x.Value).SingleOrDefault();
+    var ContactUs = _context.Settings.Where(x => x.Key.Equals("MiniFooter")).Select(x => x.Value).SingleOrDefault();
     Layout = null;
 }
 
@@ -94,7 +94,7 @@ var ContactUs = _context.Settings.Where(x => x.Key.Equals("MiniFooter")).Select(
                     </a>
                 </div>
                 <div class="row w-100 mx-auto py-2">
-                    <a href="/MVControllers/Contact" class="text-white">
+                    <a href="/ContactUs" class="text-white">
                         <li class="font-kalame size20"> تماس با ما</li>
                     </a>
                 </div>
@@ -193,6 +193,45 @@ var ContactUs = _context.Settings.Where(x => x.Key.Equals("MiniFooter")).Select(
     <!-- END: Page JS-->
     <script src="~/assets/js/jquery.cookie.js"></script>
     <script>
+        function addToShopBasket(code) {
+            var products = [];
+            var oldCookieValue = $.cookie('cart');
+            var pId = code;
+            products[0] = pId;
+            if (oldCookieValue == undefined) {
+                $.cookie('cart', products, { expires: 7, path: '/' });
+
+            } else {
+
+                var value = oldCookieValue + "," + new String(products);
+                value = removeDuolicate(value);
+                $.removeCookie('cart', { path: '/' });
+                $.cookie('cart', value, { expires: 7, path: '/' });
+            }
+            products = [];
+            var cooki = $.cookie('cart');
+            var productCount = cooki.split(",").length;
+            $('#cartCount').text(productCount);
+            Toast.fire({
+                icon: 'success',
+                title: 'به سبد خرید شما اضافه شد'
+
+            })
+        }
+        function removeDuolicate(a) {
+            var cookieVal = a.split(",");
+            var realValue = [];
+            for (i = 0; i < cookieVal.length; i++) {
+                if (jQuery.inArray(cookieVal[i], realValue) !== -1) {
+                    continue;
+                }
+                else {
+                    realValue.push(cookieVal[i]);
+                }
+            }
+            return realValue;
+        }
+
         document.getElementById('searchItem').onkeypress = function (e) {
             if (!e) e = window.event;
             var keyCode = e.keyCode || e.which;
@@ -208,8 +247,8 @@ var ContactUs = _context.Settings.Where(x => x.Key.Equals("MiniFooter")).Select(
             $.removeCookie('cart', { path: '/' });
         }
         if (oldCookieValue != undefined) {
-            if (oldCookieValue&&oldCookieValue.includes(",,")) {
-                oldCookieValue= oldCookieValue.replace(",,", ",");
+            if (oldCookieValue && oldCookieValue.includes(",,")) {
+                oldCookieValue = oldCookieValue.replace(",,", ",");
                 $.cookie('cart', oldCookieValue, { expires: 7, path: '/' });
             }
             var productCount = oldCookieValue.split(",").length;

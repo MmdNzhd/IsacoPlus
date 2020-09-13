@@ -198,13 +198,8 @@ namespace KaraYadak.Controllers
         }
        
         [Route("ContactUs")]
-        [Authorize]
         public IActionResult ContactUs()
         {
-            ViewBag.Address = _context.Settings.Where(x => x.Key.Equals("Address")).Select(x => x.Value).FirstOrDefault();
-            var Phone = _context.Settings.Where(x => x.Key.Equals("Phone")).Select(x => x.Value).FirstOrDefault();
-            var PhoneNumber = _context.Settings.Where(x => x.Key.Equals("PhoneNumber")).Select(x => x.Value).FirstOrDefault();
-            ViewBag.PhoneNumber = Phone + " / " + PhoneNumber;
             return View();
         }
 
@@ -230,11 +225,6 @@ namespace KaraYadak.Controllers
             }
             return Json(new { status = "0", message = "خطایی رخ داده است لطفا مجددا امتحان کنید." });
         }
-        //public async Task<IActionResult> ListOfBlogs()
-        //{
-            
-        //  ViewBag.blogs = await _context.Blogs.OrderByDescending(x=>x.CreateAt).Take(7).ToListAsync();
-        //    return PartialView(listOfBlogs);
-        //}
+      
     }
 }
