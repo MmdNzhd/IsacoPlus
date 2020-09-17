@@ -11,7 +11,7 @@ using KaraYadak.Models;
 
 namespace KaraYadak.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin")]
     public class AccessController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -17,7 +17,7 @@ using DNTPersianUtils.Core;
 
 namespace KaraYadak.Controllers
 {
-    //   [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -29,7 +29,7 @@ namespace KaraYadak.Controllers
             _context = context;
             _env = env;
         }
-
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Comments.Where(x => x.Status.Equals(CommentStatus.در_حال_بررسی)).OrderByDescending(i => i.Date).ToListAsync());

@@ -9,9 +9,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using DNTPersianUtils.Core;
 using KaraYadak.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace KaraYadak.Controllers
 {
+    //[Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "User")]
+    [Authorize(Roles = "Admin,User")]
+
     public class AccountController : Controller
     {
 
@@ -93,6 +99,7 @@ namespace KaraYadak.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+        [AllowAnonymous]
         public IActionResult Login(string returnUrl)
         {
             returnUrl = string.IsNullOrEmpty(returnUrl) ? "/" : returnUrl;
@@ -114,6 +121,7 @@ namespace KaraYadak.Controllers
             var result = await _userManager.ResetPasswordAsync(user, code, password);
             return Json(password);
         }
+        [AllowAnonymous]
 
         public IActionResult Register(string returnUrl = "")
         {
@@ -123,6 +131,8 @@ namespace KaraYadak.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
+
         public async Task<IActionResult> SignIn(LoginViewModel input)
         {
             input.ReturnUrl = input.ReturnUrl ?? Url.Action("index", "home");
@@ -146,18 +156,23 @@ namespace KaraYadak.Controllers
             if (result.Succeeded)
             {
                 var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
-                //if (isAdmin)
-                //{
-                //    if (user.UserType == UserType.ShopAdmin)
-                //    {
-                //        return new JsonResult(new { Status = 1, ReturnUrl = "/tables" });
-                //    }
-                //    return new JsonResult(new { Status = 1, ReturnUrl = "/tables" });
-                //}
-                //return new JsonResult(new { Status = 1, input.ReturnUrl });
+                var isUser = await _userManager.IsInRoleAsync(user, "User");
+
                 await _signInManager.SignInAsync(user, true);
 
+                if (string.IsNullOrEmpty(input.ReturnUrl)||input.ReturnUrl=="/")
+                {
+                    if (isAdmin)
+                    {
+                        return new JsonResult(new { Status = 3, input.ReturnUrl, message = "/dashboard" });
 
+                    }
+                    else
+                    {
+                        return new JsonResult(new { Status = 3, input.ReturnUrl, message = "/" });
+
+                    }
+                }
                 return new JsonResult(new { Status = 1, input.ReturnUrl ,message="خوش آمدید!"});
             }
             else
@@ -175,6 +190,8 @@ namespace KaraYadak.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
+
         public async Task<IActionResult> Register(RegisterViewModel input)
         {
             input.ReturnUrl = input.ReturnUrl ?? Url.Action("index", "home");
@@ -191,10 +208,6 @@ namespace KaraYadak.Controllers
                 }
                 return new JsonResult(new { Status = 0, Error = errors });
             }
-            //if (input.PhoneNumber.StartsWith("09") == false)
-            //{
-            //    return new JsonResult(new { Status = 2, Error = "تلفن همراه معتبر نمی باشد" });
-            //}
             var fullName = input.Nickname;
             var names = fullName.Split(" ");
             var fName = "";
@@ -241,20 +254,14 @@ namespace KaraYadak.Controllers
             }
 
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Logout(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
-            returnUrl = returnUrl ?? Url.Content("/home");
+            returnUrl = returnUrl ?? Url.Content("/");
             return LocalRedirect(returnUrl);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return Json((Status: 1, Message: "Logged Out"));
-        }
     }
 }

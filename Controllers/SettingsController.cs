@@ -16,7 +16,7 @@ using KaraYadak.ViewModels;
 
 namespace KaraYadak.Controllers
 {
-    //   [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     public class SettingsController : Controller
     {
         private readonly ApplicationDbContext _context;

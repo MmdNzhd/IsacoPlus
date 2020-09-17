@@ -17,7 +17,7 @@ using DNTPersianUtils.Core;
 
 namespace KaraYadak.Controllers
 {
-    //   [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     public class BlogsController : Controller
     {
         private readonly ApplicationDbContext _context;

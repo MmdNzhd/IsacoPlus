@@ -513,7 +513,7 @@ button {
 }
 
 a {
-    text-decoration: none !important;
+    text-decoration: none ;
 }
 
 .size20 {
@@ -917,4 +917,7 @@ em.error {
 
 .blog-single .post-content img{
     max-width:100% !important;
+}
+.filterlink {
+     text-decoration: none;
 }

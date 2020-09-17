@@ -29,6 +29,17 @@
         .bg-product {
             background-size: 48% 60% !important;
         }
+
+        .category-title {
+            border-radius: 10px;
+        }
+
+        .filter-selected {
+            color: red !important;
+            text-decoration: underline !important;
+        }
+
+       
     </style>
 
 
@@ -63,6 +74,52 @@
 }
 @section scripts{
     <script>
+       
+        var list = $(".filterlink");
+        var filterName = $("#filter-name").text();
+        var n = filterName.indexOf(":");
+
+        var m = filterName.substring(n + 1, filterName.length);
+        if (m.includes('---->')) {
+            m = m.replace('---->', ',')
+        }
+        if (m.includes(',')) {
+            var filterlist = m.split(",");
+
+            for (var el of filterlist) {
+                if (el.includes(" ")) {
+                    el = el.replace(" ", "")
+                }
+                if (el.startsWith(" ") || el.endsWith(" ")) {
+                    el = el.replace(" ", "")
+                }
+                for (var elem of list) {
+                    if ($(elem).text() == el) {
+                        $(elem).addClass("filter-selected");
+                        var par = $(elem).parent();
+                        var parent = $(par).parent();
+                        $(parent).addClass("d-block").removeClass("d-none");
+                    }
+                }
+            }
+        }
+        else {
+            filterName = m;
+            if (filterName.includes(" ")) {
+                filterName=   filterName.replace(" ", "")
+
+            }
+            for (var elem of list) {
+                if ($(elem).text() == filterName) {
+                    $(elem).addClass("filter-selected");
+
+                    var par = $(elem).parent();
+                    var parent = $(par).parent();
+                    $(parent).addClass("d-block").removeClass("d-none");
+                }
+            }
+        }
+
         $(".cta").mouseenter(function () {
             $(this).addClass("active").delay(300).queue(function (next) {
                 $(this).removeClass("active");
@@ -74,9 +131,11 @@
 
         countDown('@ViewBag.timer');
 
-        $(".category").on("click", function () {
-            if ($(".child-list").hasClass("d-none")) $(".child-list").addClass("d-block").removeClass("d-none");
-            else if ($(".child-list").hasClass("d-block")) $(".child-list").addClass("d-none").removeClass("d-block");
+        $(".col-12.py-3.text-right").on("click", function (e) {
+            var element = e.currentTarget;
+            var nextElem = $(element).next('.child-list')[0];
+            if ($(nextElem).hasClass("d-none")) $(nextElem).addClass("d-block").removeClass("d-none");
+            else if ($(nextElem).hasClass("d-block")) $(nextElem).addClass("d-none").removeClass("d-block");
         })
     </script>
 
@@ -112,7 +171,7 @@
                     <div class="child-list d-none">
                         @foreach (var i in item.Categories)
                         {
-                            <div class="col-8 py-1 text-right"><a href="/filtering/@i" class="text text-dark">@i</a></div>
+                            <div class="col-8 py-1 text-right"><a href="/filtering/@i" class=" filterlink text text-dark">@i</a></div>
                         }
                     </div>
 
@@ -120,6 +179,14 @@
             </div>
 
             <div class="col-12 col-lg-9">
+
+                <div class="category-title row  bg-white p-3 m-2" category-title">
+                    @if (ViewBag.FilterName != null)
+                    {
+                        <p id="filter-name">@ViewBag.FilterName</p>
+                    }
+
+                </div>
                 <div class="row">
                     @if (Model.Count > 0)
                     {
@@ -127,28 +194,31 @@
                         {
                             var offerPrice = item.Price - item.Price * item.Off / 100;
 
-                            <div class="hj-card my-5 py-5 w-100">
-                                <a class="d-block w-100 text-decoration-none" href="/Products/ProductDetail?code=@item.Code">
-                                    @if (!string.IsNullOrEmpty(item.Picture))
-                                    {
-                                        <img src="@item.Picture" class="img-fluid hj-productImg w-75">
-                                    }
-                                    else
-                                    {
-                                        <img src="~/img/DefualtProduct.png" class="img-fluid hj-productImg w-75" />
-                                    }                                 <div class="pt-5 mt-2 px-3 ">
-                                        <h3 class="d-block font-kalameBlack text-center text-truncate text-dark" style="max-width:100%;">@item.Title</h3>
-                                    </div>
-                                    <div class="pb-3 px-5 ">
-                                        <span class="font-kalame text-center mx-auto text-success">450.500</span>
-                                    </div>
-                                </a>
+                            <div class="col-lg-3 mb-3">
+                                <div class="hj-card my-5 py-5 w-100">
+                                    <a class="d-block w-100 text-decoration-none" href="/Products/ProductDetail?code=@item.Code">
+                                        @if (!string.IsNullOrEmpty(item.Picture))
+                                        {
+                                            <img src="@item.Picture" class="img-fluid hj-productImg w-75">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/img/DefualtProduct.png" class="img-fluid hj-productImg w-75" />
+                                        }                                 <div class="pt-5 mt-2 px-3 ">
+                                            <h3 class="d-block font-kalameBlack text-center text-truncate text-dark" style="max-width:100%;">@item.Title</h3>
+                                        </div>
+                                        <div class="pb-3 px-5 ">
+                                            <span class="font-kalame text-center mx-auto text-success">450.500</span>
+                                        </div>
+                                    </a>
 
-                                <div class="">
-                                    <button type="button" onclick="addToShopBasket('@item.Code')"
-                                            class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
-                                        افزودن به سبد خرید
-                                    </button>
+                                    <div class="">
+                                        <button type="button" onclick="addToShopBasket('@item.Code')"
+                                                class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                                            افزودن به سبد خرید
+                                        </button>
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -156,34 +226,32 @@
 
 
 
-
-
                             @*<div class="col-lg-4 mb-3">
-                    <div class="hj-card my-5 py-5 w-100">
-                        <a class="d-block w-100 text-decoration-none" href="/Products/ProductDetail?code=@item.Code">
-                            <img src="@item.Picture" class="img-fluid hj-productImg w-75">
-                            <div class="pt-5 mt-2 px-3 ">
-                                <h3 class="d-block font-kalameBlack text-center text-truncate text-dark" style="max-width:100%;">@item.Title</h3>
-                            </div>
+                                    <div class="hj-card my-5 py-5 w-100">
+                                        <a class="d-block w-100 text-decoration-none" href="/Products/ProductDetail?code=@item.Code">
+                                            <img src="@item.Picture" class="img-fluid hj-productImg w-75">
+                                            <div class="pt-5 mt-2 px-3 ">
+                                                <h3 class="d-block font-kalameBlack text-center text-truncate text-dark" style="max-width:100%;">@item.Title</h3>
+                                            </div>
 
-                            <div class="pb-3 px-5 ">
-                                <span class="font-kalame text-center mx-auto text-danger text" style="font-size:1.5em; text-decoration:line-through;">@item.Price تومان</span>
-                            </div>
+                                            <div class="pb-3 px-5 ">
+                                                <span class="font-kalame text-center mx-auto text-danger text" style="font-size:1.5em; text-decoration:line-through;">@item.Price تومان</span>
+                                            </div>
 
-                            <div class="pb-3 px-5 ">
-                                <span class="font-kalame text-center mx-auto text-success" style="font-size:1.5em;">@offerPrice تومان</span>
-                            </div>
-                        </a>
+                                            <div class="pb-3 px-5 ">
+                                                <span class="font-kalame text-center mx-auto text-success" style="font-size:1.5em;">@offerPrice تومان</span>
+                                            </div>
+                                        </a>
 
-                        <div class="">
-                            <button type="button" onclick=""
-                                    class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
-                                افزودن به سبد خرید
-                            </button>
-                        </div>
+                                        <div class="">
+                                            <button type="button" onclick=""
+                                                    class="btn btn-primary w-75 mx-auto text-center hj-more-button py-2 waves-effect waves-light">
+                                                افزودن به سبد خرید
+                                            </button>
+                                        </div>
 
-                    </div>
-                </div>*@
+                                    </div>
+                                </div>*@
                         }
                     }
                     else

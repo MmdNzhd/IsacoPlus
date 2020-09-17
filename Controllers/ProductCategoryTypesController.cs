@@ -11,7 +11,7 @@ using DNTPersianUtils.Core;
 
 namespace KaraYadak.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ProductCategoryTypesController : Controller
     {
         private readonly double itemsPerPage = 10;

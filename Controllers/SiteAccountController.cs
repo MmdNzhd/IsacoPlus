@@ -16,6 +16,7 @@ using System.IO;
 
 namespace KaraYadak.Controllers
 {
+    [Authorize(Roles = "Admin,User")]
 
     public class SiteAccountController : Controller
     {
@@ -46,6 +47,7 @@ namespace KaraYadak.Controllers
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
+        [AllowAnonymous]
         public IActionResult Register(string call, int id)
         {
             if (call != null)
@@ -55,7 +57,6 @@ namespace KaraYadak.Controllers
                 ViewBag.Call = "/";
             return View();
         }
-        [Authorize]
         public IActionResult EditProfile(string call)
         {
             ViewBag.Transaction = _context.ShoppingCarts.Where(x => x.UserName.Equals(User.Identity.Name)).ToList();
@@ -80,7 +81,7 @@ namespace KaraYadak.Controllers
             return View(vm);
         }
         [HttpPost]
-        public async Task<IActionResult> SaveProfile(ProfileVM input,IFormFile file)
+        public async Task<IActionResult> SaveProfile(ProfileVM input, IFormFile file)
         {
             if (!ModelState.IsValid)
             {
@@ -103,7 +104,7 @@ namespace KaraYadak.Controllers
             user.Phone = input.Phone;
             user.Email = input.Email;
             user.Gender = input.Gender;
-            user.AvatarUrl = (file!=null)? upload(file):""; 
+            user.AvatarUrl = (file != null) ? upload(file) : "";
             user.CartNumber = input.CartNumber;
             await _context.SaveChangesAsync();
             if (input.CallbackUrl == null)
@@ -116,29 +117,14 @@ namespace KaraYadak.Controllers
 
             }
         }
-        [Authorize]
-        public IActionResult Purchase()
-        {
-            ViewBag.P = Request.Headers["Referer"].ToString();
-            var item = _context.Users.SingleOrDefault(i => i.UserName == User.Identity.Name);
-            var vm = new RequestFormVM
-            {
-                Address = item.Address,
-                FirstName = item.FirstName,
-                LastName = item.LastName,
-                Phone = item.Phone,
-                PhoneNumber = item.PhoneNumber,
-                Email = item.Email,
-            };
-            return View(vm);
-        }
         [HttpGet]
         [Route("LogOut")]
+        [AllowAnonymous]
         public async Task<IActionResult> Logout(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
             returnUrl = returnUrl ?? Url.Content("/");
-            return LocalRedirect(returnUrl);
+            return RedirectToAction("Index", "HomeSite");
         }
 
     }

@@ -60,7 +60,7 @@ namespace KaraYadak
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.AccessDeniedPath = "/SiteAccount/AccessDenied";
+                options.AccessDeniedPath = "/";
                 options.Cookie.Name = "ProjectCookie";
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromDays(7);

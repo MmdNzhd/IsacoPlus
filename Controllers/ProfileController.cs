@@ -15,7 +15,7 @@ using Nancy.Json;
 
 namespace KaraYadak.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin")]
     public class ProfileController : Controller
     {
         private readonly ApplicationDbContext _context;

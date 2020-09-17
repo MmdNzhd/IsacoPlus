@@ -19,7 +19,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>کارایـــــــــــــــــدک</title>
+    <title>ایساکــــــو پلـــــــــــــاس</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.min.css"
@@ -38,6 +38,25 @@
     <!-- BEGIN: Vendor CSS-->
     <link href="~/css/style.css" rel="stylesheet" />
     <link href="~/css/login.css" rel="stylesheet" />
+    <style>
+        .loader {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background:  50% 50% no-repeat rgb(94, 93, 95);
+            opacity:0.8
+
+        }
+        #imgLoad {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            height:100px;
+        }
+    </style>
     @*<link href="~/css/mdb.min.css" rel="stylesheet" />*@
 
     @RenderSection("vendorstyles", false)
@@ -57,6 +76,10 @@
     <!-- --navbar-- -->
     <!-- ---end navbar-- -->
     <!-- ----intro--- -->
+    <div class="loader">
+        <img id="imgLoad" src="~/img/Loading.gif" />
+    </div>
+
     @RenderBody()
     <!-- ---- -->
     <!-- ----footer---- -->
@@ -193,6 +216,15 @@
     <!-- END: Page JS-->
     <script src="~/assets/js/jquery.cookie.js"></script>
     <script>
+        //$(window).load(function () {
+        //    $(".loader").fadeOut("slow");
+        //});
+        function afterPageLoad() {
+            $(".loader").css("display", "none");
+        }
+        window.onload = afterPageLoad();
+
+        var returnUrl = "/";
         function addToShopBasket(code) {
             var products = [];
             var oldCookieValue = $.cookie('cart');
@@ -351,7 +383,7 @@
         });
         $("#login-form").submit(function (e) {
             e.preventDefault();
-            let values = { 'Username': $("#username").val(), 'Password': $("#password").val() };
+            let values = { 'Username': $("#username").val(), 'Password': $("#password").val(), 'ReturnUrl': returnUrl };
             var url = "/Account/SignIn"
             $.ajax({
                 type: "POST",
@@ -378,6 +410,9 @@
                             icon: 'error',
                             title: data.error
                         })
+                    }
+                    if (data.status == 3) {
+                        location.href = data.message;
                     }
                     if (data.status == 0) {
                         data.error.forEach((err) => {

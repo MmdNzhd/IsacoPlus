@@ -16,6 +16,8 @@ using System.Net.WebSockets;
 
 namespace KaraYadak.Controllers
 {
+    [Authorize(Roles = "Admin")]
+
     public class ProductsController : Controller
     {
         private readonly double itemsPerPage = 10;
@@ -63,29 +65,7 @@ namespace KaraYadak.Controllers
         {
             return View();
         }
-        public IActionResult Qr()
-        {
-            ViewBag.Title = "لیست Qrکدها";
-            var qrCode = _context.QRCodes.Where(x => x.Use.Equals(QrUse.NotUsed)).ToList().Take(20);
-
-            return View(qrCode);
-        }
-        public JsonResult RemoveQr(int id)
-        {
-            try
-            {
-                var qr = _context.QRCodes.Find(id);
-                qr.Use = QrUse.Used;
-                _context.Entry(qr).State = EntityState.Modified;
-                _context.SaveChanges();
-                return Json(true);
-            }
-            catch (Exception)
-            {
-                return Json(false);
-            }
-        }
-
+   
         [HttpPost]
         public async Task<IActionResult> Index(int? page, int? draw, int start, int length)
         {
@@ -93,9 +73,6 @@ namespace KaraYadak.Controllers
             {
                 page = 1;
             }
-
-            //var items = await _context.Products
-            //    .ToListAsync();
             var items = (from a in _context.Products
                      .Join(_context.ProductCategories,
                      ac => ac.CategoryIdLvl1,
@@ -123,9 +100,6 @@ namespace KaraYadak.Controllers
 
             return Json(new
             {
-                //draw,
-                //recordsTotal,
-                //recordsFiltered,
                 data = items.Select(s => new
                 {
                     s.Product.Id,
@@ -142,7 +116,7 @@ namespace KaraYadak.Controllers
                     //Unit = s.Product.Unit.Name,
                     s.Categories,
                     UpdatedAt = s.Product.UpdatedAt.ToFriendlyPersianDateTextify(),
-                    SpecialSale=   (s.Product.SpecialSale)?"فعال":"غیر فعال"
+                    SpecialSale = (s.Product.SpecialSale) ? "فعال" : "غیر فعال"
                 }).OrderByDescending(x => x.Code)
                 //.Skip((int)itemsPerPage * (page.Value - 1))
                 //.Take((int)itemsPerPage)
@@ -298,7 +272,7 @@ namespace KaraYadak.Controllers
                 return new JsonResult(new { status = "0", message = "محصولی یافت نشد" });
             }
 
-            var item =  _context.Products.Where(m => m.Code == code).ToList();
+            var item = _context.Products.Where(m => m.Code == code).ToList();
             if (item == null)
             {
                 return new JsonResult(new { status = "0", message = "محصولی یافت نشد" });
@@ -446,7 +420,7 @@ namespace KaraYadak.Controllers
 
             return View(finalModel);
         }
-
+        [AllowAnonymous]
         [Route("Search/{key?}/{Page?}")]
         public IActionResult SearchProduct(string key, int page)
         {
@@ -458,15 +432,16 @@ namespace KaraYadak.Controllers
                               from t in tble
                               select new FilteringVM
                               {
-                                  CatId=t.Id,
+                                  CatId = t.Id,
                                   SubCategory = t.Name,
                                   Categories = c.Name
                               }).ToList();
-           
+
 
             ViewBag.Filter = categories.GroupBy(x => x.CatId).Select(x =>
-            new FilterVM{
-                SubCategory= x.FirstOrDefault().SubCategory ,
+            new FilterVM
+            {
+                SubCategory = x.FirstOrDefault().SubCategory,
                 Categories = x.ToList().Select(y => y.Categories).ToList(),
                 CatId = x.Key
             }).ToList();
@@ -541,7 +516,7 @@ namespace KaraYadak.Controllers
                                      .ToList();
 
 
-            var products = groupByCodeProduct.Where(x => x.Categories.Contains(key) || x.Product.Name.Contains(key) || x.Tags.Contains(key) || x.SubCategories.Contains(key)
+            var products = groupByCodeProduct.Where(x => x.Categories.Contains(key) || x.Product.Name.Contains(key) || x.Tags.Contains(key) || x.SubCategories.Contains(key)||x.Product.Code.Contains(key)
               || x.CategoriyTypes.Equals(key)).Select(x => new ProductForIndexVM
               {
                   Id = x.Product.Id,
@@ -568,6 +543,8 @@ namespace KaraYadak.Controllers
             return View(products.Skip((page - 1) * 12).Take(12).ToList());
 
         }
+        [AllowAnonymous]
+
         [Route("ProductList/{Page?}")]
         public IActionResult AllProducts(int page)
         {
@@ -692,10 +669,34 @@ namespace KaraYadak.Controllers
 
             return new JsonResult(new { status = 1, message = "با موفقیت انجام شد" });
         }
+        [AllowAnonymous]
 
         [Route("Filtering/{type1?}/{type2?}/{Page?}")]
         public IActionResult IndexFilterProduct(string type1, string type2, int page)
         {
+            /* ViewBag.FilterName*/
+            var filterName = "";
+            if (!string.IsNullOrWhiteSpace(type1))
+            {
+                filterName = type1;
+            }
+            else if (!string.IsNullOrWhiteSpace(type2))
+            {
+                filterName = type2;
+            }
+            if (!string.IsNullOrEmpty(filterName))
+            {
+                var cat =  _context.ProductCategories.FirstOrDefault(x => x.Name == filterName);
+                var categorytypeName = _context.ProductCategoryTypes.FirstOrDefault(x => x.Id == cat.ProductCategoryType).Name;
+                ViewBag.FilterName = categorytypeName + " : " + filterName;
+                var subCategory = _context.ProductCategories.FirstOrDefault(x => x.Id == cat.Parent);
+
+                if (subCategory != null)
+                {
+                    ViewBag.FilterName = categorytypeName + " : " +subCategory.Name +" ----> "+ filterName;
+                }
+            }
+
             //filter side
             var categories = (from c in _context.ProductCategories
                               join ct in _context.ProductCategoryTypes
@@ -829,6 +830,7 @@ namespace KaraYadak.Controllers
             return View(products.Skip((page - 1) * 12).Take(12).ToList());
 
         }
+        [AllowAnonymous]
 
         [Route("ListOfCars/{Page?}")]
         public async Task<IActionResult> ListOfCars(int page)
@@ -922,6 +924,8 @@ namespace KaraYadak.Controllers
 
         }
         [HttpPost]
+        [AllowAnonymous]
+
         public async Task<IActionResult> AddToFavorite(string code)
         {
             if (string.IsNullOrEmpty(code)) return new JsonResult(new { status = "0", message = "محصولی یافت نشد" });
@@ -948,6 +952,7 @@ namespace KaraYadak.Controllers
             }
         }
         [HttpPost]
+        [AllowAnonymous]
 
         public async Task<IActionResult> IsFavoriteForThisUser(string code)
         {
@@ -956,6 +961,8 @@ namespace KaraYadak.Controllers
             if (username == null) return null;
             return new JsonResult(new { status = "1", result = IsExsistFavorite(code, username) });
         }
+        [AllowAnonymous]
+
         [Route("MyFavoriteProducts/{Page?}")]
         public async Task<IActionResult> MyFavoriteProducts(int page)
         {
@@ -1083,6 +1090,8 @@ namespace KaraYadak.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
+
         public async Task<IActionResult> AddCommentInProduct(string code, string text, string rate)
         {
             if (string.IsNullOrEmpty(code)) return new JsonResult(new { status = "0", message = "محصولی یافت نشد" });
@@ -1116,12 +1125,13 @@ namespace KaraYadak.Controllers
         }
 
         //side filter
+        [AllowAnonymous]
 
         public async Task<IActionResult> GetFilterMenu()
         {
-          
+
             return PartialView();
-                           
+
             //return new JsonResult(new { status = "1", message = "شما قبلا نظر خود را ثبت کرده اید!" });
         }
     }

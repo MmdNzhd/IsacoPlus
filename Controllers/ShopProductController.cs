@@ -9,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using KaraYadak.Data;
 using KaraYadak.Models;
 using KaraYadak.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KaraYadak.Controllers
 {
+    [Authorize(Roles = "Admin")]
 
     public class ShopProductController : Controller
     {

@@ -1,6 +1,6 @@
 ﻿@model KaraYadak.ViewModels.ListForIndexVM
 @{
-    ViewBag.Title = "کارایـــــــــــــــــدک";
+    ViewBag.Title = "ایساکــــــو پلـــــــــــــاس";
     Layout = "~/Views/Shared/_SiteLayout.cshtml";
     Baner baner = ViewBag.baner;
 
@@ -24,8 +24,24 @@
     <script src="~/js/app.js"></script>
     <script src="~/js/CountDown.js"></script>
     <script>
-
         $(document).ready(function () {
+            var url = window.location.href;
+
+            if (url.includes("=") ) {
+
+                var n = url.indexOf("=");
+                var m = url.substring(n + 1, url.length - 1);
+                if (m.includes('%2F')) {
+                    m = m.replace('%2F', '/')
+
+                }
+                if (m.includes('%2F')) {
+                    m = m.replace('%2F', '/')
+
+                }
+                returnUrl = m;
+                $("#centralModalLogin").modal("toggle");
+            }
             //$("#blogs").load("/HomeSite/ListOfBlogs")
         });
         function filter() {
@@ -85,6 +101,15 @@
                             <span class="text-center mr-1 bg-success d-inline-block mv-cart-counter" id="cartCount"></span>
                         </a>
                     </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item px-md-3">
+
+                            <a class="nav-link text-white" href="/dashboard">
+                               پنل مدیریت
+                            </a>
+                        </li>
+                    }
                     <li class="nav-item px-md-3">
                         @if (ViewBag.Username != null)
                         {

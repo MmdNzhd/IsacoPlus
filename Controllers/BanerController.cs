@@ -16,7 +16,7 @@ using System.IO;
 
 namespace KaraYadak.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class BanerController : Controller
     {
         private readonly double itemsPerPage = 10;
@@ -73,7 +73,7 @@ namespace KaraYadak.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string Url, string Time, string Date, IFormFile Image)
         {
-            if (string.IsNullOrWhiteSpace(Time)||Time.Equals("12:undefined AM")) Time = "00:00 AM";
+            if (string.IsNullOrWhiteSpace(Time) || Time.Equals("12:undefined AM")) Time = "00:00 AM";
             if (string.IsNullOrWhiteSpace(Date)) Date = DateTime.Today.AddDays(1).ToShamsi();
             PersianCalendar pc = new PersianCalendar();
             if (Time.Length < 8) Time = "0" + Time;
@@ -84,13 +84,18 @@ namespace KaraYadak.Controllers
                 hour += 12;
             }
             string[] d = Date.Split('/');
-            DateTime dt = new DateTime(int.Parse(d[0]),
-                           int.Parse(d[1]),
-                           int.Parse(d[2]),
-                           hour,
-                           minute,
-                           0,
-                           new PersianCalendar());
+            var year = int.Parse(d[0]);
+            var month = int.Parse(d[1]);
+            var day = int.Parse(d[2]);
+            DateTime x = new DateTime(1399, 2, 2, 10, 10, 10, new PersianCalendar());
+            DateTime dt = new DateTime(year, month, day, hour, minute, 0, new PersianCalendar());
+            //DateTime dt = new DateTime(year,
+            //               month,
+            //              day,
+            //               hour,
+            //               minute,
+            //               0, 0,
+            //               new PersianCalendar());
             //GetTimeDiff
             //var dateNow = DateTime.Now;
             //System.TimeSpan timer = dt - dateNow;
@@ -101,7 +106,7 @@ namespace KaraYadak.Controllers
             {
                 CreateAt = DateTime.Now,
                 Date = dt,
-                Image = (Image!=null)?upload(Image):"",
+                Image = (Image != null) ? upload(Image) : "",
                 Url = Url
             };
             await _context.AddAsync(baner);

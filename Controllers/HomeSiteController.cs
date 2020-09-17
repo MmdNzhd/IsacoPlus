@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -46,7 +46,7 @@ namespace KaraYadak.Controllers
         public ActionResult Index()
         {
             //blog
-            ViewBag.blogs =  _context.Blogs.OrderByDescending(x => x.CreateAt).Take(7).ToList();
+            ViewBag.blogs = _context.Blogs.OrderByDescending(x => x.CreateAt).Take(7).ToList();
 
             //baner
             var baner = _context.Baners.OrderByDescending(x => x.Date).FirstOrDefault();
@@ -54,11 +54,11 @@ namespace KaraYadak.Controllers
             var now = DateTime.Now;
             if (baner.Date < now)
             {
-                ViewBag.timer =now;
+                ViewBag.timer = now;
             }
             else
             {
-                ViewBag.timer = baner.Date ;
+                ViewBag.timer = baner.Date;
             }
 
             if (User.Identity.Name != null)
@@ -106,7 +106,7 @@ namespace KaraYadak.Controllers
                 Off = p.Discount,
                 Picture = p.ImageUrl,
                 Price = p.Price,
-                Special=p.SpecialSale
+                Special = p.SpecialSale
 
             }).ToList();
 
@@ -132,9 +132,9 @@ namespace KaraYadak.Controllers
                 Title = x.FirstOrDefault().Title,
                 Off = x.FirstOrDefault().Off,
                 Picture = x.FirstOrDefault().Picture,
-                Price = x.FirstOrDefault().Price- x.FirstOrDefault().Off* x.FirstOrDefault().Price/100,
-                Special=x.FirstOrDefault().Special,
-                UpdateDate=x.FirstOrDefault().UpdateDate
+                Price = x.FirstOrDefault().Price - x.FirstOrDefault().Off * x.FirstOrDefault().Price / 100,
+                Special = x.FirstOrDefault().Special,
+                UpdateDate = x.FirstOrDefault().UpdateDate
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
             }).OrderByDescending(x => x.UpdateDate).Take(10).ToList();
             var maxinDiscountProducts = groupByCodeProduct/*.Where()*/.Select(x => new ProductForIndexVM
@@ -196,12 +196,13 @@ namespace KaraYadak.Controllers
 
             return PartialView();
         }
-       
+
         [Route("ContactUs")]
         public IActionResult ContactUs()
         {
             return View();
         }
+      
 
         [HttpPost]
         public async Task<IActionResult> AddContactusMessage(ContactUsMessage contactUs)
@@ -225,6 +226,6 @@ namespace KaraYadak.Controllers
             }
             return Json(new { status = "0", message = "خطایی رخ داده است لطفا مجددا امتحان کنید." });
         }
-      
+
     }
 }
