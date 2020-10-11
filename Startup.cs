@@ -35,6 +35,7 @@ namespace KaraYadak
             //{
             //    options.RespectBrowserAcceptHeader = true; // false by default
             //});
+            services.AddResponseCaching();
 
             services.AddSingleton<HtmlEncoder>(
                  HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.BasicLatin,
