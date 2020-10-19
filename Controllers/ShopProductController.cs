@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace KaraYadak.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
 
     public class ShopProductController : Controller
     {
@@ -120,7 +120,7 @@ namespace KaraYadak.Controllers
                                              Picture = p.ImageUrl,
                                              Price = p.Price,
                                              Code = p.Code,
-                                             Off=p.Discount
+                                             Off = p.Discount
                                          }
                                    ).FirstOrDefaultAsync();
                     products.Add(product);
@@ -192,7 +192,7 @@ namespace KaraYadak.Controllers
             }
             return PartialView(vm);
         }
-   
+        [Authorize]
         public async Task<IActionResult> SubmitBasket()
         {
             var user = _context.Users.SingleOrDefault(u => u.UserName == User.Identity.Name);
@@ -232,12 +232,12 @@ namespace KaraYadak.Controllers
                     var pr = vm.Products.Where(x => x.Code.Equals(item)).SingleOrDefault();
                     var factorItem = new CartItem()
                     {
-                        ProductId=pr.Id,
-                        Price= ((pr.Price ) - (pr.Discount * pr.Price / 100)  ).ToString(),
-                        UserName=user.UserName,
-                        Date=DateTime.Now,
-                        Quantity=count,
-                };
+                        ProductId = pr.Id,
+                        Price = ((pr.Price) - (pr.Discount * pr.Price / 100)).ToString(),
+                        UserName = user.UserName,
+                        Date = DateTime.Now,
+                        Quantity = count,
+                    };
                     listOfFactorItems.Add(factorItem);
                     vm.Price += (pr.Price * count) - ((pr.Discount * pr.Price / 100) * pr.Count);
                     vm.DiscountPrice += (pr.Discount * pr.Price / 100) * pr.Count;
@@ -246,23 +246,23 @@ namespace KaraYadak.Controllers
                 vm.SendPrice = (sendPrice != null) ? int.Parse(sendPrice.Value) : 25000;
                 vm.TotalPrice = vm.Price + vm.SendPrice;
             }
-               
+
             else return new JsonResult(new { status = 0, message = "مشکلی در سبد خرید شما به وجود آمده است" });
             var factor = new ShoppingCart()
             {
                 UserName = user.UserName,
-                Date=DateTime.Now,
-                Price=vm.Price.ToString(),
-                Address=user.Address,
-                CartItems=listOfFactorItems,
-                DiscountPercent=vm.DiscountPrice.ToString(),
-                Name=user.FirstName+" "+user.LastName,
-                PaymentType=PaymentType.Online,
-                Phone=user.Phone,
-                PhoneNumber=user.PhoneNumber,
-                RequestCode=RandomString(5),
-                SendPrice=vm.SendPrice.ToString(),
-                Status=RequestStatus.Confirmed,
+                Date = DateTime.Now,
+                Price = vm.Price.ToString(),
+                Address = user.Address,
+                CartItems = listOfFactorItems,
+                DiscountPercent = vm.DiscountPrice.ToString(),
+                Name = user.FirstName + " " + user.LastName,
+                PaymentType = PaymentType.Online,
+                Phone = user.Phone,
+                PhoneNumber = user.PhoneNumber,
+                RequestCode = RandomString(5),
+                SendPrice = vm.SendPrice.ToString(),
+                Status = RequestStatus.Confirmed,
             };
             await _context.CartItems.AddRangeAsync(listOfFactorItems);
             await _context.ShoppingCarts.AddRangeAsync(factor);

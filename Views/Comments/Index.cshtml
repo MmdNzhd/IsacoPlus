@@ -3,7 +3,8 @@
 
 @{
     ViewBag.Title = "نظر کاربران";
-    Layout = "_AdminPanel";
+    Layout = "_layout";
+
 }
 @section vendorstyles{
     <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors-rtl.min.css">
@@ -126,6 +127,7 @@
                 <thead>
                     <tr>
                         <th></th>
+                        <th>کد محصول</th>
                         <th>ایمیل کابر</th>
                         <th>نظر کابر</th>
                         <th>تاریخ درج</th>
@@ -140,8 +142,9 @@
                     {
                         <tr id="@item.Id">
                             <th></th>
+                            <td>@item.ProductCode</td>
                             <td>@item.Username</td>
-                            <td style="max-width:400px">@item.Text</td>
+                            <td style="width:300px;white-space:normal;line-height:1.5;">@item.Text</td>
                             <td>@item.Date.ToFriendlyPersianDateTextify()</td>
                             <th></th>
                         </tr>
