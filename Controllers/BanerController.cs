@@ -69,6 +69,7 @@ namespace KaraYadak.Controllers
             });
 
         }
+        
 
         [HttpPost]
         public async Task<IActionResult> Create(string Url, string Time, string Date, IFormFile Image)

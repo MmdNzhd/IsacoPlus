@@ -1,0 +1,126 @@
+﻿@model IEnumerable<KaraYadak.Models.ContactUsMessage>
+@using KaraYadak.Helper;
+
+@{
+    ViewBag.Title = "مدیریت تماس با ما";
+    Layout = "_layout";
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css" />
+
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css" />
+    <link href="~/css/PersianDatePicker.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" />
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    <script src="~/js/PersianDatePicker.js"></script>
+    <script src="~/assets/Datepiker/persian-date.js"></script>
+
+    <link href="~/assets/Datepiker/daterangepicker.css" rel="stylesheet" />
+    <script src="~/assets/Datepiker/daterangepicker.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.min.css"
+          integrity="sha256-QaRlBIHoN1LIkxeziW34nknOVrCasnLJY6esf3ldv+k=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" integrity="sha512-rmZcZsyhe0/MAjquhTgiUcb4d9knaFc7b5xAfju483gbEXTkeJRUMIPk6s3ySZMYUHEcjKbjLjyddGWMrNEvZg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js" integrity="sha512-GDey37RZAxFkpFeJorEUwNoIbkTwsyC736KNSYucu1WJWFK9qTdzYub8ATxktr6Dwke7nbFaioypzbDOQykoRg==" crossorigin="anonymous"></script>
+}
+@section scripts{
+    <script>
+        //$('#input_starttime').pickatime({});
+
+     
+        var oTable = $('.zero-configuration').DataTable({
+            processing: true,
+            //serverSide: true,
+            language: {
+                url: "/app-assets/vendors/js/tables/datatable/Persian.json"
+            },
+            ajax: {
+                url: '@Url.Action("ContactUsManagerData", "Comments")',
+                type: "Get",
+                dataType: "json",
+                delay: 1000,
+                data: function (d) {
+                    //d._token = $('meta[name="csrf-token"]').attr('content');
+                    //d.created_start = $('input[name=created_start]').val();
+                }
+            },
+            columns: [
+                {
+                    data: 'id',
+                    name: 'id'
+                },
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'phoneNumber',
+                    name: 'phoneNumber'
+                },
+                {
+                    data: 'email',
+                    name: 'email'
+                },
+                {
+                    data: 'text',
+                    name: 'text'
+                },
+            ],
+            //columnDefs: [
+            //    {
+            //        targets: -1,
+            //        render: function (data, type, row) {
+            //            return '<button type="button" onclick="DeleteItem('+ data +')" class="btn btn-icon btn-sm btn-warning"><i class="feather icon-trash-2"></i></button>';
+            //        }
+            //    },
+            //],
+        });
+    </script>
+}
+@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+
+<div class="content-body">
+    <section id="basic-datatable">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">@ViewBag.Title</h4>
+
+                        @*<button class="btn btn-success" type="button" data-toggle="modal" data-backdrop="false" data-target="#backdrop"><i class="feather icon-plus"></i>ثبت جدید </button>*@
+                        <!-- Modal -->
+                    </div>
+
+                    <div class="card-content">
+                        <div class="card-body card-dashboard">
+                            <div class="table-responsive">
+                                <table class="table zero-configuration">
+                                    <thead>
+                                        <tr>
+                                            <th>شماره</th>
+                                            <th>نام</th>
+                                            <th> شماره تلفن</th>
+                                            <th>  ایمیل</th>
+                                            <th>  متن</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

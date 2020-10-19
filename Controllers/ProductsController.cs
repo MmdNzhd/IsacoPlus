@@ -329,6 +329,7 @@ namespace KaraYadak.Controllers
             await _context.SaveChangesAsync();
             return Json(true);
         }
+        [AllowAnonymous]
         public async Task<IActionResult> ProductDetail(string code)
         {
 

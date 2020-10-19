@@ -17,11 +17,14 @@ using DNTPersianUtils.Core;
 
 namespace KaraYadak.Controllers
 {
+
     [Authorize(Roles = "Admin")]
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _env;
+        private readonly double itemsPerPage = 10;
+
 
 
         public CommentsController(ApplicationDbContext context, IWebHostEnvironment env)
@@ -29,10 +32,54 @@ namespace KaraYadak.Controllers
             _context = context;
             _env = env;
         }
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Comments.Where(x => x.Status.Equals(CommentStatus.در_حال_بررسی)).OrderByDescending(i => i.Date).ToListAsync());
+        }
+
+        [Authorize(Roles = "Admin")]
+        [Route("ContactUsManager")]
+        public async Task<IActionResult> ContactUsManager()
+        {
+            var model = _context.contactUsMessages.OrderByDescending(x => x.CreateAt).AsNoTracking().AsQueryable();
+            var finalModel = await model.ToListAsync();
+            return View(model);
+
+        }
+        public async Task<IActionResult> ContactUsManagerData(int? page, int? draw, int start, int length)
+        {
+            if (page is null)
+            {
+                page = 1;
+            }
+
+            var items = await _context.contactUsMessages.ToListAsync();
+
+            int recordsTotal = items.Count();
+
+            items.Skip(start).Take(length);
+
+            int recordsFiltered = items.Count();
+
+            return Json(new
+            {
+                draw,
+                recordsTotal,
+                recordsFiltered,
+                data = items.Select(s => new
+                {
+                    s.Id,
+                    s.Name,
+                    s.PhoneNumber,
+                    s.Email,
+                    s.Text,
+                    UpdatedAt = s.CreateAt.ToFriendlyPersianDateTextify()
+                })
+                .Skip((int)itemsPerPage * (page.Value - 1))
+                .Take((int)itemsPerPage)
+            });
+
         }
 
 
@@ -80,6 +127,6 @@ namespace KaraYadak.Controllers
             }
         }
 
-   
+
     }
 }

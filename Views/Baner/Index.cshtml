@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "لیست بنر ها";
-    Layout = "_AdminPanel";
+    Layout = "_layout";
 }
 @section vendorstyles{
     <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css" />
@@ -60,21 +60,23 @@
         }
         $("#create").submit(function (e) {
             e.preventDefault();
+
+            var formdata = new FormData(this);
             var fileUpload = $("#image").get(0);
 
 
-            let form = new FormData();
-            form.append("Url", $("#url").val());
-            form.append("Date", $("#date").val());
-            form.append("Time", onTimeChange());
-            form.append("Image", fileUpload.files[0]);
+            //let form = new FormData();
+            //form.append("Url", $("#url").val());
+            //form.append("Date", $("#date").val());
+            //form.append("Time", onTimeChange());
+            //form.append("Image", fileUpload.files[0]);
 
 
             $.ajax({
-                url: "/Baner/Create/",
-                type: "POST",
-                dataType: "json",
-                data: form,
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                dataType: false,
+                data: formdata,
                 contentType: false,
                 processData: false,
                 success: function (data) {
@@ -181,7 +183,7 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form id="create">
+                                    <form id="create" asp-action="create" asp-controller="Baner" method="post" enctype="multipart/form-data">
                                         <div class="modal-body">
                                             <div class="form-group">
                                                 <input type="text" placeholder="لینک" name="url" id="url" class="form-control">
