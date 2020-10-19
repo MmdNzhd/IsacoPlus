@@ -513,7 +513,7 @@ button {
 }
 
 a {
-    text-decoration: none ;
+    text-decoration: none;
 }
 
 .size20 {
@@ -915,9 +915,103 @@ em.error {
     color: red;
 }
 
-.blog-single .post-content img{
-    max-width:100% !important;
+.blog-single .post-content img {
+    max-width: 100% !important;
 }
+
 .filterlink {
-     text-decoration: none;
+    text-decoration: none;
+}
+
+.inquire {
+    transition:.5s;
+    background: var(--main-blue);
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    z-index: 10;
+    padding:20px;
+}
+
+.inquire.active{
+    right:0 !important;
+}
+
+    .inquire .i-btn {
+        font-family: IranSans;
+        color: var(--main-blue) !important;
+        background: var(--main-yellow);
+        width: 150px;
+        height: 30px;
+        line-height: 30px;
+        cursor: pointer;
+        border-radius: 15px 15px 0 0;
+        font-weight: 1000;
+        position: absolute;
+        top: 110px;
+        left: -90px;
+        transform: rotate(-90deg);
+        text-align:center;
+        user-select:none;
+    }
+
+:root {
+    --main-yellow: #ffcc00;
+    --main-blue: #011099;
+}
+
+.inquire-modal{
+    transition:.5s;
+    visibility:hidden;
+    opacity:0;
+    width:100vw;
+    height:100vh;
+    background:#00000050;
+    position:fixed;
+    top:0;
+    right:0;
+    padding:30px;
+    z-index:15;
+}
+
+.inquire-modal.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.inquire-modal .content {
+    width: calc(100vw - 60px);
+    height: calc(100vh - 60px);
+    background: #fff;
+    box-shadow: 5px 5px 15px #00000015;
+    border-radius: 5px;
+    overflow-y:auto;
+    padding:20px;
+    padding-top:45px;
+}
+
+.inquire-modal .close-btn{
+    position: absolute;
+    top:40px;
+    left:40px;
+    display:block;
+    width:15px;
+    height:15px;
+    background: url(../img/close.svg) no-repeat center;
+    background-size: 100% 100% !important;
+    cursor:pointer;
+}
+
+@media only screen and (max-width:991.99px) {
+    .inquire {
+        right: -60vw;
+        width: 60vw;
+    }
+}
+
+@media only screen and (min-width:992px) {
+    .inquire {
+        right: -20vw;
+        width: 20vw;
+    }
 }
