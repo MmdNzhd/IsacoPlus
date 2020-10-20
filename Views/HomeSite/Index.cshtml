@@ -38,12 +38,19 @@
 
         $("#inquireSubmit").on("click", function () {
             inquireFlag = 0;
-            $(".inquire").removeClass("active");
-            $(".inquire-modal").addClass("active");
+            //$(".inquire").removeClass("active");
+            //$(".inquire-modal").addClass("active");
         });
 
         $(".inquire-modal .close-btn").on("click", function () {
             $(".inquire-modal").removeClass("active");
+            $(".table").remove();
+    //        $(".inquire-modal").append(`<div class="content d - flex mx - auto flex - column position - relative" id="content">
+    //            < span class= "close-btn" ></span >
+
+    //        <h3 class="d-block text-center mb-5">نتایج جستجو</h3>
+    //</div >`);
+            
         });
     </script>
 
@@ -88,6 +95,56 @@
         function smoothScrollTo(location) {
         document.getElementById(location).scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
         }
+
+        $("#inquireSubmit").click(function () {
+      
+
+            $.ajax({
+                type: "POST",
+                url: '/CallForPrice/CallForPrice',
+                dataType: 'json',
+                data: { "productCode": $("#inquireSearch").val() },
+                success: function (data) {
+
+                    console.log(data);
+                    $("#content").append(data);
+                    $(".inquire").removeClass("active");
+                    $(".inquire-modal").addClass("active");
+
+                    if (data.status == 1) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.message
+
+                        })
+                        $("#centralModalLogin").modal("hide");
+                        location.reload();
+
+                    }
+
+
+                    if (data.status == 2) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: data.error
+                        })
+                    }
+                    if (data.status == 0) {
+                        data.error.forEach((err) => {
+                            var er = `---${err}`;
+
+                            errors += er;
+
+                        })
+                        Toast.fire({
+                            icon: 'error',
+                            title: errors
+                        })
+
+                    }
+                }
+            });
+        });
     </script>
 }
 
@@ -612,9 +669,9 @@
 </div>
 
 <div class="inquire-modal">
-    <div class="content">
+    <div class="content d-flex mx-auto flex-column position-relative" id="content">
         <span class="close-btn"></span>
 
-        @*Your Codes...*@
+        <h3 class="d-block text-center mb-5">نتایج جستجو</h3>
     </div>
 </div>

@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using WebScarpinInCSharp;
 
 namespace KaraYadak.Controllers
 {
@@ -31,29 +32,19 @@ namespace KaraYadak.Controllers
             _context = context;
             _env = env;
         }
-      
+
         [HttpPost]
-        public async Task<IActionResult> CallForPrice(string productCode)
+        //[Route("CallForPrice")]
+        [AllowAnonymous]
+        public  IActionResult CallForPrice(string productCode)
         {
             //webScraping
 
-            IWebDriver m_driver;
-            m_driver = new ChromeDriver(@"C:\Users\MmdNzhd\AppData\Local\Temp\Rar$EXa0.659");
-            m_driver.Url = "https://www.isaco.ir/main/auto-parts-list/auto-parts-list/";
-            m_driver.Manage().Window.Maximize();
-            IWebElement button;
-            IWebElement finalTable;
 
+            var webscrap = new webScrapp();
+            var finalResult = webscrap.isacoWebscrap(productCode);
 
-            m_driver.FindElement(By.Id("gdmCode")).SendKeys("1460100412");
-
-            button = m_driver.FindElement(By.Id("post_form"));
-
-            button.Click();
-            //m_driver.Close();
-            // price_table
-            finalTable = m_driver.FindElement(By.ClassName("price_table"));
-            return (IActionResult)finalTable;
+            return Json(finalResult);
         }
         
 
