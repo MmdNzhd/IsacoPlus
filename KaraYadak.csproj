@@ -110,8 +110,4 @@
     <Folder Include="wwwroot\uploads\ProductImages\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CodeFirst_Example\WebScarpinInCSharp\WebScarpinInCSharp\WebScarpinInCSharp.csproj" />
-  </ItemGroup>
-
 </Project>

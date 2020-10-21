@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KaraYadak", "KaraYadak.csproj", "{A8A78DD0-A701-463D-9515-71B60F1A4C6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebScarpinInCSharp", "..\CodeFirst_Example\WebScarpinInCSharp\WebScarpinInCSharp\WebScarpinInCSharp.csproj", "{F26290B9-14D2-4129-9442-92D2267D7742}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{A8A78DD0-A701-463D-9515-71B60F1A4C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8A78DD0-A701-463D-9515-71B60F1A4C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8A78DD0-A701-463D-9515-71B60F1A4C6F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F26290B9-14D2-4129-9442-92D2267D7742}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F26290B9-14D2-4129-9442-92D2267D7742}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F26290B9-14D2-4129-9442-92D2267D7742}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F26290B9-14D2-4129-9442-92D2267D7742}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
