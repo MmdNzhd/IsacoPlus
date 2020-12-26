@@ -285,7 +285,7 @@
     <script>
         $("#addProductWithExel").click(function () {
             var fileExtension = ['xls', 'xlsx'];
-            var filename = $('#fileUpload2').val();
+            var filename = $('#fileUpload').val();
             if (filename.length == 0) {
 
                 toastr.error("لطفا فایل انتخاب کنید")
@@ -299,7 +299,7 @@
                 }
             }
             var fdata = new FormData();
-            var fileUpload = $("#fileUpload2").get(0);
+            var fileUpload = $("#fileUpload1").get(0);
             var files = fileUpload.files;
             fdata.append("file", files[0]);
             $.ajax({
@@ -334,8 +334,11 @@
                 }
             }
             var fdata = new FormData();
-            var fileUpload = $("#fileUpload2").get(0);
+            var fileUpload = $("#fileUpload1").get(0);
+            console.log(fileUpload)
             var files = fileUpload.files;
+            console.log(files)
+
             fdata.append("file", files[0]);
             $.ajax({
                 type: "POST",
@@ -348,7 +351,7 @@
                         toastr.success(res.message);
                     }
                     else {
-                        toastr.error(res.message);
+                        toastr.error("خطایی رخ داده است لطفا فایل اکسل با فرمت درست وارد کنید");
                     }
                 }
             });
@@ -410,13 +413,13 @@
                     <input type="file" class="col-7 form-control form-control-file" id="fileUpload1" />
                     <button class="btn btn-primary col-4 ml-2" id="updateProductWithExel">اعمال تغییرات</button>
                 </div>
-                <div class=" row mt-4 mb-1" style="text-align:center">
+                @*<div class=" row mt-4 mb-1" style="text-align:center">
                     اضافه کردن محصولات
                 </div>
                 <div class=" row">
                     <input type="file" class="col-7 form-control form-control-file" id="fileUpload2" />
                     <button class="btn btn-primary col-4 ml-2" id="addProductWithExel">اعمال تغییرات</button>
-                </div>
+                </div>*@
 
             </div>
         </div>

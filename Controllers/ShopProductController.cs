@@ -10,6 +10,7 @@ using KaraYadak.Data;
 using KaraYadak.Models;
 using KaraYadak.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using DNTPersianUtils.Core.IranCities;
 
 namespace KaraYadak.Controllers
 {
@@ -54,6 +55,7 @@ namespace KaraYadak.Controllers
 
         public IActionResult shopBasket()
         {
+            ViewBag.Provinces = Iran.Provinces.ToList();
             var item = _context.Users.SingleOrDefault(i => i.UserName == User.Identity.Name);
             ViewBag.profileIsComplete = false;
             if (item != null && !string.IsNullOrWhiteSpace(item.PhoneNumber))
@@ -73,7 +75,10 @@ namespace KaraYadak.Controllers
                     NationalCode = item.NationalCode,
                     CartNumber = item.CartNumber,
                     Gender = item.Gender,
-                    ImageProfile = item.AvatarUrl
+                    ImageProfile = item.AvatarUrl,
+                    Province=item.Province,
+                    PostalCode=item.PostalCode,
+                    City=item.City,
                 };
                 return View(vm);
             }
@@ -88,7 +93,11 @@ namespace KaraYadak.Controllers
                 NationalCode = "",
                 CartNumber = "",
                 Gender = "",
-                ImageProfile = null
+                ImageProfile = "",
+                City = "",
+                CallbackUrl = "",
+                PostalCode = "",
+                Province = ""
             });
 
         }
@@ -269,5 +278,74 @@ namespace KaraYadak.Controllers
             await _context.SaveChangesAsync();
             return new JsonResult(new { status = 1, message = "با موفقیت انجام شد" });
         }
+
+        [Route("GetFactorDetails")]
+        public async Task<IActionResult> GetFactorDetails(int id)
+        {
+            var categories = await _context.ProductCategories.ToListAsync();
+            var user = _context.Users.SingleOrDefault(u => u.UserName == User.Identity.Name);
+
+
+
+
+
+            var sendPrice = await _context.Settings.FirstOrDefaultAsync(x => x.Key == "SendPrice");
+            var vm = new SiteCartVM();
+            if (user != null)
+            {
+                if (user.PhoneNumber != null)
+                {
+                    vm.IsProfileCompelete = true;
+                }
+            }
+            //var cart = Request.Cookies["tempcart"];
+            //if (cart != null)
+            //{
+            //    vm.ProductIds = cart.Split("_").Select(x => x.Split("-")[0]).ToList();
+            //    vm.Count = cart.Split("_").Select(x => int.Parse(x.Split("-")[1])).ToList();
+            vm.ProductIds = new List<string>();
+            vm.Count = new List<int>();
+            var factor = await _context.ShoppingCarts.Where(x=>x.Id==id).Include(x=>x.CartItems).Select(x=> x.CartItems).FirstOrDefaultAsync();
+            foreach (var item in factor)
+            {
+                vm.ProductIds.Add(item.ProductId.ToString());
+                vm.Count.Add(Convert.ToInt32(item.Quantity));
+                ViewBag.FactorDate = item.Date;
+                //    vm.Count = 
+            }
+
+
+            var products = _context.Products.Where(x => vm.ProductIds.Contains(x.Id.ToString())).ToLookup(p => p.Code, p => new ProductWithMeterForFactorVM
+                {
+                    Name = p.Name,
+                    Code = p.Code,
+                    Discount = p.Discount,
+                    ImageUrl = p.ImageUrl,
+                    Price = p.Price,
+                    Id = p.Id,
+
+                }).ToList();
+
+            vm.Products = new List<ProductWithMeterForFactorVM>();
+                foreach (IGrouping<string, ProductWithMeterForFactorVM> item in products)
+                {
+                    var x = item.FirstOrDefault();
+                    vm.Products.Add(item.FirstOrDefault());
+
+                }
+
+            foreach (var item in vm.ProductIds)
+                {
+                    int count = vm.Count.ElementAt(vm.ProductIds.IndexOf(item));
+                    vm.Products.Where(x => x.Id.Equals(int.Parse(item))).FirstOrDefault().Count = count;
+                    var pr = vm.Products.Where(x => x.Id.Equals(int.Parse(item))).SingleOrDefault();
+                    vm.Price += (pr.Price * count) - ((pr.Discount * pr.Price / 100) * pr.Count);
+                }
+                vm.SendPrice = (sendPrice != null) ? int.Parse(sendPrice.Value) : 25000;
+                vm.TotalPrice = vm.Price + vm.SendPrice;
+            //}
+            return PartialView(vm);
+        }
+
     }
 }

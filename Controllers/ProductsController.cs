@@ -13,6 +13,9 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 using System.Net.WebSockets;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using System.Security.Cryptography;
 
 namespace KaraYadak.Controllers
 {
@@ -22,6 +25,8 @@ namespace KaraYadak.Controllers
     {
         private readonly double itemsPerPage = 10;
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
         static String removeDuplicate(string str)
         {
             var sArray = str.Split(",").ToList();
@@ -35,9 +40,10 @@ namespace KaraYadak.Controllers
         }
 
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public string GetCategoryTypeNameById(int id)
@@ -65,7 +71,7 @@ namespace KaraYadak.Controllers
         {
             return View();
         }
-   
+
         [HttpPost]
         public async Task<IActionResult> Index(int? page, int? draw, int start, int length)
         {
@@ -517,7 +523,7 @@ namespace KaraYadak.Controllers
                                      .ToList();
 
 
-            var products = groupByCodeProduct.Where(x => x.Categories.Contains(key) || x.Product.Name.Contains(key) || x.Tags.Contains(key) || x.SubCategories.Contains(key)||x.Product.Code.Contains(key)
+            var products = groupByCodeProduct.Where(x => x.Categories.Contains(key) || x.Product.Name.Contains(key) || x.Tags.Contains(key) || x.SubCategories.Contains(key) || x.Product.Code.Contains(key)
               || x.CategoriyTypes.Equals(key)).Select(x => new ProductForIndexVM
               {
                   Id = x.Product.Id,
@@ -632,12 +638,19 @@ namespace KaraYadak.Controllers
             return new JsonResult(new { status = 1, message = "با موفقیت انجام شد" });
         }
         [HttpPost]
-        public ActionResult updateProductWithExel(IFormFile file)
+        [AllowAnonymous]
+        public async Task<ActionResult> updateProductWithExel(IFormFile file)
         {
+            string xx = "";
+            var code = "";
             if (Request != null)
             {
                 if ((file != null) && (file.Length > 0) && !string.IsNullOrEmpty(file.FileName))
                 {
+                    //update product list
+                    var updateProducts = new List<Product>();
+                    var prosucts = new List<Product>();
+
                     string fileName = file.FileName;
                     string fileContentType = file.ContentType;
                     byte[] fileBytes = new byte[file.Length];
@@ -653,9 +666,18 @@ namespace KaraYadak.Controllers
                             try
                             {
 
-                                //user.SNo = Convert.ToInt32(workSheet.Cells[rowIterator, 1].Value);
-                                //user.Name = workSheet.Cells[rowIterator, 2].Value.ToString();
-                                //user.Age = Convert.ToInt32(workSheet.Cells[rowIterator, 3].Value);
+                                code = (workSheet.Cells[rowIterator, 1].Value).ToString();
+                                if (_context.Products.Any(x => x.Code == code))
+                                {
+                                    prosucts = await _context.Products.Where(x => x.Code == code).ToListAsync();
+                                    var price = Convert.ToDouble(workSheet.Cells[rowIterator, 2].Value);
+                                    foreach (var item in prosucts)
+                                    {
+                                        item.Price = price;
+                                    }
+                                    updateProducts.AddRange(prosucts);
+
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -664,11 +686,67 @@ namespace KaraYadak.Controllers
 
                             }
                         }
+                        _context.Products.UpdateRange(updateProducts);
+                        await _context.SaveChangesAsync();
                     }
                 }
             }
+            
 
             return new JsonResult(new { status = 1, message = "با موفقیت انجام شد" });
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> exel(IFormFile file)
+        {
+            string xx = "";
+
+            if ((file == null) && (file.Length <= 0) && string.IsNullOrEmpty(file.FileName))
+            {
+                return Json(new { status = "0", message = "خطا در فایل ارسالی" });
+            }
+            var fileName = DateTime.Now.Ticks.ToString() + Path.GetFileName(file.FileName);
+            var path = _webHostEnvironment.WebRootPath + "/uploads/" + fileName;
+            file.CopyTo(new FileStream(path, FileMode.Create));
+            var fileLocation = new FileInfo(path);
+            try
+            {
+                using (ExcelPackage package = new ExcelPackage(fileLocation))
+                {
+                    ExcelWorksheet workSheet = package.Workbook.Worksheets[0];
+                    //var workSheet = package.Workbook.Worksheets.First();
+                    int totalRows = workSheet.Dimension.Rows;
+
+                    var DataList = new List<ApplicationUser>();
+
+                    for (int i = 4; i <= totalRows; i++)
+                    {
+                        byte[] salt = new byte[128 / 8];
+                        using (var rng = RandomNumberGenerator.Create())
+                        {
+                            rng.GetBytes(salt);
+                        }
+
+                        if (workSheet.Cells[i, 1].Value != null)
+                        {
+                            var x = workSheet.Cells[i, 1].Value.ToString();
+                            xx += x + " , ";
+                        }
+
+
+
+                    }
+                    //await _context.Users.AddRangeAsync(DataList);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { status = "0", message = ex.Message });
+            }
+
+            return Json(new { status = "1", message = xx /*"با موفقیت ارسال شد" */});
         }
         [AllowAnonymous]
 
@@ -687,14 +765,14 @@ namespace KaraYadak.Controllers
             }
             if (!string.IsNullOrEmpty(filterName))
             {
-                var cat =  _context.ProductCategories.FirstOrDefault(x => x.Name == filterName);
+                var cat = _context.ProductCategories.FirstOrDefault(x => x.Name == filterName);
                 var categorytypeName = _context.ProductCategoryTypes.FirstOrDefault(x => x.Id == cat.ProductCategoryType).Name;
                 ViewBag.FilterName = categorytypeName + " : " + filterName;
                 var subCategory = _context.ProductCategories.FirstOrDefault(x => x.Id == cat.Parent);
 
                 if (subCategory != null)
                 {
-                    ViewBag.FilterName = categorytypeName + " : " +subCategory.Name +" ----> "+ filterName;
+                    ViewBag.FilterName = categorytypeName + " : " + subCategory.Name + " ----> " + filterName;
                 }
             }
 

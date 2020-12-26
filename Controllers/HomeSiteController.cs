@@ -13,6 +13,8 @@ using QRCoder;
 using KaraYadak.Data;
 using KaraYadak.Models;
 using KaraYadak.ViewModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace KaraYadak.Controllers
 {
@@ -23,6 +25,7 @@ namespace KaraYadak.Controllers
 
 
         private readonly ApplicationDbContext _context;
+
         //private readonly IHostingEnvironment _hostingEnvironment;
 
         public HomeSiteController(ApplicationDbContext context)
@@ -43,8 +46,24 @@ namespace KaraYadak.Controllers
             }
             return String.Join(",", list);
         }
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+            //var ip = _accessor.ActionContext.HttpContext.Connection.RemoteIpAddress.ToString();
+            ////add site visit
+            //if(!await _context.SiteVisits.AnyAsync(x => x.Ip == ip && x.Date.Day == DateTime.Now.Day))
+            //{
+            //    var visit = new Models.SiteVisit()
+            //    {
+            //        Date = DateTime.Now,
+            //        Ip = ip
+            //    };
+            //    await _context.SiteVisits.AddAsync(visit);
+            //    await _context.SaveChangesAsync();
+
+            //}
+                
+
+                
             //blog
             ViewBag.blogs = _context.Blogs.OrderByDescending(x => x.CreateAt).Take(7).ToList();
 

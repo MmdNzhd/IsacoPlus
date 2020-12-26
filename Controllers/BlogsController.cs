@@ -112,6 +112,7 @@ namespace KaraYadak.Controllers
             }
             return new JsonResult(new { status = "0", message = "خطایی رخ داده است" });
         }
+        [AllowAnonymous]
         public async Task<IActionResult> BlogDetails(int id)
         {
 

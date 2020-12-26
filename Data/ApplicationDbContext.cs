@@ -14,6 +14,7 @@ namespace KaraYadak.Data
         {
         }
         public DbSet<Favorite>Favorites  { get; set; }
+        public DbSet<SiteVisit> SiteVisits  { get; set; }
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Baner> Baners { get; set; }
         public DbSet<Access> Access { get; set; }

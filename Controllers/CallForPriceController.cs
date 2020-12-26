@@ -58,7 +58,7 @@ namespace KaraYadak.Controllers
             button.Click();
             Thread.Sleep(100);
             finalTable = m_driver.FindElement(By.Id("result"));
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
 
             var innerHtml = finalTable.GetAttribute("innerHTML");
             m_driver.Close();

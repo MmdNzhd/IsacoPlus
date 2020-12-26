@@ -76,7 +76,7 @@
             <div class="modal-body table-responsive">
             </div>
             <div class="modal-footer   row">
-                <button class="btn btn-success col-2 " onclick="updateCookie()" id="submitShop">ادامه</button>
+                <button class="btn btn-success col-2 " onclick="updateCookie()" id="submitShop" style="margin-left:auto">ادامه</button>
                 <div class="col-6"></div>
                 <button id="return" type="button" class="btn btn-danger col-2" data-dismiss="modal">بازگشت</button>
 
@@ -218,8 +218,37 @@
                                                         <input readonly type="text" id="nationalCode" value="@Model.NationalCode">
                                                         <label>  شماره کارت </label>
                                                         <input readonly type="text" id="cartNumber" value="@Model.CartNumber">
+
+
+                                                        <label>  استان </label>
+                                                        <select id="province" class="form-control">
+                                                            <option value="@Model.Province" selected>@Model.Province </option>
+
+                                                            @foreach (var item in ViewBag.Provinces)
+                                                            {
+                                                                <option value=@item>@item </option>
+                                                            }
+                                                        </select>
+                                                        @*<input type="text" id="province" value="@Model.Province">*@
+
+                                                        <label>  شهر </label>
+                                                        <select id="city" class="form-control">
+                                                            <option value="@Model.Province" selected>@Model.City </option>
+
+                                                            @*@foreach (var item in ViewBag.Cities)
+            {
+            }*@
+                                                        </select>
+                                                        <label>  کد پستی </label>
+                                                        <input type="text" id="postalCode" value="@Model.PostalCode">
+
+
+
                                                         <label>  آدرس </label>
                                                         <textarea id="address">@Model.Address</textarea>
+
+
+
                                                     </form>
                                                     <div class="profile-footer ">
                                                         <button id="editProfileSubmit" class="profile-button profile-button--save text-center w-100">ثبت</button>
@@ -275,8 +304,34 @@
                                                         <input type="text" id="nationalCode" value="@Model.NationalCode">
                                                         <label>  شماره کارت </label>
                                                         <input type="text" id="cartNumber" value="@Model.CartNumber">
+
+                                                        <label>  استان </label>
+                                                        <select id="province" class="form-control">
+                                                            <option value="@Model.Province" selected>@Model.Province </option>
+
+                                                            @foreach (var item in ViewBag.Provinces)
+                                                            {
+                                                                <option value=@item>@item </option>
+                                                            }
+                                                        </select>
+                                                        @*<input type="text" id="province" value="@Model.Province">*@
+
+                                                        <label>  شهر </label>
+                                                        <select id="city" class="form-control">
+                                                            <option value="@Model.Province" selected>@Model.City </option>
+
+                                                            @*@foreach (var item in ViewBag.Cities)
+            {
+            }*@
+                                                        </select>
+                                                        <label>  کد پستی </label>
+                                                        <input type="text" id="postalCode" value="@Model.PostalCode">
+
+
+
                                                         <label>  آدرس </label>
                                                         <textarea id="address">@Model.Address</textarea>
+
                                                     </form>
                                                     <div class="profile-footer ">
                                                         <button id="editProfileSubmit" class="profile-button profile-button--save text-center w-100">ثبت</button>
@@ -600,6 +655,57 @@
             });
 
         });
+        function GetCities(province) {
+            $.ajax({
+                type: "Get",
+                url: "/GetCities?province=" + province,
+                data: {},
+                contentType: 'application/json',
+                //processData: false,
+                success: function (res) {
+                    if (res.status == 1) {
+                        let citySelec = $("#city").empty();
+
+                        @* res.data.forEach(city => {
+                            if (city == '@Model.City') {
+                                citySelec.append(`<option value=${city} selected>${city}  </option>`)
+
+                            }
+                            else {
+                                citySelec.append(`<option value=${city}>${city} </option>`)
+
+                            }*@
+                    
+                        var items = "";
+                            $.each(res.data, function (i, row) {
+                                console.log(row);
+                                items += "<option value='" + row + "'>" + row + "</option>";
+                            });
+                            $("#city").html(items);
+
+                        }
+       
+                    else {
+                        let errors = `<p> `;
+                        res.error.forEach(er => {
+                            errors += `${er}<br />`;
+                        });
+                        errors += `<p/>`;
+
+                        Toast.fire({
+                            icon: 'error',
+                            title: errors
+
+                        })
+
+
+                    }
+                }
+            });
+        }
+        $("#province").on("change", function (val) {
+            GetCities($("#province").val());
+        })
         $("#notComplete").click(function () {
             if ('@ViewBag.profileIsComplete') {
                 Toast.fire({
@@ -608,7 +714,7 @@
                 })
             }
             $("#centralModalEditProfile").modal("toggle");
-
+            GetCities('@Model.Province');
 
             $("#editProfileSubmit").click(function (e) {
                 e.preventDefault();
@@ -636,6 +742,9 @@
                 fdata.append("NationalCode", $("#nationalCode").val());
                 fdata.append("CartNumber", $("#cartNumber").val());
                 fdata.append("Address", $("#address").val());
+                fdata.append("province", $("#province").val());
+                fdata.append("city", $("#city").val());
+                fdata.append("postalCode", $("#postalCode").val());
 
                 $.ajax({
                     type: "POST",
@@ -652,9 +761,10 @@
                                 title: "با موفقیت ثبت شد"
 
                             })
-                            sleep(2000).then(() => {
+                            sleep(1000).then(() => {
                                 //location.reload();
                                 $("#goNext").html(` <h5 id="submit">تایید و ادامه خرید</h5>`);
+                                $("#submit").click();
                             })
                         }
                         else {
