@@ -535,6 +535,7 @@
         }
         $("#notLogin").click(function () {
             $("#centralModalLogin").modal("toggle");
+            $("#tab-1").click();
             $("#Register-form").submit(function (e) {
                 e.preventDefault();
                 var url = "/Account/Register"

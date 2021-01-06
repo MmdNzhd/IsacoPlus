@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace KaraYadak.Models
@@ -13,9 +14,19 @@ namespace KaraYadak.Models
             UpdatedAt = DateTime.Now;
         }
         [Key]
-        public int Id { get; set; }
+        public int Id { get; set; }  
+        
+        [DisplayName(" نام کالا")]
+        [Required(ErrorMessage ="لطفا  {0}  را وارد کنید")]
+        [MaxLength(100, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد ")]
         public string Name { get; set; }
+
+        [DisplayName("کد")]
+        [Required(ErrorMessage = "لطفا  {0}  را وارد کنید")]
+        [MaxLength(50, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد ")]
         public string Code { get; set; }
+
+
         public double Price { get; set; }
         public int Discount { get; set; }
         public bool SpecialSale { get; set; }
@@ -36,5 +47,23 @@ namespace KaraYadak.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string QR { get; set; }
+    }
+
+    public class ProductViewModel
+    {
+        [DisplayName(" نام کالا")]
+        [Required(ErrorMessage = "لطفا  {0}  را وارد کنید")]
+        [MaxLength(100, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد ")]
+        public string Name { get; set; }
+
+        [DisplayName("کد")]
+        [Required(ErrorMessage = "لطفا  {0}  را وارد کنید")]
+        [MaxLength(50, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد ")]
+        public string Code { get; set; }
+        public string Description { get; set; }
+
+        public int MinEntity { get; set; }
+        public int MaxEntity { get; set; }
+
     }
 }

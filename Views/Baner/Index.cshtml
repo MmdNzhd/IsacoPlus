@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<KaraYadak.Models.Baner>
+
 @using KaraYadak.Helper;
 
 @{
@@ -26,7 +27,9 @@
     <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
     <script src="~/js/PersianDatePicker.js"></script>
     <script src="~/assets/Datepiker/persian-date.js"></script>
-
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <link href="~/assets/Datepiker/daterangepicker.css" rel="stylesheet" />
     <script src="~/assets/Datepiker/daterangepicker.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.min.css"
@@ -37,6 +40,9 @@
 @section scripts{
     <script>
         //$('#input_starttime').pickatime({});
+
+
+
 
         function onTimeChange() {
             var timeSplit = $("#time").val().split(':'),
@@ -58,11 +64,42 @@
             }
             return hours + ':' + minutes + ' ' + meridian;
         }
+
+        //var uploadFileExtentions = ["JPEG", "PNG", "GIF", "PDF", "DOC", "DOCM", "DOCX", "DOT", "TXT", "JPG"];
+        var uploadFileExtentions = ["JPEG", "PNG", "GIF","JPG"];
+
         $("#create").submit(function (e) {
             e.preventDefault();
 
+
+
+            function onTimeChange() {
+                var inputEle = document.getElementById('time');
+
+                var timeSplit = inputEle.value.split(':'),
+                    hours,
+                    minutes,
+                    meridian;
+                hours = timeSplit[0];
+                minutes = timeSplit[1];
+                if (hours > 12) {
+                    meridian = 'PM';
+                    hours -= 12;
+                } else if (hours < 12) {
+                    meridian = 'AM';
+                    if (hours == 0) {
+                        hours = 12;
+                    }
+                } else {
+                    meridian = 'PM';
+                }
+              return(hours + ':' + minutes + ' ' + meridian);
+            }
+
             var formdata = new FormData(this);
-            var fileUpload = $("#image").get(0);
+            formdata.set("time", onTimeChange());
+
+            //var fileUpload = $("#image").get(0);
 
 
             //let form = new FormData();
@@ -80,7 +117,13 @@
                 contentType: false,
                 processData: false,
                 success: function (data) {
-                    toastr.success(data.message);
+                    if (data.status == 1) {
+                        toastr.success(data.message);
+                    }
+                    else {
+                        toastr.error(data.message);
+
+                    }
                 },
                 error: function (data) {
 
@@ -122,6 +165,7 @@
         }
         var oTable = $('.zero-configuration').DataTable({
             processing: true,
+            ordering: false,
             //serverSide: true,
             language: {
                 url: "/app-assets/vendors/js/tables/datatable/Persian.json"
@@ -137,9 +181,12 @@
                 }
             },
             columns: [
-               
+
                 {
                     data: 'url',
+                render: function (data, type, item) {
+                    return `<div><a style="max-width: 106px;" href="${data}">${data}<a/><div/>`
+                },
                     name: 'url'
                 },
                 {
@@ -162,7 +209,7 @@
         });
     </script>
 }
-@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+@*@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })*@
 
 <div class="content-body">
     <section id="basic-datatable">
@@ -186,13 +233,15 @@
                                     <form id="create" asp-action="create" asp-controller="Baner" method="post" enctype="multipart/form-data">
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <input type="text" placeholder="لینک" name="url" id="url" class="form-control">
+                                                <input type="text" placeholder="لینک" name="url" id="url" class="form-control" maxlength="200" required="" oninvalid="this.setCustomValidity('ایمیل را وارد کنید')" oninput="setCustomValidity('')">
                                             </div>
+                                            @*<span asp-validation-for="First().Url"></span>*@
+                                            @**@
                                         </div>
                                         <div class="modal-body row">
-                                            <input type="text" id="date" placeholder="تاریخ" class="form-control col-6" onclick="PersianDatePicker.Show(this, '@DateTime.Now.ToShamsi()');" />
+                                            <input type="text" id="date" name="date" placeholder="تاریخ" class="form-control col-6" onclick="PersianDatePicker.Show(this, '@DateTime.Now.ToShamsi()');" />
                                             <div class="md-form col-4">
-                                                <input placeholder="زمان" type="time" id="time" class="form-control">
+                                                <input placeholder="زمان" name="time" type="time" id="time" class="form-control">
                                             </div>
                                         </div>
                                         <div class="modal-body">

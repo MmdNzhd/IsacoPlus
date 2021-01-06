@@ -2,7 +2,7 @@
 @using DNTPersianUtils.Core;
 @{
     ViewBag.Title = "مدیریت اخبار";
-    Layout = "_AdminPanel";
+    Layout = "_Layout";
 }
 @section vendorstyles{
     <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors-rtl.min.css">
@@ -130,7 +130,6 @@
        
     </script>
 }
-@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
 <div class="content-body">
     <section id="data-list-view" class="data-list-view-header">
         <div class="table-responsive">

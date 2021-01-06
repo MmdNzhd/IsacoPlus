@@ -1,0 +1,20 @@
+﻿1>------ Build started: Project: KaraYadak, Configuration: Release Any CPU ------
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\HomeSite\Index.cshtml(664,7,664,56): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\HomeSite\Index.cshtml(667,7,667,57): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\HomeSite\Index.cshtml(687,7,687,50): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\Products\AllProducts.cshtml(113,7,113,29): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\Products\ListOfCars.cshtml(94,7,94,29): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\Products\ListOfCars.cshtml(149,7,149,114): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\Products\IndexFilterProduct.cshtml(146,7,146,29): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\Products\IndexFilterProduct.cshtml(349,7,349,114): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\Products\MyFavoriteProducts.cshtml(123,7,123,29): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\Products\MyFavoriteProducts.cshtml(284,7,284,114): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\Products\ProductDetail.cshtml(495,7,495,56): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\Products\SearchProduct.cshtml(126,7,126,29): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\Products\SearchProduct.cshtml(294,7,294,114): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\SiteAccount\EditProfile.cshtml(46,7,46,29): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>E:\web mvc and core\Mvc project\KaraYadak\Views\ShopProduct\ShopBasket.cshtml(28,7,28,29): warning MVC1000: Use of IHtmlHelper.Partial may result in application deadlocks. Consider using <partial> Tag Helper or IHtmlHelper.PartialAsync.
+1>KaraYadak -> E:\web mvc and core\Mvc project\KaraYadak\bin\Release\netcoreapp3.1\KaraYadak.dll
+1>KaraYadak -> E:\web mvc and core\Mvc project\KaraYadak\bin\Release\netcoreapp3.1\KaraYadak.Views.dll
+1>Done building project "KaraYadak.csproj".
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========

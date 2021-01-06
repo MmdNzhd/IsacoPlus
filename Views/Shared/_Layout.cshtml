@@ -12,7 +12,41 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="/bordash/assets/media/image/favicon.png" />
 
-    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors-rtl.min.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/ToggleSwitch.css">
+
+    <style>
+        .swal-footer{
+            text-align:center !important;
+        }
+        #notifCount {
+            position: absolute;
+            left: 5%;
+            bottom: 16%;
+            cursor: pointer;
+        }
+
+        #loadingDiv {
+            width: 10000px;
+            height: 1500px;
+            background: rgba(0,0,0,0.6);
+            /* opacity: 0.4;*/
+            z-index: 1100;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding-left: 50%;
+            padding-top: 50%;
+        }
+
+        #imgLoading {
+            position: fixed;
+            max-height: 23%;
+            max-width: 19%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%)
+        }
+    </style>
     @RenderSection("vendorstyles", false)
     <link rel="stylesheet" href="/bordash/vendors/bundle.css" type="text/css">
     @RenderSection("styles", false)
@@ -25,13 +59,12 @@
     <div class="header">
         <div>
             <ul class="navbar-nav">
-             
             </ul>
         </div>
         <div>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                   
+
                 </li>
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link" title="تمام صفحه" data-toggle="fullscreen">
@@ -103,23 +136,23 @@
                     <ul>
                         <li>
                             @*<a class="active" href="#" data-toggle="tooltip" data-placement="right" title="حسابداری" data-nav-target="#accounting-menu">
-                                <i data-feather="dollar-sign"></i>
-                            </a>*@
+                                    <i data-feather="dollar-sign"></i>
+                                </a>*@
                         </li>
                         <li>
                             @*<a href="#" data-toggle="tooltip" data-placement="right" title="انبارداری" data-nav-target="#warehouse-menu">
-                                <i data-feather="database"></i>
-                            </a>*@
+                                    <i data-feather="database"></i>
+                                </a>*@
                         </li>
                         <li>
                             @*<a href="#" data-toggle="tooltip" data-placement="right" title="سایت" data-nav-target="#cms-menu">
-                                <i data-feather="anchor"></i>
-                            </a>*@
+                                    <i data-feather="anchor"></i>
+                                </a>*@
                         </li>
                         <li>
                             @*<a href="#" data-toggle="tooltip" data-placement="right" title="فروشگاه" data-nav-target="#shop-menu">
-                                <i data-feather="book"></i>
-                            </a>*@
+                                    <i data-feather="book"></i>
+                                </a>*@
                         </li>
                     </ul>
                 </div>
@@ -149,16 +182,22 @@
                 </div>
                 <div class="navigation-menu-group">
                     <div class="open" id="accounting-menu">
-                        <ul>
-                            <li class="navigation-divider">مدیریت</li>
+                        <ul class="open">
+                            @*<li class="navigation-divider">مدیریت</li>*@
                             <li><a class="active" href="/dashboard">داشبورد<span class="badge badge-danger"></span></a></li>
                             <li><a class="active" asp-action="index" asp-controller="products">محصولات انبار<span class="badge badge-danger"></span></a></li>
                             <li><a class="active" href="/productcategories">دسته بندی ها<span class="badge badge-danger"></span></a></li>
                             <li><a class="active" href="/baner">مدیریت بنر<span class="badge badge-danger"></span></a></li>
                             <li><a class="active" href="/shopProducts">محصولات فروشگاه<span class="badge badge-danger"></span></a></li>
                             <li><a class="active" href="/comments">مدیریت نظرات<span class="badge badge-danger"></span></a></li>
+                            <li><a class="active" href="/Account/UserManager"> مدیریت کاربران<span class="badge badge-danger"></span></a></li>
+                            <li><a class="active" href="/Payment/Index"> مدیریت مالی<span class="badge badge-danger"></span></a></li>
+                            
                             <li><a class="active" href="/contactUsmanager">مدیریت تماس با ما<span class="badge badge-danger"></span></a></li>
+                            <li><a class="active" href="/blogs">مدیریت اخبار<span class="badge badge-danger"></span></a></li>
+                            <li><a class="active" href="/Tickets/Index">مدیریت پیام ها<span class="badge badge-danger"></span></a></li>
                             <li><a class="active" href="/Settings"> تنظیمات<span class="badge badge-danger"></span></a></li>
+
 
                         </ul>
                     </div>
@@ -186,17 +225,6 @@
             <div class="page-header">
                 <div class="container-fluid d-sm-flex justify-content-between">
                     <h4>@ViewBag.Title</h4>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="#">داشبرد</a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a href="#">صفحات</a>
-                            </li>
-                            <li class="breadcrumb-item" aria-current="page">صفحه خالی</li>
-                        </ol>
-                    </nav>
                 </div>
             </div>
             @RenderBody()
@@ -205,12 +233,6 @@
                 <div class="container-fluid">
                     <div>© 1399 | مدیریت حسابداری و انبار | ارایه از  <a target="_blank" href="//niknet.co">Niknetco</a></div>
 
-                    <div>
-                        <nav class="nav">
-                            <a href="#" class="nav-link">تغییر لاگ</a>
-                            <a href="#" class="nav-link">راهنمایی</a>
-                        </nav>
-                    </div>
                 </div>
             </footer>
         </main>
@@ -219,6 +241,211 @@
     @RenderSection("vendors", false)
     <script src="/bordash/assets/js/custom.js"></script>
     <script src="/bordash/assets/js/app.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script>
+        var uploadFileExtentions = ["JPEG", "PNG", "GIF", "PDF", "DOC", "DOCM", "DOCX", "DOT", "TXT", "JPG"];
+        $(document).ready(function () {
+
+            var url = window.location.href;
+            var finalUrl = "";
+            if (url.includes("localhost")) {
+                finalUrl = url.replace("https://localhost:44367", "");
+            }
+            if (url.includes("isacoplus")) {
+                finalUrl = url.replace("https://isacoplus.com", "");
+            }
+            $("#accounting-menu > .open >li").each(function () {
+
+                var a = $(this).children();
+                var href = $(a).attr("href");
+
+                $(a).removeClass("active");
+
+                if (href.toLowerCase() == finalUrl.toLowerCase() || href.toLowerCase() == finalUrl.toLowerCase()) {
+                    $(a).addClass("active");
+                }
+            });
+        })
+
+
+
+        function GetTypeOfCooperation(id) {
+            switch (id) {
+                case 1:
+                    return "تمام وقت";
+                    break;
+                case 2:
+                    return "پارت تایم";
+                    break;
+                case 3:
+                    return "کارآموزی";
+                    break;
+                case 4:
+                    return "دورکاری";
+                    break;
+                default:
+                    return "نامشخص";
+                    break;
+            }
+        }
+
+
+        function GetSalary(id) {
+            switch (id) {
+                case 1:
+                    return "کمتر از 1 میلیون";
+                    break;
+                case 2:
+                    return "بین 1 تا 2.5 میلیون";
+                    break;
+                case 3:
+                    return "بین 2.5 تا 3.5 میلیون";
+                    break;
+                case 4:
+                    return "بین 3.5 تا 5 میلیون";
+                    break;
+                case 5:
+                    return "بین 5 تا 8 میلیون";
+                    break;
+                case 6:
+                    return "بیشتر از 8 میلیون";
+                    break;
+                default:
+                    return "نامشخص";
+                    break;
+            }
+        }
+
+
+
+        function GetDegreeOfEducation(id) {
+            switch (id) {
+                case 1:
+                    return "مهم نیست";
+                    break;
+                case 2:
+                    return "دیپلم";
+                    break;
+                case 3:
+                    return "کاردانی";
+                    break;
+                case 4:
+                    return "کارشناسی";
+                    break;
+                case 4:
+                    return "کارشناسی ارشد";
+                    break;
+                case 5:
+                    return "دکترا"
+                    break;
+                default:
+                    return "";
+                    break;
+            }
+        }
+
+        function GetWorkExperience(id) {
+            switch (id) {
+                case 1:
+                    return "مهم نیست";
+                    break;
+                case 2:
+                    return "کمتر از 3 سال";
+                    break;
+                case 3:
+                    return "بین 3 تا 7 سال";
+                    break;
+                case 4:
+                    return "بیشتر از 7 سال";
+                    break;
+                default:
+                    return "";
+                    break;
+            }
+        }
+
+        function GetGender(id) {
+            switch (id) {
+                case 1:
+                    return "مهم نیست";
+                    break;
+                case 2:
+                    return " مرد";
+                    break;
+                case 3:
+                    return "زن";
+                    break;
+                case 4:
+                    return "سایر";
+                    break;
+                default:
+                    return "";
+                    break;
+            }
+        }
+        function GetTicketPriorityStatus(id) {
+            switch (id) {
+                case 1:
+                    return "فوری";
+                    break;
+                case 2:
+                    return " معمولی";
+                    break;
+                case 3:
+                    return "جهت اطلاع";
+                    break;
+                default:
+                    return "";
+                    break;
+            }
+        }
+        function GetAdverCreatationStatus(id) {
+            switch (id) {
+                case 1:
+                    return "در حال بررسی";
+                    break;
+                case 2:
+                    return "رد شده";
+                    break;
+
+                case 3:
+                    return "پذیرفته شده";
+                    break;
+                case 4:
+                    return "برگشت خورده";
+                    break;
+                default:
+                    return "";
+                    break;
+            }
+        }
+        function GetAdverStatus(id) {
+            switch (id) {
+                case 1:
+                    return "فعال";
+                    break;
+                case 2:
+                    return "پیش نویس";
+                    break;
+                case 3:
+                    return "آرشیو";
+                    break;
+                case 4:
+                    return "پایان یافته";
+                    break;
+                case 5:
+                    return "غیرفعال";
+                    break;
+                case 6:
+                    return "منقضی شده";
+                    break;
+                default:
+                    return "";
+                    break;
+            }
+        }
+    </script>
     @RenderSection("scripts", false)
 </body>
 </html>

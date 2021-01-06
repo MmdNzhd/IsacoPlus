@@ -91,6 +91,7 @@
         }
         var oTable = $('.zero-configuration').DataTable({
             processing: true,
+            ordering:false,
             //serverSide: true,
             language: {
                 url: "/app-assets/vendors/js/tables/datatable/Persian.json"
@@ -106,6 +107,10 @@
                 }
             },
             columns: [
+                 {
+                    data: 'id',
+                    name: 'id'
+                },
                 {
                     data: 'name',
                     name: 'name'
@@ -138,7 +143,7 @@
         });
     </script>
 }
-@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+@*@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })*@
 
 <div class="content-body">
     <section id="basic-datatable">
@@ -211,6 +216,7 @@
                                 <table class="table zero-configuration">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>نام</th>
                                             <th>پدر</th>
                                             <th>نوع</th>

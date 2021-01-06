@@ -24,10 +24,20 @@
 }
 @section scripts{
     <script src="/app-assets/js/scripts/ui/data-list-view.js"></script>
+    <script>
+        $(".btn-outline-danger").click(function () {
+            $(".icon-x").click();
+        })
+        $(".icon-x").click(function () {
+            $(".add-new-data").removeClass("show");
+            $(".overlay-bg").removeClass("show");
+        })
+    </script>
 }
-@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+@*@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })*@
 <div class="content-body">
     <section id="data-list-view" class="data-list-view-header">
+        <a href="/settings/EditAll" class="btn btn-lg btn-primary" style=" margin-right: 438px; color:aliceblue">تنظیمات اصلی سایت</a>
         <div class="table-responsive">
             <table class="table data-list-view datatable">
                 <thead>

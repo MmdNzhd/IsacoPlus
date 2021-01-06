@@ -208,6 +208,12 @@
         $(document).ready(function () {
             var url = window.location.href;
 
+            let formsInPage = document.querySelectorAll('form');
+
+            formsInPage.forEach(form => {
+                form.addEventListener('submit', (e) => { e.preventDefault() });
+            });
+
             if (url.includes("=") ) {
 
                 var n = url.indexOf("=");
@@ -246,7 +252,50 @@
         document.getElementById(location).scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
         }
 
-        $("#inquireSubmit").click(function () {
+
+        var input = document.getElementById("inquireSearch");
+
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                $("#inquireSubmit").click();
+            }
+        });
+        //
+        var openClose = true;
+        var div = $(".i-btn-holder").addClass("d-none").removeClass("d-block");
+
+
+        $("#modalEstelam").click(function () {
+
+
+            $("#inquireSubmit").css("width", "100%");
+
+
+            if ($(this).attr("data-elem") == "1") {
+                if (openClose) {
+                    $(".i-btn-holder").removeClass("d-none").addClass("d-block");
+                    openClose = false;
+
+                }
+                else {
+
+                    $(".i-btn-holder").addClass("d-none").removeClass("d-block");
+                    openClose = true;
+
+                }
+            }
+
+
+
+        })
+
+        $("#inquireSubmit").click(function (e) {
+
+            $(".i-btn-holder").addClass("d-none").removeClass("d-block");
+            openClose = true;
+
+            e.preventDefault();
             $(".inquire").removeClass("active");
             $(".inquire-modal").addClass("active");
             $("#modalTtile").html("در حال جستجو...");
@@ -361,7 +410,34 @@
                         }
                     </li>
                 </ul>
+                @* <div class="inquire">
+                        <span class="i-btn">استعلام قیمت</span>
+
+                        <form class="w-100" onsubmit="this.preventDefault()">
+                            <div class="form-group">
+                                <input type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                                <button class="btn btn-success d-flex ml-auto" id="inquireSubmit" type="button">جستجو</button>
+                            </div>
+                        </form>
+                    </div>*@
                 <ul class="navbar-nav nav-flex-icons   p-0">
+
+                    <div class="i-btn ">
+                        <span id="modalEstelam" class="btn btn-warning i-btn scaleout-glow" data-elem="1"> استعلام وضعیت </span>
+
+                        <form class="i-btn-holder" onsubmit="this.preventDefault()">
+
+                            <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                            <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
+
+                        </form>
+
+                    </div>
+
+
+
+
+
                     <li class="nav-item px-2">
                         <a href="@FaceBook" class="nav-link text-white"><i class="fa fa-facebook-f "></i></a>
                     </li>
@@ -374,6 +450,7 @@
                     <li class="nav-item px-2">
                         <a href="@Whatsapp" class="nav-link text-white"><i class="fa fa-whatsapp"></i></a>
                     </li>
+
                 </ul>
             </div>
         </nav>
@@ -618,7 +695,7 @@
         <a href="@baner.Url">
 
             <div class="row  mx-auto hj-banner position-relative">
-                <img src="/uploads/@baner.Image" class="img-fluid  position-relative">
+                <img src="/uploads/@baner.Image" class="img-fluid  position-relative" style="width:100% !important ">
                 <span id="baneertimer" class=" countdown" style="font-weight: bold;"></span>
             </div>
         </a>
@@ -819,17 +896,21 @@
     </div>
 </div>
 <!--filter modal-->
+@*<div class="inquire">
+        <span class="i-btn">استعلام قیمت</span>
 
-<div class="inquire">
-    <span class="i-btn">استعلام قیمت</span>
+        <form class="w-100" onsubmit="this.preventDefault()">
+            <div class="form-group">
+                <input type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                <button class="btn btn-success d-flex ml-auto" id="inquireSubmit" type="button">جستجو</button>
+            </div>
+        </form>
+    </div>*@
 
-    <form class="w-100">
-        <div class="form-group">
-            <input type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
-            <button class="btn btn-success d-flex ml-auto" id="inquireSubmit" type="button">جستجو</button>
-        </div>
-    </form>
-</div>
+
+
+
+
 
 <div class="inquire-modal">
     <div class="content d-flex mx-auto flex-column position-relative" id="content">

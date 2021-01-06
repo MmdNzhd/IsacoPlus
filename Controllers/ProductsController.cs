@@ -16,6 +16,10 @@ using System.Net.WebSockets;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Security.Cryptography;
+using System.Threading;
+using Microsoft.CodeAnalysis.CSharp;
+using EFCore.BulkExtensions;
+using Newtonsoft.Json;
 
 namespace KaraYadak.Controllers
 {
@@ -151,55 +155,59 @@ namespace KaraYadak.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ProductStatus,Description,Code,MinEntity,MaxEntity")] Product input, List<int> CategoryId, int UnitId, string productMiddleName)
+        public async Task<IActionResult> Create(ProductViewModel input, List<int> CategoryId, int UnitId, string productMiddleName)
         {
-            var products = await _context.Products.OrderByDescending(x => x.Id).ToListAsync();
-            if (products.Where(i => i.Code == input.Code).Any())
+            try
             {
-                return Json(new { status = "0", message = "کد از قبل وجود دارد" });
-            }
-            if (products.Where(i => i.Name == input.Name).Any())
-            {
-                return Json(new { status = "0", message = "نام محصول از قبل وجود دارد" });
-            }
 
-            var categories = await _context.ProductCategories.ToListAsync();
-            var productCategoryTypes = await _context.ProductCategoryTypes.ToListAsync();
-            input.CreatedAt = DateTime.Now;
-            input.UpdatedAt = DateTime.Now;
-            var unit = _context.ProductUnits.Find(UnitId);
-            int cid_1 = 0, cid_2 = 0, cid_3 = 0, cid_4 = 0;
-
-            foreach (var cid in CategoryId)
-            {
-                cid_1 = cid;
-                cid_2 = _context.ProductCategories.Find(cid_1) != null ? _context.ProductCategories.Find(cid_1).Parent : 0;
-                cid_3 = _context.ProductCategories.Find(cid_2) != null ? _context.ProductCategories.Find(cid_2).Parent : 0;
-                var category = cid_1;
-                category = cid_2 != 0 ? cid_2 : category;
-                category = cid_3 != 0 ? cid_3 : category;
-                cid_4 = categories.SingleOrDefault(x => x.Id == category).ProductCategoryType;
-
-                await _context.AddAsync(new Product
+                //var products = await _context.Products.OrderByDescending(x => x.Id).ToListAsync();
+                if (await _context.Products.AnyAsync(i => i.Code == input.Code || i.Name == input.Name))
                 {
-                    CategoryIdLvl1 = cid_1,
-                    CategoryIdLvl2 = cid_2,
-                    CategoryIdLvl3 = cid_3,
-                    ProductCategoryType = cid_4,
-                    Code = input.Code,
-                    Name = input.Name,
-                    MinEntity = input.MinEntity,
-                    MaxEntity = input.MaxEntity,
-                    ProductStatus = input.ProductStatus,
-                    Unit = unit,
-                    Description = input.Description,
-                    CreatedAt = input.CreatedAt,
-                    UpdatedAt = input.UpdatedAt
-                });
+                    return Json(new { status = "0", message = "کالا از قبل وجود دارد" });
+                }
+
+
+                var categories = await _context.ProductCategories.ToListAsync();
+                var productCategoryTypes = await _context.ProductCategoryTypes.ToListAsync();
+                var unit = _context.ProductUnits.Find(UnitId);
+                int cid_1 = 0, cid_2 = 0, cid_3 = 0, cid_4 = 0;
+
+                foreach (var cid in CategoryId)
+                {
+                    cid_1 = cid;
+                    cid_2 = _context.ProductCategories.Find(cid_1) != null ? _context.ProductCategories.Find(cid_1).Parent : 0;
+                    cid_3 = _context.ProductCategories.Find(cid_2) != null ? _context.ProductCategories.Find(cid_2).Parent : 0;
+                    var category = cid_1;
+                    category = cid_2 != 0 ? cid_2 : category;
+                    category = cid_3 != 0 ? cid_3 : category;
+                    cid_4 = categories.SingleOrDefault(x => x.Id == category).ProductCategoryType;
+
+                    await _context.AddAsync(new Product
+                    {
+                        CategoryIdLvl1 = cid_1,
+                        CategoryIdLvl2 = cid_2,
+                        CategoryIdLvl3 = cid_3,
+                        ProductCategoryType = cid_4,
+                        Code = input.Code,
+                        Name = input.Name,
+                        MinEntity = input.MinEntity,
+                        MaxEntity = input.MaxEntity,
+                        ProductStatus = ProductStatus.دردسترس,
+                        Unit = unit,
+                        Description = input.Description,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    });
+                }
+                await _context.SaveChangesAsync();
+                return Json(new { status = "1", message = "ثبت شد" });
             }
-            await _context.SaveChangesAsync();
-            return Json(new { status = "1", message = "ثبت شد" });
+            catch (Exception ex)
+            {
+
+                return Json(new { status = "0", message = "خطایی رخ داده است" });
+
+            }
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -599,12 +607,26 @@ namespace KaraYadak.Controllers
 
         }
         [HttpPost]
-        public ActionResult AddProductWithExel(IFormFile file)
+        public async Task<ActionResult> AddProductWithExel(IFormFile file)
         {
+            var categories = await _context.ProductCategories.ToListAsync();
+
+            var code = "";
+            var name = "";
+            var des = "";
+            var ids = new List<int>();
+            var price = 0.0;
+            var discount = 0;
+            var count = 0;
             if (Request != null)
             {
                 if ((file != null) && (file.Length > 0) && !string.IsNullOrEmpty(file.FileName))
                 {
+                    //update product list
+                    var updateProducts = new List<Product>();
+                    var updateProductsImg = new List<Image>();
+                    var prosucts = new List<Product>();
+
                     string fileName = file.FileName;
                     string fileContentType = file.ContentType;
                     byte[] fileBytes = new byte[file.Length];
@@ -620,20 +642,94 @@ namespace KaraYadak.Controllers
                             try
                             {
 
-                                //user.SNo = Convert.ToInt32(workSheet.Cells[rowIterator, 1].Value);
-                                //user.Name = workSheet.Cells[rowIterator, 2].Value.ToString();
-                                //user.Age = Convert.ToInt32(workSheet.Cells[rowIterator, 3].Value);
+                                name = (workSheet.Cells[rowIterator, 1].Value).ToString();
+                                code = (workSheet.Cells[rowIterator, 2].Value).ToString();
+                                des = (workSheet.Cells[rowIterator, 3].Value).ToString();
+                                var stringIds = (workSheet.Cells[rowIterator, 4].Value).ToString();
+                                var splitedId = stringIds.Split(",");
+                                ids.Clear();
+                                foreach (var item in splitedId)
+                                {
+                                    ids.Add(int.Parse(item));
+                                }
+                                price = Convert.ToDouble(workSheet.Cells[rowIterator, 5].Value);
+                                discount = Convert.ToInt16(workSheet.Cells[rowIterator, 6].Value);
+                                count = Convert.ToInt16(workSheet.Cells[rowIterator, 7].Value);
+                                if (!_context.Products.Any(x => x.Code == code))
+                                {
+                                    int cid_1 = 0, cid_2 = 0, cid_3 = 0, cid_4 = 0;
+
+                                    foreach (var id in ids)
+                                    {
+                                        cid_1 = id;
+                                        cid_2 = _context.ProductCategories.Find(cid_1) != null ? _context.ProductCategories.Find(cid_1).Parent : 0;
+                                        cid_3 = _context.ProductCategories.Find(cid_2) != null ? _context.ProductCategories.Find(cid_2).Parent : 0;
+                                        var category = cid_1;
+                                        category = cid_2 != 0 ? cid_2 : category;
+                                        category = cid_3 != 0 ? cid_3 : category;
+                                        cid_4 = (categories.SingleOrDefault(x => x.Id == category)) != null ?
+                                            categories.SingleOrDefault(x => x.Id == category).ProductCategoryType : 0;
+                                        var newProducts = new Product()
+                                        {
+                                            Code = code,
+                                            Name = name,
+                                            Description = des,
+                                            CreatedAt = DateTime.Now,
+                                            Discount = discount,
+                                            MaxEntity = count,
+                                            MinEntity = count,
+                                            UpdatedAt = DateTime.Now,
+                                            CategoryIdLvl1 = cid_1,
+                                            CategoryIdLvl2 = cid_2,
+                                            CategoryIdLvl3 = cid_3,
+                                            ProductCategoryType = cid_4,
+                                            ProductStatus = ProductStatus.آماده_برای_فروش,
+                                            ImageUrl = "9fad10de-80a0-4601-b481-2d53b62faea7.jpg",
+                                            Price = price,
+                                            
+                                        };
+                                        updateProducts.Add(newProducts);
+
+
+                                    }
+
+
+                                }
                             }
                             catch (Exception ex)
                             {
 
-                                return new JsonResult(new { status = 0, message = ex.Message });
 
                             }
                         }
+                        //var maxId = await _context.Products.MaxAsync(x => x.Id);
+
+                        //foreach (var pr in await _context.Products.Where(x=>x.Id>maxId).ToListAsync())
+                        //{
+                        //    var img = new Image()
+                        //    {
+                        //        CreatedAt = DateTime.Now,
+                        //        UpdatedAt = DateTime.Now,
+                        //        Key = pr.Code,
+                        //        ProductId = pr.Id,
+                        //        Url = "9fad10de-80a0-4601-b481-2d53b62faea7.jpg",
+                        //    };
+                        //    updateProductsImg.Add(img);
+                        //}
+
+                        //await _context.Images.AddRangeAsync(updateProductsImg);
+                        //await _context.AddRangeAsync(updateProducts);
+
+                        //await _context.SaveChangesAsync();
+
+
+                        await _context.BulkInsertAsync(updateProducts);
+
+
                     }
                 }
             }
+
 
             return new JsonResult(new { status = 1, message = "با موفقیت انجام شد" });
         }
@@ -682,7 +778,7 @@ namespace KaraYadak.Controllers
                             catch (Exception ex)
                             {
 
-                                return new JsonResult(new { status = 0, message = ex.Message });
+                                //return new JsonResult(new { status = 0, message = ex.Message });
 
                             }
                         }
@@ -691,7 +787,7 @@ namespace KaraYadak.Controllers
                     }
                 }
             }
-            
+
 
             return new JsonResult(new { status = 1, message = "با موفقیت انجام شد" });
         }

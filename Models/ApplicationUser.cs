@@ -56,6 +56,10 @@ namespace KaraYadak.Models
         [DisplayName("شهر ")]
         [MaxLength(500, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد ")]
         public string City { get; set; }
+
+        public ICollection<Ticket> SenderTickets { get; set; }
+        public ICollection<Ticket> RecieveTickets { get; set; }
+        public ICollection<Payment> Payments { get; set; }
     }
 
 }

@@ -12,6 +12,7 @@ using KaraYadak.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using KaraYadak.Services;
 
 namespace KaraYadak.Controllers
 {
@@ -25,12 +26,15 @@ namespace KaraYadak.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IAccountService _accountService;
         private readonly ApplicationDbContext _context;
 
-        public AccountController(ApplicationDbContext context, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AccountController(ApplicationDbContext context, SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,IAccountService accountService)
         {
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _accountService = accountService;
             _userManager = userManager;
             _context = context;
         }
@@ -478,6 +482,66 @@ namespace KaraYadak.Controllers
             await _signInManager.SignOutAsync();
             returnUrl = returnUrl ?? Url.Content("/");
             return LocalRedirect(returnUrl);
+        }
+
+        [Authorize(Roles = PublicHelper.ADMINROLE)]
+        public async Task<IActionResult> UserManager()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = PublicHelper.ADMINROLE)]
+        [HttpGet]
+        public async Task<IActionResult> GetAllUserForAdmin()
+        {
+            var result = await _accountService.GetAllUserForAdmin();
+
+            return new JsonResult(result);
+        }
+
+        [Authorize(Roles =PublicHelper.ADMINROLE)]
+        [HttpPost]
+        public async Task<IActionResult> BlockUser(string userId)
+        {
+          var result=  await _accountService.BlockUser(userId);
+            if (result.isSuccess)
+            {
+                return Json(new { status = 1, message = "با موفقیت انجام شد" });
+            }
+            else
+            {
+                return Json(new { status = 0, message = result.error });
+            }
+        }
+
+        [Authorize(Roles = PublicHelper.ADMINROLE)]
+        [HttpPost]
+        public async Task<IActionResult> UnBlockUser(string userId)
+        {
+            var result = await _accountService.UnBlockUser(userId);
+            if (result.isSuccess)
+            {
+                return Json(new { status = 1, message = "با موفقیت انجام شد" });
+            }
+            else
+            {
+                return Json(new { status = 0, message = result.error });
+            }
+        }
+
+        [Authorize(Roles = PublicHelper.ADMINROLE)]
+        [HttpPost]
+        public async Task<IActionResult> GetUserAddress(string phoneNumber)
+        {
+            var result = await _accountService.GetUserAddress(phoneNumber);
+            if (result.isSuccess)
+            {
+                return Json(new { status = 1, message = "با موفقیت انجام شد" ,data=result.error});
+            }
+            else
+            {
+                return Json(new { status = 0, message = result.error });
+            }
         }
 
     }

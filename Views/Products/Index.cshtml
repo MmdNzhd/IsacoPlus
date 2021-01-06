@@ -285,7 +285,7 @@
     <script>
         $("#addProductWithExel").click(function () {
             var fileExtension = ['xls', 'xlsx'];
-            var filename = $('#fileUpload').val();
+            var filename = $('#fileUpload2').val();
             if (filename.length == 0) {
 
                 toastr.error("لطفا فایل انتخاب کنید")
@@ -299,7 +299,7 @@
                 }
             }
             var fdata = new FormData();
-            var fileUpload = $("#fileUpload1").get(0);
+            var fileUpload = $("#fileUpload2").get(0);
             var files = fileUpload.files;
             fdata.append("file", files[0]);
             $.ajax({
@@ -358,7 +358,7 @@
         });
     </script>
 }
-@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+@*@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })*@
 
 <div class="content-body">
     <section id="basic-datatable" class="data-list-view-header">
@@ -413,13 +413,13 @@
                     <input type="file" class="col-7 form-control form-control-file" id="fileUpload1" />
                     <button class="btn btn-primary col-4 ml-2" id="updateProductWithExel">اعمال تغییرات</button>
                 </div>
-                @*<div class=" row mt-4 mb-1" style="text-align:center">
+                <div class=" row mt-4 mb-1" style="text-align:center">
                     اضافه کردن محصولات
                 </div>
                 <div class=" row">
                     <input type="file" class="col-7 form-control form-control-file" id="fileUpload2" />
                     <button class="btn btn-primary col-4 ml-2" id="addProductWithExel">اعمال تغییرات</button>
-                </div>*@
+                </div>
 
             </div>
         </div>
