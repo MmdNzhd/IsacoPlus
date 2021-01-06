@@ -252,7 +252,6 @@
         document.getElementById(location).scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
         }
 
-
         var input = document.getElementById("inquireSearch");
 
         input.addEventListener("keyup", function (event) {
@@ -265,29 +264,20 @@
         var openClose = true;
         var div = $(".i-btn-holder").addClass("d-none").removeClass("d-block");
 
-
         $("#modalEstelam").click(function () {
-
-
             $("#inquireSubmit").css("width", "100%");
-
 
             if ($(this).attr("data-elem") == "1") {
                 if (openClose) {
                     $(".i-btn-holder").removeClass("d-none").addClass("d-block");
                     openClose = false;
-
                 }
                 else {
 
                     $(".i-btn-holder").addClass("d-none").removeClass("d-block");
                     openClose = true;
-
                 }
             }
-
-
-
         })
 
         $("#inquireSubmit").click(function (e) {
@@ -358,6 +348,37 @@
             });
         });
     </script>
+
+    <script>
+
+        $(document).on('click', '#LoginAndRegister', function(e){ 
+            $("#login-form").removeClass("d-none");
+            $("#Register-form").removeClass("d-none");
+            $("#label-1").removeClass("d-none");
+            $("#label-2").removeClass("d-none");
+            $("#VerifyForm").addClass("d-none");
+        });
+        $(document).on('click', '#LoginSubmitButton', function(e){ 
+            $("#VerifyForm").removeClass("d-none");
+        });
+        $(document).on('click', '#LoginSubmitButton', function(e){ 
+            $("#login-form").addClass("d-none");
+            $("#Register-form").addClass("d-none");
+            $("#label-1").addClass("d-none");
+            $("#label-2").addClass("d-none");
+        })
+        $(document).on('click', '#RegisterSubmitButton', function(e){ 
+            $("#VerifyForm").removeClass("d-none");
+            console.log("sam")
+        });
+        $(document).on('click', '#RegisterSubmitButton', function(e){ 
+            $("#login-form").addClass("d-none");
+            $("#Register-form").addClass("d-none");
+            $("#label-1").addClass("d-none");
+            $("#label-2").addClass("d-none");
+        })
+   
+    </script>
 }
 
 <div class="container-fluid hj-header">
@@ -375,7 +396,6 @@
             </button>
             <div class="collapse navbar-collapse text-right" id="navbarSupportedContent-333">
                 <ul class="navbar-nav mx-auto p-0 ">
-
                     <li class="nav-item px-md-3">
                         @if (ViewBag.Username != null)
                         {
@@ -384,7 +404,7 @@
                         }
                         else
                         {
-                            <a class="nav-link text-white" href="#" data-toggle="modal" data-target="#centralModalLogin">ورود/ثبت نام</a>
+                            <a id="LoginAndRegister" class="nav-link text-white" href="#" data-toggle="modal" data-target="#centralModalLogin">ورود/ثبت نام</a>
                         }
                     </li>
                     <li class="nav-item px-md-3">
@@ -421,22 +441,14 @@
                         </form>
                     </div>*@
                 <ul class="navbar-nav nav-flex-icons   p-0">
-
                     <div class="i-btn ">
                         <span id="modalEstelam" class="btn btn-warning i-btn scaleout-glow" data-elem="1"> استعلام وضعیت </span>
-
                         <form class="i-btn-holder" onsubmit="this.preventDefault()">
-
                             <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
                             <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
 
                         </form>
-
                     </div>
-
-
-
-
 
                     <li class="nav-item px-2">
                         <a href="@FaceBook" class="nav-link text-white"><i class="fa fa-facebook-f "></i></a>
@@ -742,19 +754,7 @@
     </div>
 
 
-
     @Html.Partial("OtherProducts", Model.Fourth);
-
-
-
-
-
-
-
-
-
-
-
     <!-- --------- -->
 </div>
 <!-- ----end Products---- -->
@@ -764,90 +764,96 @@
 
     <!-- Change class .modal-sm to change the size of the modal -->
     <div class="modal-dialog modal-md login" role="document">
-
-
         <div class="modal-content modal-login">
-
             <div class="modal-body">
-
                 <div class="login-wrap">
-                    <div class="login-html">
-                        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">ورود </label>
-                        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"> ثبت نام</label>
+                    <div class="login-html" >
+                        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label id="label-1" for="tab-1" class="tab">ورود </label>
+                        <input id="tab-2" type="radio" name="tab" class="sign-up"><label id="label-2" for="tab-2" class="tab"> ثبت نام</label>
                         <div class="login-form mt-3">
-                            <form id="login-form" action="" method="post">
-                                <div class="sign-in-htm">
+                            <form id="VerifyForm" class="d-none" action="" method="post">
+                                <div class="sign-up-htm sign-in-htm">
                                     <div class="group">
-                                        <label for="username" class="label"> ایمبل  </label>
+                                        <label for="username" class="label"> کد تایید </label>
                                         <input id="username" type="text" class="input" name="username">
                                     </div>
                                     <div class="group">
-                                        <label for="pass" class="label">رمزعبور</label>
-                                        <input id="password" type="password" class="input" data-type="password" name="password">
+                                        <input type="submit" class="button" value=" ورود">
+                                    </div>
+                                    <div class="hr"></div>
+                                </div>
+                            </form>
+                            <form id="login-form" action="" method="post">
+                                <div class="sign-in-htm">
+                                    <div class="group">
+                                        <label for="username" class="label"> شماره تماس  </label>
+                                        <input id="username" type="text" class="input" name="username">
                                     </div>
                                     <div class="group">
                                         <input id="check" type="checkbox" class="check" checked>
                                         <label for="check"><span class="icon"></span> به یاد داشته باش </label>
                                     </div>
                                     <div class="group">
-                                        <input type="submit" class="button" value=" ورود">
+                                        <input id="LoginSubmitButton" type="submit" class="button" value=" ورود">
                                     </div>
                                     <div class="hr"></div>
-                                    <div class="foot-lnk">
-                                        <a href="#forgot"> فراموشی رمزعبور؟</a>
-                                    </div>
+                               
                                 </div>
                             </form>
-                            <form id="Register-form" action="" method="post">
+                            <form  id="Register-form" action="" method="post">
                                 <div class="sign-up-htm">
                                     <div class="group">
                                         <label for="usernameForReg" class="label">نام نام خانوادگی</label>
                                         <input id="usernameForReg" type="text" class="input" name="usernameForReg">
                                     </div>
                                     <div class="group">
-                                        <label for="passwordForReg" class="label">رمزعبور</label>
-                                        <input id="passwordForReg" type="password" class="input" data-type="password" name="passwordForReg">
+                                        <label for="phonenumberForReg" class="label">شماره تماس</label>
+                                        <input id="phonenumberForReg" type="password" class="input" data-type="password" name="passwordForReg">
                                     </div>
                                     <div class="group">
-                                        <label for="ConfirmPassword" class="label"> تایید رمزعبور</label>
-                                        <input id="ConfirmPassword" type="password" class="input" data-type="password" name="ConfirmPassword">
-                                    </div>
-                                    <div class="group">
-                                        <label for="email" class="label"> آدرس ایمیل</label>
-                                        <input id="email" type="text" class="input">
-                                    </div>
-                                    <div class="group">
-                                        <input type="submit" class="button" value=" ثبت نام">
+                                        <input id="RegisterSubmitButton" type="submit" class="button" value=" ثبت نام">
                                     </div>
                                     <div class="foot-lnk">
                                         <label for="tab-1"> قبلا ثبت نام کردید؟</label>
                                     </div>
-
-
                                 </div>
-                            </form>
-
+                            </form> 
                         </div>
                     </div>
+                   
                 </div>
-
             </div>
-
         </div>
     </div>
 </div>
+
+
+ @* <div class="login-html d-none" id="VerifyForm">
+                        <input id="tab-3" type="radio" name="tab" class="sign-in" checked><label for="tab-3" class="tab">کد تایید  </label>
+                         <div class="verify-form mt-3"  >
+                            <form id="verify-form" action="" method="post">
+                                <div class="sign-in-htm">
+                                    <div class="group">
+                                        <label for="username" class="label"> کد تایید </label>
+                                        <input id="username" type="text" class="input" name="username">
+                                    </div>
+                                    <div class="group">
+                                        <input type="submit" class="button" value=" ورود">
+                                    </div>
+                                    <div class="hr"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div> *@
+ 
 <!-- end modal login -->
 <!--filter modal-->
 <div class="modal fade" id="centralModalfilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
-
     <!-- Change class .modal-sm to change the size of the modal -->
     <div class="modal-dialog modal-lg" role="document">
-
-
         <div class="modal-content modalfilter">
             <div class="modal-header modal-header-filter">
-
                 <button type="button" class="close button-close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -908,18 +914,12 @@
     </div>*@
 
 
-
-
-
-
 <div class="inquire-modal">
     <div class="content d-flex mx-auto flex-column position-relative" id="content">
         <span class="close-btn"></span>
-
         <h3 id="modalTtile" class="d-block text-center mb-5">نتایج جستجو</h3>
 
         <!--loading-->
-
         <div class="loading-container">
             <div class="search-loading">
                 <div class="my-loader"></div>
@@ -937,9 +937,6 @@
                     </g>
                 </svg>
             </div>
-
         </div>
-
-
     </div>
 </div>
