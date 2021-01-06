@@ -13,6 +13,9 @@ using QRCoder;
 using KaraYadak.Data;
 using KaraYadak.Models;
 using KaraYadak.ViewModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace KaraYadak.Controllers
 {
@@ -23,6 +26,7 @@ namespace KaraYadak.Controllers
 
 
         private readonly ApplicationDbContext _context;
+
         //private readonly IHostingEnvironment _hostingEnvironment;
 
         public HomeSiteController(ApplicationDbContext context)
@@ -43,13 +47,32 @@ namespace KaraYadak.Controllers
             }
             return String.Join(",", list);
         }
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+
+          
+           
+            //var ip = _accessor.ActionContext.HttpContext.Connection.RemoteIpAddress.ToString();
+            ////add site visit
+            //if(!await _context.SiteVisits.AnyAsync(x => x.Ip == ip && x.Date.Day == DateTime.Now.Day))
+            //{
+            //    var visit = new Models.SiteVisit()
+            //    {
+            //        Date = DateTime.Now,
+            //        Ip = ip
+            //    };
+            //    await _context.SiteVisits.AddAsync(visit);
+            //    await _context.SaveChangesAsync();
+
+            //}
+                
+
+                
             //blog
-            ViewBag.blogs = _context.Blogs.OrderByDescending(x => x.CreateAt).Take(7).ToList();
+            ViewBag.blogs = await _context.Blogs.OrderByDescending(x => x.CreateAt).Take(7).ToListAsync();
 
             //baner
-            var baner = _context.Baners.OrderByDescending(x => x.Date).FirstOrDefault();
+            var baner =await  _context.Baners.OrderByDescending(x => x.CreateAt).FirstOrDefaultAsync();
             ViewBag.baner = baner;
             var now = DateTime.Now;
             if (baner.Date < now)
@@ -63,12 +86,12 @@ namespace KaraYadak.Controllers
 
             if (User.Identity.Name != null)
             {
-                var user = _context.Users.SingleOrDefault(x => x.UserName.Equals(User.Identity.Name));
+                var user =await  _context.Users.SingleOrDefaultAsync(x => x.UserName.Equals(User.Identity.Name));
                 ViewBag.Username = user.FirstName + " " + user.LastName;
             }
-            ViewBag.Categories = _context.ProductCategories.Where(i => i.ProductCategoryType == 4 ||
-            i.ProductCategoryType == 6 || i.ProductCategoryType == 7 || i.ProductCategoryType == 8).ToList();
-            ViewBag.Brands = _context.ProductCategories.Where(i => i.Parent != 0 && i.ProductCategoryType == 11).ToList();
+            ViewBag.Categories = await _context.ProductCategories.Where(i => i.ProductCategoryType == 4 ||
+            i.ProductCategoryType == 6 || i.ProductCategoryType == 7 || i.ProductCategoryType == 8).ToListAsync();
+            ViewBag.Brands =await _context.ProductCategories.Where(i => i.Parent != 0 && i.ProductCategoryType == 11).ToListAsync();
 
 
 
@@ -126,7 +149,7 @@ namespace KaraYadak.Controllers
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
             }).Take(1).ToList();
 
-            var specialProducts = groupByCodeProduct.Select(x => new ProductForIndexVM
+            var specialProducts = groupByCodeProduct.Where(x=>x.FirstOrDefault().Special).Select(x => new ProductForIndexVM
             {
                 Code = x.FirstOrDefault().Code,
                 Title = x.FirstOrDefault().Title,

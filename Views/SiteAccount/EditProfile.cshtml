@@ -1,5 +1,6 @@
 ﻿@model KaraYadak.ViewModels.ProfileVM
 @using KaraYadak.Helper
+@using DNTPersianUtils.Core
 
 
 
@@ -16,6 +17,29 @@
 }
 <div id="throbber" style="display:none;">
     <img src="~/assets/iKSmF.gif" />
+</div>
+<div class="modal fade mt-5 pt-5" id="factor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+
+    <!-- Change class .modal-sm to change the size of the modal -->
+    <div class="modal-dialog modal-xl" role="document">
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title w-100 text-right" id="myModalLabel">فاکتور</h2>
+                <h3 id="factorDate"></h3>
+
+            </div>
+            <div class="modal-body table-responsive">
+            </div>
+            <div class="modal-footer   row">
+                <div class="col-12"></div>
+                <button id="return" type="button" class="btn btn-danger col-2" style="margin-left: 41%;" data-dismiss="modal">بستن</button>
+
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container-fluid bg-product">
@@ -50,7 +74,7 @@
                     </a>
                 </div>
                 <div class="col-7 mx-auto text-center pt-5">
-                    <h4 class="exit" ><a href="/LogOut" class="text text-danger">خروج</a></h4>
+                    <h4 class="exit"><a href="/LogOut" class="text text-danger">خروج</a></h4>
                 </div>
             </div>
         </div>
@@ -105,6 +129,24 @@
                     </tr>
                     <tr>
 
+
+                        <td class="Bleft-profile">
+                            <div class="form-group">
+                                <label for="name" class="lableEditeProfile">استان :</label>
+                                <div>@Model.Province</div>
+
+                            </div>
+                        </td>
+
+                        <td class="Bleft-profile">
+                            <div class="form-group">
+                                <label for="name" class="lableEditeProfile">شهر :</label>
+                                <div>@Model.City</div>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="Bleft-profile">
                             <div class="form-group">
                                 <label for="name" class="lableEditeProfile">آدرس :</label>
@@ -112,6 +154,17 @@
 
                             </div>
                         </td>
+
+
+                        <td class="Bleft-profile">
+                            <div class="form-group">
+                                <label for="name" class="lableEditeProfile">کد پستی :</label>
+                                <div>@Model.PostalCode</div>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>
                             <div class="form-group">
                                 <label for="name" class="lableEditeProfile"> شماره کارت:</label>
@@ -146,6 +199,7 @@
                             <th scope="col">مبلغ قابل پرداخت</th>
                             <th scope="col">مبلغ کل</th>
                             <th scope="col"> عملیات پرداخت</th>
+                            <th scope="col">مشاهده جزئیات</th>
                             @*<th scope="col"> جزییات </th>*@
                         </tr>
                     </thead>
@@ -156,7 +210,7 @@
                         {
                             DateTime date = item.Date;
                             <tr>
-                                <th scope="row">3</th>
+                                <th scope="row">@item.Id</th>
                                 <td class="text-primary">@item.RequestCode</td>
                                 <td class="text-warning">@date.ToShamsi()</td>
                                 <td>0</td>
@@ -174,6 +228,8 @@
 
                                 }
                                 @*<td><a href=#>بیشتر</a></td>*@
+                                <td><button type="button" item-id="@item.Id" class="btn btn-primary " 
+                                            onclick="getDetails(@item.Id,'@date.ToShamsi()')"><i class="fa fa-eye" aria-hidden="true"></i></button></td>
                             </tr>
                         }
                     </tbody>
@@ -263,6 +319,31 @@
                                                     <input type="text" id="nationalCode" value="@Model.NationalCode">
                                                     <label>  شماره کارت </label>
                                                     <input type="text" id="cartNumber" value="@Model.CartNumber">
+
+                                                    <label>  استان </label>
+                                                    <select id="province" class="form-control">
+                                                        <option value="@Model.Province" selected>@Model.Province </option>
+
+                                                        @foreach (var item in ViewBag.Provinces)
+                                                        {
+                                                            <option value=@item>@item </option>
+                                                        }
+                                                    </select>
+                                                    @*<input type="text" id="province" value="@Model.Province">*@
+
+                                                    <label>  شهر </label>
+                                                    <select id="city" class="form-control">
+                                                        <option value="@Model.Province" selected>@Model.City </option>
+
+                                                        @*@foreach (var item in ViewBag.Cities)
+                                                            {
+                                                            }*@
+                                                    </select>
+                                                    <label>  کد پستی </label>
+                                                    <input type="text" id="postalCode" value="@Model.PostalCode">
+
+
+
                                                     <label>  آدرس </label>
                                                     <textarea id="address">@Model.Address</textarea>
                                                 </form>
@@ -293,6 +374,7 @@
 
 @section Scripts{
     <script>
+        GetCities('@Model.Province')
         const sleep = (milliseconds) => {
             return new Promise(resolve => setTimeout(resolve, milliseconds))
         }
@@ -322,6 +404,9 @@
             fdata.append("NationalCode", $("#nationalCode").val());
             fdata.append("CartNumber", $("#cartNumber").val());
             fdata.append("Address", $("#address").val());
+            fdata.append("province", $("#province").val());
+            fdata.append("city", $("#city").val());
+            fdata.append("postalCode", $("#postalCode").val());
 
             $.ajax({
                 type: "POST",
@@ -360,6 +445,88 @@
                 }
             });
         });
+        //GetCities
+        $("#province").on("change", function (val) {
+            GetCities($("#province").val());
+        })
+        function GetCities(province) {
+            $.ajax({
+                type: "Get",
+                url: "/GetCities?province=" + province,
+                data: {},
+                contentType: 'application/json',
+                //processData: false,
+                success: function (res) {
+                    if (res.status == 1) {
+                        let citySelec = $("#city").empty();
 
+                        @*res.data.forEach(city => {
+                            if (city == '@Model.City') {
+                                citySelec.append(`<option value=${city} selected>${city}  </option>`)
+
+                            }
+                            else {
+                                citySelec.append(`<option value=${city}>${city} </option>`)
+
+                            }*@
+
+                        var items = "";
+                        $.each(res.data, function (i, row) {
+                            console.log(row);
+                            items += "<option value='" + row + "'>" + row + "</option>";
+                        });
+                        $("#city").html(items);
+
+                        }
+
+                    else {
+                        let errors = `<p> `;
+                        res.error.forEach(er => {
+                            errors += `${er}<br />`;
+                        });
+                        errors += `<p/>`;
+
+                        Toast.fire({
+                            icon: 'error',
+                            title: errors
+
+                        })
+
+
+                    }
+                }
+            });
+        }
+
+
+        function getDetails(id,date) {
+            $.ajax({
+                type: "Get",
+                url: "/GetFactorDetails?id=" + id,
+                data: {},
+                dataType: "html",
+                contentType: 'application/json',
+                //processData: false,
+                success: function (res) {
+                    $("#factor").modal();
+                    $(".modal-body").html(res);
+                    $("#factorDate").html(date);
+
+                },
+                error: function (err) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: "خطایی رخ داده است"
+
+                    })
+
+                }
+
+
+
+
+
+            });
+        }
     </script>
 }

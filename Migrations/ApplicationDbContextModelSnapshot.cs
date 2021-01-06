@@ -62,6 +62,10 @@ namespace KaraYadak.Migrations
                     b.Property<string>("CartNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -123,6 +127,13 @@ namespace KaraYadak.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Province")
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
                     b.Property<DateTime>("RegistrationDateTime")
                         .HasColumnType("datetime2");
 
@@ -139,6 +150,9 @@ namespace KaraYadak.Migrations
                     b.Property<string>("VerificationCode")
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
+
+                    b.Property<DateTime>("VerificationExpireTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -605,7 +619,9 @@ namespace KaraYadak.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -626,7 +642,9 @@ namespace KaraYadak.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -826,6 +844,9 @@ namespace KaraYadak.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PaymentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("PaymentType")
                         .HasColumnType("int");
 
@@ -852,7 +873,29 @@ namespace KaraYadak.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PaymentId")
+                        .IsUnique()
+                        .HasFilter("[PaymentId] IS NOT NULL");
+
                     b.ToTable("ShoppingCarts");
+                });
+
+            modelBuilder.Entity("KaraYadak.Models.SiteVisit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Ip")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SiteVisits");
                 });
 
             modelBuilder.Entity("KaraYadak.Models.VerificationCode", b =>
@@ -928,6 +971,163 @@ namespace KaraYadak.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("WarehouseProductQuantities");
+                });
+
+            modelBuilder.Entity("KaraYadak.Payment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ErrorCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ErrorDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("FinallyAmountWithTax")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("InvoiceKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsBackMOney")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSucceed")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ShoppingCartId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TrackingNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("KaraYadak.Ticket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Answer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("AnswerDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsReciverSeen")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSenderSeen")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ReceiverFile")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReceiverId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("ReceiverSeenDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SenderFile")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SenderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("SenderSeenDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<int>("TicketPriorityStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TicketStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("KaraYadak.Transaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("FinallyAmountWithTax")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Information")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSucceed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PaymentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TransactionCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentId")
+                        .IsUnique();
+
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1141,6 +1341,40 @@ namespace KaraYadak.Migrations
                     b.HasOne("KaraYadak.Models.ProductUnit", "Unit")
                         .WithMany()
                         .HasForeignKey("UnitId");
+                });
+
+            modelBuilder.Entity("KaraYadak.Models.ShoppingCart", b =>
+                {
+                    b.HasOne("KaraYadak.Payment", "Payment")
+                        .WithOne("ShoppingCart")
+                        .HasForeignKey("KaraYadak.Models.ShoppingCart", "PaymentId");
+                });
+
+            modelBuilder.Entity("KaraYadak.Payment", b =>
+                {
+                    b.HasOne("KaraYadak.Models.ApplicationUser", "User")
+                        .WithMany("Payments")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("KaraYadak.Ticket", b =>
+                {
+                    b.HasOne("KaraYadak.Models.ApplicationUser", "Receive")
+                        .WithMany("RecieveTickets")
+                        .HasForeignKey("ReceiverId");
+
+                    b.HasOne("KaraYadak.Models.ApplicationUser", "Sender")
+                        .WithMany("SenderTickets")
+                        .HasForeignKey("SenderId");
+                });
+
+            modelBuilder.Entity("KaraYadak.Transaction", b =>
+                {
+                    b.HasOne("KaraYadak.Payment", "Payment")
+                        .WithOne("Transaction")
+                        .HasForeignKey("KaraYadak.Transaction", "PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

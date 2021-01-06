@@ -334,8 +334,11 @@
                 }
             }
             var fdata = new FormData();
-            var fileUpload = $("#fileUpload2").get(0);
+            var fileUpload = $("#fileUpload1").get(0);
+            console.log(fileUpload)
             var files = fileUpload.files;
+            console.log(files)
+
             fdata.append("file", files[0]);
             $.ajax({
                 type: "POST",
@@ -348,14 +351,14 @@
                         toastr.success(res.message);
                     }
                     else {
-                        toastr.error(res.message);
+                        toastr.error("خطایی رخ داده است لطفا فایل اکسل با فرمت درست وارد کنید");
                     }
                 }
             });
         });
     </script>
 }
-@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
+@*@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })*@
 
 <div class="content-body">
     <section id="basic-datatable" class="data-list-view-header">

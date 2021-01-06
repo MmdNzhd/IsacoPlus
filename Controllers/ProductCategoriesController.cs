@@ -65,7 +65,9 @@ namespace KaraYadak.Controllers
                              pc.UpdatedAt,
                              ParentString = pc.Parent > 0 ? t1.Name : "ندارد",
                              ProductCategoryTypeString = pc.ProductCategoryType > 0 ? t2.Name : "بی نوع",
-                         }).ToListAsync();
+                         }).OrderByDescending(x=>x.UpdatedAt)
+                         
+                         .ToListAsync();
 
             int recordsTotal = items.Count();
 

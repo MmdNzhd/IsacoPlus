@@ -15,6 +15,10 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using KaraYadak.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using KaraYadak.Extention;
+using KaraYadak.Services;
+using Parbad.Builder;
 
 namespace KaraYadak
 {
@@ -49,7 +53,7 @@ namespace KaraYadak
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 5;
+                options.Password.RequiredLength = 4;
                 options.Password.RequiredUniqueChars = 0;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
@@ -73,17 +77,53 @@ namespace KaraYadak
 
             services.AddSession();
 
+            services.AddHttpContextAccessor();
+
             //services.AddControllersWithViews();
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                     );
+            services.AddMvc(options =>
+            {
+                options.EnableEndpointRouting = false;
+                options.Filters.Add(new ModelStateCheckFilter());
+                //options.Filters.Add(new ClaimsAuthorizeAttribute());
 
+            });
             services.AddRazorPages()
                 .AddRazorOptions(options =>
                 {
                     options.ViewLocationFormats.Add("/{0}.cshtml");
                 });
+
+
+            services.AddParbad().ConfigureGateways(gateways =>
+                                {
+                                    //gateways
+                                    //    .AddParsian()
+                                    //    .WithAccounts(accounts =>
+                                    //    {
+                                    //        accounts.AddInMemory(account =>
+                                    //        {
+                                    //            account.LoginAccount = "T46BcVoBu0O4lx7415aa";
+                                    //        });
+                                    //    });
+
+                                    gateways
+                                        .AddParbadVirtual()
+                                        .WithOptions(options => options.GatewayPath = "/MyVirtualGateway");
+                                })
+                        .ConfigureHttpContext(builder => builder.UseDefaultAspNetCore())
+                        .ConfigureStorage(builder => builder.UseMemoryCache());
+
+            //services.AddScoped<IActionContextAccessor, ActionContextAccessor>();
+            //services.AddScoped<ISiteVisitService, SiteVisitService>();
+            services.AddScoped<ISmsSender, SmsSender>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ITicketService, TicketService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,9 +159,11 @@ namespace KaraYadak
                     pattern: "{controller=HomeSite}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            app.UseMiddleware<SiteVisitCounter>();
+
         }
-      
-            
+
+
 
     }
 }

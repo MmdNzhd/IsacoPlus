@@ -13,6 +13,8 @@ using KaraYadak.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Net.WebSockets;
+using DNTPersianUtils.Core;
 
 namespace KaraYadak.Controllers
 {
@@ -57,8 +59,29 @@ namespace KaraYadak.Controllers
                 ViewBag.Call = "/";
             return View();
         }
+        [Route("GetCities")]
+        public IActionResult GetCities(string province)
+        {
+            try
+            {
+                var cities = Iran.Cities.Where(x => x.ProvinceName.Equals(province)).Select(x => x.CityName).ToList();
+                return new JsonResult(new { status=1,data= cities, error=new List<string>() });
+
+            }
+            catch (Exception ex)
+            {
+                var err = new List<string>();
+                err.Add("خطایی رخ داده است");
+                return new JsonResult(new { status = 1, data = "", error = err });
+
+
+            }
+
+        }
         public IActionResult EditProfile(string call)
         {
+            ViewBag.Cities = Iran.Cities.Select(x => x.CityName).ToList();
+            ViewBag.Provinces = Iran.Cities.Select(x => x.ProvinceName).ToList();
             ViewBag.Transaction = _context.ShoppingCarts.Where(x => x.UserName.Equals(User.Identity.Name)).ToList();
 
             ViewBag.Provinces = Iran.Provinces.OrderBy(i => i.ProvinceName);
@@ -75,9 +98,12 @@ namespace KaraYadak.Controllers
                 NationalCode = item.NationalCode,
                 CartNumber = item.CartNumber,
                 Gender = item.Gender,
-                ImageProfile = item.AvatarUrl
+                ImageProfile = item.AvatarUrl,
+                City=item.City,
+                PostalCode=item.PostalCode,
+                Province=item.Province
             };
-
+            //DateTime.Now.ToShortPersianDateString()
             return View(vm);
         }
         [HttpPost]
@@ -106,6 +132,9 @@ namespace KaraYadak.Controllers
             user.Gender = input.Gender;
             user.AvatarUrl = (file != null) ? upload(file) : "";
             user.CartNumber = input.CartNumber;
+            user.City = input.City;
+            user.Province = input.Province;
+            user.PostalCode = input.PostalCode;
             await _context.SaveChangesAsync();
             if (input.CallbackUrl == null)
             {

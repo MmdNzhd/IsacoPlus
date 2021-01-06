@@ -14,6 +14,7 @@ namespace KaraYadak.Data
         {
         }
         public DbSet<Favorite>Favorites  { get; set; }
+        public DbSet<SiteVisit> SiteVisits  { get; set; }
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Baner> Baners { get; set; }
         public DbSet<Access> Access { get; set; }
@@ -38,6 +39,9 @@ namespace KaraYadak.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<CategoryType> CategoryTypes { get; set; }
         public DbSet<QRCode> QRCodes { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -45,6 +49,40 @@ namespace KaraYadak.Data
             builder.Entity<QRCode>()
                 .HasIndex(u => u.Code)
                 .IsUnique();
+
+            builder.Entity<Ticket>()
+                .HasOne<ApplicationUser>(x => x.Receive)
+                .WithMany(x => x.RecieveTickets)
+                .HasForeignKey(x => x.ReceiverId);
+
+
+            builder.Entity<Ticket>()
+                .HasOne<ApplicationUser>(x => x.Sender)
+                .WithMany(x => x.SenderTickets)
+                .HasForeignKey(x => x.SenderId);
+
+
+
+            builder.Entity<Payment>()
+                .HasOne<ApplicationUser>(x => x.User)
+                .WithMany(x => x.Payments)
+                .HasForeignKey(x => x.UserId);
+
+
+            builder.Entity<Payment>()
+                .HasOne(a => a.Transaction)
+                .WithOne(b => b.Payment)
+                .HasForeignKey<Transaction>(b => b.PaymentId);
+
+
+            builder.Entity<Payment>()
+                .HasOne(a => a.ShoppingCart)
+                .WithOne(b => b.Payment)
+                .HasForeignKey<ShoppingCart>(b => b.PaymentId);
+
+
+
+
         }
     }
 

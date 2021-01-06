@@ -1,6 +1,7 @@
 ﻿using DNTPersianUtils.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,8 +38,6 @@ namespace KaraYadak.ViewModels
         [EmailAddress(ErrorMessage = "{0} معتبر نیست")]
         [Display(Name = "ایمیل")]
         public string Email { get; set; }
-        [StringLength(maximumLength: 10, MinimumLength = 10)]
-        public string PostalCode { get; set; }
         [StringLength(maximumLength: 10)]
         [Display(Name = "جنسیت")]
         public string Gender { get; set; }
@@ -49,6 +48,27 @@ namespace KaraYadak.ViewModels
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [Display(Name = " کارت بانکی")]
         public string  CartNumber { get; set; }
+
+
+        [DisplayName("کد پستی")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [ValidIranianPostalCode(ErrorMessage = "کد پستی نامعتبر")]
+        public string PostalCode { get; set; }
+
+
+        [DisplayName("استان ")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MaxLength(500, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد ")]
+        public string Province { get; set; }
+
+
+        [DisplayName("شهر ")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MaxLength(500, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد ")]
+        public string City { get; set; }
+
+
+
     }
 
 }

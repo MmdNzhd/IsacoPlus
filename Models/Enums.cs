@@ -106,4 +106,41 @@ namespace KaraYadak.Models
         Used,
         NotUsed,
     }
+
+    public enum TicketStatus
+    {
+        [Display(Name = "فرستنده_یوزر_پاسخ_نگرفته")]
+        UserSenderNotReply = 1,
+        [Display(Name = "فرستنده_ادمین_پاسخ_گرفته")]
+        AdminSenderReply = 2,
+        [Display(Name = "فرستنده_یوزر_پاسخ_گرفته")]
+        UserSenderReply = 3,
+        [Display(Name = "فرستنده_ادمین_پاسخ_نگرفته")]
+        AdminSenderNotReply = 4,
+
+    }
+
+    public enum TicketPriorityStatus
+    {
+        [Display(Name = "فوری")]
+        Immediate = 1,
+        [Display(Name = "معمولی")]
+        Ordinary = 2,
+        [Display(Name = "جهت اطلاع")]
+        justForInformation = 3,
+    }
+    public enum Gateways
+    {
+        Saman,
+        Mellat,
+        Parsian,
+        Pasargad,
+        IranKish,
+        Melli,
+        AsanPardakht,
+        ZarinPal,
+        PayIr,
+        IdPay,
+        ParbadVirtual
+    }
 }

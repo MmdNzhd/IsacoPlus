@@ -22,5 +22,7 @@ namespace KaraYadak.Models
         public DateTime Date { get; set; }
         public string DiscountPercent { get; set; }
         public string SendPrice { get; set; }
+        public int? PaymentId { get; set; }
+        public Payment Payment { get; set; }
     }
 }

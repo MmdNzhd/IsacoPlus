@@ -25,7 +25,7 @@ namespace KaraYadak.Controllers
 
         private readonly IConfigurationSection _settings;
 
-        public ShopProductsController(ApplicationDbContext context,IHostingEnvironment hostingEnvironment, IConfiguration iConfig)
+        public ShopProductsController(ApplicationDbContext context, IHostingEnvironment hostingEnvironment, IConfiguration iConfig)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
@@ -53,7 +53,7 @@ namespace KaraYadak.Controllers
         }
         public IActionResult Index()
         {
-            var items = (from a in _context.Products.Where(x => x.ProductStatus == ProductStatus.درفروشگاه || x.ProductStatus == ProductStatus.آماده_برای_فروش)  
+            var items = (from a in _context.Products.Where(x => x.ProductStatus == ProductStatus.درفروشگاه || x.ProductStatus == ProductStatus.آماده_برای_فروش)
                      .Join(_context.ProductCategories,
                      ac => ac.CategoryIdLvl1,
                      cc => cc.Id,
@@ -98,7 +98,7 @@ namespace KaraYadak.Controllers
                          {
                              Product = pp.FirstOrDefault().ac,
                              Date = pp.FirstOrDefault().ac.CreatedAt.ToPersianDateTextify(),
-                             Status= pp.FirstOrDefault().ac.ProductStatus.ToString(),
+                             Status = pp.FirstOrDefault().ac.ProductStatus.ToString(),
                              Categories = removeDuplicate(String.Join(",", (pp.Select(x => x.cc.Name)).ToArray())),
                              Id = pp.FirstOrDefault().ac.Id
                          })
@@ -112,7 +112,7 @@ namespace KaraYadak.Controllers
             //var items = await _context.Products
             //    .ToListAsync();
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Name == name);
-            var items = (from a in _context.Products.Where(x => x.Name != name).Where(x => x.ProductStatus == ProductStatus.درفروشگاه || x.ProductStatus == Models.ProductStatus.آماده_برای_فروش)  
+            var items = (from a in _context.Products.Where(x => x.Name != name).Where(x => x.ProductStatus == ProductStatus.درفروشگاه || x.ProductStatus == Models.ProductStatus.آماده_برای_فروش)
                      .Join(_context.ProductCategories,
                      ac => ac.CategoryIdLvl1,
                      cc => cc.Id,
@@ -127,7 +127,7 @@ namespace KaraYadak.Controllers
                          {
                              Product = pp.FirstOrDefault().ac,
                              Date = pp.FirstOrDefault().ac.CreatedAt.ToPersianDateTextify(),
-                             Status= pp.FirstOrDefault().ac.ProductStatus.ToString(),
+                             Status = pp.FirstOrDefault().ac.ProductStatus.ToString(),
                              Categories = removeDuplicate(String.Join(", ", (pp.Select(x => x.cc.Name)).ToArray())),
                          }).OrderByDescending(x => x.Date)
                     .ToList();
@@ -154,13 +154,13 @@ namespace KaraYadak.Controllers
             {
                 after = false;
             }
-            return Json(new { items = items.Skip(skip).Take(pagesize).ToList() , after , before , pages , product.SetProducts , page});
+            return Json(new { items = items.Skip(skip).Take(pagesize).ToList(), after, before, pages, product.SetProducts, page });
         }
         [HttpPost]
-        public async Task<IActionResult> SearchSetProducts(string key,string name,int page)
+        public async Task<IActionResult> SearchSetProducts(string key, string name, int page)
         {
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Name == name);
-            var items = (from a in _context.Products.Where(x => x.Name != name).Where(x => x.ProductStatus == ProductStatus.درفروشگاه || x.ProductStatus == Models.ProductStatus.آماده_برای_فروش)  
+            var items = (from a in _context.Products.Where(x => x.Name != name).Where(x => x.ProductStatus == ProductStatus.درفروشگاه || x.ProductStatus == Models.ProductStatus.آماده_برای_فروش)
                      .Join(_context.ProductCategories,
                      ac => ac.CategoryIdLvl1,
                      cc => cc.Id,
@@ -209,7 +209,7 @@ namespace KaraYadak.Controllers
         {
             if (product.Status == ProductStatus.آماده_برای_فروش && product.DiscountPrice == 0 || product.Status == ProductStatus.آماده_برای_فروش && product.Price == 0)
             {
-                return Json(new { method = "error" , status = "0" , message="برای ورود به فروشگاه اول باید قیمت گذاری شود"});
+                return Json(new { method = "error", status = "0", message = "برای ورود به فروشگاه اول باید قیمت گذاری شود" });
             }
             var items = await _context.Products.Where(x => x.Name == product.Name).ToListAsync();
             foreach (var item in items)
@@ -231,7 +231,7 @@ namespace KaraYadak.Controllers
             }
             await _context.SaveChangesAsync();
 
-            var products = (from a in _context.Products  
+            var products = (from a in _context.Products
                      .Join(_context.ProductCategories,
                      ac => ac.CategoryIdLvl1,
                      cc => cc.Id,
@@ -241,16 +241,20 @@ namespace KaraYadak.Controllers
                          cc
                      }
                      ).ToList()
-                         group a by a.ac.Name into pp
-                         select new ProductWithCategoryVM
-                         {
-                             Product = pp.FirstOrDefault().ac,
-                             Categories = String.Join(", ", (pp.Select(x => x.cc.Name)).ToArray()),
-                         })
+                            group a by a.ac.Name into pp
+                            select new ProductWithCategoryVM
+                            {
+                                Product = pp.FirstOrDefault().ac,
+                                Categories = String.Join(", ", (pp.Select(x => x.cc.Name)).ToArray()),
+                            })
                     .ToList();
 
-            return Json( new { method ="create" , item = products.Select(s => new {
-            s.Product.Id,
+            return Json(new
+            {
+                method = "create",
+                item = products.Select(s => new
+                {
+                    s.Product.Id,
                     s.Product.Name,
                     s.Product.ProductStatus,
                     Status = s.Product.ProductStatus.ToString(),
@@ -271,11 +275,12 @@ namespace KaraYadak.Controllers
                     s.Categories,
                     UpdatedAt = s.Product.UpdatedAt.ToFriendlyPersianDateTextify(),
                     product = s.Product.Description + "_" + s.Product.Id
-            }).SingleOrDefault(x => x.Name == product.Name)});
+                }).SingleOrDefault(x => x.Name == product.Name)
+            });
         }
-        public async Task<IActionResult> EditProduct(ProductVM product,string type)
+        public async Task<IActionResult> EditProduct(ProductVM product, string type)
         {
-            var products = (from a in _context.Products  
+            var products = (from a in _context.Products
                      .Join(_context.ProductCategories,
                      ac => ac.CategoryIdLvl1,
                      cc => cc.Id,
@@ -299,7 +304,7 @@ namespace KaraYadak.Controllers
                 foreach (var item in items)
                 {
                     item.Description = product.Description;
-                    if(product.Tags != null)
+                    if (product.Tags != null)
                     {
                         item.Tags = product.Tags;
                     }
@@ -321,7 +326,8 @@ namespace KaraYadak.Controllers
                 return Json(new
                 {
                     method = "edit",
-                    item = products.Select(s => new {
+                    item = products.Select(s => new
+                    {
                         s.Product.Id,
                         s.Product.Name,
                         s.Product.ProductStatus,
@@ -353,7 +359,7 @@ namespace KaraYadak.Controllers
                 var ids = product.Name.Split("_");
                 foreach (var item in ids)
                 {
-                    if(item != "")
+                    if (item != "")
                     {
                         var p = await _context.Products.Where(x => x.Name == item).ToListAsync();
                         items.AddRange(p);
@@ -412,18 +418,22 @@ namespace KaraYadak.Controllers
         {
             if (code == null)
             {
-                return Json("404");
+                return new JsonResult(new { status = 0, message = " کد را وارد کنید " });
             }
-            var item = _context.Products.SingleOrDefault(x => x.Code == code);
+            var item = await _context.Products.FirstOrDefaultAsync(x => x.Code == code);
+            if (item == null)
+                return new JsonResult(new { status = 0, message = " کد را وارد کنید " });
+
             var items = await _context.Products.Where(m => m.Name == item.Name).ToListAsync();
 
-            foreach (var i in items)
-            {
-                i.ProductStatus = ProductStatus.دردسترس;
-            }
+
+            _context.Products.RemoveRange(items);
             await _context.SaveChangesAsync();
-            return Json(code);
+            return new JsonResult(new { status = 1, message = "با موفقیت انجام شد" });
+
         }
+
+
         public async Task<IActionResult> AddProductToSpecial(string code)
         {
             var items = await _context.Products.Where(x => x.Code == code).ToListAsync();
@@ -449,10 +459,11 @@ namespace KaraYadak.Controllers
         {
             try
             {
-            var product = await _context.Products.Include(x => x.Images).FirstOrDefaultAsync(x => x.Code == code);
-            return Json(product.Images.Select(x => x.Url));
+                var product = await _context.Products.Include(x => x.Images).FirstOrDefaultAsync(x => x.Code == code);
+                return Json(product.Images.Select(x => x.Url));
 
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return Json(e.Message);
             }
@@ -487,7 +498,7 @@ namespace KaraYadak.Controllers
                 return Json(new { status = '0' });
             foreach (var item in products)
             {
-                if(item.ImageUrl == null)
+                if (item.ImageUrl == null)
                 {
                     item.ImageUrl = image;
                 }
@@ -506,11 +517,11 @@ namespace KaraYadak.Controllers
             //{
             //    list.Add(item.Url);
             //}
-            return Json(new { code , image});
+            return Json(new { code, image });
         }
         public async Task<IActionResult> DeleteImgFromGallery(string name, string url)
         {
-            var products = await _context.Products.Where(x => x.Name == name).ToListAsync();
+            var products = await _context.Products.Where(x => x.Code == name).ToListAsync();
             if (products == null)
                 return Json(new { status = '0' });
             var id = 0;
@@ -535,7 +546,7 @@ namespace KaraYadak.Controllers
                         //}
                     }
                     var img = await _context.Images.Where(x => x.Url == url && x.Key == item.Code).ToListAsync();
-                    if(img != null)
+                    if (img != null)
                     {
                         _context.RemoveRange(img);
                     }
@@ -545,7 +556,7 @@ namespace KaraYadak.Controllers
             await _context.SaveChangesAsync();
             return Json(name);
         }
-        public async Task<IActionResult> SetMainImage(string url,string name)
+        public async Task<IActionResult> SetMainImage(string url, string name)
         {
             var products = await _context.Products.Where(x => x.Name == name).ToListAsync();
             if (products == null)
@@ -555,7 +566,7 @@ namespace KaraYadak.Controllers
                 item.ImageUrl = url;
             }
             await _context.SaveChangesAsync();
-            return Json(new { status ="1" , message ="با موفقیت انجام شد" ,name , url});
+            return Json(new { status = "1", message = "با موفقیت انجام شد", name, url });
         }
     }
 }

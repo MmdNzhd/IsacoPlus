@@ -46,25 +46,11 @@
                 data: form.serialize(),
                 success: function (data) {
                     if (data.status == '0') {
-                        //$(e.target).find('.form-message').html(data.message);
-                        toastr.error(data.message, '', {
-                            showMethod: 'slideDown',
-                            showDuration: 200,
-                            hideDuration: 300,
-                            timeOut: 1500,
-                            positionClass: 'toast-bottom-left',
-                            containerId: 'toast-bottom-left'
-                        });
+                        toastr.error(data.message);
+
                     } else {
-                        //$(e.target).trigger('reset');
-                        toastr.success('با موفقیت ثبت شد', '', {
-                            showMethod: 'slideDown',
-                            showDuration: 200,
-                            hideDuration: 300,
-                            timeOut: 1500,
-                            positionClass: 'toast-bottom-left',
-                            containerId: 'toast-bottom-left'
-                        });
+                        toastr.success(data.message);
+
                     }
                     setTimeout(function () {
                         $(e.target)
@@ -76,7 +62,7 @@
         });
     </script>
 }
-@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "محصولات", ParentUrl = Url.Action("index") })
+@*@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "محصولات", ParentUrl = Url.Action("index") })*@
 
 <div class="content-body">
     <section id="basic-vertical-layouts">

@@ -264,7 +264,6 @@
         //FUNCTION gereftan list mahsoolati ke mitoonan set bashan
         function GetSetProducts(page) {
             var name = $("#itemId").val();
-            loading();
             $.ajax({
                 type: "POST",
                 data: {
@@ -318,7 +317,6 @@
                     $("#paginationUl").append('<li ' + beforeVal + ' class="page-item ' + hasBefore + '"><a class="page-link" > Previous</a ></li>'
                         + li
                         + '<li ' + afterVal + ' class="page-item ' + hasAfter + '"><a class="page-link">Next</a></li>');
-                    closeLoader();
                 }
             });
         }
@@ -391,7 +389,6 @@
         };
         //FUNCTION gereftan e list e mahsoolat e warehouse
         function getWarehouseProducts() {
-            loading();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetWareHouseProducts", "shopproducts")',
@@ -419,7 +416,6 @@
 
                 }
             });
-            closeLoader();
         }
         //inpute tag ha
         $("input.tagsinput-example").tagsinput('items');
@@ -462,6 +458,8 @@
                 style:'multi',
                 selector: 'td:first-child'
             },
+            scrollX: true,
+            scrollY: true,
             order: [[1, 'asc']]
         });
         $("#WareHouseProductsTable").DataTable();
@@ -563,7 +561,7 @@
                 formData.append("name", $("#itemId").val());
                 formData.append("tags", $("#tags").val());
                 formData.append("type", $("#type").val());
-          
+
                 formData.append("setProductsValue", $("#setProductsValue").val());
                 //status e 3 yani amade frush hast
                 if ($('#customCheckBoxInline1').is(":checked")) {
@@ -572,7 +570,6 @@
                     //status e 2 yani amade frush nist
                     formData.append("status", 2);
                 }
-                loading();
 
                 $.ajax({
                     type: "POST",
@@ -667,7 +664,6 @@
                             $("#WareHouseProducts").modal();
                             toast("1", 'با موفقیت انجام شد');
                         }
-                        closeLoader();
                     }
                 });
             });
@@ -682,19 +678,18 @@
             var model = {
                 code: button.attr("data-item-id")
             };
-            loading();
             $.ajax({
                 url: '@Url.Action("AddProductToSpecial", "shopProducts")',
                 method: "POST",
                 data: model,
                 success: function (data) {
-                    console.log(data);
                     toast(data.status, data.message);
                 }
             });
-            closeLoader();
         });
         //Remove From Special slider webapp index
+
+
         $("body").on("click", ".removeFromSpecial", function () {
             var button = $(this);
             $(this).children('input').removeAttr('checked');
@@ -703,7 +698,6 @@
             var model = {
                 code: button.attr("data-item-id")
             };
-            loading();
             $.ajax({
                 url: '@Url.Action("RemoveFromSpecial", "shopProducts")',
                 method: "POST",
@@ -712,46 +706,59 @@
                     toast(data.status, data.message);
                 }
             });
-            closeLoader();
         });
         //delete
         function DeleteItem(item) {
             var button = $(item);
-            Swal.fire({
-                title: '',
-                text: "آیا مطمئن به حذف هستید؟",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'بله',
-                cancelButtonText: 'خیر',
-                confirmButtonClass: 'btn btn-primary',
-                cancelButtonClass: 'btn btn-danger ml-1',
-                buttonsStyling: false,
-            }).then(function (result) {
-                if (result.value) {
-                    var model = {
+            $(".swal-button--cancel").html("انصراف");
+            $(".swal-button--danger").html("باشه");
+
+            swal({
+                title: "آیا مطمئن هستید؟",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                         var model = {
                         code: button.attr("data-code")
                     }
-                    @*$.ajax({
+                    $.ajax({
                         type: "POST",
                         url: '@Url.Action("delete","shopProducts")',
                         data: model,
                         dataType: 'json',
                         success: function (data) {
-                            console.log(data);
-                            $("#sample_1").DataTable().row(button.parents("tr")).remove().draw();
+                            if (data.status == 0) {
+                                toastr.error(data.message);
+                            }
+                            else {
+                                //$("#sample_1").DataTable().row(button.parents("tr")).remove().draw();
+                                $("#tbody").remove($("[id="+model.code+"]"));
+
+                                Swal.fire({
+                                    type: "success",
+                                    title: '',
+                                    text: 'با موفقیت حذف شد',
+                                    confirmButtonClass: 'btn btn-success',
+                                    confirmButtonText: 'باشه',
+                                });
+                            }
                         }
                     });
 
-                    Swal.fire({
-                        type: "success",
-                        title: '',
-                        text: 'با موفقیت حذف شد',
-                        confirmButtonClass: 'btn btn-success',
-                        confirmButtonText: 'باشه',
-                    });*@
-                }
-            });
+                 
+
+                    } else {
+
+
+                    }
+                });
+            $(".swal-button--cancel").html("انصراف");
+            $(".swal-button--danger").html("باشه");
+
+     
         }
         function CloseSidebar() {
             $(".add-new-data").removeClass("show")
@@ -769,13 +776,19 @@
                 }
             }
         });
+
+        function showCategories(e) {
+            var val = $(e).attr("data-categories");
+            $("#showCategoryBody").html(val);
+            $("#showCategory").modal("toggle");
+
+        }
     </script>
     @*Gallery*@
     <script>
         //FUNCTION ezafe ax e jadid be gallery
         function AddImgToGallery(image) {
             $("Gallery").modal('toggle');
-            loading();
             //gereftan code mahsoole (RANG) entekhab shode az cookie
             var value = $.cookie('gallery');
             var formData = new FormData();
@@ -818,7 +831,6 @@
                 url: url,
                 name: name
             };
-            loading();
             $.ajax({
                 url: "/shopProducts/SetMainImage/",
                 method: "POST",
@@ -842,10 +854,50 @@
             });
         });
         //hazfe ax
-        $(".deleteImg").on('click', function () {
-            alert();
+       
+        //namayeshe modal e gallery e tasavir
+        function showGallery(elem)
+        {
+            var model = {
+                code: elem
+            };
+            $.cookie('gallery', model.code, { expires: 7, path: '/' });
+            console.log(model);
+            $.ajax({
+                url: "/shopProducts/GetProductImage/",
+                method: "GET",
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                data: model,
+                success: function (data) {
+                    console.log(data);
+                    $('#gallerySpace').empty();
+                    for (var i = 0; i < data.length; i++) {
+                        $("#gallerySpace").append('<div id="' + data[i].split("/")[3].split(".")[0] + '" class="col-xl-4 col-md-6 col-sm-12"><div class="card"><div class="card-content"> ' +
+                            '<img class="card-img-top img-fluid" src="' + data[i] + '" alt="Card image cap"> ' +
+                            '<div class="card-body"><div class="card-btns d-flex justify-content-between mt-2">' +
+                            '<a data-id="' + data[i] + '" href="#" class="btn btn-danger text-white waves-effect waves-light deleteImage" >حدف</a>' +
+                            '</div></div></div></div></div>');
+                    }
+                    $('#Gallery').modal();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    alert(errorThrown);
+                    console.log(errorThrown);
+                }
+            });
+            //$.unblockUI();
+        }
+        $("#table").on('click', ".showGallery", function () {
+            showGallery($(this).attr("data-code"));
+        });
+       
+
+        $("#gallerySpace").on('click', ".deleteImage", function () {
             var button = $(this);
-            var url = button.attr("data-url");
+            var url = button.attr("data-id");
             var formData = new FormData();
             var value = $.cookie('gallery');
             var modelId = value;
@@ -870,46 +922,6 @@
                 }
             });
         });
-        //namayeshe modal e gallery e tasavir
-        function showGallery(elem)
-        {
-            var model = {
-                code: elem
-            };
-            $.cookie('gallery', model.code, { expires: 7, path: '/' });
-            console.log(model);
-            loading();
-            $.ajax({
-                url: "/shopProducts/GetProductImage/",
-                method: "GET",
-                dataType: 'json',
-                contentType: "application/json; charset=utf-8",
-                data: model,
-                success: function (data) {
-                    console.log(data);
-                    $('#gallerySpace').empty();
-                    for (var i = 0; i < data.length; i++) {
-                        $("#gallerySpace").append('<div id="' + data[i].split("/")[3].split(".")[0] + '" class="col-xl-4 col-md-6 col-sm-12"><div class="card"><div class="card-content"> ' +
-                            '<img class="card-img-top img-fluid" src="' + data[i] + '" alt="Card image cap"> ' +
-                            '<div class="card-body"><div class="card-btns d-flex justify-content-between mt-2">' +
-                            '<a data-id="' + data[i] + '" href="#" class="btn btn-danger text-white waves-effect waves-light deleteImage">حدف</a>' +
-                            '</div></div></div></div></div>');
-                    }
-                    $('#Gallery').modal();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                    console.log(textStatus);
-                    alert(errorThrown);
-                    console.log(errorThrown);
-                }
-            });
-            //$.unblockUI();
-            closeLoader();
-        }
-        $("#table").on('click', ".showGallery", function () {
-            showGallery($(this).attr("data-code"));
-        });
     </script>
 }
 @*@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })*@
@@ -930,7 +942,7 @@
                     <div class="card-content">
                         <div class="card-body card-dashboard">
                             <div class="table-responsive">
-                                <table id="table" class="table zero-configuration" style="width:130%!important">
+                                <table id="table" class="table zero-configuration" style="width:100%!important">
                                     <thead>
                                         <tr>
                                             <th></th>
@@ -940,7 +952,7 @@
                                           @*  <th>واحد</th>*@
                                             <th> قیمت واحد با تخفیف</th>
                                             <th>درصد تخفیف</th>
-                                            <th>دسته بندی</th>
+                                            <th style="max-width:20%">دسته بندی</th>
                                             <th>فروش ویژه</th>
                                             <th>وضعیت</th>
                                             <th>تاریخ تغییر</th>
@@ -950,44 +962,51 @@
                                     <tbody id="tbody">
                                         @foreach (var item in Model)
                                         {
-                                            <tr id="@item.Product.Code">
-                                                <td><span style="display:none"> @item.Id</span></td>
-                                                <td style="width:100px!important;height:auto!important;position:relative">
-                                                    <a class="image-popup" href="@item.Product.ImageUrl">
-                                                        <img id="@item.Product.Name-Img" style="max-height:100%;max-width:100%" src="@item.Product.ImageUrl" />
-                                                    </a>
-                                                    <button data-code="@item.Product.Code" class="btn btn-info showGallery" style="position:absolute!important;bottom:0px;font-size:12px;right:0px">گالری</button>
-                                                </td>
-                                                <td>@item.Product.Name</td>
-                                                <td>@item.Product.Code</td>
-                                                @*<td>@item.Product.Unit.Name</td>*@
-                                                <td class="text-center">@string.Format("{0:n0}", item.Product.Price).ToPersianNumbers()</td>
-                                                <td>@item.Product.Discount%</td>
-                                                <td>@item.Categories</td>
-                                                <td class="text-center">
-                                                    <div class="form-check">
-                                                        @if (item.Product.SpecialSale == true)
-                                                        {
-                                                            <div style="cursor:pointer" data-item-id="@item.Product.Code" class="custom-control custom-switch custom-checkbox-secondary addToSpecial">
-                                                                <input style="cursor:pointer" type="checkbox" class="custom-control-input" id="@item.Product.Code" checked>
-                                                                <label style="cursor:pointer" class="custom-control-label" for="customSwitch2"></label>
-                                                            </div>
-                                                        }
-                                                        else
-                                                        {
-                                                            <div style="cursor:pointer" data-item-id="@item.Product.Code" class="custom-control custom-switch custom-checkbox-secondary addToSpecial">
-                                                                <input style="cursor:pointer" type="checkbox" class="custom-control-input" id="@item.Product.Code">
-                                                                <label style="cursor:pointer" class="custom-control-label" for="customSwitch2"></label>
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                </td>
-                                                <td>@item.Product.ProductStatus.ToString()</td>
-                                                <td>@item.Product.CreatedAt.ToPersianDateTextify()</td>
-                                                <td>
-                                                    <button data-title="@item.Product.Name" data-code="@item.Product.Code" data-price="@item.Product.Price" data-description="@item.Product.Description" data-tags="@item.Product.Tags" data-discount="@item.Product.Discount" data-status="@item.Product.ProductStatus" class="btn btn-icon btn-sm btn-primary action-edit1"><i class="feather icon-edit"></i></button>|<button data-code="@item.Product.Code" type="button" onclick="DeleteItem(this)" class="btn btn-icon btn-sm btn-danger"><i class="feather icon-trash-2"></i></button>
-                                                </td>
-                                            </tr>
+                                        <tr id="@item.Product.Code">
+                                            <td><span style="display:none"> @item.Id</span></td>
+                                            <td style="width:100px!important;height:auto!important;position:relative">
+                                                <a class="image-popup" href="@item.Product.ImageUrl">
+                                                    <img id="@item.Product.Name-Img" style="max-height:100%;max-width:100%" src="@item.Product.ImageUrl" />
+                                                </a>
+                                                <button data-code="@item.Product.Code" class="btn btn-info showGallery" style=" position: absolute !important; bottom: 0px; font-size: 11px; right: 0px; padding: 5px;">گالری</button>
+                                            </td>
+                                            <td>@item.Product.Name</td>
+                                            <td>@item.Product.Code</td>
+                                            @*<td>@item.Product.Unit.Name</td>*@
+                                            <td class="text-center">@string.Format("{0:n0}", item.Product.Price).ToPersianNumbers()</td>
+                                            <td>@item.Product.Discount%</td>
+                                            @*<td>@item.Categories</td>*@
+                                        <td style="position:relative">
+                                            <button data-categories="@item.Categories" onclick="showCategories(this)" class="btn btn-info showGallery" 
+                                                    style="position:absolute!important;bottom:0px;font-size:12px;right:0px">نمایش  </button>
+
+                                        </td>
+                                            
+
+                                            <td class="text-center">
+                                                <div class="form-check">
+                                                    @if (item.Product.SpecialSale == true)
+                                                    {
+                                                        <div style="cursor:pointer" data-item-id="@item.Product.Code" class="custom-control custom-switch custom-checkbox-secondary removeFromSpecial">
+                                                            <input style="cursor:pointer" type="checkbox" class="custom-control-input" id="@item.Product.Code" checked>
+                                                            <label style="cursor:pointer" class="custom-control-label" for="customSwitch2"></label>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div style="cursor:pointer" data-item-id="@item.Product.Code" class="custom-control custom-switch custom-checkbox-secondary addToSpecial">
+                                                            <input style="cursor:pointer" type="checkbox" class="custom-control-input" id="@item.Product.Code">
+                                                            <label style="cursor:pointer" class="custom-control-label" for="customSwitch2"></label>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>@item.Product.ProductStatus.ToString()</td>
+                                            <td>@item.Product.CreatedAt.ToPersianDateTextify()</td>
+                                            <td>
+                                                <button data-title="@item.Product.Name" data-code="@item.Product.Code" data-price="@item.Product.Price" data-description="@item.Product.Description" data-tags="@item.Product.Tags" data-discount="@item.Product.Discount" data-status="@item.Product.ProductStatus" class="btn btn-icon btn-sm btn-primary action-edit1"><i class="feather icon-edit"></i></button>|<button data-code="@item.Product.Code" type="button" onclick="DeleteItem(this)" class="btn btn-icon btn-sm btn-danger"><i class="feather icon-trash-2"></i></button>
+                                            </td>
+                                        </tr>
                                         }
                                     </tbody>
                                 </table>
@@ -1075,7 +1094,7 @@
                                     <br />
                                 </div>
                                 <div class="col-sm-3 data-field-col">
-                                    <label for="data-name">قیمت با تخفیف</label>
+                                    <label for="data-name">درصد تخفیف</label>
                                     <input class="form-control" name="discountPrice" id="discountPrice" />
                                     <br />
                                 </div>
@@ -1236,6 +1255,23 @@
                 <button type="button" class="btn btn-primary" id="crop">Crop</button>
                 <button type="button" class="btn btn-danger" id="out">out</button>
                 <button type="button" class="btn btn-success" id="in">in</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="showCategory" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">دسته بندی این محصول</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="showCategoryBody" style="text-align:center ">
+                
             </div>
         </div>
     </div>

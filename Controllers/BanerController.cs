@@ -50,7 +50,7 @@ namespace KaraYadak.Controllers
                 page = 1;
             }
 
-            var items = await _context.Baners.ToListAsync();
+            var items = await _context.Baners.OrderByDescending(x=>x.CreateAt).ToListAsync();
 
             int recordsTotal = items.Count();
 
@@ -64,8 +64,8 @@ namespace KaraYadak.Controllers
                 recordsTotal,
                 recordsFiltered,
                 data = items.Select(s => new { s.Id, s.Url, s.Image, UpdatedAt = s.CreateAt.ToFriendlyPersianDateTextify() })
-                .Skip((int)itemsPerPage * (page.Value - 1))
-                .Take((int)itemsPerPage)
+                //.Skip((int)itemsPerPage * (page.Value - 1))
+                //.Take((int)itemsPerPage)
             });
 
         }
@@ -74,80 +74,45 @@ namespace KaraYadak.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string Url, string Time, string Date, IFormFile Image)
         {
-            if (string.IsNullOrWhiteSpace(Time) || Time.Equals("12:undefined AM")) Time = "00:00 AM";
-            if (string.IsNullOrWhiteSpace(Date)) Date = DateTime.Today.AddDays(1).ToShamsi();
-            PersianCalendar pc = new PersianCalendar();
-            if (Time.Length < 8) Time = "0" + Time;
-            int hour = int.Parse(Time.Substring(0, 2));
-            int minute = int.Parse(Time.Substring(3, 2));
-            if (Time.Substring(6, 2) != "AM")
+            try
             {
-                hour += 12;
+                if (string.IsNullOrWhiteSpace(Time) || Time.Equals("12:undefined AM")) Time = "00:00 AM";
+                if (string.IsNullOrWhiteSpace(Date)) Date = DateTime.Today.AddDays(1).ToShamsi();
+                PersianCalendar pc = new PersianCalendar();
+                if (Time.Length < 8) Time = "0" + Time;
+                int hour = int.Parse(Time.Substring(0, 2));
+                int minute = int.Parse(Time.Substring(3, 2));
+                if (Time.Substring(6, 2) != "AM")
+                {
+                    hour += 12;
+                }
+                string[] d = Date.Split('/');
+                var year = int.Parse(d[0]);
+                var month = int.Parse(d[1]);
+                var day = int.Parse(d[2]);
+                DateTime x = new DateTime(1399, 2, 2, 10, 10, 10, new PersianCalendar());
+                DateTime dt = new DateTime(year, month, day, hour, minute, 0, new PersianCalendar());
+
+                var baner = new Baner()
+                {
+                    CreateAt = DateTime.Now,
+                    Date = dt,
+                    Image = (Image != null) ? upload(Image) : "",
+                    Url = Url
+                };
+                await _context.Baners.AddAsync(baner);
+                await _context.SaveChangesAsync();
+
+                return new JsonResult(new { status = 1, message = "با موفقیت اضافه شد" });
             }
-            string[] d = Date.Split('/');
-            var year = int.Parse(d[0]);
-            var month = int.Parse(d[1]);
-            var day = int.Parse(d[2]);
-            DateTime x = new DateTime(1399, 2, 2, 10, 10, 10, new PersianCalendar());
-            DateTime dt = new DateTime(year, month, day, hour, minute, 0, new PersianCalendar());
-            //DateTime dt = new DateTime(year,
-            //               month,
-            //              day,
-            //               hour,
-            //               minute,
-            //               0, 0,
-            //               new PersianCalendar());
-            //GetTimeDiff
-            //var dateNow = DateTime.Now;
-            //System.TimeSpan timer = dt - dateNow;
-            //var days = timer.Days;
-            //var hours = timer.Hours;
-            //var minuts = timer.Minutes;
-            var baner = new Baner()
+            catch (Exception ex)
             {
-                CreateAt = DateTime.Now,
-                Date = dt,
-                Image = (Image != null) ? upload(Image) : "",
-                Url = Url
-            };
-            await _context.AddAsync(baner);
-            await _context.SaveChangesAsync();
-            return new JsonResult(new { status = 1, message = "با موفقیت اضافه شد" });
+
+                return Json(ex);
+            }
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id,[Bind("Id,Image,Url,Date")] Baner baner)
-        //{
-        //    if (id != productCategoryType.Id)
-        //    {
-        //        return Json("404");
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            productCategoryType.UpdatedAt = DateTime.Now;
-        //            _context.Update(productCategoryType);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!ProductCategoryTypeExists(productCategoryType.Id))
-        //            {
-        //                return Json("404");
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return Json("ok");
-        //    }
-        //    return Json("no");
-        //}
-
+       
         [HttpPost]
         public async Task<IActionResult> Delete(int? id)
         {

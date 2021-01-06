@@ -122,8 +122,8 @@ namespace KaraYadak.Controllers
                 var pr = await _context.Products.FindAsync(item.ProductId);
                 var prtopsell = new ProductForIndexVM()
                 {
-                    Code=pr.Code,
-                    Title=pr.Name,
+                    Code=pr?.Code,
+                    Title=pr?.Name,
                     Count=item.Count
                 };
                 topSellProducts.Add(prtopsell);

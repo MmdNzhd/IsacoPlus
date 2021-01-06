@@ -18,14 +18,201 @@
     var Slider2 = _context.Settings.Where(x => x.Key.Equals("Slider2")).Select(x => x.Value).SingleOrDefault();
     var Slider3 = _context.Settings.Where(x => x.Key.Equals("Slider3")).Select(x => x.Value).SingleOrDefault();
 }
+@section styles{
+    <style>
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
 
+
+        .loading-container {
+            background: #000;
+            padding: 20px 0;
+        }
+
+
+        .search-loading {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+        }
+
+            .search-loading .my-loader {
+                height: 150px;
+                width: 150px;
+                border: 25px solid #fff;
+                border-radius: 50%;
+                border-top-color: rgb(251, 196, 28);
+                -webkit-animation: rotate 1s ease-out infinite;
+                animation: rotate 1s ease-out infinite;
+            }
+
+            .search-loading .loader-mag-glass {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                width: 135px;
+                -webkit-animation: circle 2s linear infinite;
+                animation: circle 2s linear infinite;
+            }
+
+            .search-loading.finishing .loader-mag-glass path {
+                -webkit-transform: scale(0);
+                -ms-transform: scale(0);
+                transform: scale(0);
+                -webkit-transform-origin: center;
+                -ms-transform-origin: center;
+                transform-origin: center;
+                opacity: 0;
+                -webkit-transition: all 0.2s ease-out;
+                -o-transition: all 0.2s ease-out;
+                transition: all 0.2s ease-out;
+            }
+
+            .search-loading .loader-complete {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+            .search-loading .loader-complete-bg {
+                -webkit-transform: scale(0);
+                -ms-transform: scale(0);
+                transform: scale(0);
+                -webkit-transition: -webkit-transform 0.2s ease-out;
+                transition: -webkit-transform 0.2s ease-out;
+                -o-transition: transform 0.2s ease-out;
+                transition: transform 0.2s ease-out;
+                transition: transform 0.2s ease-out, -webkit-transform 0.2s ease-out;
+                -webkit-transition-delay: 0.15s;
+                -o-transition-delay: 0.15s;
+                transition-delay: 0.15s;
+                -webkit-transform-origin: center;
+                -ms-transform-origin: center;
+                transform-origin: center;
+            }
+
+            .search-loading .loader-complete-check {
+                -webkit-transform: scale(0) rotate(-720deg);
+                -ms-transform: scale(0) rotate(-720deg);
+                transform: scale(0) rotate(-720deg);
+                -webkit-transition: -webkit-transform 0.5s ease-out;
+                transition: -webkit-transform 0.5s ease-out;
+                -o-transition: transform 0.5s ease-out;
+                transition: transform 0.5s ease-out;
+                transition: transform 0.5s ease-out, -webkit-transform 0.5s ease-out;
+                -webkit-transition-delay: 0.3s;
+                -o-transition-delay: 0.3s;
+                transition-delay: 0.3s;
+                -webkit-transform-origin: center;
+                -ms-transform-origin: center;
+                transform-origin: center;
+            }
+
+            .search-loading .loader-complete-check {
+                -webkit-transition-delay: 0.35s;
+                -o-transition-delay: 0.35s;
+                transition-delay: 0.35s;
+            }
+
+
+            .search-loading.finishing .loader-complete-bg,
+            .search-loading.finishing .loader-complete-check {
+                -webkit-transform: scale(1) rotate(0);
+                -ms-transform: scale(1) rotate(0);
+                transform: scale(1) rotate(0);
+            }
+
+        @@-webkit-keyframes rotate {
+            to {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes rotate {
+            to {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @@-webkit-keyframes circle {
+            0% {
+                -webkit-transform: rotate(0deg) translate(-15px) rotate(0deg);
+                transform: rotate(0deg) translate(-15px) rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg) translate(-15px) rotate(-360deg);
+                transform: rotate(360deg) translate(-15px) rotate(-360deg);
+            }
+        }
+
+        @@keyframes circle {
+            0% {
+                -webkit-transform: rotate(0deg) translate(-15px) rotate(0deg);
+                transform: rotate(0deg) translate(-15px) rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg) translate(-15px) rotate(-360deg);
+                transform: rotate(360deg) translate(-15px) rotate(-360deg);
+            }
+        }
+    </style>
+}
 @section scripts{
     <script src="~/js/mdb.min.js"></script>
     <script src="~/js/app.js"></script>
     <script src="~/js/CountDown.js"></script>
+
+    <script>
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        var inquireFlag = 0;
+        $(".inquire .i-btn").on("click", function () {
+            if (inquireFlag === 0) {
+                $(".inquire").addClass("active");
+                inquireFlag = 1;
+            } else {
+                $(".inquire").removeClass("active");
+                inquireFlag = 0;
+            }
+        });
+
+        $("#inquireSubmit").on("click", function () {
+            inquireFlag = 0;
+            //$(".inquire").removeClass("active");
+            //$(".inquire-modal").addClass("active");
+        });
+
+        $(".inquire-modal .close-btn").on("click", function () {
+            $(".inquire-modal").removeClass("active");
+            $(".table").remove();
+            //        $(".inquire-modal").append(`<div class="content d - flex mx - auto flex - column position - relative" id="content">
+            //            < span class= "close-btn" ></span >
+
+            //        <h3 class="d-block text-center mb-5">نتایج جستجو</h3>
+            //</div >`);
+
+        });
+    </script>
+
     <script>
         $(document).ready(function () {
             var url = window.location.href;
+
+            let formsInPage = document.querySelectorAll('form');
+
+            formsInPage.forEach(form => {
+                form.addEventListener('submit', (e) => { e.preventDefault() });
+            });
 
             if (url.includes("=") ) {
 
@@ -63,7 +250,113 @@
         //scroll
         function smoothScrollTo(location) {
         document.getElementById(location).scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
-      }
+        }
+
+
+        var input = document.getElementById("inquireSearch");
+
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                $("#inquireSubmit").click();
+            }
+        });
+        //
+        var openClose = true;
+        var div = $(".i-btn-holder").addClass("d-none").removeClass("d-block");
+
+
+        $("#modalEstelam").click(function () {
+
+
+            $("#inquireSubmit").css("width", "100%");
+
+
+            if ($(this).attr("data-elem") == "1") {
+                if (openClose) {
+                    $(".i-btn-holder").removeClass("d-none").addClass("d-block");
+                    openClose = false;
+
+                }
+                else {
+
+                    $(".i-btn-holder").addClass("d-none").removeClass("d-block");
+                    openClose = true;
+
+                }
+            }
+
+
+
+        })
+
+        $("#inquireSubmit").click(function (e) {
+
+            $(".i-btn-holder").addClass("d-none").removeClass("d-block");
+            openClose = true;
+
+            e.preventDefault();
+            $(".inquire").removeClass("active");
+            $(".inquire-modal").addClass("active");
+            $("#modalTtile").html("در حال جستجو...");
+            $(".loading-container").removeClass("d-none");
+            $(".search-loading").removeClass("d-none");
+            $("#loading").css("height", "344px");
+            $(".search-loading").removeClass("finishing");
+
+            //$('.loader').css('display','block');
+
+
+            $.ajax({
+                type: "Get",
+                url: '/CallForPrice/CallForPrice',
+                dataType: 'json',
+                data: { "productCode": $("#inquireSearch").val() },
+                success: function (data) {
+
+                    $(".search-loading").addClass("finishing");
+                    setTimeout(() => {
+                        $(".loading-container").addClass("d-none");
+                    }, 700);
+
+
+                    $("#modalTtile").html("نتایج جستجو");
+
+                    $("#content").append(data);
+                    if (data.status == 1) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.message
+
+                        })
+                        $("#centralModalLogin").modal("hide");
+                        location.reload();
+
+                    }
+
+
+                    if (data.status == 2) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: data.error
+                        })
+                    }
+                    if (data.status == 0) {
+                        data.error.forEach((err) => {
+                            var er = `---${err}`;
+
+                            errors += er;
+
+                        })
+                        Toast.fire({
+                            icon: 'error',
+                            title: errors
+                        })
+
+                    }
+                }
+            });
+        });
     </script>
 }
 
@@ -106,7 +399,7 @@
                         <li class="nav-item px-md-3">
 
                             <a class="nav-link text-white" href="/dashboard">
-                               پنل مدیریت
+                                پنل مدیریت
                             </a>
                         </li>
                     }
@@ -117,7 +410,34 @@
                         }
                     </li>
                 </ul>
+                @* <div class="inquire">
+                        <span class="i-btn">استعلام قیمت</span>
+
+                        <form class="w-100" onsubmit="this.preventDefault()">
+                            <div class="form-group">
+                                <input type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                                <button class="btn btn-success d-flex ml-auto" id="inquireSubmit" type="button">جستجو</button>
+                            </div>
+                        </form>
+                    </div>*@
                 <ul class="navbar-nav nav-flex-icons   p-0">
+
+                    <div class="i-btn ">
+                        <span id="modalEstelam" class="btn btn-warning i-btn scaleout-glow" data-elem="1"> استعلام وضعیت </span>
+
+                        <form class="i-btn-holder" onsubmit="this.preventDefault()">
+
+                            <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                            <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
+
+                        </form>
+
+                    </div>
+
+
+
+
+
                     <li class="nav-item px-2">
                         <a href="@FaceBook" class="nav-link text-white"><i class="fa fa-facebook-f "></i></a>
                     </li>
@@ -130,6 +450,7 @@
                     <li class="nav-item px-2">
                         <a href="@Whatsapp" class="nav-link text-white"><i class="fa fa-whatsapp"></i></a>
                     </li>
+
                 </ul>
             </div>
         </nav>
@@ -374,7 +695,7 @@
         <a href="@baner.Url">
 
             <div class="row  mx-auto hj-banner position-relative">
-                <img src="/uploads/@baner.Image" class="img-fluid  position-relative">
+                <img src="/uploads/@baner.Image" class="img-fluid  position-relative" style="width:100% !important ">
                 <span id="baneertimer" class=" countdown" style="font-weight: bold;"></span>
             </div>
         </a>
@@ -575,3 +896,50 @@
     </div>
 </div>
 <!--filter modal-->
+@*<div class="inquire">
+        <span class="i-btn">استعلام قیمت</span>
+
+        <form class="w-100" onsubmit="this.preventDefault()">
+            <div class="form-group">
+                <input type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                <button class="btn btn-success d-flex ml-auto" id="inquireSubmit" type="button">جستجو</button>
+            </div>
+        </form>
+    </div>*@
+
+
+
+
+
+
+<div class="inquire-modal">
+    <div class="content d-flex mx-auto flex-column position-relative" id="content">
+        <span class="close-btn"></span>
+
+        <h3 id="modalTtile" class="d-block text-center mb-5">نتایج جستجو</h3>
+
+        <!--loading-->
+
+        <div class="loading-container">
+            <div class="search-loading">
+                <div class="my-loader"></div>
+                <svg class="loader-mag-glass" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+                    <path fill="#ffcc00" d="M55.863 62.09c0-6.737 5.481-12.219 12.219-12.219 6.738 0 12.219 5.482 12.219 12.22 0 6.737-5.481 12.22-12.219 12.22-6.738 0-12.219-5.483-12.219-12.22zm40.34 23.652L82.991 72.53a18.103 18.103 0 0 0 3.31-10.44c0-10.046-8.172-18.219-18.219-18.219-10.046 0-18.219 8.173-18.219 18.22 0 10.046 8.173 18.22 18.219 18.22 4 0 7.691-1.312 10.699-3.505l13.18 13.18a2.992 2.992 0 0 0 2.121.877 3 3 0 0 0 2.121-5.121zm-97.731 56.625h150v-150h-150v150zm0-150h150v150h-150v-150z" display="block" />
+                </svg>
+                <svg class="loader-complete" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%" viewBox="0 0 150 150">
+                    <g class="loader-complete-bg">
+                        <path fill="none" stroke="#FFF" stroke-width="19.228" d="M75 9.792c35.988 0 65.208 29.22 65.208 65.208S110.988 140.208 75 140.208 9.792 110.988 9.792 75 39.012 9.792 75 9.792z" display="block" />
+                        <path fill="#FFF" d="M87.513 69.651zm0 0zm0 0zm0 0z" display="block" />
+                        <path fill="#A9E962" d="M75 130.55c-30.63 0-55.55-24.92-55.55-55.55 0-30.63 24.92-55.55 55.55-55.55 30.63 0 55.55 24.92 55.55 55.55 0 30.63-24.92 55.55-55.55 55.55zm-75.75 20.2h151.5V-.75H-.75v151.5zm0-151.5h151.5v151.5H-.75V-.75z" display="block" />
+                    </g>
+                    <g class="loader-complete-check">
+                        <path fill="#FFF" d="M70.282 96.012a4.563 4.563 0 0 1-3.11-1.224L52.297 80.946a4.566 4.566 0 1 1 6.221-6.685l11.13 10.357 21.27-28.778a4.566 4.566 0 1 1 7.345 5.427L73.954 94.16a4.56 4.56 0 0 1-3.672 1.852zm-73.268 56.972h155.97V-2.986H-2.986v155.97zm0-155.97h155.97v155.97H-2.986V-2.986z" display="block" />
+                    </g>
+                </svg>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>

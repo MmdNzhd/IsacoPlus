@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using SixLabors.ImageSharp.Formats.Png;
 
 namespace KaraYadak
 {
@@ -41,9 +41,126 @@ namespace KaraYadak
         }
         //10 mb
         const int _maxImageLength = 10;
+        public static (bool succsseded, string result) UploadPDF(IFormFile file, string path, double maxLength = _maxImageLength, int width = (int)ImageWidth.Medium, int height = (int)ImageHeight.Medium, int compression = (int)ImageComperssion.Normal)
+        {
+
+            if (!IsPDFExtentionValid(file))
+            {
+                return (false, "فرمت pdf صحیح نیست.");
+            }
+
+       
+            try
+            {
+
+                var fileName = GetRandomFileName(file);
+                var savePath = Path.GetFullPath(Path.Combine(path, fileName));
+                using (var stream = new FileStream(savePath, FileMode.Create))
+                {
+                     file.CopyTo(stream);
+                }
+
+                return (true, fileName);
+            }
+            catch (Exception e)
+            {
+                return (false, e.Message);
+            }
+
+        }
+        public static (bool succsseded, string result) UploadFile(IFormFile file, string path, double maxLength = _maxImageLength, int width = (int)ImageWidth.Medium, int height = (int)ImageHeight.Medium, int compression = (int)ImageComperssion.Normal)
+        {
+
+            
+
+            try
+            {
+
+                var fileName = GetRandomFileName(file);
+                var savePath = Path.GetFullPath(Path.Combine(path, fileName));
+                using (var stream = new FileStream(savePath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+
+                return (true, fileName);
+            }
+            catch (Exception e)
+            {
+                return (false, e.Message);
+            }
+
+        }
 
 
-        public static (bool succsseded, string result) UploadImage(IFormFile file, string path, int maxLength = _maxImageLength, int width = (int)ImageWidth.Medium, int height = (int)ImageHeight.Medium, int compression = (int)ImageComperssion.Normal)
+        public static (bool succsseded, string result) UploadImage(IFormFile file, string path, double maxLength = _maxImageLength, int width = (int)ImageWidth.Medium, int height = (int)ImageHeight.Medium, int compression = (int)ImageComperssion.Normal)
+        {
+
+            if (!IsImageMimeTypeValid(file) || !IsImageExtentionValid(file))
+            {
+                return (false, "فرمت عکس صحیح نیست.");
+            }
+
+            if (!IsImageSizeValid(file, maxLength))
+            {
+                return (false, $"سایز عکس باید کمتر از {maxLength} باشد");
+            }
+
+            try
+            {
+                var image = Image.Load(file.OpenReadStream());
+                var resizeOptions = new ResizeOptions()
+                {
+                    Size = new Size(width, height),
+                    Mode = ResizeMode.Stretch
+                };
+                image.Mutate(x => x.Resize(resizeOptions));
+                var encoder = new JpegEncoder()
+                {
+                    Quality = compression
+                };
+
+                var fileName = GetRandomFileName(file);
+                var savePath = Path.GetFullPath(Path.Combine(path, fileName));
+                image.Save(savePath, encoder);
+
+
+
+                return (true, fileName);
+            }
+            catch (Exception e)
+            {
+                return (false, e.Message);
+            }
+
+        }
+
+        public static (bool succsseded, string result) UploadImageHighQuality(IFormFile file, string path)
+        {
+
+           
+
+            try
+            {
+                var image = Image.Load(file.OpenReadStream());
+               
+
+                var fileName = GetRandomFileName(file);
+                var savePath = Path.GetFullPath(Path.Combine(path, fileName));
+                image.Save(savePath);
+
+
+
+                return (true, fileName);
+            }
+            catch (Exception e)
+            {
+                return (false, e.Message);
+            }
+
+        }
+
+        public static (bool succsseded, string result) UploadImagePng(IFormFile file, string path, double maxLength = _maxImageLength, int width = (int)ImageWidth.Medium, int height = (int)ImageHeight.Medium, int compression = (int)ImageComperssion.Normal)
         {
 
             if (!IsImageMimeTypeValid(file) || !IsImageExtentionValid(file))
@@ -65,33 +182,20 @@ namespace KaraYadak
                     Mode = ResizeMode.Crop
                 };
                 image.Mutate(x => x.Resize(resizeOptions));
-                //var encoder = new JpegEncoder()
-                //{
-                //    Quality = compression
-                //};
-                var encoder = new PngEncoder()
-                {
-                    CompressionLevel=PngCompressionLevel.BestCompression,
-                   
-                };
                 var fileName = GetRandomFileName(file);
                 var savePath = Path.GetFullPath(Path.Combine(path, fileName));
-                //image.Saveasp(savePath, encoder);
-                image.SaveAsPng(savePath,encoder);
-
-
-
-
+                image.SaveAsPng(savePath);
+                
                 return (true, fileName);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                return (false,e.Message);
+                return (false, e.Message);
             }
 
         }
 
-        private static bool IsImageSizeValid(IFormFile image, int validLength = _maxImageLength)
+        public static bool IsImageSizeValid(IFormFile image, double validLength = _maxImageLength)
         {
             if (image.Length > (validLength * 1024 * 1024))
             {
@@ -102,8 +206,17 @@ namespace KaraYadak
                 return true;
             }
         }
+        public static void DeleteFile(string path,string fileName)
+        {
 
-        private static bool IsImageMimeTypeValid(IFormFile image)
+            string fullPath = path + fileName;
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
+        }
+
+        public static bool IsImageMimeTypeValid(IFormFile image)
         {
             string mimeType = image.ContentType.ToLower();
             if (mimeType != "image/jpg" &&
@@ -111,26 +224,33 @@ namespace KaraYadak
                  mimeType != "image/pjpeg" &&
                  mimeType != "image/gif" &&
                  mimeType != "image/x-png" &&
-                 mimeType != "image/png")
+                 mimeType != "image/png"
+                 )
             {
                 return false;
             }
             return true;
         }
 
-        private static string GetRandomFileName(IFormFile file)
+
+       
+
+
+
+        public static string GetRandomFileName(IFormFile file)
         {
             return Guid.NewGuid() + Path.GetExtension(file.FileName).ToLower();
         }
 
-        private static bool IsImageExtentionValid(IFormFile image)
+        public static bool IsImageExtentionValid(IFormFile image)
         {
             string extention = Path.GetExtension(image.FileName).ToLower();
 
             if (extention != ".jpg"
                 && extention != ".png"
                 && extention != ".gif"
-                && extention != ".jpeg")
+                && extention != ".jpeg"
+                )
             {
                 return false;
             }
@@ -140,7 +260,25 @@ namespace KaraYadak
             }
         }
 
-        private bool IsFileExtentionValid(IFormFile file)
+        public static bool IsPDFExtentionValid(IFormFile image)
+        {
+            string extention = Path.GetExtension(image.FileName).ToLower();
+
+            if (extention != ".pdf"
+                //&& extention != ".png"
+                //&& extention != ".gif"
+                //&& extention != ".jpeg"
+                )
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public bool IsFileExtentionValid(IFormFile file)
         {
             string[] validExt = { ".jpg", ".gif", ".png", ".rar", ".pdf", ".zip", ".mp4", ".flv", ".avi", ".wmv", ".mp3", ".wav", ".aac", ".3gp", ".xls", ".xlsx", ".doc", ".docx", ".ppt", ".pptx" };
 
