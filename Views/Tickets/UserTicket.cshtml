@@ -10,10 +10,10 @@
 
    @Html.Partial("Header")
 
-   <section class="tickets container-fluid spx-2 spx-lg-10 smt-10 spt-3">
+   <section class="tickets container-fluid px-2 my-5 mx-2">
             <div class="row">
               <aside class="col-12">
-                <div class="bg-white sbs-shadow srounded-md sp-2">
+                <div class="bg-white bs-shadow srounded-md p-2">
                   <header class="header d-lg-flex w-100 justify-content-lg-between align-items-lg-center">
                     <h2 class="ir-b fs-s c-dark text-right smb-2 mb-lg-0">
                       تیکت های پشتیبانی
@@ -105,5 +105,75 @@
                 </div>
               </aside>
             </div>
-          </section>
+    </section>
    
+
+    <section class="ticket-detail container-fluid px-10 mt-10 pt-3" >
+        <div class="row">
+          <aside class="col-12 col-lg-6 mx-auto">
+            <div class="bs-shadow srounded-md bg-white rounded p-3 my-5" style="box-shadow:0 0 10px 1px rgba(0,0,0,0.1)">
+              <header class="header d-flex flex-column flex-lg-row justify-content-between align-items-center">
+                <h2 class="fs-m c-dark ir-b text-center text-lg-right w-50 text-truncate smb-2 mb-lg-0">
+                  ثبت تیکت جدید
+                </h2>
+
+                <a
+                  class="ir-r fs-s btn bg-white shadow-none border"
+                  href="/Tickets"
+                >
+                  بازگشت
+                </a>
+              </header>
+
+              <hr class="smy-2" />
+
+              <form onSubmit={this.submitTicketAnswer}>
+                <input
+                  class="form-control ir-r fs-s mt-0 mb-2 srounded-sm shadow-none sp-1"
+                  id="subject"
+                  placeholder="موضوع پیام"
+                  rows="4"
+                />
+
+                <select
+                  class="form-control ir-r fs-s mt-0 mb-2 srounded-sm shadow-none"
+                  id="subject"
+                  placeholder="اولویت"
+                  rows="4"
+                >
+                  <option value="1">فوری</option>
+                  <option value="2">جهت اطلاع</option>
+                  <option value="3">عادی</option>
+                </select>
+
+                <textarea
+                  class="form-control ir-r fs-s mt-0 mb-2 srounded-sm shadow-none sp-1"
+                  id="message"
+                  placeholder="پیام شما..."
+                  rows="4"
+                ></textarea>
+
+                <input
+                  class="d-none"
+                  id="file"
+                  type="file"
+                  accept="image/jpeg,image/gif,image/png,application/pdf,.doc,.docx"
+                />
+
+                <div class="d-flex justify-content-start align-items-center mb-2">
+                   
+                  <label
+                    htmlFor="file"
+                    class="ir-r btn btn-light fs-s shadow-none border sp-1"
+                  > آپلود فایل
+                  </label>
+                </div>
+
+                <button type="submit" class="ir-r btn btn-primary">
+                  ثبت
+                </button>
+              </form>
+            </div>
+          </aside>
+        </div>
+      </section>
