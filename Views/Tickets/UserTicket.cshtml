@@ -8,7 +8,7 @@
 }
    @Html.Partial("Header")
 
-   <section class="tickets container-fluid px-2 my-5 mx-2">
+    <section class="tickets container-fluid px-2 my-5 mx-2">
             <div class="row">
               <aside class="col-12">
                 <div class="bg-white bs-shadow srounded-md p-2">
@@ -174,4 +174,84 @@
             </div>
           </aside>
         </div>
-      </section>
+    </section>
+
+    <section class="ticket-detail container-fluid px-10 mt-10 pt-3">
+      <div class="row">
+        <aside class="col-12 col-lg-6 mx-auto">
+          <div class="bs-shadow srounded-md bg-white rounded p-3 my-5"  style="box-shadow:0 0 10px 1px rgba(0,0,0,0.1)">
+            <header class="header d-flex flex-column flex-lg-row justify-content-between align-items-center">
+              <h2 class="fs-m c-dark ir-b text-center text-lg-right w-50 text-truncate mb-2 mb-lg-0">عنوان</h2>
+              <div>
+                  <button
+                    class="btn btn-success ml-2"
+                    download
+                    onClick={this.Downloader}
+                  >
+                    دانلود فایل
+                  </button>
+                <a
+                  class="ir-r fs-s btn bg-white shadow-none border"
+                  href="/Tickets"
+                >
+                  بازگشت
+                </a>
+              </div>
+            </header>
+
+            <hr class="my-2" />
+
+            <div class="first-content">
+              <span class="d-block text-right ir-b fs-s smb-1 c-regular">
+               عمو محمد
+              </span>
+              <span class="d-block text-right ir-r fs-s smb-1 c-regular">
+               سلطان ترین
+              </span>
+              <span class="d-block text-right ir-r fs-s mb-0 c-light">
+                تاریخ : تا ابد                  
+              </span>
+            </div>
+
+
+            <div>
+              <hr class="my-2" />
+
+              <span class="d-block text-right ir-b fs-s smb-1 c-regular">
+                نام دریافت کننده
+              </span>
+
+              <form >
+                <textarea
+                  class="form-control ir-r fs-s mt-0 smb-2 rounded-sm shadow-none p-1"
+                  id="message"
+                  placeholder="پیام شما..."
+                  rows="4"
+                ></textarea>
+
+                <input
+                  class="d-none"
+                  id="file"
+                  type="file"
+                  accept="image/jpeg,image/gif,image/png,application/pdf,.doc,.docx"
+                  onChange={this.fileHandler}
+                />
+
+                <div class="d-flex justify-content-start align-items-center mb-2">
+                  <label
+                    htmlFor="file"
+                    class="ir-r btn btn-light fs-s shadow-none border p-1"
+                  >
+                    نام
+                  </label>
+                </div>
+
+                <button type="submit" class="ir-r btn btn-primary">
+                  ثبت
+                </button>
+              </form>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
