@@ -1,0 +1,257 @@
+﻿@{
+    ViewBag.Title = "پشتیبانی";
+    Layout = "_SiteLayout";
+
+}
+@section Styles{
+ 
+}
+   @Html.Partial("Header")
+
+    <section class="tickets container-fluid px-2 my-5 mx-2">
+            <div class="row">
+              <aside class="col-12">
+                <div class="bg-white bs-shadow srounded-md p-2">
+                  <header class="header d-lg-flex w-100 justify-content-lg-between align-items-lg-center">
+                    <h2 class="ir-b fs-s c-dark text-right smb-2 mb-lg-0">
+                      تیکت های پشتیبانی
+                    </h2>
+
+                    <div>
+                      <a
+                        class="d-block d-lg-inline-block shadow-none ir-r fs-s c-regular btn border srounded-sm smb-2 mb-lg-0"
+                        href="tel:01133333333"
+                      >
+                        تماس تلفنی
+                      </a>
+
+                      <a
+                        class="d-block c-white text-white d-lg-inline-block shadow-none ir-r fs-s btn btn-primary srounded-sm mb-0 mr-0 mr-lg-2"
+                        to="/Employee/createTicket"
+                      >
+                        تیکت جدید
+                        <i class="fa fa-plus smr-1"></i>
+                      </a>
+                    </div>
+                  </header>
+
+                  <hr class="smy-2" />
+                    <div class="table-responsive">
+                      <table class="table mb-0">
+                        <thead>
+                          <tr>
+                            <th
+                              class="ir-b c-regular fs-s border-top-0"
+                              scope="col"
+                            >
+                              #
+                            </th>
+                            <th
+                              class="ir-b c-regular fs-s border-top-0"
+                              scope="col"
+                            >
+                              عنوان تیکت
+                            </th>
+                            <th
+                              class="ir-b c-regular fs-s border-top-0"
+                              scope="col"
+                            >
+                              اولویت
+                            </th>
+                            <th
+                              class="ir-b c-regular fs-s border-top-0"
+                              scope="col"
+                            >
+                              تاریخ ارسال
+                            </th>
+                            <th
+                              class="ir-b c-regular fs-s border-top-0"
+                              scope="col"
+                            >
+                              عملیات
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr >
+                              <td class="ir-r c-regular fs-s">ss</td>
+                              <td>
+                                <span class="ir-r c-regular fs-s w-100 text-truncate">
+                                  ss
+                                </span>
+                              </td>
+                              <td>    
+                                <span class="ir-r fs-s bg-primary-light c-primary py-1 px-2 srounded-sm">
+                                جهت اطلاع
+                                </span>
+                              </td>
+                              <td class="ir-r c-regular fs-s">
+                               ss
+                              </td>
+                              <td class="ir-r c-regular fs-s">
+                                <a
+                                  class="ir-r c-regular fs-s btn btn-light shadow-none sml-1"
+                                >
+                                  مشاهده
+                                </a>
+                              </td>
+                            </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+              </aside>
+            </div>
+    </section>
+   
+
+    <section class="ticket-detail container-fluid px-10 mt-10 pt-3" >
+        <div class="row">
+          <aside class="col-12 col-lg-6 mx-auto">
+            <div class="bs-shadow srounded-md bg-white rounded p-3 my-5" style="box-shadow:0 0 10px 1px rgba(0,0,0,0.1)">
+              <header class="header d-flex flex-column flex-lg-row justify-content-between align-items-center">
+                <h2 class="fs-m c-dark ir-b text-center text-lg-right w-50 text-truncate smb-2 mb-lg-0">
+                  ثبت تیکت جدید
+                </h2>
+
+                <a
+                  class="ir-r fs-s btn bg-white shadow-none border"
+                  href="/Tickets"
+                >
+                  بازگشت
+                </a>
+              </header>
+
+              <hr class="smy-2" />
+
+              <form onSubmit={this.submitTicketAnswer}>
+                <input
+                  class="form-control ir-r fs-s mt-0 mb-2 srounded-sm shadow-none sp-1"
+                  id="subject"
+                  placeholder="موضوع پیام"
+                  rows="4"
+                />
+
+                <select
+                  class="form-control ir-r fs-s mt-0 mb-2 srounded-sm shadow-none"
+                  id="subject"
+                  placeholder="اولویت"
+                  rows="4"
+                >
+                  <option value="1">فوری</option>
+                  <option value="2">جهت اطلاع</option>
+                  <option value="3">عادی</option>
+                </select>
+
+                <textarea
+                  class="form-control ir-r fs-s mt-0 mb-2 srounded-sm shadow-none sp-1"
+                  id="message"
+                  placeholder="پیام شما..."
+                  rows="4"
+                ></textarea>
+
+                <input
+                  class="d-none"
+                  id="file"
+                  type="file"
+                  accept="image/jpeg,image/gif,image/png,application/pdf,.doc,.docx"
+                />
+
+                <div class="d-flex justify-content-start align-items-center mb-2">
+                   
+                  <label
+                    htmlFor="file"
+                    class="ir-r btn btn-light fs-s shadow-none border sp-1"
+                  > آپلود فایل
+                  </label>
+                </div>
+
+                <button type="submit" class="ir-r btn btn-primary">
+                  ثبت
+                </button>
+              </form>
+            </div>
+          </aside>
+        </div>
+    </section>
+
+    <section class="ticket-detail container-fluid px-10 mt-10 pt-3">
+      <div class="row">
+        <aside class="col-12 col-lg-6 mx-auto">
+          <div class="bs-shadow srounded-md bg-white rounded p-3 my-5"  style="box-shadow:0 0 10px 1px rgba(0,0,0,0.1)">
+            <header class="header d-flex flex-column flex-lg-row justify-content-between align-items-center">
+              <h2 class="fs-m c-dark ir-b text-center text-lg-right w-50 text-truncate mb-2 mb-lg-0">عنوان</h2>
+              <div>
+                  <button
+                    class="btn btn-success ml-2"
+                    download
+                    onClick={this.Downloader}
+                  >
+                    دانلود فایل
+                  </button>
+                <a
+                  class="ir-r fs-s btn bg-white shadow-none border"
+                  href="/Tickets"
+                >
+                  بازگشت
+                </a>
+              </div>
+            </header>
+
+            <hr class="my-2" />
+
+            <div class="first-content">
+              <span class="d-block text-right ir-b fs-s smb-1 c-regular">
+               عمو محمد
+              </span>
+              <span class="d-block text-right ir-r fs-s smb-1 c-regular">
+               سلطان ترین
+              </span>
+              <span class="d-block text-right ir-r fs-s mb-0 c-light">
+                تاریخ : تا ابد                  
+              </span>
+            </div>
+
+
+            <div>
+              <hr class="my-2" />
+
+              <span class="d-block text-right ir-b fs-s smb-1 c-regular">
+                نام دریافت کننده
+              </span>
+
+              <form >
+                <textarea
+                  class="form-control ir-r fs-s mt-0 smb-2 rounded-sm shadow-none p-1"
+                  id="message"
+                  placeholder="پیام شما..."
+                  rows="4"
+                ></textarea>
+
+                <input
+                  class="d-none"
+                  id="file"
+                  type="file"
+                  accept="image/jpeg,image/gif,image/png,application/pdf,.doc,.docx"
+                  onChange={this.fileHandler}
+                />
+
+                <div class="d-flex justify-content-start align-items-center mb-2">
+                  <label
+                    htmlFor="file"
+                    class="ir-r btn btn-light fs-s shadow-none border p-1"
+                  >
+                    نام
+                  </label>
+                </div>
+
+                <button type="submit" class="ir-r btn btn-primary">
+                  ثبت
+                </button>
+              </form>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>

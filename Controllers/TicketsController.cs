@@ -259,6 +259,15 @@ namespace KaraYadak.Controllers
             }
         }
 
+             
+        [AllowAnonymous]
+        [Route("UserTicket")]
+        public async Task<ActionResult> UserTicket()
+        {
+           return View();
+        }
+        
+
     }
 
     public class listOfIds
