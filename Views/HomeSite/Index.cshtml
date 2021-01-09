@@ -372,6 +372,19 @@
         })
    
     </script>
+
+    <script>
+        var toggle = 0 ;
+        $(document).on('click', '#menuToggler', function(e){ 
+            if(toggle){
+                $("#navbarSupportedContent-333").removeClass("show");
+                toggle = 0;
+            }else{
+                $("#navbarSupportedContent-333").addClass("show");
+                toggle = 1 ;
+            }
+        });
+    </script>
 }
 
 <div class="container-fluid hj-header">
@@ -382,9 +395,7 @@
         <!--Navbar -->
         <nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color w-100">
             <a class="navbar-brand" href="/"><img src="~/uploads/@Logo" class="img-fluid w-75"></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse"
-                    data-target="#navbarSupportedContent-333" aria-controls="navbarSupportedContent-333"
-                    aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" id="menuToggler">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse text-right" id="navbarSupportedContent-333">

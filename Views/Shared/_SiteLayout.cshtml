@@ -56,6 +56,7 @@
             top: 50%;
             height: 100px;
         }
+            
     </style>
     @*<link href="~/css/mdb.min.css" rel="stylesheet" />*@
 
@@ -304,6 +305,23 @@
         });
 
 
+
+        var $counter = $("#cartCount");
+        var cartVal = $counter.html().parseInt;
+        cartVal <= 0 ? $counter.hide() : $counter.css("display","inline-block");
+    
+
+
+        var toggle = 0 ;
+        $(document).on('click', '#menuTogglerHeader', function(e){ 
+            if(toggle){
+                $("#basicExampleNav").removeClass("show");
+                toggle = 0;
+            }else{
+                $("#basicExampleNav").addClass("show");
+                toggle = 1 ;
+            }
+        });
 
 
 
