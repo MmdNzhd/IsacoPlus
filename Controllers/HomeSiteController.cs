@@ -87,7 +87,12 @@ namespace KaraYadak.Controllers
             if (User.Identity.Name != null)
             {
                 var user =await  _context.Users.SingleOrDefaultAsync(x => x.UserName.Equals(User.Identity.Name));
-                ViewBag.Username = user.FirstName + " " + user.LastName;
+                if (user != null)
+                {
+                    if (string.IsNullOrEmpty(user.FirstName)) ViewBag.Username = user.PhoneNumber;
+                    ViewBag.Username = user.FirstName + " " + user.LastName;
+                }
+                else ViewBag.Username = ":(";
             }
             ViewBag.Categories = await _context.ProductCategories.Where(i => i.ProductCategoryType == 4 ||
             i.ProductCategoryType == 6 || i.ProductCategoryType == 7 || i.ProductCategoryType == 8).ToListAsync();

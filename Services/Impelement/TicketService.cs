@@ -308,6 +308,7 @@ namespace KaraYadak
                         Content = x.Content,
                         CreateDate = (x.CreateDate != null) ? x.CreateDate.ToShortPersianDateTimeString(true) : "",
                         Subject = x.Subject,
+                        
                         IsSenderSeen = x.IsSenderSeen,
                         SenderFullName = x.SenderId== user.Id&&isAsmin? "ادمین" : x.Sender.FirstName + " " + x.Sender.LastName,
 
@@ -353,7 +354,7 @@ namespace KaraYadak
             }
             try
             {
-                var tickets = await _dataContext.Tickets
+                var tickets =  _dataContext.Tickets
                     .Where(x => x.SenderId == user.Id || x.ReceiverId == user.Id)
                     .Include(x => x.Sender)
                     .Include(x => x.Receive)
@@ -368,10 +369,11 @@ namespace KaraYadak
                         Content = x.Content,
                         CreateDate = (x.CreateDate != null) ? x.CreateDate.ToShortPersianDateTimeString(true) : "",
                         Subject = x.Subject,
-                        SenderFullName = (( _userManager.IsInRoleAsync(x.Sender, "Admin").Result)) ? "ادمین" :x.Sender.FirstName+" "+ x.Sender.LastName,
-                        ReceiverFullName = ((_userManager.IsInRoleAsync(x.Receive, "Admin").Result)) ? "ادمین" : x.Receive.FirstName + " " + x.Receive.LastName,
-                        HasAnswer = ((x.SenderId != user.Id) && string.IsNullOrEmpty(x.Answer)) ? true : false
-                    }).ToListAsync();
+                        SenderFullName = (x.SenderId!=user.Id)?"ادمین" :x.Sender.FirstName+" "+ x.Sender.LastName,
+                        ReceiverFullName = (x.ReceiverId != user.Id) ? "ادمین" : x.Receive.FirstName + " " + x.Receive.LastName,
+                        HasAnswer = ((x.SenderId != user.Id) && string.IsNullOrEmpty(x.Answer)) ? true : false,
+                        SenderId=x.SenderId
+                    }).AsNoTracking().AsQueryable();
                 if (tickets == null)
                 {
                     return (null, false, "");
@@ -379,7 +381,7 @@ namespace KaraYadak
                 }
                 else
                 {
-                    return (tickets, true, "");
+                    return (await tickets.ToListAsync(), true, "");
 
                 }
 
@@ -416,9 +418,10 @@ namespace KaraYadak
                         Content = x.Content,
                         CreateDate = (x.CreateDate != null) ? x.CreateDate.ToShortPersianDateTimeString(true) : "",
                         Subject = x.Subject,
+                        SenderId=x.SenderId,
                         IsSenderSeen = x.IsSenderSeen,
-                        SenderFullName = (( _userManager.IsInRoleAsync(x.Sender, "Admin").Result)) ? "ادمین" :x.Sender.FirstName+" "+ x.Sender.LastName,
-                        ReceiverFullName = ((_userManager.IsInRoleAsync(x.Receive, "Admin").Result)) ? "ادمین" : x.Receive.FirstName + " " + x.Receive.LastName,
+                        SenderFullName = (x.SenderId != user.Id) ? "ادمین" : x.Sender.FirstName + " " + x.Sender.LastName,
+                        ReceiverFullName = (x.ReceiverId != user.Id) ? "ادمین" : x.Receive.FirstName + " " + x.Receive.LastName,
                         HasAnswer = ((x.SenderId != user.Id) && string.IsNullOrEmpty(x.Answer)) ? true : false
                     }).FirstOrDefaultAsync();
                 if (tickets == null)

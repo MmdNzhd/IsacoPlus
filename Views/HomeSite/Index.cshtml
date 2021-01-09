@@ -202,6 +202,7 @@
             //</div >`);
 
         });
+
     </script>
 
     <script>
@@ -359,23 +360,15 @@
             $("#VerifyForm").addClass("d-none");
         });
         $(document).on('click', '#LoginSubmitButton', function(e){ 
-            $("#VerifyForm").removeClass("d-none");
         });
         $(document).on('click', '#LoginSubmitButton', function(e){ 
-            $("#login-form").addClass("d-none");
-            $("#Register-form").addClass("d-none");
-            $("#label-1").addClass("d-none");
-            $("#label-2").addClass("d-none");
+      
         })
         $(document).on('click', '#RegisterSubmitButton', function(e){ 
-            $("#VerifyForm").removeClass("d-none");
-            console.log("sam")
+            //$("#VerifyForm").removeClass("d-none");
         });
         $(document).on('click', '#RegisterSubmitButton', function(e){ 
-            $("#login-form").addClass("d-none");
-            $("#Register-form").addClass("d-none");
-            $("#label-1").addClass("d-none");
-            $("#label-2").addClass("d-none");
+           
         })
    
     </script>
@@ -774,11 +767,11 @@
                             <form id="VerifyForm" class="d-none" action="" method="post">
                                 <div class="sign-up-htm sign-in-htm">
                                     <div class="group">
-                                        <label for="username" class="label"> کد تایید </label>
-                                        <input id="username" type="text" class="input" name="username">
+                                        <label for="VerificationNumber" class="label"> کد تایید </label>
+                                        <input id="VerificationNumber" type="text" class="input" name="VerificationNumber">
                                     </div>
                                     <div class="group">
-                                        <input type="submit" class="button" value=" ورود">
+                                                   <input type="submit" id="verifivation" class="button" value=" ورود">
                                     </div>
                                     <div class="hr"></div>
                                 </div>
@@ -786,8 +779,8 @@
                             <form id="login-form" action="" method="post">
                                 <div class="sign-in-htm">
                                     <div class="group">
-                                        <label for="username" class="label"> شماره تماس  </label>
-                                        <input id="username" type="text" class="input" name="username">
+                                        <label for="phoneNumberForLogin" class="label"> شماره تماس  </label>
+                                        <input id="phoneNumberForLogin" type="text" class="input" name="phoneNumberForLogin">
                                     </div>
                                     <div class="group">
                                         <input id="check" type="checkbox" class="check" checked>
@@ -804,11 +797,14 @@
                                 <div class="sign-up-htm">
                                     <div class="group">
                                         <label for="usernameForReg" class="label">نام نام خانوادگی</label>
-                                        <input id="usernameForReg" type="text" class="input" name="usernameForReg">
+                                        <input id="usernameForReg" type="text" class="input" name="Nickname">
                                     </div>
                                     <div class="group">
                                         <label for="phonenumberForReg" class="label">شماره تماس</label>
-                                        <input id="phonenumberForReg" type="password" class="input" data-type="password" name="passwordForReg">
+                                        <input id="phonenumberForReg" type="text" class="input" data-type="number" name="PhoneNumber">
+                                        <input  type="hidden" name="LoginOrRegister" value="Register">
+                                        <input  type="hidden" name="ReturnUrl" >
+                                        
                                     </div>
                                     <div class="group">
                                         <input id="RegisterSubmitButton" type="submit" class="button" value=" ثبت نام">
