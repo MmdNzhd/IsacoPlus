@@ -1,4 +1,4 @@
-* {
+*:not(i) {
   direction: rtl;
   box-sizing: border-box;
   padding: 0;
@@ -11,7 +11,7 @@ html {
 }
 
 html,
-body {
+body:not(i) {
   overflow-x: hidden;
   font-family: Yekan !important;
 }
@@ -1108,5 +1108,11 @@ em.error {
 
   .inquire-modal .content {
     width: 60vw;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .searchInput {
+    width: 100% !important;
   }
 }
