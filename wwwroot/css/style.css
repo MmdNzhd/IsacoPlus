@@ -1116,3 +1116,20 @@ em.error {
     width: 100% !important;
   }
 }
+
+.ResponsiveButton {
+  display: none;
+}
+@media only screen and (max-width: 992px) {
+  .ResponsiveButton {
+    display: block;
+  }
+}
+.WebResponsiveButton {
+  display: block;
+}
+@media only screen and (max-width: 992px) {
+  .WebResponsiveButton {
+    display: none;
+  }
+}
