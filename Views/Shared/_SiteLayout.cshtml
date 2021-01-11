@@ -8,9 +8,12 @@
     var Whatsapp = _context.Settings.Where(x => x.Key.Equals("Whatsapp")).Select(x => x.Value).SingleOrDefault();
     var Phone = _context.Settings.Where(x => x.Key.Equals("Phone")).Select(x => x.Value).SingleOrDefault();
     var Email = _context.Settings.Where(x => x.Key.Equals("Email")).Select(x => x.Value).SingleOrDefault();
+    var FaceBook = _context.Settings.Where(x => x.Key.Equals("Facebook")).Select(x => x.Value).SingleOrDefault();
+    var Twitter = _context.Settings.Where(x => x.Key.Equals("Twitter")).Select(x => x.Value).SingleOrDefault();
     var ContactUs = _context.Settings.Where(x => x.Key.Equals("MiniFooter")).Select(x => x.Value).SingleOrDefault();
     Layout = null;
 }
+
 
 <html lang="en">
 
@@ -105,6 +108,24 @@
                 <div class="row w-100 mx-auto my-2 mr-2 pt-4">
                     <h5 class="pr-3 pt-2"> <i class="fa fa-phone-square pl-2 icon-footer"></i>@Phone </h5>
                 </div>
+               
+                    <ul class="navbar-nav nav-flex-icons p-0" 
+                        style="display:flex !important ; flex-direction:row"
+                    >
+                        <li class="nav-item px-2">
+                            <a href="@FaceBook" class="nav-link text-white"><i class="fa fa-facebook-f "></i></a>
+                        </li>
+                        <li class="nav-item px-2">
+                            <a href="@Twitter" class="nav-link text-white"><i class="fa fa-twitter"></i></a>
+                        </li>
+                        <li class="nav-item px-2">
+                            <a href="@Instagram" class="nav-link text-white"><i class="fa fa-instagram"></i></a>
+                        </li>
+                        <li class="nav-item px-2">
+                            <a href="@Whatsapp" class="nav-link text-white"><i class="fa fa-whatsapp"></i></a>
+                        </li>
+                    </ul>
+          
                 <div class="row w-100 mx-auto my-2 mr-2">
                     <h5 class="pr-3 pt-2"><i class="fa fa-envelope pl-2 icon-footer"></i>@Email</h5>
                 </div>
