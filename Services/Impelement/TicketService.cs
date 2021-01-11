@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic.CompilerServices;
 using Nancy.Json;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
@@ -26,14 +28,19 @@ namespace KaraYadak
         private readonly IAccountService _accountService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _configuration;
+        private readonly IConfigurationSection _settings;
 
         public TicketService(ApplicationDbContext dataContext, IAccountService accountService,
-            IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager)
+            IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager, IConfiguration iConfig)
         {
             _dataContext = dataContext;
             _accountService = accountService;
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
+            _configuration = iConfig;
+            _settings = _configuration.GetSection("AppSettings");
+
         }
 
         public async Task<(bool isSuccess, string error)> CreateTicket(CreateTiket model)
@@ -50,6 +57,9 @@ namespace KaraYadak
             {
                 var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
 
+                var host = _webHostEnvironment.WebRootPath;
+                var url = _settings.GetSection("TicketFiles").Value;
+                var savePath = Path.Combine(host, url);
                 if (isAdmin)
                 {
                     if (model.UserId[0] == "all")
@@ -67,7 +77,7 @@ namespace KaraYadak
                         {
                             Content = model.Content,
                             Subject = model.Subject,
-                            SenderFile = (model.File != null) ? FileUploader.UploadFile(model.File, root + "/uploads/Ticket/").result : "",
+                            SenderFile = (model.File != null) ? FileUploader.UploadFile(model.File, savePath).result : "",
                             TicketPriorityStatus = model.TicketPriorityStatus,
                             CreateDate = DateTime.Now,
                             SenderId = user.Id,
@@ -86,7 +96,7 @@ namespace KaraYadak
                     {
                         Content = model.Content,
                         Subject = model.Subject,
-                        SenderFile = (model.File != null) ? FileUploader.UploadFile(model.File, root + "/Img/Ticket/").result : "",
+                        SenderFile = (model.File != null) ? FileUploader.UploadFile(model.File, savePath).result : "",
                         TicketPriorityStatus = model.TicketPriorityStatus,
                         CreateDate = DateTime.Now,
                         SenderId = user.Id,

@@ -20,6 +20,9 @@
 }
 @section styles{
     <style>
+        .modalfilter{
+            top:22px;
+        }
         * {
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
@@ -207,6 +210,8 @@
 
     <script>
         $(document).ready(function () {
+            $("#selectSubCategory").html(` <option value=""></option>`);
+
             var url = window.location.href;
 
             let formsInPage = document.querySelectorAll('form');
@@ -233,9 +238,14 @@
             //$("#blogs").load("/HomeSite/ListOfBlogs")
         });
         function filter() {
-            let type1 = $("#selectBrand").val();
-            let type2 = $("#TypePiece").val();
-            location.href = "/Filtering/" + type1 + "/" + type2;
+            let car = $("#selectCar").val();
+            let brand = $("#selectBrand").val();
+            let mainCategory = $("#TypePiece").val();
+            let subCategory = $("#selectSubCategory").val();
+            location.href = "/Filter/" + car + "/" + brand + "/" + mainCategory + "/" + subCategory;
+
+            //[Route("Filter/{car?}/{brand?}/{?}/{?}/{page?}")]
+
         }
         function Search() {
             location.href = "/Search/" + $("#searchItem").val();
@@ -374,16 +384,45 @@
     </script>
 
     <script>
-        var toggle = 0 ;
-        $(document).on('click', '#menuToggler', function(e){ 
-            if(toggle){
+        var toggle = 0;
+        $(document).on('click', '#menuToggler', function (e) {
+            if (toggle) {
                 $("#navbarSupportedContent-333").removeClass("show");
                 toggle = 0;
-            }else{
+            } else {
                 $("#navbarSupportedContent-333").addClass("show");
-                toggle = 1 ;
+                toggle = 1;
             }
         });
+
+        $("#TypePiece").change(function (e) {
+            $("#selectSubCategory").html("");
+            $.ajax({
+                type: "Get",
+                url: "/GetSubCategories/" + $(this).val(),
+                data: {},
+                success: function (data) {
+                    if (data.status == "0") {
+                        toastr.error(data.message);
+                    }
+                    else {
+
+                        $("#selectSubCategory").html(` <option value=""></option>`);
+                        $.each(data.data, function (key, value) {
+                            $("#selectSubCategory").append(` <option value="${value}">${value}</option>`);
+
+                        });
+
+                    }
+
+                },
+                error: function (data) {
+                    toastr.warning("خطایی رخ داده است");
+                    console.log(data);
+                }
+            });
+
+        })
     </script>
 }
 
@@ -423,6 +462,15 @@
                         <li class="nav-item px-md-3">
 
                             <a class="nav-link text-white" href="/dashboard">
+                                پنل مدیریت
+                            </a>
+                        </li>
+                    }
+                    @if (User.IsInRole("WarehousingAdmin"))
+                    {
+                        <li class="nav-item px-md-3">
+
+                            <a class="nav-link text-white" href="/WarehousingAdmin">
                                 پنل مدیریت
                             </a>
                         </li>
@@ -579,9 +627,9 @@
         <div class="col-md-9 p-0">
             <div class="row w-100 mx-auto text-center">
                 <div class="col-md-4 py-3 hj-category ">
-                    <a href="/Filtering/لوازم مصرفی"> <img src="./img/1.png" class="img-fluid w-100 mx-auto"></a>
+                    <a href="/Filtering/اقلام مصرفی"> <img src="./img/1.png" class="img-fluid w-100 mx-auto"></a>
                     <b>
-                        <h4 class="STiter-Grouping">لوازم مصرفی</h4>
+                        <h4 class="STiter-Grouping">اقلام مصرفی</h4>
                     </b>
                 </div>
                 <div class="col-md-4 py-3 hj-category">
@@ -591,39 +639,39 @@
                     </b>
                 </div>
                 <div class="col-md-4 py-3 hj-category">
-                    <a href="/Filtering/لوازم جانبی"><img src="./img/3.png" class="img-fluid w-100 mx-auto"></a>
+                    <a href="/Filtering/اقلام تزئینی و داخلی خودرو"><img src="./img/3.png" class="img-fluid w-100 mx-auto"></a>
                     <b>
-                        <h4 class="STiter-Grouping"> لوازم جانبی</h4>
+                        <h4 class="STiter-Grouping"> اقلام تزئینی و داخلی خودرو</h4>
                     </b>
                 </div>
 
             </div>
             <div class="row w-100 mx-auto text-center">
                 <div class="col-md-4 py-3 hj-category">
-                    <a href="/Filtering/نگهداری و نظافت"><img src="./img/4.png" class="img-fluid w-100 mx-auto"></a>
+                    <a href="/Filtering/قطعات بدنه "><img src="./img/4.png" class="img-fluid w-100 mx-auto"></a>
                     <b>
-                        <h4 class="STiter-Grouping"> نگهداری و نظافت</h4>
+                        <h4 class="STiter-Grouping"> قطعات بدنه </h4>
                     </b>
                 </div>
                 <div class="col-md-4 py-3 hj-category">
-                    <a href="/Filtering/الکتریک و الکترونیک"><img src="./img/Group 5.png" class="img-fluid w-100 mx-auto"></a>
+                    <a href="/Filtering/سیستم برق و الکترونیک و کولر"><img src="./img/Group 5.png" class="img-fluid w-100 mx-auto"></a>
                     <b>
-                        <h4 class="STiter-Grouping"> الکتریک و الکترونیک</h4>
+                        <h4 class="STiter-Grouping"> سیستم برق و الکترونیک و کولر</h4>
                     </b>
                 </div>
                 <div class="col-md-4 py-3 hj-category">
-                    <a href="/Filtering/لوکس و اسپرت"> <img src="./img/6.png" class="img-fluid w-100 mx-auto"></a>
+                    <a href="/Filtering/اقلام تزئینی و داخلی خودرو"> <img src="./img/6.png" class="img-fluid w-100 mx-auto"></a>
                     <b>
-                        <h4 class="STiter-Grouping"> لوکس و اسپرت</h4>
+                        <h4 class="STiter-Grouping"> اقلام تزئینی و داخلی خودرو</h4>
                     </b>
                 </div>
 
             </div>
         </div>
         <div class="col-md-3 py-3 hj-category ">
-            <a href="/Filtering/قطعات"><img src="img/l1.png" class="img-fluid w-100 mx-auto"></a>
+            <a href="/Filtering/قطعات بدنه "><img src="img/l1.png" class="img-fluid w-100 mx-auto"></a>
             <b>
-                <h4 class="STiter-Grouping"> قطعات</h4>
+                <h4 class="STiter-Grouping"> قطعات بدنه </h4>
             </b>
         </div>
     </div>
@@ -869,19 +917,48 @@
                 <div class="container">
                     <form>
                         <div class="form-group row pt-5 py-2">
-                            <label for=" TypePiece selectBrand" class="col-sm-2 col-form-label text-md-center text-right">نوع قطعه</label>
+                            <label for=" TypePiece selectBrand" class="col-sm-2 col-form-label text-md-center text-right">دسته بندی اصلی</label>
                             <div class="col-sm-10">
                                 <select class="form-control view-filterInput" id="TypePiece">
                                     <option value=""></option>
 
-                                    @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Categories)
+                                    @foreach (var item in (List<KaraYadak.Models.ProductCategoryType>)ViewBag.Categories)
                                     {
                                         <option value="@item.Name">@item.Name</option>
                                     }
                                 </select>
                             </div>
-
                         </div>
+                        <div class="form-group row py-2">
+                            <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">دسته بندی فرعی</label>
+                            <div class="col-sm-10">
+                                <select class="form-control view-filterInput" id="selectSubCategory">
+                                    <option value=" "> </option>
+
+                                    @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Brands)
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row py-2">
+                            <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">خودرو</label>
+                            <div class="col-sm-10">
+                                <select class="form-control view-filterInput" id="selectCar">
+                                    <option value=" "> </option>
+
+                                    @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Cars)
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="form-group row py-2">
                             <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">برند</label>
                             <div class="col-sm-10">

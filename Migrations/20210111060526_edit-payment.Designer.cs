@@ -4,14 +4,16 @@ using KaraYadak.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KaraYadak.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210111060526_edit-payment")]
+    partial class editpayment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -844,9 +846,6 @@ namespace KaraYadak.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderLevel")
-                        .HasColumnType("int");
-
                     b.Property<int?>("PaymentId")
                         .HasColumnType("int");
 
@@ -858,13 +857,6 @@ namespace KaraYadak.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PostTrackingNumber")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("PostType")
-                        .HasColumnType("int");
 
                     b.Property<string>("Price")
                         .HasColumnType("nvarchar(max)");
@@ -1016,13 +1008,6 @@ namespace KaraYadak.Migrations
 
                     b.Property<bool>("IsSucceed")
                         .HasColumnType("bit");
-
-                    b.Property<int>("OrderLevel")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PostTrackingNumber")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
 
                     b.Property<int>("PostType")
                         .HasColumnType("int");

@@ -23,7 +23,18 @@ namespace KaraYadak.Controllers
             _accountService = accountService;
             _paymentService = paymentService;
         }
+        [Authorize(Roles = PublicHelper.ADMINROLE)]
+
         public async Task<IActionResult> Index()
+        {
+            ViewBag.UserList = await _accountService.GetAllUserForAdmin();
+
+            return View();
+        }
+        [Authorize(Roles = PublicHelper.WarehousingAdminROLE)]
+
+        [Route("WarehousingAdmin")]
+        public async Task<IActionResult> WarehousingAdmin()
         {
             ViewBag.UserList = await _accountService.GetAllUserForAdmin();
 
@@ -36,7 +47,7 @@ namespace KaraYadak.Controllers
         }
 
 
-        [Authorize(Roles = PublicHelper.ADMINROLE)]
+        [Authorize(Roles = PublicHelper.ADMINROLE+","+PublicHelper.WarehousingAdminROLE)]
 
         public async Task<IActionResult> GetLastOfOrdersForAdmin()
         {
@@ -45,6 +56,31 @@ namespace KaraYadak.Controllers
             var result = await _paymentService.GetLastOfOrdersForAdmin();
           
             return new JsonResult(result);
+
+
+        }
+
+
+        [Authorize(Roles = PublicHelper.ADMINROLE + "," + PublicHelper.WarehousingAdminROLE)]
+        [HttpPost]
+        [Route("ChangeOrderTypeByWarehousingAdmin")]
+        public async Task<IActionResult> ChangeOrderTypeByWarehousingAdmin([FromBody]ChangeOrderTypeByWarehousingAdminViewModel model)
+        {
+            var error = new List<string>();
+
+            var result = await _paymentService.ChangeOrderTypeByWarehousingAdmin(model);
+            if (result.isSuccess)
+            {
+
+
+                return new JsonResult(new { status = 1, message = "با موفقیت انجام شد", data = result.isSuccess });
+
+            }
+            else
+            {
+                return new JsonResult(new { status = 0, message = result.message });
+
+            }
 
 
         }
@@ -68,7 +104,7 @@ namespace KaraYadak.Controllers
 
 
 
-        [Authorize(Roles = PublicHelper.ADMINROLE)]
+        [Authorize(Roles = PublicHelper.ADMINROLE + "," + PublicHelper.WarehousingAdminROLE)]
         [HttpPost]
 
         public async Task<IActionResult> GetUserInfoForMoneyBack(string phoneNumber)
@@ -91,7 +127,7 @@ namespace KaraYadak.Controllers
 
 
 
-        [Authorize(Roles = PublicHelper.ADMINROLE)]
+        [Authorize(Roles = PublicHelper.ADMINROLE + "," + PublicHelper.WarehousingAdminROLE)]
         [HttpPost]
         public async Task<IActionResult> MoneyBack([FromBody] MoneyBackViewModel model)
         {

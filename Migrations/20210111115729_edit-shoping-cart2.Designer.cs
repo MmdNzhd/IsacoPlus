@@ -4,14 +4,16 @@ using KaraYadak.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KaraYadak.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210111115729_edit-shoping-cart2")]
+    partial class editshopingcart2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -859,10 +861,6 @@ namespace KaraYadak.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostTrackingNumber")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
                     b.Property<int>("PostType")
                         .HasColumnType("int");
 
@@ -1019,10 +1017,6 @@ namespace KaraYadak.Migrations
 
                     b.Property<int>("OrderLevel")
                         .HasColumnType("int");
-
-                    b.Property<string>("PostTrackingNumber")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
 
                     b.Property<int>("PostType")
                         .HasColumnType("int");

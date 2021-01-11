@@ -18,6 +18,9 @@
 @section Scripts{
 
     <script>
+        $(document).ready(function () {
+
+        })
         function NewTicket() {
             $("#CreateTicket").modal("toggle");
         }
@@ -64,6 +67,7 @@
                 contentType: 'application/json',
                 success: function (data) {
                     if (data.status == '1') {
+                        if (data.data.answer == null) data.data.answer = "";
                         var htmlData = `
             <div class="modal-body" style="padding:0 !important">
 
@@ -75,9 +79,10 @@
                                     <h2 class="fs-m c-dark ir-b text-center text-lg-right w-50 text-truncate mb-2 mb-lg-0">
 ${data.data.subject}</h2>
                                     <div>
-                                        <button class="btn btn-success ml-2 downloadLink"
-      <a id="aLink" href="/uploads/Ticket/${data.data.senderFile}" download> دانلود فایل<a/>
-                                        </button>
+
+      <a id="aLink" href="/uploads/Ticket/${data.data.senderFile}" download>
+<button class="btn btn-success ml-2 downloadLink">دانلود فایل</button> </a>
+
                                         <a class="ir-r fs-s btn bg-white shadow-none border"
                                            href="#" data-dismiss="modal" aria-label="Close">
                                             بازگشت
@@ -105,15 +110,19 @@ ${data.data.subject}</h2>
                                     نام دریافت کننده:  ${data.data.receiverFullName}
                                     </span>
 
-                                    <form>
+                                    <form id=formAnswer>
                                         <textarea class="form-control ir-r fs-s mt-0 smb-2 rounded-sm shadow-none p-1"
                                                   id="message"
                                                   placeholder="پیام شما..."
-                                                  rows="4"></textarea>
-
+                                                    name="Answer"
+                                                  rows="4">${data.data.answer}</textarea>
+                    <input id="idValue" type="hidden" value="${data.data.id}" />
+        
                                         <input class="d-none"
                                                id="file"
                                                type="file"
+                                                    name="AnswerFile"
+
                                                accept="image/jpeg,image/gif,image/png,application/pdf,.doc,.docx"
                                                onChange={this.fileHandler} />
 
@@ -123,7 +132,7 @@ ${data.data.subject}</h2>
                                             نام فرستنده:     ${data.data.senderFullName}
                                             </label>
                                         </div  >
-                                          <button id=answerBtn type="submit" class="ir-r btn btn-primary" onclick=answer( ${data.data.senderFullName} )>
+                                          <button id=answerBtn type="submit" class="ir-r btn btn-primary">
                                             ثبت
                                         </button>
 
@@ -142,9 +151,10 @@ ${data.data.subject}</h2>
 
                         $("#modal-content").html(htmlData);
 
-                         if (data.data.senderId == '@ViewBag.UserId' || data.data.hasAnswer) {
+                        if (data.data.senderId == '@ViewBag.UserId' || !data.data.hasAnswer || data.data.answer != "") {
                             $("#answerBtn").remove();
                         }
+
 
 
                         if (data.data.senderId== '@ViewBag.UserId') {
@@ -152,13 +162,15 @@ ${data.data.subject}</h2>
 
                         }
 
-                         if (data.data.hasAnswer) {
+                        if (!data.data.hasAnswer || data.data.answer !="") {
                              $('.rounded-sm').prop('readonly', true);
                         }
 
                         //if (data.data.receiverFile == null || data.data.receiverFile == "") {
                         //    $(".downloadLink").remove();
                         //}
+
+
 
                     } else {
                         toastr.error(data.message);
@@ -167,13 +179,41 @@ ${data.data.subject}</h2>
                 error: function (data) {
                     toastr.warning("خطا در ثبت اطلاعات");
                 }
+
             });
 
 
         }
-        $(".downloadLink").on("click", function () {
+        $("body").on("submit", "#formAnswer", function (e) {
+            e.preventDefault();
+
+
+            var formData = new FormData(this);
+            formData.append("Id", $("#idValue").val())
+            $.ajax({
+                type: "POST",
+                url:"/tickets/AnswerTicket",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.status == '1') {
+                        toastr.success("با موفقیت ثبت شد");
+                        location.reload();
+                    } else {
+                        toastr.error(data.message);
+                    }
+                },
+                error: function (data) {
+                    toastr.warning("خطا در ثبت اطلاعات");
+                    console.log(data);
+                }
+            });
 
         })
+
+
     </script>
 }
 @Html.Partial("Header")
@@ -206,6 +246,7 @@ ${data.data.subject}</h2>
                 <!--this-->
 
                 <div class="table-responsive">
+
                     <table class="table mb-0">
                         <thead>
                             <tr>
@@ -266,7 +307,16 @@ ${data.data.subject}</h2>
                                                 }
                                                 else
                                                 {
-                                                    <span onclick="showTicket('@item.Id')">پاسخ</span>
+                                                    @if (string.IsNullOrEmpty(item.Answer))
+                                                    {
+                                                        <span onclick="showTicket('@item.Id')">پاسخ</span>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <span onclick="showTicket('@item.Id')">مشاهده</span>
+
+                                                    }
 
                                                 }
                                             </a>
@@ -293,7 +343,7 @@ ${data.data.subject}</h2>
     <div class="modal-dialog modal-lg" role="document">
 
 
-        <div class="modal-content"  style="width: 550px !important; margin: 50px auto;">
+        <div class="modal-content" style="width: 550px !important; margin: 50px auto;">
 
             <div class="modal-body" style="padding:0 !important">
 
@@ -367,7 +417,7 @@ ${data.data.subject}</h2>
 
         </div>
 
-      </div>
+    </div>
 </div>
 
 
@@ -377,7 +427,7 @@ ${data.data.subject}</h2>
 
 
         <div class="modal-content" id="modal-content" style="width: 550px !important; margin: 50px auto;">
-           
+
 
         </div>
     </div>

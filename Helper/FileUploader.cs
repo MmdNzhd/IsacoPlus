@@ -49,29 +49,6 @@ namespace KaraYadak
                 return (false, "فرمت pdf صحیح نیست.");
             }
 
-       
-            try
-            {
-
-                var fileName = GetRandomFileName(file);
-                var savePath = Path.GetFullPath(Path.Combine(path, fileName));
-                using (var stream = new FileStream(savePath, FileMode.Create))
-                {
-                     file.CopyTo(stream);
-                }
-
-                return (true, fileName);
-            }
-            catch (Exception e)
-            {
-                return (false, e.Message);
-            }
-
-        }
-        public static (bool succsseded, string result) UploadFile(IFormFile file, string path, double maxLength = _maxImageLength, int width = (int)ImageWidth.Medium, int height = (int)ImageHeight.Medium, int compression = (int)ImageComperssion.Normal)
-        {
-
-            
 
             try
             {
@@ -82,6 +59,27 @@ namespace KaraYadak
                 {
                     file.CopyTo(stream);
                 }
+
+                return (true, fileName);
+            }
+            catch (Exception e)
+            {
+                return (false, e.Message);
+            }
+
+        }
+        public static (bool succsseded, string result) UploadFile(IFormFile file, string path)
+        {
+
+
+
+            try
+            {
+
+                var fileName = GetRandomFileName(file);
+                var savePath = Path.GetFullPath(Path.Combine(path, fileName));
+                var stream = new FileStream(savePath, FileMode.Create);
+                file.CopyTo(stream);
 
                 return (true, fileName);
             }
@@ -125,7 +123,6 @@ namespace KaraYadak
                 image.Save(savePath, encoder);
 
 
-
                 return (true, fileName);
             }
             catch (Exception e)
@@ -138,12 +135,12 @@ namespace KaraYadak
         public static (bool succsseded, string result) UploadImageHighQuality(IFormFile file, string path)
         {
 
-           
+
 
             try
             {
                 var image = Image.Load(file.OpenReadStream());
-               
+
 
                 var fileName = GetRandomFileName(file);
                 var savePath = Path.GetFullPath(Path.Combine(path, fileName));
@@ -185,7 +182,7 @@ namespace KaraYadak
                 var fileName = GetRandomFileName(file);
                 var savePath = Path.GetFullPath(Path.Combine(path, fileName));
                 image.SaveAsPng(savePath);
-                
+
                 return (true, fileName);
             }
             catch (Exception e)
@@ -206,7 +203,7 @@ namespace KaraYadak
                 return true;
             }
         }
-        public static void DeleteFile(string path,string fileName)
+        public static void DeleteFile(string path, string fileName)
         {
 
             string fullPath = path + fileName;
@@ -233,7 +230,7 @@ namespace KaraYadak
         }
 
 
-       
+
 
 
 

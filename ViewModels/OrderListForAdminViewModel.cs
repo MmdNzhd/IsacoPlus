@@ -17,5 +17,9 @@ namespace KaraYadak
         public string OrderType { get; set; }
         public string CompanyName { get; set; }
         public string Issuccess { get; set; }
+        public string PostType { get; set; }
+        public string OrderLevel { get; set; }
+        public int ShopingId { get; set; }
+        public string PostTrackingNumber { get; set; }
     }
 }

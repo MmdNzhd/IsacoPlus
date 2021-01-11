@@ -116,45 +116,9 @@
                                              aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
-                                <div class="list-group list-group-flush">
-                                    <a href="#" class="list-group-item">پروفایل</a>
-                                    <a href="#" class="list-group-item d-flex">
-                                        دنبال‌کنندگان<span class="text-muted ml-auto">214</span>
-                                    </a>
-                                    <a href="#" class="list-group-item d-flex">
-                                        صندوق ورودی <span class="text-muted ml-auto">18</span>
-                                    </a>
-                                    <a href="#" class="list-group-item" data-sidebar-target="#settings">صورتحساب</a>
-                                    <a href="#" class="list-group-item" data-sidebar-target="#settings">راهنمایی?</a>
-                                    <a asp-action="logout" asp-controller="account" class="list-group-item text-danger" data-sidebar-target="#settings">خروج</a>
-                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="flex-grow-1">
-                    <ul>
-                        <li>
-                            @*<a class="active" href="#" data-toggle="tooltip" data-placement="right" title="حسابداری" data-nav-target="#accounting-menu">
-                                    <i data-feather="dollar-sign"></i>
-                                </a>*@
-                        </li>
-                        <li>
-                            @*<a href="#" data-toggle="tooltip" data-placement="right" title="انبارداری" data-nav-target="#warehouse-menu">
-                                    <i data-feather="database"></i>
-                                </a>*@
-                        </li>
-                        <li>
-                            @*<a href="#" data-toggle="tooltip" data-placement="right" title="سایت" data-nav-target="#cms-menu">
-                                    <i data-feather="anchor"></i>
-                                </a>*@
-                        </li>
-                        <li>
-                            @*<a href="#" data-toggle="tooltip" data-placement="right" title="فروشگاه" data-nav-target="#shop-menu">
-                                    <i data-feather="book"></i>
-                                </a>*@
-                        </li>
-                    </ul>
                 </div>
                 <div>
                     <ul>
@@ -178,44 +142,6 @@
                             <img class="logo" src="/bordash/assets/media/image/logo-F.png" alt="logo">
                             <img class="logo-light" src="/bordash/assets/media/image/logo-light.png" alt="light logo">
                         </a>
-                    </div>
-                </div>
-                <div class="navigation-menu-group">
-                    <div class="open" id="accounting-menu">
-                        <ul class="open">
-                            @*<li class="navigation-divider">مدیریت</li>*@
-                            <li><a class="active" href="/dashboard">داشبورد<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" asp-action="index" asp-controller="products">محصولات انبار<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" href="/productcategories">دسته بندی ها<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" href="/baner">مدیریت بنر<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" href="/shopProducts">محصولات فروشگاه<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" href="/comments">مدیریت نظرات<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" href="/Account/UserManager"> مدیریت کاربران<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" href="/Payment/Index"> مدیریت مالی<span class="badge badge-danger"></span></a></li>
-                            
-                            <li><a class="active" href="/contactUsmanager">مدیریت تماس با ما<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" href="/blogs">مدیریت اخبار<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" href="/Tickets/Index">مدیریت پیام ها<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" href="/Settings"> تنظیمات<span class="badge badge-danger"></span></a></li>
-
-
-                        </ul>
-                    </div>
-                    <div id="warehouse-menu">
-                        <ul>
-                            <li class="navigation-divider">انبارداری</li>
-                            <li><a asp-action="index" asp-controller="home">انبار<span class="badge badge-danger">2</span></a></li>
-                        </ul>
-                    </div>
-                    <div id="cms-menu">
-                        <ul>
-                            <li class="navigation-divider">سایت</li>
-                        </ul>
-                    </div>
-                    <div id="shop-menu">
-                        <ul>
-                            <li class="navigation-divider">فروشگاه</li>
-                        </ul>
                     </div>
                 </div>
             </div>

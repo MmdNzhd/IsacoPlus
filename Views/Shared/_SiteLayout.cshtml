@@ -490,7 +490,14 @@
 
                         })
                         $("#centralModalLogin").modal("hide");
-                        location.reload();
+                        if (data.returnUrl) {
+                           
+                            location.href = data.returnUrl;
+                        }
+                        else {
+                            location.reload();
+
+                        }
 
 
                     }

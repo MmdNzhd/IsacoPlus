@@ -106,6 +106,28 @@ namespace KaraYadak.Models
         Used,
         NotUsed,
     }
+    //    
+    //
+    //Tipax
+    //Burberry
+    public enum PostType
+    {
+        [Display(Name = "پست")]
+        Post,
+        [Display(Name = "تیپاکس")]
+        Tipax,
+        [Display(Name = "باربری")]
+        Barbary
+    }
+    public enum OrderLevel
+    {
+        [Display(Name = "در حال بررسی")]
+        Pending,
+        [Display(Name = "بسته بندی")]
+        packing,
+        [Display(Name = "ارسال شده")]
+        Sent
+    }
 
     public enum TicketStatus
     {

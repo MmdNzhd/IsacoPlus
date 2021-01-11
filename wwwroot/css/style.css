@@ -42,17 +42,17 @@ body:not(i) {
 }
 
 *:not(i) {
-  font-family: IranSans;
+  font-family: Yekan !important;
 }
 
-input,
+/*input,
 ::placeholder {
   font-family: kalame !important;
 }
 
 button {
   font-family: kalame !important;
-}
+}*/
 
 /* ------ */
 .hj-header {
@@ -248,7 +248,7 @@ button {
 }
 
 .STiter-Grouping {
-  font-family: kalame !important;
+  font-family: Yekan !important;
   position: absolute;
   bottom: 25px;
   right: 24px;
@@ -300,7 +300,7 @@ button {
 }
 
 .font-kalame {
-  font-family: kalame !important;
+  font-family: Yekan !important;
 }
 
 .hj-more-button {
@@ -334,16 +334,16 @@ hj-gallery2 {
 .hj-prouduct-Tslider {
   color: #ffcc00;
   font-size: 57px !important;
-  font-family: kalameBlack !important;
+  font-family: Yekan !important;
 }
 
 .hj-producttext {
   font-size: 40px !important;
-  font-family: kalameBlack !important;
+  font-family: Yekan !important;
 }
 
 .font-kalameBlack {
-  font-family: kalameBlack !important;
+  font-family: Yekan !important;
 }
 
 .dir-ltr {
@@ -596,7 +596,7 @@ a {
 .category-list {
   color: #000;
   font-size: 26px;
-  font-family: kalame;
+  font-family: Yekan;
   font-weight: bold;
 }
 
@@ -978,7 +978,7 @@ em.error {
 
 .i-btn,
 .i-btn:hover {
-  font-family: IranSans;
+  font-family: Yekan;
   color: var(--main-blue) !important;
   background: var(--main-yellow);
   cursor: pointer;
@@ -1027,7 +1027,7 @@ em.error {
 }
 
 .inquire .i-btn {
-  font-family: IranSans;
+  font-family: Yekan;
   color: var(--main-blue) !important;
   background: var(--main-yellow);
   width: 150px;

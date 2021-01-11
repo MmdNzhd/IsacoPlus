@@ -195,7 +195,11 @@ namespace KaraYadak
                   CompanyName = x.User.FirstName + " " + x.User.LastName,
                   Issuccess = (x.IsSucceed) ? "موفق" : "ناموفق",
                   Discount = x.Discount,
-                  PriceWithDiscount = x.Amount
+                  PriceWithDiscount = x.Amount,
+                  OrderLevel=x.OrderLevel.GetDisplayAttributeFrom(),
+                  PostType=x.PostType.GetDisplayAttributeFrom(),
+                  ShopingId=(x.ShoppingCartId.HasValue)?x.ShoppingCartId.Value:0,
+                  PostTrackingNumber = x.PostTrackingNumber
 
               }).AsNoTracking().AsQueryable();
                 var finalModel = await lastOfOrder.ToListAsync(); 
@@ -215,6 +219,43 @@ namespace KaraYadak
         public Task<(bool isSuccess, string message, double? discount)> CheckGiftCode(string giftCode)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<(bool isSuccess, string message)> ChangeOrderTypeByWarehousingAdmin(ChangeOrderTypeByWarehousingAdminViewModel model)
+        {
+            try
+            {
+                if (model.OrderLevel == Models.OrderLevel.Sent && string.IsNullOrEmpty(model.PostTrackingNumber))
+                {
+                    return (false, "کد پیگیری پستی را وارد کنید");
+                }
+                var payment = await _dataContext.Payments.FindAsync(model.PaymentId);
+                if (payment == null/*||payment.IsSucceed*/)
+                {
+                    return (false, "اطلاعاتی یافت نشد");
+                }
+                var shopingCart = await _dataContext.ShoppingCarts.FindAsync(model.ShopingCartId);
+                if (shopingCart == null) return (false, "اطلاعاتی یافت نشد");
+                payment.PostTrackingNumber = model.PostTrackingNumber;
+                payment.OrderLevel = model.OrderLevel;
+                _dataContext.Payments.Update(payment);
+
+                shopingCart.PostTrackingNumber = model.PostTrackingNumber;
+                shopingCart.OrderLevel = model.OrderLevel;
+                _dataContext.ShoppingCarts.Update(shopingCart);
+                await _dataContext.SaveChangesAsync();
+                if (model.OrderLevel == Models.OrderLevel.Sent)
+                {
+                    await _smsService.SendWithPattern(shopingCart.UserName, "bsknr9hm51",
+                        JsonConvert.SerializeObject(new { trackingNubmber=model.PostTrackingNumber, OrderId=model.ShopingCartId }));
+                }
+                return (true, "");
+            }
+            catch (Exception)
+            {
+
+                return (false, "خطایی رخ داده است");
+            }
         }
     }
 }

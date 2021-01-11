@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Payment\WarehousingAdmin.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Components\ShopBasketComponent\ShopBasketComponent.cs" />
     <Content Include="Components\MenuComponent\MenuComponent.cs" />
     <Content Include="Components\PageHeaderComponent\PageHeaderComponent.cs" />
@@ -48,6 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Payment\WarehousingAdmin.cshtml" />
     <None Include="Views\Payment\Index.cshtml" />
     <None Include="Views\Requests\index.cshtml" />
     <None Include="Views\Webapp\Index.cshtml" />
@@ -117,7 +122,6 @@
     <Folder Include="wwwroot\uploads\CategoriesImg\" />
     <Folder Include="wwwroot\uploads\Ticket\" />
     <Folder Include="wwwroot\uploads\UserImg\" />
-    <Folder Include="wwwroot\uploads\ProductImages\" />
   </ItemGroup>
 
 </Project>

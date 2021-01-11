@@ -65,7 +65,7 @@ namespace KaraYadak.Controllers
             ViewBag.Provinces = Iran.Provinces.ToList();
             var item = _context.Users.SingleOrDefault(i => i.UserName == User.Identity.Name);
             ViewBag.profileIsComplete = false;
-            if (item != null && !string.IsNullOrWhiteSpace(item.PhoneNumber))
+            if (item != null && !string.IsNullOrWhiteSpace(item.Email))
             {
                 ViewBag.profileIsComplete = true;
             }
@@ -209,7 +209,7 @@ namespace KaraYadak.Controllers
             return PartialView(vm);
         }
         [Authorize]
-        public async Task<IActionResult> SubmitBasket()
+        public async Task<IActionResult> SubmitBasket(PostType PostType)
         {
             var user = _context.Users.SingleOrDefault(u => u.UserName == User.Identity.Name);
             if (user == null)
@@ -279,6 +279,8 @@ namespace KaraYadak.Controllers
                 RequestCode = RandomString(5),
                 SendPrice = vm.SendPrice.ToString(),
                 Status = RequestStatus.Confirmed,
+                PostType= PostType
+
             };
             await _context.CartItems.AddRangeAsync(listOfFactorItems);
             await _context.ShoppingCarts.AddRangeAsync(factor);
@@ -314,6 +316,7 @@ namespace KaraYadak.Controllers
                 Date = DateTime.Now,
                 UserId = user.Id,
                 ShoppingCartId = factor.Id,
+                PostType= PostType
 
             };
 

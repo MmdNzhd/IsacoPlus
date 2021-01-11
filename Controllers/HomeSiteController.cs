@@ -16,6 +16,7 @@ using KaraYadak.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.CodeAnalysis.CSharp;
+using System.Collections.Immutable;
 
 namespace KaraYadak.Controllers
 {
@@ -46,6 +47,22 @@ namespace KaraYadak.Controllers
                     list.Add(item);
             }
             return String.Join(",", list);
+        }
+        [Route("GetSubCategories/{mainCategory?}")]
+        public async Task<IActionResult>GetSubCategories(string mainCategory)
+        {
+            var subCategory = await _context.ProductCategoryTypes.Where(x => x.Name.Equals(mainCategory)).FirstOrDefaultAsync();
+            if (subCategory != null)
+            {
+                var finalModel =await  _context.ProductCategories.Where(x => x.ProductCategoryType == subCategory.Id)
+                    .Select(x=>x.Name).ToListAsync();
+
+                return new JsonResult(new { status = 1, data = finalModel });
+            }
+            else
+            {
+                return new JsonResult(new { status = 0, message="دسته بندی یافت نشد."});
+            }
         }
         public async Task<ActionResult> Index()
         {
@@ -94,9 +111,10 @@ namespace KaraYadak.Controllers
                 }
                 else ViewBag.Username = ":(";
             }
-            ViewBag.Categories = await _context.ProductCategories.Where(i => i.ProductCategoryType == 4 ||
-            i.ProductCategoryType == 6 || i.ProductCategoryType == 7 || i.ProductCategoryType == 8).ToListAsync();
+            ViewBag.Categories = await _context.ProductCategoryTypes.Where(x=>x.Id!=11&&x.Id!=5).ToListAsync();
             ViewBag.Brands =await _context.ProductCategories.Where(i => i.Parent != 0 && i.ProductCategoryType == 11).ToListAsync();
+
+            ViewBag.Cars =await _context.ProductCategories.Where(i => i.Parent != 0 && i.ProductCategoryType == 5).ToListAsync();
 
 
 
@@ -134,7 +152,8 @@ namespace KaraYadak.Controllers
                 Off = p.Discount,
                 Picture = p.ImageUrl,
                 Price = p.Price,
-                Special = p.SpecialSale
+                Special = p.SpecialSale,
+                CategoryId=p.ProductCategoryType
 
             }).ToList();
 
@@ -149,7 +168,8 @@ namespace KaraYadak.Controllers
                 CreatingDate = x.FirstOrDefault().CreatingDate,
                 Title = x.FirstOrDefault().Title,
                 Off = x.FirstOrDefault().Off,
-                Picture = x.FirstOrDefault().Picture,
+                Picture = (string.IsNullOrEmpty(x.FirstOrDefault().Picture)) ? "" :
+                x.FirstOrDefault().Picture,
                 Price = x.FirstOrDefault().Price - x.FirstOrDefault().Off * x.FirstOrDefault().Price / 100,
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
             }).Take(1).ToList();
@@ -159,7 +179,8 @@ namespace KaraYadak.Controllers
                 Code = x.FirstOrDefault().Code,
                 Title = x.FirstOrDefault().Title,
                 Off = x.FirstOrDefault().Off,
-                Picture = x.FirstOrDefault().Picture,
+                Picture = (string.IsNullOrEmpty(x.FirstOrDefault().Picture)) ? "" :
+                x.FirstOrDefault().Picture,
                 Price = x.FirstOrDefault().Price - x.FirstOrDefault().Off * x.FirstOrDefault().Price / 100,
                 Special = x.FirstOrDefault().Special,
                 UpdateDate = x.FirstOrDefault().UpdateDate
@@ -171,7 +192,8 @@ namespace KaraYadak.Controllers
                 CreatingDate = x.FirstOrDefault().CreatingDate,
                 Title = x.FirstOrDefault().Title,
                 Off = x.FirstOrDefault().Off,
-                Picture = x.FirstOrDefault().Picture,
+                Picture = (string.IsNullOrEmpty(x.FirstOrDefault().Picture)) ? "" :
+                x.FirstOrDefault().Picture,
                 Price = x.FirstOrDefault().Price - x.FirstOrDefault().Off * x.FirstOrDefault().Price / 100,
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
             }).Where(e => e.Picture != null).OrderByDescending(x => x.Off).Take(10).ToList();
@@ -181,7 +203,8 @@ namespace KaraYadak.Controllers
                 CreatingDate = x.FirstOrDefault().CreatingDate,
                 Title = x.FirstOrDefault().Title,
                 Off = x.FirstOrDefault().Off,
-                Picture = x.FirstOrDefault().Picture,
+                Picture = (string.IsNullOrEmpty(x.FirstOrDefault().Picture))? "" :
+                x.FirstOrDefault().Picture,
                 Price = x.FirstOrDefault().Price - x.FirstOrDefault().Off * x.FirstOrDefault().Price / 100,
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
             }).Where(e => e.Picture != null).OrderByDescending(x => x.CreatingDate).Take(12).ToList();
@@ -200,10 +223,10 @@ namespace KaraYadak.Controllers
             products.Add(maxinDiscountProducts);
             products.Add(product);
 
-
             return View(finalmodel);
         }
 
+    
         public PartialViewResult SpecialOfferProduct()
         {
 

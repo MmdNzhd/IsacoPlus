@@ -165,7 +165,6 @@ namespace KaraYadak.Controllers
 
         public async Task<IActionResult> IdentityLogin([FromBody] IdentityLoginViewModel input)
         {
-            input.ReturnUrl = input.ReturnUrl ?? Url.Action("index", "home");
 
             input.LoginOrRegister = "Login";
 
@@ -186,14 +185,15 @@ namespace KaraYadak.Controllers
                 return Json(new { status = 0, Message = "شماره شما در سیستم موجود نمی باشد" });
 
             Random random = new Random();
-            int current = 11111; //random.Next(10000, 99999);
+            int current = random.Next(10000, 99999);
             user.VerificationCode = current.ToString();
             user.VerificationExpireTime = DateTime.Now.AddMinutes(2);
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             var result = await _userManager.ResetPasswordAsync(user, code, current.ToString());
-            await _smsSender.SendWithPattern(user.UserName, "", JsonConvert.SerializeObject(new { }));
+            await _smsSender.SendWithPattern(input.PhoneNumber, "xdumcpryk5", JsonConvert.SerializeObject(
+                    new { name = user.FirstName + " " + user.LastName, verificationCode = current }));
             return new JsonResult(new { Status = 1, Message = "لطفا کد 5 رقمی را وارد کنید", Data = input });
 
 
@@ -206,8 +206,8 @@ namespace KaraYadak.Controllers
 
         public async Task<IActionResult> IdentityRegister([FromBody] IdentityRegisterViewModel input)
         {
-            input.ReturnUrl = input.ReturnUrl ?? Url.Action("index", "home");
-
+            await _context.Roles.AddAsync(new IdentityRole { Name = PublicHelper.WarehousingAdminROLE });
+            await _context.SaveChangesAsync();
             input.LoginOrRegister = "Register";
 
             if (!ModelState.IsValid)
@@ -231,7 +231,7 @@ namespace KaraYadak.Controllers
             }
 
             Random random = new Random();
-            int current = 11111; //random.Next(10000, 99999);
+            int current = random.Next(10000, 99999);
             //user.VerificationCode = current.ToString();
             //user.VerificationExpireTime = DateTime.Now.AddMinutes(2);
 
@@ -272,7 +272,8 @@ namespace KaraYadak.Controllers
 
             if (result.Succeeded)
             {
-                await _smsSender.SendWithPattern(user.UserName, "", JsonConvert.SerializeObject(new { }));
+                await _smsSender.SendWithPattern(input.PhoneNumber, "xdumcpryk5", JsonConvert.SerializeObject(
+                    new { name = input.Nickname, verificationCode = current }));
 
                 return new JsonResult(new { Status = 1, Message = "لطفا کد 5 رقمی را وارد کنید", Data = input });
 
@@ -321,8 +322,9 @@ namespace KaraYadak.Controllers
 
                 if (result.Succeeded)
                 {
-                    var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
-                    var isUser = await _userManager.IsInRoleAsync(user, "User");
+                    var isAdmin = await _userManager.IsInRoleAsync(user, PublicHelper.ADMINROLE);
+                    var isUser = await _userManager.IsInRoleAsync(user, PublicHelper.USERROLE);
+                    var isWarehousingAdmin = await _userManager.IsInRoleAsync(user, PublicHelper.WarehousingAdminROLE);
 
                     await _signInManager.SignInAsync(user, true);
 
@@ -330,14 +332,17 @@ namespace KaraYadak.Controllers
                     {
                         if (isAdmin)
                         {
-                            return new JsonResult(new { Status = 3, ReturnUrl = "/dashboard", message = "/dashboard" });
+                            return new JsonResult(new { Status = 1, ReturnUrl = "/dashboard", message = "خوش آمدید!" });
+
+                        }
+                        else if (isWarehousingAdmin)
+                        {
+                            return new JsonResult(new { Status = 1, ReturnUrl = "/WarehousingAdmin", message = "خوش آمدید!" });
 
                         }
                         else
-                        {
-                            return new JsonResult(new { Status = 3, ReturnUrl = "/", message = "/" });
+                            return new JsonResult(new { Status = 1, ReturnUrl = "/", message = "خوش آمدید!" });
 
-                        }
                     }
                     return new JsonResult(new { Status = 1, ReturnUrl = input.ReturnUrl, message = "خوش آمدید!" });
                 }
@@ -350,7 +355,7 @@ namespace KaraYadak.Controllers
             else
             {
 
-                await _userManager.AddToRoleAsync(await _userManager.FindByNameAsync(input.PhoneNumber), "User");
+                await _userManager.AddToRoleAsync(await _userManager.FindByNameAsync(input.PhoneNumber), PublicHelper.USERROLE);
                 var signIn = await _signInManager.PasswordSignInAsync(input.PhoneNumber, input.VerificationNumber, isPersistent: true, lockoutOnFailure: false);
                 if (signIn.Succeeded)
                     return new JsonResult(new { Status = 1, input.ReturnUrl, message = "ثبت نام با موفقیت انجام شد" });
