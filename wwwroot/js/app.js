@@ -62,6 +62,31 @@ var swiper = new Swiper(".swiper-container4", {
 });
 
 //
+var swiper = new Swiper(".swiper-Landing2", {
+  slidesPerView: 4,
+  loop: true,
+  spaceBetween: 30,
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+  breakpoints: {
+    // when window width is <= 499px
+    0: {
+      slidesPerView: 1,
+      spaceBetweenSlides: 30,
+    },
+    800: {
+      slidesPerView: 3,
+      spaceBetweenSlides: 40,
+    },
+
+    1300: {
+      slidesPerView: 4,
+      spaceBetweenSlides: 40,
+    },
+  },
+});
 var swiper = new Swiper(".swiper-containerBlog2", {
   slidesPerView: 4,
   loop: true,
