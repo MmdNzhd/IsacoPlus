@@ -250,6 +250,10 @@
             let brand = $("#selectBrand").val();
             let mainCategory = $("#TypePiece").val();
             let subCategory = $("#selectSubCategory").val();
+            if (car == "") car = " ";
+            if (brand == "") brand = " ";
+            if (mainCategory == "") mainCategory = " ";
+            if (subCategory == "") subCategory = " ";
             location.href = "/Filter/" + car + "/" + brand + "/" + mainCategory + "/" + subCategory;
 
             //[Route("Filter/{car?}/{brand?}/{?}/{?}/{page?}")]
@@ -549,7 +553,7 @@
                     <div class="i-btn "> 
                         <span id="modalEstelam" class="btn btn-warning i-btn scaleout-glow" style="width:240px" data-elem="1"> استعلام بارکد ایساکویی  </span>
                         <form class="i-btn-holder" onsubmit="this.preventDefault()">
-                            <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                            <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="بارکد ایساکو را وارد کنید..." />
                             <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
 
                         </form>

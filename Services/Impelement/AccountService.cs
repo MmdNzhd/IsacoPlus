@@ -7,6 +7,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace KaraYadak.Services
@@ -144,6 +145,52 @@ namespace KaraYadak.Services
         {
             if (user.LockoutEnabled) return false;
             else return true;
+        }
+
+        public async Task<ApplicationUser> GetWarehousingAdmin()
+        {
+            var admin = await (from r in _context.Roles
+                               where r.Name == PublicHelper.WarehousingAdminROLE
+                               join ur in _context.UserRoles
+                               on r.Id equals ur.RoleId
+                               join u in _context.Users
+                               on ur.UserId equals u.Id
+                               select u).AsNoTracking().FirstOrDefaultAsync();
+            return (admin);
+
+        }
+
+        public async Task<(bool isSuccess, string error)> ChangeWarehousingAdmin(string phoneNumber)
+        {
+            try
+            {
+                var regex = new Regex(@"^(\+98|0)?9\d{9}$");
+                if (!regex.IsMatch(phoneNumber)) return (false, "شماره وارد شده نا معتبر میباشد");
+                if(await _context.Users.AnyAsync(x => x.UserName == phoneNumber))
+                {
+                    return (false, "کاربری با این شماره ثبت شده است");
+                }
+                var admin = await (from r in _context.Roles
+                                   where r.Name == PublicHelper.WarehousingAdminROLE
+                                   join ur in _context.UserRoles
+                                   on r.Id equals ur.RoleId
+                                   join u in _context.Users
+                                   on ur.UserId equals u.Id
+                                   select u).AsNoTracking().FirstOrDefaultAsync();
+
+                if (admin == null) return (false, "کاربری یافت نشد");
+                admin.PhoneNumber = phoneNumber;
+                admin.UserName = phoneNumber;
+                admin.NormalizedUserName = phoneNumber;
+                _context.Users.Update(admin);
+                await _context.SaveChangesAsync();
+                return (true, "");
+            }
+            catch (Exception)
+            {
+
+                return (false, "خطایی رخ داده است");
+            }
         }
     }
 }

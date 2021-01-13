@@ -424,11 +424,15 @@ namespace KaraYadak.Controllers
             }).Where(e => e.Picture != null).OrderByDescending(x => x.CreatingDate).Take(12).ToList();
             var carBranding = new Dictionary<string, List<string>>();
 
-            foreach (KeyValuePair<int, List<string>> item in brandWithCars)
+            if (brandWithCars.Count > 0)
             {
-                var carBrand = _context.ProductCategories.Find(item.Key).Image;
+                foreach (KeyValuePair<int, List<string>> item in brandWithCars)
+                {
+                    var carBrand = await _context.ProductCategories.FindAsync(item.Key);
+                    if (carBrand != null)
 
-                carBranding.Add(carBrand, item.Value);
+                        carBranding.Add(carBrand.Image, item.Value);
+                }
             }
             finalModel.OtherProduct = otherProducts;
             finalModel.CarCategoriesForProduct = carBranding;
@@ -1023,6 +1027,7 @@ namespace KaraYadak.Controllers
             return View(products.Skip((page - 1) * 12).Take(12).ToList());
 
         }
+        [AllowAnonymous]
 
         [Route("Filter/{car?}/{brand?}/{mainCategory?}/{subCategory?}/{page?}")]
         public async Task<IActionResult> Filter(string car, string brand, string mainCategory, string subCategory, int page)
@@ -1034,12 +1039,12 @@ namespace KaraYadak.Controllers
                 filterName = mainCategory;
                 if (!string.IsNullOrEmpty(subCategory))
                 {
-                    filterName = mainCategory + " ----- " + subCategory;
+                    filterName = mainCategory + " ----- " + subCategory+" / ";
                 }
             }
             if (!string.IsNullOrEmpty(car))
             {
-                filterName += "  خودرو ---- " + car;
+                filterName += "  خودرو ---- " + car + " / ";
             }
 
             if (!string.IsNullOrEmpty(brand))
@@ -1153,9 +1158,7 @@ namespace KaraYadak.Controllers
                                       })
                                      .ToList();
 
-            var products = groupByCodeProduct.Where(x => x.Categories.Contains(subCategory) ||
-            x.Categories.Contains(car) || x.SubCategories.Contains(brand)
-            || x.CategoriyTypes.Equals(mainCategory) || x.CategoriyTypes.Equals(subCategory)).Select(x => new ProductForIndexVM
+            var products = groupByCodeProduct.Select(x => new ProductForIndexVM
             {
                 Id = x.Product.Id,
                 CreatingDate = x.Product.CreatedAt,
@@ -1214,7 +1217,7 @@ namespace KaraYadak.Controllers
             if (!string.IsNullOrWhiteSpace(mainCategory))
             {
 
-                products = groupByCodeProduct.Where(x => x.Categories.Contains(mainCategory)||x.CategoriyTypes.Contains(mainCategory)).Select(x => new ProductForIndexVM
+                products = groupByCodeProduct.Where(x => x.Categories.Contains(mainCategory) || x.CategoriyTypes.Contains(mainCategory)).Select(x => new ProductForIndexVM
                 {
                     Id = x.Product.Id,
                     CreatingDate = x.Product.CreatedAt,

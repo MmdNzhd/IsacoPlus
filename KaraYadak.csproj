@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Payment\test.cshtml" />
     <Content Remove="Views\Payment\WarehousingAdmin.cshtml" />
   </ItemGroup>
 
@@ -52,6 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Profile\WarehousingAdmin.cshtml" />
     <None Include="Views\Payment\WarehousingAdmin.cshtml" />
     <None Include="Views\Payment\Index.cshtml" />
     <None Include="Views\Requests\index.cshtml" />

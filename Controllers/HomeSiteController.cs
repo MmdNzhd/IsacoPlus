@@ -66,7 +66,6 @@ namespace KaraYadak.Controllers
         }
         public async Task<ActionResult> Index()
         {
-
           
            
             //var ip = _accessor.ActionContext.HttpContext.Connection.RemoteIpAddress.ToString();
@@ -115,7 +114,6 @@ namespace KaraYadak.Controllers
             ViewBag.Brands =await _context.ProductCategories.Where(i => i.Parent != 0 && i.ProductCategoryType == 11).ToListAsync();
 
             ViewBag.Cars =await _context.ProductCategories.Where(i => i.Parent != 0 && i.ProductCategoryType == 5).ToListAsync();
-
 
 
             //var categories = new List<CategoriesVM>();

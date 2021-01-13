@@ -82,7 +82,7 @@ namespace KaraYadak.Controllers
         {
             ViewBag.Cities = Iran.Cities.Select(x => x.CityName).ToList();
             ViewBag.Provinces = Iran.Cities.Select(x => x.ProvinceName).ToList();
-            ViewBag.Transaction =await _context.ShoppingCarts.Where(x => x.UserName.Equals(User.Identity.Name)).ToListAsync();
+            ViewBag.Transaction =await _context.ShoppingCarts.Where(x => x.UserName.Equals(User.Identity.Name)).OrderByDescending(x=>x.Id).ToListAsync();
 
             ViewBag.Provinces = Iran.Provinces.OrderBy(i => i.ProvinceName);
             var item = _context.Users.SingleOrDefault(i => i.UserName == User.Identity.Name);

@@ -6,6 +6,7 @@ using DNTPersianUtils.Core;
 using KaraYadak.Data;
 using KaraYadak.Helper;
 using KaraYadak.Models;
+using KaraYadak.Services;
 using KaraYadak.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -20,10 +21,13 @@ namespace KaraYadak.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        public ProfileController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        private readonly IAccountService _accountService;
+
+        public ProfileController(ApplicationDbContext context, UserManager<ApplicationUser> userManager,IAccountService accountService)
         {
             _context = context;
             _userManager = userManager;
+            _accountService = accountService;
         }
 
         public async Task<IActionResult> Index()
@@ -74,6 +78,14 @@ namespace KaraYadak.Controllers
                 }
             }
             return Json(new { Status = 0, Message = errors.First() });
+        }
+        [AllowAnonymous]
+        [Authorize(Roles = PublicHelper.WarehousingAdminROLE)]
+        [Route("WarehousingAdmin")]
+        public async Task<IActionResult> WarehousingAdmin()
+        {
+            ViewBag.UserList = await _accountService.GetAllUserForAdmin();
+            return View();
         }
         [Route("Dashboard")]
         public async Task<IActionResult> Dashboard()

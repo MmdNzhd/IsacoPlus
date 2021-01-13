@@ -31,15 +31,12 @@ namespace KaraYadak.Controllers
 
             return View();
         }
-        [Authorize(Roles = PublicHelper.WarehousingAdminROLE)]
-
-        [Route("WarehousingAdmin")]
-        public async Task<IActionResult> WarehousingAdmin()
-        {
-            ViewBag.UserList = await _accountService.GetAllUserForAdmin();
-
-            return View();
-        }
+        //public async Task<IActionResult> WarehousingAdmin()
+        //{
+        //    ViewBag.UserList = await _accountService.GetAllUserForAdmin();
+        //    return View();
+        //}
+   
         public class UserList
         {
             public string PhoneNumber { get; set; }

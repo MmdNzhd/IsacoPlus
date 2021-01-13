@@ -12,6 +12,9 @@ namespace KaraYadak.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
+            Database.SetCommandTimeout(150000);
+
         }
         public DbSet<Favorite>Favorites  { get; set; }
         public DbSet<SiteVisit> SiteVisits  { get; set; }
