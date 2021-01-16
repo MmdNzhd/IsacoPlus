@@ -12,7 +12,11 @@ namespace KaraYadak.Models
         public int ProductId { get; set; }
         public double Quantity { get; set; }
         public string Price { get; set; }
+        public string Discount { get; set; }
         public DateTime Date { get; set; }
         public string QR { get; set; }
+        public string ProductCode { get; set; }
+        public string ProductName { get; set; }
+
     }
 }

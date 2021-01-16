@@ -26,6 +26,7 @@ namespace KaraYadak.ViewModels
         public string Brand { get; set; }
         public double Count { get; set; }//just Use in Dashboard
         public bool Special { get; set; }
+        public int CategoryId { get; set; }
     }
     
     public class ListForIndexVM

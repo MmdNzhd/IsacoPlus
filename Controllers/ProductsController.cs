@@ -393,14 +393,14 @@ namespace KaraYadak.Controllers
                     brandWithCars[item.carBrand] = newCarModelsList.Distinct().ToList();
                 }
             }
-            var product = _context.Products.Where(x => x.Code.Equals(code)).Select(x => new ProductDetailVM
+            var product = await _context.Products.Where(x => x.Code.Contains(code)).Select(x => new ProductDetailVM
             {
                 Code = x.Code,
                 Description = x.Description,
                 Price = x.Price,
                 Title = x.Name,
                 Images = x.ImageUrl,
-            }).FirstOrDefault();
+            }).FirstOrDefaultAsync();
 
             finalModel.Product = product;
             var groupByCodeProduct = _context.Products.ToLookup(p => p.Code, p => new ProductForIndexVM
@@ -424,11 +424,15 @@ namespace KaraYadak.Controllers
             }).Where(e => e.Picture != null).OrderByDescending(x => x.CreatingDate).Take(12).ToList();
             var carBranding = new Dictionary<string, List<string>>();
 
-            foreach (KeyValuePair<int, List<string>> item in brandWithCars)
+            if (brandWithCars.Count > 0)
             {
-                var carBrand = _context.ProductCategories.Find(item.Key).Image;
+                foreach (KeyValuePair<int, List<string>> item in brandWithCars)
+                {
+                    var carBrand = await _context.ProductCategories.FindAsync(item.Key);
+                    if (carBrand != null)
 
-                carBranding.Add(carBrand, item.Value);
+                        carBranding.Add(carBrand.Image, item.Value);
+                }
             }
             finalModel.OtherProduct = otherProducts;
             finalModel.CarCategoriesForProduct = carBranding;
@@ -684,9 +688,9 @@ namespace KaraYadak.Controllers
                                             CategoryIdLvl3 = cid_3,
                                             ProductCategoryType = cid_4,
                                             ProductStatus = ProductStatus.آماده_برای_فروش,
-                                            ImageUrl = "9fad10de-80a0-4601-b481-2d53b62faea7.jpg",
+                                            ImageUrl = GetPicture(cid_4),
                                             Price = price,
-                                            
+
                                         };
                                         updateProducts.Add(newProducts);
 
@@ -718,12 +722,12 @@ namespace KaraYadak.Controllers
                         //}
 
                         //await _context.Images.AddRangeAsync(updateProductsImg);
-                        //await _context.AddRangeAsync(updateProducts);
+                        await _context.AddRangeAsync(updateProducts);
 
-                        //await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync();
 
 
-                        await _context.BulkInsertAsync(updateProducts);
+                        //await _context.BulkInsertAsync(updateProducts);
 
 
                     }
@@ -767,9 +771,12 @@ namespace KaraYadak.Controllers
                                 {
                                     prosucts = await _context.Products.Where(x => x.Code == code).ToListAsync();
                                     var price = Convert.ToDouble(workSheet.Cells[rowIterator, 2].Value);
+                                    var count = Convert.ToInt32(workSheet.Cells[rowIterator, 3].Value);
                                     foreach (var item in prosucts)
                                     {
                                         item.Price = price;
+                                        item.MinEntity = count;
+                                        item.MaxEntity = count;
                                     }
                                     updateProducts.AddRange(prosucts);
 
@@ -847,7 +854,7 @@ namespace KaraYadak.Controllers
         [AllowAnonymous]
 
         [Route("Filtering/{type1?}/{type2?}/{Page?}")]
-        public IActionResult IndexFilterProduct(string type1, string type2, int page)
+        public async Task<IActionResult> IndexFilterProduct(string type1, string type2, int page)
         {
             /* ViewBag.FilterName*/
             var filterName = "";
@@ -861,15 +868,28 @@ namespace KaraYadak.Controllers
             }
             if (!string.IsNullOrEmpty(filterName))
             {
-                var cat = _context.ProductCategories.FirstOrDefault(x => x.Name == filterName);
-                var categorytypeName = _context.ProductCategoryTypes.FirstOrDefault(x => x.Id == cat.ProductCategoryType).Name;
-                ViewBag.FilterName = categorytypeName + " : " + filterName;
-                var subCategory = _context.ProductCategories.FirstOrDefault(x => x.Id == cat.Parent);
-
-                if (subCategory != null)
+                string categorytypeName = "";
+                var cat = await _context.ProductCategories.FirstOrDefaultAsync(x => x.Name == filterName);
+                if (cat == null)
                 {
-                    ViewBag.FilterName = categorytypeName + " : " + subCategory.Name + " ----> " + filterName;
+                    var categorytype = await _context.ProductCategoryTypes.FirstOrDefaultAsync(x => x.Name == filterName);
+                    categorytypeName = categorytype.Name;
+                    ViewBag.FilterName = filterName;
+
                 }
+                else
+                {
+                    categorytypeName = _context.ProductCategoryTypes.FirstOrDefault(x => x.Id == cat.ProductCategoryType).Name;
+                    ViewBag.FilterName = categorytypeName + " : " + filterName;
+                    var subCategory = _context.ProductCategories.FirstOrDefault(x => x.Id == cat.Parent);
+
+                    if (subCategory != null)
+                    {
+                        ViewBag.FilterName = categorytypeName + " : " + subCategory.Name + " ----> " + filterName;
+                    }
+
+                }
+
             }
 
             //filter side
@@ -955,6 +975,7 @@ namespace KaraYadak.Controllers
 
 
 
+
             var groupByCodeProduct = (from a in _context.Products.Where(x => x.ProductStatus == ProductStatus.آماده_برای_فروش)
                                                   .Join(_context.ProductCategories,
                                                         ac => ac.CategoryIdLvl1,
@@ -988,7 +1009,7 @@ namespace KaraYadak.Controllers
                 Picture = x.Product.ImageUrl,
                 Price = x.Product.Price,
                 Rate = x.Product.Rate.GetValueOrDefault(),
-                Code = x.Product.Code
+                Code = x.Product.Code,
             }).OrderByDescending(x => x.CreatingDate).Distinct().ToList();
             ViewBag.Page = Math.Ceiling(Convert.ToDecimal(products.Count / 12));
             ViewBag.CurrectPage = page;
@@ -1002,8 +1023,229 @@ namespace KaraYadak.Controllers
                 Picture = x.Product.ImageUrl,
                 Price = x.Product.Price,
             }).Where(e => e.Picture != null).OrderByDescending(x => x.Off).Take(10).ToList();
+
             return View(products.Skip((page - 1) * 12).Take(12).ToList());
 
+        }
+        [AllowAnonymous]
+
+        [Route("Filter/{car?}/{brand?}/{mainCategory?}/{subCategory?}/{page?}")]
+        public async Task<IActionResult> Filter(string car, string brand, string mainCategory, string subCategory, int page)
+        {
+            /* ViewBag.FilterName*/
+            var filterName = "";
+            if (!string.IsNullOrWhiteSpace(mainCategory))
+            {
+                filterName = mainCategory;
+                if (!string.IsNullOrEmpty(subCategory))
+                {
+                    filterName = mainCategory + " ----- " + subCategory+" / ";
+                }
+            }
+            if (!string.IsNullOrEmpty(car))
+            {
+                filterName += "  خودرو ---- " + car + " / ";
+            }
+
+            if (!string.IsNullOrEmpty(brand))
+            {
+                filterName += "  برند ---- " + brand;
+            }
+            if (!string.IsNullOrEmpty(filterName))
+            {
+                ViewBag.FilterName = filterName;
+
+
+            }
+
+            //filter side
+            var categories = (from c in _context.ProductCategories
+                              join ct in _context.ProductCategoryTypes
+                              on c.ProductCategoryType equals ct.Id
+                              into tble
+                              from t in tble
+                              select new FilteringVM
+                              {
+                                  CatId = t.Id,
+                                  SubCategory = t.Name,
+                                  Categories = c.Name
+                              }).ToList();
+
+
+            ViewBag.Filter = categories.GroupBy(x => x.CatId).Select(x =>
+            new FilterVM
+            {
+                SubCategory = x.FirstOrDefault().SubCategory,
+                Categories = x.ToList().Select(y => y.Categories).ToList(),
+                CatId = x.Key
+            }).ToList();
+
+            var baner = await _context.Baners.OrderByDescending(x => x.Date).FirstOrDefaultAsync();
+            ViewBag.baner = baner;
+            var now = DateTime.Now;
+            if (baner.Date < now)
+            {
+                ViewBag.timer = now;
+            }
+            else
+            {
+                ViewBag.timer = baner.Date;
+            }
+
+            if (page == 0)
+            {
+                page = 1;
+            }
+
+
+
+
+            //Other Product With BestSeller Product
+            var sellers = from r in _context.CartItems
+                          group r by r.ProductId into g
+                          select new
+                          {
+                              ProductId = g.Key,
+                              Sum = g.Sum(x => x.Quantity)
+                          };
+            var bestSellers = sellers.OrderByDescending(x => x.Sum).Take(24).ToList();
+            var segustProduct = new List<ProductForIndexVM>();
+            foreach (var item in bestSellers)
+            {
+                var pr = (from x in _context.Products
+                          where x.Id.Equals(item.ProductId)
+                          select new ProductForIndexVM
+                          {
+                              Id = x.Id,
+                              CreatingDate = x.CreatedAt,
+                              Title = x.Name,
+                              Off = x.Discount,
+                              Picture = x.ImageUrl,
+                              Price = x.Price,
+                              Rate = x.Rate.GetValueOrDefault(),
+                              Code = x.Code
+                          }).FirstOrDefault();
+                segustProduct.Add(pr);
+            }
+            ViewBag.segustProduct = segustProduct;
+
+
+
+
+
+
+            var groupByCodeProduct = (from a in _context.Products.Where(x => x.ProductStatus == ProductStatus.آماده_برای_فروش)
+                                                  .Join(_context.ProductCategories,
+                                                        ac => ac.CategoryIdLvl1,
+                                                        cc => cc.Id,
+                                                        (ac, cc) => new
+                                                        {
+                                                            ac,
+                                                            cc
+                                                        })
+                                                  .ToList()
+
+                                      group a by a.ac.Code into pp
+
+
+                                      select new ProductWithCategoryVM
+                                      {
+                                          Product = pp.FirstOrDefault().ac,
+                                          Tags = pp.FirstOrDefault().ac.Tags ?? "",
+                                          Categories = removeDuplicate(String.Join(", ", (pp.Select(x => x.cc.Name ?? "")).ToArray())),
+                                          SubCategories = GetCategoryNameById(pp.Where(x => x.ac.CategoryIdLvl2 > 0).Select(x => x.ac.CategoryIdLvl2).ToList()),
+                                          CategoriyTypes = (pp.FirstOrDefault().ac.CategoryIdLvl1 > 0) ? GetCategoryTypeNameById(pp.FirstOrDefault().ac.CategoryIdLvl1) : "",
+                                      })
+                                     .ToList();
+
+            var products = groupByCodeProduct.Select(x => new ProductForIndexVM
+            {
+                Id = x.Product.Id,
+                CreatingDate = x.Product.CreatedAt,
+                Title = x.Product.Name,
+                Off = x.Product.Discount,
+                Picture = x.Product.ImageUrl,
+                Price = x.Product.Price,
+                Rate = x.Product.Rate.GetValueOrDefault(),
+                Code = x.Product.Code,
+            }).OrderByDescending(x => x.CreatingDate).Distinct().ToList();
+            ViewBag.Page = Math.Ceiling(Convert.ToDecimal(products.Count / 12));
+            ViewBag.CurrectPage = page;
+            //OferBox
+            ViewBag.BestOfferProduct = groupByCodeProduct.Select(x => new ProductForIndexVM
+            {
+                Code = x.Product.Code,
+                CreatingDate = x.Product.CreatedAt,
+                Title = x.Product.Name,
+                Off = x.Product.Discount,
+                Picture = x.Product.ImageUrl,
+                Price = x.Product.Price,
+            }).Where(e => e.Picture != null).OrderByDescending(x => x.Off).Take(10).ToList();
+
+            if (!string.IsNullOrWhiteSpace(car))
+            {
+
+                products = groupByCodeProduct.Where(x => x.Categories.Contains(car)).Select(x => new ProductForIndexVM
+                {
+                    Id = x.Product.Id,
+                    CreatingDate = x.Product.CreatedAt,
+                    Title = x.Product.Name,
+                    Off = x.Product.Discount,
+                    Picture = x.Product.ImageUrl,
+                    Price = x.Product.Price,
+                    Rate = x.Product.Rate.GetValueOrDefault(),
+                    Code = x.Product.Code,
+                }).OrderByDescending(x => x.CreatingDate).Distinct().ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(brand))
+            {
+
+                products = groupByCodeProduct.Where(x => x.Categories.Contains(brand)).Select(x => new ProductForIndexVM
+                {
+                    Id = x.Product.Id,
+                    CreatingDate = x.Product.CreatedAt,
+                    Title = x.Product.Name,
+                    Off = x.Product.Discount,
+                    Picture = x.Product.ImageUrl,
+                    Price = x.Product.Price,
+                    Rate = x.Product.Rate.GetValueOrDefault(),
+                    Code = x.Product.Code,
+                }).OrderByDescending(x => x.CreatingDate).Distinct().ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(mainCategory))
+            {
+
+                products = groupByCodeProduct.Where(x => x.Categories.Contains(mainCategory) || x.CategoriyTypes.Contains(mainCategory)).Select(x => new ProductForIndexVM
+                {
+                    Id = x.Product.Id,
+                    CreatingDate = x.Product.CreatedAt,
+                    Title = x.Product.Name,
+                    Off = x.Product.Discount,
+                    Picture = x.Product.ImageUrl,
+                    Price = x.Product.Price,
+                    Rate = x.Product.Rate.GetValueOrDefault(),
+                    Code = x.Product.Code,
+                }).OrderByDescending(x => x.CreatingDate).Distinct().ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(subCategory))
+            {
+
+                products = groupByCodeProduct.Where(x => x.Categories.Contains(subCategory) || x.CategoriyTypes.Contains(subCategory)).Select(x => new ProductForIndexVM
+                {
+                    Id = x.Product.Id,
+                    CreatingDate = x.Product.CreatedAt,
+                    Title = x.Product.Name,
+                    Off = x.Product.Discount,
+                    Picture = x.Product.ImageUrl,
+                    Price = x.Product.Price,
+                    Rate = x.Product.Rate.GetValueOrDefault(),
+                    Code = x.Product.Code,
+                }).OrderByDescending(x => x.CreatingDate).Distinct().ToList();
+            }
+            return View(products.Skip((page - 1) * 12).Take(12).ToList());
         }
         [AllowAnonymous]
 
@@ -1308,6 +1550,36 @@ namespace KaraYadak.Controllers
             return PartialView();
 
             //return new JsonResult(new { status = "1", message = "شما قبلا نظر خود را ثبت کرده اید!" });
+        }
+        public string GetPicture(int id)
+        {
+            switch (id)
+            {
+                case 4:
+                    return "/Uploads/ProductImages/مصرفی.JPG";
+                case 5:
+                    return "/Uploads/ProductImages/مصرفی.JPG";
+                case 6:
+                    return "/Uploads/ProductImages/موتور.JPG";
+                case 7:
+                    return "/Uploads/ProductImages/جلوبندی.JPG";
+                case 8:
+                    return "/Uploads/ProductImages/برقی.JPG";
+                case 9:
+                    return "/Uploads/ProductImages/تزئینی.JPG";
+                case 10:
+                    return "/Uploads/ProductImages/بدنه.JPG";
+                case 11:
+                    return "/Uploads/ProductImages/بدنه.JPG";
+                case 12:
+                    return "/Uploads/ProductImages/کلاج.JPG";
+                case 13:
+                    return "/Uploads/ProductImages/کلاج.JPG";
+                case 14:
+                    return "/Uploads/ProductImages/سایر.JPG";
+                default:
+                    return "/Uploads/ProductImages/سایر.JPG";
+            }
         }
     }
 }

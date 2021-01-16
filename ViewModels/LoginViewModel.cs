@@ -1,6 +1,7 @@
 ﻿using DNTPersianUtils.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,9 +33,11 @@ namespace KaraYadak.ViewModels
         public string LoginOrRegister { get; set; }
 
 
-        [Required]
+        [DisplayName("شماره تلفن")]
+        [Required(ErrorMessage = "لطفا  {0}  را وارد کنید")]
+        //[MaxLength(500, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد ")]
         //[DataType(DataType/*.*/PhoneNumber)]
-        [ValidIranianPhoneNumber(ErrorMessage = "شماره تماس نامعتبر")]
+        [RegularExpression(@"^(\+98|0)?9\d{9}$",ErrorMessage ="شماره تلفن نامعتبر")]
         public string PhoneNumber { get; set; }
 
         public bool RememberMe { get; set; }
@@ -43,19 +46,20 @@ namespace KaraYadak.ViewModels
     }
     public class IdentityRegisterViewModel : IdentityLoginViewModel
     {
-        [Required]
+        [DisplayName(" نام و نام خانوادگی")]
+        [Required(ErrorMessage = "لطفا  {0}  را وارد کنید")]
         public string Nickname { get; set; }
     }
 
-    public class IdentityVerifyViewModel 
+    public class IdentityVerifyViewModel
     {
         public string ReturnUrl { get; set; }
         public string LoginOrRegister { get; set; }
         [Required]
-        [ValidIranianPhoneNumber(ErrorMessage = "شماره تماس نامعتبر")]
+        [RegularExpression(@"^(\+98|0)?9\d{9}$", ErrorMessage = "شماره تلفن نامعتبر")]
         public string PhoneNumber { get; set; }
         [Required]
-        [MaxLength(4,ErrorMessage ="کد 4 رقمی نا درست")]
+        [MaxLength(5, ErrorMessage = "کد 5 رقمی نا درست")]
         public string VerificationNumber { get; set; }
     }
 }

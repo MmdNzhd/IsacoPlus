@@ -231,11 +231,20 @@ namespace KaraYadak.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Discount")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Price")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QR")
                         .HasColumnType("nvarchar(max)");
@@ -844,6 +853,9 @@ namespace KaraYadak.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OrderLevel")
+                        .HasColumnType("int");
+
                     b.Property<int?>("PaymentId")
                         .HasColumnType("int");
 
@@ -855,6 +867,13 @@ namespace KaraYadak.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostTrackingNumber")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("PostType")
+                        .HasColumnType("int");
 
                     b.Property<string>("Price")
                         .HasColumnType("nvarchar(max)");
@@ -1006,6 +1025,16 @@ namespace KaraYadak.Migrations
 
                     b.Property<bool>("IsSucceed")
                         .HasColumnType("bit");
+
+                    b.Property<int>("OrderLevel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PostTrackingNumber")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("PostType")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ShoppingCartId")
                         .HasColumnType("int");

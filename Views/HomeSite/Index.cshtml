@@ -19,7 +19,15 @@
     var Slider3 = _context.Settings.Where(x => x.Key.Equals("Slider3")).Select(x => x.Value).SingleOrDefault();
 }
 @section styles{
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <style>
+        #modalEstelam {
+            width: 240px;
+            font-size: 137%;
+        }
+        .modalfilter{
+            top:22px;
+        }
         * {
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
@@ -126,6 +134,9 @@
                 transform: scale(1) rotate(0);
             }
 
+         
+    
+
         @@-webkit-keyframes rotate {
             to {
                 -webkit-transform: rotate(360deg);
@@ -167,8 +178,8 @@
 }
 @section scripts{
     <script src="~/js/mdb.min.js"></script>
-    <script src="~/js/app.js"></script>
     <script src="~/js/CountDown.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
     <script>
         function sleep(ms) {
@@ -202,10 +213,13 @@
             //</div >`);
 
         });
+
     </script>
 
     <script>
         $(document).ready(function () {
+            $("#selectSubCategory").html(` <option value=""></option>`);
+
             var url = window.location.href;
 
             let formsInPage = document.querySelectorAll('form');
@@ -232,9 +246,18 @@
             //$("#blogs").load("/HomeSite/ListOfBlogs")
         });
         function filter() {
-            let type1 = $("#selectBrand").val();
-            let type2 = $("#TypePiece").val();
-            location.href = "/Filtering/" + type1 + "/" + type2;
+            let car = $("#selectCar").val();
+            let brand = $("#selectBrand").val();
+            let mainCategory = $("#TypePiece").val();
+            let subCategory = $("#selectSubCategory").val();
+            if (car == "") car = " ";
+            if (brand == "") brand = " ";
+            if (mainCategory == "") mainCategory = " ";
+            if (subCategory == "") subCategory = " ";
+            location.href = "/Filter/" + car + "/" + brand + "/" + mainCategory + "/" + subCategory;
+
+            //[Route("Filter/{car?}/{brand?}/{?}/{?}/{page?}")]
+
         }
         function Search() {
             location.href = "/Search/" + $("#searchItem").val();
@@ -265,6 +288,21 @@
         var div = $(".i-btn-holder").addClass("d-none").removeClass("d-block");
 
         $("#modalEstelam").click(function () {
+            $("#inquireSubmit").css("width", "100%");
+
+            if ($(this).attr("data-elem") == "1") {
+                if (openClose) {
+                    $(".i-btn-holder").removeClass("d-none").addClass("d-block");
+                    openClose = false;
+                }
+                else {
+
+                    $(".i-btn-holder").addClass("d-none").removeClass("d-block");
+                    openClose = true;
+                }
+            }
+        })
+        $("#modalEstelam2").click(function () {
             $("#inquireSubmit").css("width", "100%");
 
             if ($(this).attr("data-elem") == "1") {
@@ -359,26 +397,100 @@
             $("#VerifyForm").addClass("d-none");
         });
         $(document).on('click', '#LoginSubmitButton', function(e){ 
-            $("#VerifyForm").removeClass("d-none");
         });
         $(document).on('click', '#LoginSubmitButton', function(e){ 
-            $("#login-form").addClass("d-none");
-            $("#Register-form").addClass("d-none");
-            $("#label-1").addClass("d-none");
-            $("#label-2").addClass("d-none");
+      
         })
         $(document).on('click', '#RegisterSubmitButton', function(e){ 
-            $("#VerifyForm").removeClass("d-none");
-            console.log("sam")
+            //$("#VerifyForm").removeClass("d-none");
         });
         $(document).on('click', '#RegisterSubmitButton', function(e){ 
-            $("#login-form").addClass("d-none");
-            $("#Register-form").addClass("d-none");
-            $("#label-1").addClass("d-none");
-            $("#label-2").addClass("d-none");
+           
         })
    
     </script>
+
+    <script>
+        var toggle = 0;
+        $(document).on('click', '#menuToggler', function (e) {
+            if (toggle) {
+                $("#navbarSupportedContent-333").removeClass("show");
+                toggle = 0;
+            } else {
+                $("#navbarSupportedContent-333").addClass("show");
+                toggle = 1;
+            }
+        });
+
+        $("#TypePiece").change(function (e) {
+            $("#selectSubCategory").html("");
+            $.ajax({
+                type: "Get",
+                url: "/GetSubCategories/" + $(this).val(),
+                data: {},
+                success: function (data) {
+                    if (data.status == "0") {
+                        toastr.error(data.message);
+                    }
+                    else {
+
+                        $("#selectSubCategory").html(` <option value=""></option>`);
+                        $.each(data.data, function (key, value) {
+                            $("#selectSubCategory").append(` <option value="${value}">${value}</option>`);
+
+                        });
+
+                    }
+
+                },
+                error: function (data) {
+                    toastr.warning("خطایی رخ داده است");
+                    console.log(data);
+                }
+            });
+
+        })
+    </script>
+
+    <script>
+		var swiper = new Swiper('.swiper-menuContainer', {
+        spaceBetween: 30,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        });
+	</script>
+
+    <script>
+        var swiper = new Swiper(".swiper-Landing1", {
+        slidesPerView: 3,
+        loop: true,
+        spaceBetween: 30,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        breakpoints: {
+            // when window width is <= 499px
+            0: {
+            slidesPerView: 1,
+            spaceBetweenSlides: 30,
+            },
+            800: {
+            slidesPerView: 2,
+            spaceBetweenSlides: 40,
+            },
+
+            1300: {
+            slidesPerView: 3,
+            spaceBetweenSlides: 40,
+            },
+        },
+        });
+    </script>
+    
+
 }
 
 <div class="container-fluid hj-header">
@@ -389,13 +501,11 @@
         <!--Navbar -->
         <nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color w-100">
             <a class="navbar-brand" href="/"><img src="~/uploads/@Logo" class="img-fluid w-75"></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse"
-                    data-target="#navbarSupportedContent-333" aria-controls="navbarSupportedContent-333"
-                    aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" id="menuToggler">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse text-right" id="navbarSupportedContent-333">
-                <ul class="navbar-nav mx-auto p-0 ">
+                <ul class="navbar-nav w-100 p-0 ">
                     <li class="nav-item px-md-3">
                         @if (ViewBag.Username != null)
                         {
@@ -423,6 +533,15 @@
                             </a>
                         </li>
                     }
+                    @if (User.IsInRole("WarehousingAdmin"))
+                    {
+                        <li class="nav-item px-md-3">
+
+                            <a class="nav-link text-white" href="/WarehousingAdmin">
+                                پنل مدیریت
+                            </a>
+                        </li>
+                    }
                     <li class="nav-item px-md-3">
                         @if (ViewBag.Username != null)
                         {
@@ -430,39 +549,15 @@
                         }
                     </li>
                 </ul>
-                @* <div class="inquire">
-                        <span class="i-btn">استعلام قیمت</span>
-
-                        <form class="w-100" onsubmit="this.preventDefault()">
-                            <div class="form-group">
-                                <input type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
-                                <button class="btn btn-success d-flex ml-auto" id="inquireSubmit" type="button">جستجو</button>
-                            </div>
-                        </form>
-                    </div>*@
-                <ul class="navbar-nav nav-flex-icons   p-0">
-                    <div class="i-btn ">
-                        <span id="modalEstelam" class="btn btn-warning i-btn scaleout-glow" data-elem="1"> استعلام وضعیت </span>
+                <ul class="navbar-nav nav-flex-icons p-0 WebResponsiveButton">
+                    <div class="i-btn "> 
+                        <span id="modalEstelam" class="btn btn-warning i-btn scaleout-glow" style="width:240px" data-elem="1"> استعلام بارکد ایساکویی  </span>
                         <form class="i-btn-holder" onsubmit="this.preventDefault()">
-                            <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                            <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="بارکد ایساکو را وارد کنید..." />
                             <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
 
                         </form>
                     </div>
-
-                    <li class="nav-item px-2">
-                        <a href="@FaceBook" class="nav-link text-white"><i class="fa fa-facebook-f "></i></a>
-                    </li>
-                    <li class="nav-item px-2">
-                        <a href="@Twitter" class="nav-link text-white"><i class="fa fa-twitter"></i></a>
-                    </li>
-                    <li class="nav-item px-2">
-                        <a href="@Instagram" class="nav-link text-white"><i class="fa fa-instagram"></i></a>
-                    </li>
-                    <li class="nav-item px-2">
-                        <a href="@Whatsapp" class="nav-link text-white"><i class="fa fa-whatsapp"></i></a>
-                    </li>
-
                 </ul>
             </div>
         </nav>
@@ -471,6 +566,18 @@
     <!-- ---end navbar-- -->
     <!-- ----intro--- -->
     <div class="row width-60 hj-filtering mx-auto mt-5">
+
+        <ul class="navbar-nav nav-flex-icons col-12 mb-3 p-0 ResponsiveButton">
+            <div class="i-btn "> 
+                <span id="modalEstelam2" class="btn btn-warning i-btn scaleout-glow " style="width:100%" data-elem="1"> استعلام قیمت </span>
+                <form class="i-btn-holder" onsubmit="this.preventDefault()">
+                    <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                    <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
+
+                </form>
+            </div>
+        </ul> 
+
         <div class="col-md-10 col-12">
             <div class="form-group position-relative w-100 mx-auto">
                 <input id="searchItem" class=" hj-serachbox mx-auto d-block position-relative w-100 pr-5 text-white"
@@ -489,7 +596,7 @@
     <!-- ---end intro--- -->
     <div class="row w-100 mx-auto">
         <!-- Swiper -->
-        <div class="swiper-container swiper-containerTitr">
+        <div class="swiper-container swiper-menuContainer">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <div class="row w-50 py-5 slider-index">
@@ -506,7 +613,6 @@
 
                 </div>
 
-
                 <div class="swiper-slide">
                     <div class="row w-50 py-5 slider-index">
                         <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
@@ -521,6 +627,7 @@
 
 
                 </div>
+                
                 <div class="swiper-slide">
                     <div class="row w-50 py-5 slider-index">
                         <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
@@ -544,10 +651,10 @@
     </div>
 
     <!-- ---- -->
-    <div class="row w-75 mx-auto text-center pt-md-5 mt-md-5 hj-li-Index">
+    <div class="row w-75 mx-auto d-flex justify-content-center text-center pt-md-5 mt-md-5 hj-li-Index">
         <div class="col-md-1 col-0 py-1"></div>
         <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('grouping')"> دسته بندی</button></div>
-        <div class="col-md-2  py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('blogSec')"> وبلاگ</button></div>
+        <div class="col-md-2  py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('blogSec')"> واخبار</button></div>
         <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="location.href='/ContactUs'"> تماس با ما</button></div>
         <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('aboutUs')"> درباره ما</button></div>
         <div class="col-md-1 col-0 py-1"></div>
@@ -575,9 +682,9 @@
         <div class="col-md-9 p-0">
             <div class="row w-100 mx-auto text-center">
                 <div class="col-md-4 py-3 hj-category ">
-                    <a href="/Filtering/لوازم مصرفی"> <img src="./img/1.png" class="img-fluid w-100 mx-auto"></a>
+                    <a href="/Filtering/اقلام مصرفی"> <img src="./img/1.png" class="img-fluid w-100 mx-auto"></a>
                     <b>
-                        <h4 class="STiter-Grouping">لوازم مصرفی</h4>
+                        <h4 class="STiter-Grouping">اقلام مصرفی</h4>
                     </b>
                 </div>
                 <div class="col-md-4 py-3 hj-category">
@@ -587,39 +694,39 @@
                     </b>
                 </div>
                 <div class="col-md-4 py-3 hj-category">
-                    <a href="/Filtering/لوازم جانبی"><img src="./img/3.png" class="img-fluid w-100 mx-auto"></a>
+                    <a href="/Filtering/اقلام تزئینی و داخلی خودرو"><img src="./img/3.png" class="img-fluid w-100 mx-auto"></a>
                     <b>
-                        <h4 class="STiter-Grouping"> لوازم جانبی</h4>
+                        <h4 class="STiter-Grouping"> اقلام تزئینی و داخلی خودرو</h4>
                     </b>
                 </div>
 
             </div>
             <div class="row w-100 mx-auto text-center">
                 <div class="col-md-4 py-3 hj-category">
-                    <a href="/Filtering/نگهداری و نظافت"><img src="./img/4.png" class="img-fluid w-100 mx-auto"></a>
+                    <a href="/Filtering/قطعات بدنه "><img src="./img/4.png" class="img-fluid w-100 mx-auto"></a>
                     <b>
-                        <h4 class="STiter-Grouping"> نگهداری و نظافت</h4>
+                        <h4 class="STiter-Grouping"> قطعات بدنه </h4>
                     </b>
                 </div>
                 <div class="col-md-4 py-3 hj-category">
-                    <a href="/Filtering/الکتریک و الکترونیک"><img src="./img/Group 5.png" class="img-fluid w-100 mx-auto"></a>
+                    <a href="/Filtering/سیستم برق و الکترونیک و کولر"><img src="./img/Group 5.png" class="img-fluid w-100 mx-auto"></a>
                     <b>
-                        <h4 class="STiter-Grouping"> الکتریک و الکترونیک</h4>
+                        <h4 class="STiter-Grouping"> سیستم برق و الکترونیک و کولر</h4>
                     </b>
                 </div>
                 <div class="col-md-4 py-3 hj-category">
-                    <a href="/Filtering/لوکس و اسپرت"> <img src="./img/6.png" class="img-fluid w-100 mx-auto"></a>
+                    <a href="/Filtering/اقلام تزئینی و داخلی خودرو"> <img src="./img/6.png" class="img-fluid w-100 mx-auto"></a>
                     <b>
-                        <h4 class="STiter-Grouping"> لوکس و اسپرت</h4>
+                        <h4 class="STiter-Grouping"> اقلام تزئینی و داخلی خودرو</h4>
                     </b>
                 </div>
 
             </div>
         </div>
         <div class="col-md-3 py-3 hj-category ">
-            <a href="/Filtering/قطعات"><img src="img/l1.png" class="img-fluid w-100 mx-auto"></a>
+            <a href="/Filtering/قطعات بدنه "><img src="img/l1.png" class="img-fluid w-100 mx-auto"></a>
             <b>
-                <h4 class="STiter-Grouping"> قطعات</h4>
+                <h4 class="STiter-Grouping"> قطعات بدنه </h4>
             </b>
         </div>
     </div>
@@ -651,7 +758,7 @@
             <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
         </div>
         <div class="col-lg-2 col-6">
-            <h2><b class="font-kalameBlack"> اخرین های بلاگ</b></h2>
+            <h2><b class="font-kalameBlack"> اخرین های اخبار</b></h2>
         </div>
         <div class="col-lg-5 col-3 text-right pt-4">
             <img src="./img/Line 35.png"
@@ -662,7 +769,7 @@
     <div class="row w-100 mx-auto text-center py-5 mb-5">
         <!-- --- -->
         <!-- Swiper -->
-        <div class="swiper-container swiper-containerBlog">
+        <div class="swiper-container swiper-Landing1">
             <div class="swiper-wrapper" @*id="blogs"*@>
                 @foreach (var item in (List<KaraYadak.Models.Blog>)ViewBag.blogs)
                 {
@@ -774,11 +881,11 @@
                             <form id="VerifyForm" class="d-none" action="" method="post">
                                 <div class="sign-up-htm sign-in-htm">
                                     <div class="group">
-                                        <label for="username" class="label"> کد تایید </label>
-                                        <input id="username" type="text" class="input" name="username">
+                                        <label for="VerificationNumber" class="label"> کد تایید </label>
+                                        <input id="VerificationNumber" type="text" class="input" name="VerificationNumber">
                                     </div>
                                     <div class="group">
-                                        <input type="submit" class="button" value=" ورود">
+                                                   <input type="submit" id="verifivation" class="button" value=" ورود">
                                     </div>
                                     <div class="hr"></div>
                                 </div>
@@ -786,8 +893,8 @@
                             <form id="login-form" action="" method="post">
                                 <div class="sign-in-htm">
                                     <div class="group">
-                                        <label for="username" class="label"> شماره تماس  </label>
-                                        <input id="username" type="text" class="input" name="username">
+                                        <label for="phoneNumberForLogin" class="label"> شماره تماس  </label>
+                                        <input id="phoneNumberForLogin" type="text" class="input" name="phoneNumberForLogin">
                                     </div>
                                     <div class="group">
                                         <input id="check" type="checkbox" class="check" checked>
@@ -804,11 +911,14 @@
                                 <div class="sign-up-htm">
                                     <div class="group">
                                         <label for="usernameForReg" class="label">نام نام خانوادگی</label>
-                                        <input id="usernameForReg" type="text" class="input" name="usernameForReg">
+                                        <input id="usernameForReg" type="text" class="input" name="Nickname">
                                     </div>
                                     <div class="group">
                                         <label for="phonenumberForReg" class="label">شماره تماس</label>
-                                        <input id="phonenumberForReg" type="password" class="input" data-type="password" name="passwordForReg">
+                                        <input id="phonenumberForReg" type="text" class="input" data-type="number" name="PhoneNumber">
+                                        <input  type="hidden" name="LoginOrRegister" value="Register">
+                                        <input  type="hidden" name="ReturnUrl" >
+                                        
                                     </div>
                                     <div class="group">
                                         <input id="RegisterSubmitButton" type="submit" class="button" value=" ثبت نام">
@@ -862,19 +972,48 @@
                 <div class="container">
                     <form>
                         <div class="form-group row pt-5 py-2">
-                            <label for=" TypePiece selectBrand" class="col-sm-2 col-form-label text-md-center text-right">نوع قطعه</label>
+                            <label for=" TypePiece selectBrand" class="col-sm-2 col-form-label text-md-center text-right">دسته بندی اصلی</label>
                             <div class="col-sm-10">
                                 <select class="form-control view-filterInput" id="TypePiece">
                                     <option value=""></option>
 
-                                    @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Categories)
+                                    @foreach (var item in (List<KaraYadak.Models.ProductCategoryType>)ViewBag.Categories)
                                     {
                                         <option value="@item.Name">@item.Name</option>
                                     }
                                 </select>
                             </div>
-
                         </div>
+                        <div class="form-group row py-2">
+                            <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">دسته بندی فرعی</label>
+                            <div class="col-sm-10">
+                                <select class="form-control view-filterInput" id="selectSubCategory">
+                                    <option value=" "> </option>
+
+                                    @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Brands)
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row py-2">
+                            <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">خودرو</label>
+                            <div class="col-sm-10">
+                                <select class="form-control view-filterInput" id="selectCar">
+                                    <option value=" "> </option>
+
+                                    @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Cars)
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="form-group row py-2">
                             <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">برند</label>
                             <div class="col-sm-10">

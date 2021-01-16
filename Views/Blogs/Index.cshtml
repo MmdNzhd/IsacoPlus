@@ -34,6 +34,16 @@
 @section scripts{
     <script src="/app-assets/js/scripts/ui/data-list-view.js"></script>
     <script>
+
+        $(".feather").click(function () {
+
+            $(".overlay").removeClass("show");
+            $(".overlay-bg").removeClass("show");
+
+            $("#editOrCreateDiv").removeClass("show");
+
+        })
+
         //Create Blog
         $('#createForm').submit(function (e) {
             e.preventDefault();

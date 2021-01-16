@@ -10,11 +10,11 @@
     }
 }
 
-@section scripts{ 
+@section scripts{
     <script>
         var $counter = $("#cartCount");
         var cartVal = $counter.html().parseInt;
-        cartVal <= 0 ? $counter.hide() : $counter.css("display","inline-block");
+        cartVal <= 0 ? $counter.hide() : $counter.css("display", "inline-block");
     </script>
 }
 
@@ -25,12 +25,11 @@
             <!-- Navbar brand -->
             <img src="/uploads/@Logo" class="img-fluid pl-md-2" onclick="location.href='/'">
             <!-- Collapse button -->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
-                    aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" id="menuTogglerHeader" >
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- Collapsible content -->
-            <div class="collapse navbar-collapse p-0 navbar-pro" id="basicExampleNav">
+            <div class="collapse navbar-collapse p-0 navbar-pro" style="width: 100%" id="basicExampleNav">
                 <!-- Links -->
                 <ul class="navbar-nav  ">
                     <li class="nav-item ">
@@ -58,15 +57,16 @@
                         }
                         else
                         {
-                            <a class="nav-link text-white" href="#" data-toggle="modal" data-target="#centralModalLogin">ورود/ثبت نام</a>
+                            <a class="nav-link text-white mx-2 text-right" href="#" data-toggle="modal" data-target="#centralModalLogin">ورود/ثبت نام</a>
                         }
                     </li>
 
                 </ul>
+                
                 <!-- Links -->
                 <form class="form-inline mx-md-5 mx-auto pr-md-5">
-                    <div class="md-form my-0 mx-auto   position-relative">
-                        <input id="searchItem" class="form-control mr-sm-2 search-prodoct pr-4" type="text" placeholder="جستجو"
+                    <div class="md-form my-0 mx-auto position-relative" style="width:100%" >
+                        <input id="searchItem" class="searchInput form-control mr-sm-2 search-prodoct pr-4" type="text" placeholder="جستجو"
                                aria-label="Search">
                         <i class="fa fa-search icon-search"></i>
                         <button type="button" class="btn btn-warning button-searchNavber py-1 px-3" onclick="Search()" onkeyup="Search()">جستجو</button>
@@ -87,76 +87,70 @@
 
     <!-- Change class .modal-sm to change the size of the modal -->
     <div class="modal-dialog modal-md login" role="document">
-
-
         <div class="modal-content modal-login">
-
             <div class="modal-body">
-
                 <div class="login-wrap">
                     <div class="login-html">
-                        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">ورود </label>
-                        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"> ثبت نام</label>
+                        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label id="label-1" for="tab-1" class="tab">ورود </label>
+                        <input id="tab-2" type="radio" name="tab" class="sign-up"><label id="label-2" for="tab-2" class="tab"> ثبت نام</label>
                         <div class="login-form mt-3">
+                            <form id="VerifyForm" class="d-none" action="" method="post">
+                                <div class="sign-up-htm sign-in-htm">
+                                    <div class="group">
+                                        <label for="VerificationNumber" class="label"> کد تایید </label>
+                                        <input id="VerificationNumber" type="text" class="input" name="VerificationNumber">
+                                    </div>
+                                    <div class="group">
+                                        <input type="submit" id="verifivation" class="button" value=" ورود">
+                                    </div>
+                                    <div class="hr"></div>
+                                </div>
+                            </form>
                             <form id="login-form" action="" method="post">
                                 <div class="sign-in-htm">
                                     <div class="group">
-                                        <label for="username" class="label"> ایمبل  </label>
-                                        <input id="username" type="text" class="input" name="username">
-                                    </div>
-                                    <div class="group">
-                                        <label for="pass" class="label">رمزعبور</label>
-                                        <input id="password" type="password" class="input" data-type="password" name="password">
+                                        <label for="phoneNumberForLogin" class="label"> شماره تماس  </label>
+                                        <input id="phoneNumberForLogin" type="text" class="input" name="phoneNumberForLogin">
                                     </div>
                                     <div class="group">
                                         <input id="check" type="checkbox" class="check" checked>
                                         <label for="check"><span class="icon"></span> به یاد داشته باش </label>
                                     </div>
                                     <div class="group">
-                                        <input type="submit" class="button" value=" ورود">
+                                        <input id="LoginSubmitButton" type="submit" class="button" value=" ورود">
                                     </div>
                                     <div class="hr"></div>
-                                    <div class="foot-lnk">
-                                        <a href="#forgot"> فراموشی رمزعبور؟</a>
-                                    </div>
+
                                 </div>
                             </form>
                             <form id="Register-form" action="" method="post">
                                 <div class="sign-up-htm">
                                     <div class="group">
                                         <label for="usernameForReg" class="label">نام نام خانوادگی</label>
-                                        <input id="usernameForReg" type="text" class="input" name="usernameForReg">
+                                        <input id="usernameForReg" type="text" class="input" name="Nickname">
                                     </div>
                                     <div class="group">
-                                        <label for="passwordForReg" class="label">رمزعبور</label>
-                                        <input id="passwordForReg" type="password" class="input" data-type="password" name="passwordForReg">
+                                        <label for="phonenumberForReg" class="label">شماره تماس</label>
+                                        <input id="phonenumberForReg" type="text" class="input" data-type="number" name="PhoneNumber">
+                                        <input type="hidden" name="LoginOrRegister" value="Register">
+                                        <input type="hidden" name="ReturnUrl">
+
                                     </div>
                                     <div class="group">
-                                        <label for="ConfirmPassword" class="label"> تایید رمزعبور</label>
-                                        <input id="ConfirmPassword" type="password" class="input" data-type="password" name="ConfirmPassword">
-                                    </div>
-                                    <div class="group">
-                                        <label for="email" class="label"> آدرس ایمیل</label>
-                                        <input id="email" type="text" class="input">
-                                    </div>
-                                    <div class="group">
-                                        <input type="submit" class="button" value=" ثبت نام">
+                                        <input id="RegisterSubmitButton" type="submit" class="button" value=" ثبت نام">
                                     </div>
                                     <div class="foot-lnk">
                                         <label for="tab-1"> قبلا ثبت نام کردید؟</label>
                                     </div>
-
-
                                 </div>
                             </form>
-
                         </div>
                     </div>
+
                 </div>
-
             </div>
-
         </div>
     </div>
 </div>
+
 <!-- end modal login -->

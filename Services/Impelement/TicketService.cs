@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic.CompilerServices;
 using Nancy.Json;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
@@ -26,14 +28,19 @@ namespace KaraYadak
         private readonly IAccountService _accountService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _configuration;
+        private readonly IConfigurationSection _settings;
 
         public TicketService(ApplicationDbContext dataContext, IAccountService accountService,
-            IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager)
+            IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager, IConfiguration iConfig)
         {
             _dataContext = dataContext;
             _accountService = accountService;
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
+            _configuration = iConfig;
+            _settings = _configuration.GetSection("AppSettings");
+
         }
 
         public async Task<(bool isSuccess, string error)> CreateTicket(CreateTiket model)
@@ -50,6 +57,9 @@ namespace KaraYadak
             {
                 var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
 
+                var host = _webHostEnvironment.WebRootPath;
+                var url = _settings.GetSection("TicketFiles").Value;
+                var savePath = Path.Combine(host, url);
                 if (isAdmin)
                 {
                     if (model.UserId[0] == "all")
@@ -67,7 +77,7 @@ namespace KaraYadak
                         {
                             Content = model.Content,
                             Subject = model.Subject,
-                            SenderFile = (model.File != null) ? FileUploader.UploadFile(model.File, root + "/uploads/Ticket/").result : "",
+                            SenderFile = (model.File != null) ? FileUploader.UploadFile(model.File, savePath).result : "",
                             TicketPriorityStatus = model.TicketPriorityStatus,
                             CreateDate = DateTime.Now,
                             SenderId = user.Id,
@@ -86,7 +96,7 @@ namespace KaraYadak
                     {
                         Content = model.Content,
                         Subject = model.Subject,
-                        SenderFile = (model.File != null) ? FileUploader.UploadFile(model.File, root + "/Img/Ticket/").result : "",
+                        SenderFile = (model.File != null) ? FileUploader.UploadFile(model.File, savePath).result : "",
                         TicketPriorityStatus = model.TicketPriorityStatus,
                         CreateDate = DateTime.Now,
                         SenderId = user.Id,
@@ -308,6 +318,7 @@ namespace KaraYadak
                         Content = x.Content,
                         CreateDate = (x.CreateDate != null) ? x.CreateDate.ToShortPersianDateTimeString(true) : "",
                         Subject = x.Subject,
+                        
                         IsSenderSeen = x.IsSenderSeen,
                         SenderFullName = x.SenderId== user.Id&&isAsmin? "ادمین" : x.Sender.FirstName + " " + x.Sender.LastName,
 
@@ -353,7 +364,7 @@ namespace KaraYadak
             }
             try
             {
-                var tickets = await _dataContext.Tickets
+                var tickets =  _dataContext.Tickets
                     .Where(x => x.SenderId == user.Id || x.ReceiverId == user.Id)
                     .Include(x => x.Sender)
                     .Include(x => x.Receive)
@@ -368,10 +379,11 @@ namespace KaraYadak
                         Content = x.Content,
                         CreateDate = (x.CreateDate != null) ? x.CreateDate.ToShortPersianDateTimeString(true) : "",
                         Subject = x.Subject,
-                        SenderFullName = (( _userManager.IsInRoleAsync(x.Sender, "Admin").Result)) ? "ادمین" :x.Sender.FirstName+" "+ x.Sender.LastName,
-                        ReceiverFullName = ((_userManager.IsInRoleAsync(x.Receive, "Admin").Result)) ? "ادمین" : x.Receive.FirstName + " " + x.Receive.LastName,
-                        HasAnswer = ((x.SenderId != user.Id) && string.IsNullOrEmpty(x.Answer)) ? true : false
-                    }).ToListAsync();
+                        SenderFullName = (x.SenderId!=user.Id)?"ادمین" :x.Sender.FirstName+" "+ x.Sender.LastName,
+                        ReceiverFullName = (x.ReceiverId != user.Id) ? "ادمین" : x.Receive.FirstName + " " + x.Receive.LastName,
+                        HasAnswer = ((x.SenderId != user.Id) && string.IsNullOrEmpty(x.Answer)) ? true : false,
+                        SenderId=x.SenderId
+                    }).AsNoTracking().AsQueryable();
                 if (tickets == null)
                 {
                     return (null, false, "");
@@ -379,7 +391,7 @@ namespace KaraYadak
                 }
                 else
                 {
-                    return (tickets, true, "");
+                    return (await tickets.ToListAsync(), true, "");
 
                 }
 
@@ -416,9 +428,10 @@ namespace KaraYadak
                         Content = x.Content,
                         CreateDate = (x.CreateDate != null) ? x.CreateDate.ToShortPersianDateTimeString(true) : "",
                         Subject = x.Subject,
+                        SenderId=x.SenderId,
                         IsSenderSeen = x.IsSenderSeen,
-                        SenderFullName = (( _userManager.IsInRoleAsync(x.Sender, "Admin").Result)) ? "ادمین" :x.Sender.FirstName+" "+ x.Sender.LastName,
-                        ReceiverFullName = ((_userManager.IsInRoleAsync(x.Receive, "Admin").Result)) ? "ادمین" : x.Receive.FirstName + " " + x.Receive.LastName,
+                        SenderFullName = (x.SenderId != user.Id) ? "ادمین" : x.Sender.FirstName + " " + x.Sender.LastName,
+                        ReceiverFullName = (x.ReceiverId != user.Id) ? "ادمین" : x.Receive.FirstName + " " + x.Receive.LastName,
                         HasAnswer = ((x.SenderId != user.Id) && string.IsNullOrEmpty(x.Answer)) ? true : false
                     }).FirstOrDefaultAsync();
                 if (tickets == null)

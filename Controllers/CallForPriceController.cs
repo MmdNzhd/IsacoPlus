@@ -41,6 +41,7 @@ namespace KaraYadak.Controllers
         public JsonResult CallForPrice(string productCode)
         {
             //webScraping
+            productCode = productCode.ToEnglishNumbers();
 
             var url = _hostEnvironment.WebRootPath + "/Rar$EXa14112.24292";
             //var webscrap = new webScrapp();

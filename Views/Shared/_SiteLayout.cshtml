@@ -8,9 +8,12 @@
     var Whatsapp = _context.Settings.Where(x => x.Key.Equals("Whatsapp")).Select(x => x.Value).SingleOrDefault();
     var Phone = _context.Settings.Where(x => x.Key.Equals("Phone")).Select(x => x.Value).SingleOrDefault();
     var Email = _context.Settings.Where(x => x.Key.Equals("Email")).Select(x => x.Value).SingleOrDefault();
+    var FaceBook = _context.Settings.Where(x => x.Key.Equals("Facebook")).Select(x => x.Value).SingleOrDefault();
+    var Twitter = _context.Settings.Where(x => x.Key.Equals("Twitter")).Select(x => x.Value).SingleOrDefault();
     var ContactUs = _context.Settings.Where(x => x.Key.Equals("MiniFooter")).Select(x => x.Value).SingleOrDefault();
     Layout = null;
 }
+
 
 <html lang="en">
 
@@ -56,6 +59,7 @@
             top: 50%;
             height: 100px;
         }
+            
     </style>
     @*<link href="~/css/mdb.min.css" rel="stylesheet" />*@
 
@@ -95,13 +99,33 @@
             <div class="col-lg-5 col-md-6 col-12">
                 <div class="row w-100 mx-auto my-1">
                     <img src="/uploads/@Logo" class="img-fluid ">
-                    <h2 class="pl-3 pt-3"><b class="font-kalame">
-    ایساکــــــو پلـــــــــــــاس
-</b></h2>
+                    <h2 class="pl-3 pt-3">
+                        <b class="font-kalame">
+                            ایساکــــــو پلـــــــــــــاس
+                        </b>
+                    </h2>
                 </div>
                 <div class="row w-100 mx-auto my-2 mr-2 pt-4">
                     <h5 class="pr-3 pt-2"> <i class="fa fa-phone-square pl-2 icon-footer"></i>@Phone </h5>
                 </div>
+               
+                    <ul class="navbar-nav nav-flex-icons p-0" 
+                        style="display:flex !important ; flex-direction:row"
+                    >
+                        <li class="nav-item px-2">
+                            <a href="@FaceBook" class="nav-link text-white"><i class="fa fa-facebook-f "></i></a>
+                        </li>
+                        <li class="nav-item px-2">
+                            <a href="@Twitter" class="nav-link text-white"><i class="fa fa-twitter"></i></a>
+                        </li>
+                        <li class="nav-item px-2">
+                            <a href="@Instagram" class="nav-link text-white"><i class="fa fa-instagram"></i></a>
+                        </li>
+                        <li class="nav-item px-2">
+                            <a href="@Whatsapp" class="nav-link text-white"><i class="fa fa-whatsapp"></i></a>
+                        </li>
+                    </ul>
+          
                 <div class="row w-100 mx-auto my-2 mr-2">
                     <h5 class="pr-3 pt-2"><i class="fa fa-envelope pl-2 icon-footer"></i>@Email</h5>
                 </div>
@@ -303,11 +327,30 @@
 
 
 
+        var $counter = $("#cartCount");
+        var cartVal = $counter.html().parseInt;
+        cartVal <= 0 ? $counter.hide() : $counter.css("display","inline-block");
+    
+
+
+        var toggle = 0 ;
+        $(document).on('click', '#menuTogglerHeader', function(e){ 
+            if(toggle){
+                $("#basicExampleNav").removeClass("show");
+                toggle = 0;
+            }else{
+                $("#basicExampleNav").addClass("show");
+                toggle = 1 ;
+            }
+        });
+
 
 
     </script>
 
     <script>
+        $("#label-1").click();
+
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -320,125 +363,246 @@
             }
         });
 
-        $("#Register-form").submit(function (e) {
+        var verifyData = {};
+        $("#RegisterSubmitButton").click(function (e) {
+
             e.preventDefault();
-            var url = "/Account/Register"
-            let formData = new FormData();
-            formData.append("Nickname", $("#usernameForReg").val());
-            formData.append("Email", $("#email").val());
-            formData.append("Password", $("#passwordForReg").val());
-            formData.append("ConfirmPassword", $("#ConfirmPassword").val());
-            if ($("#ConfirmPassword").val() != $("#passwordForReg").val()) {
+            var url = "/Account/IdentityRegister"
+            let formData = {
+                "Nickname": $("#usernameForReg").val(),
+                "PhoneNumber": $("#phonenumberForReg").val(),
+                "LoginOrRegister": "Register"
+            }
+            if ($("#usernameForReg").val().trim() == "" || $("#usernameForReg").val().trim() == null) {
                 Toast.fire({
                     icon: 'error',
-                    title: "عدم کلمه عبور همخوانی ندارد"
+                    title: "نام و نام خانوادگی را وارد کنید"
                 })
+                return;
             }
+
+            if ($("#phonenumberForReg").val().trim() == "" || $("#phonenumberForReg").val().trim() == null) {
+                Toast.fire({
+                    icon: 'error',
+                    title: "شماره تلفن را وارد کنید"
+                })
+                return;
+
+            }
+
+
             $.ajax({
                 type: "POST",
                 url: url,
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
                 success: function (data) {
 
                     var errors = "";
 
                     if (data.status == 1) {
+                        verifyData = data.data;
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.message
+
+                        })
+                        //$("#centralModalLogin").modal("hide");
+                        //location.reload();
+                        $("#VerifyForm").removeClass("d-none");
+                        $("#login-form").addClass("d-none");
+                        $("#Register-form").addClass("d-none");
+                        $("#label-1").addClass("d-none");
+                        $("#label-2").addClass("d-none");
+
+
+                    }
+
+
+                    if (data.status == 0) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: data.message
+                        })
+                    }
+
+
+                }
+            });
+        });
+        //$("#login-form").submit(function (e) {
+        //    e.preventDefault();
+        //    let values = { 'Username': $("#username").val(), 'Password': $("#password").val(), 'ReturnUrl': returnUrl };
+        //    var url = "/Account/SignIn"
+        //    $.ajax({
+        //        type: "POST",
+        //        url: url,
+        //        dataType: 'json',
+        //        data: values,
+        //        success: function (data) {
+        //            var errors = "";
+
+        //            if (data.status == 1) {
+        //                Toast.fire({
+        //                    icon: 'success',
+        //                    title: data.message
+
+        //                })
+        //                $("#centralModalLogin").modal("hide");
+        //                location.reload();
+
+        //            }
+
+
+        //            if (data.status == 2) {
+        //                Toast.fire({
+        //                    icon: 'error',
+        //                    title: data.error
+        //                })
+        //            }
+        //            if (data.status == 3) {
+        //                location.href = data.message;
+        //            }
+        //            if (data.status == 0) {
+        //                data.error.forEach((err) => {
+        //                    var er = `---${err}`;
+
+        //                    errors += er;
+
+        //                })
+        //                Toast.fire({
+        //                    icon: 'error',
+        //                    title: errors
+        //                })
+
+        //            }
+        //        }
+        //    });
+        //});
+
+        //VerificationNumber - verifivation
+
+        $("#verifivation").click(function (e) {
+            e.preventDefault();
+            if ($("#VerificationNumber").val().trim() == "" || $("#VerificationNumber").val().trim() == null) {
+                Toast.fire({
+                    icon: 'error',
+                    title: ' کد 5 رقمی را وارد کنید'
+                })
+                return;
+            }
+            verifyData.VerificationNumber = $("#VerificationNumber").val();
+            $.ajax({
+                type: "POST",
+                url: "/Account/IdentityVerify",
+                data: JSON.stringify(verifyData),
+                contentType: 'application/json',
+                success: function (data) {
+
+                    var errors = "";
+
+                    if (data.status == 1) {
+                        verifyData = data.data;
+
                         Toast.fire({
                             icon: 'success',
                             title: data.message
 
                         })
                         $("#centralModalLogin").modal("hide");
-                        location.reload();
-
-                    }
-
-
-                    if (data.status == 2) {
-                        Toast.fire({
-                            icon: 'error',
-                            title: data.error
-                        })
-                    }
-                    if (data.status == 0) {
-                        if (typeof (data.error) != "object") {
-                            Toast.fire({
-                                icon: 'error',
-                                title: data.error
-                            })
-
+                        if (data.returnUrl) {
+                           
+                            location.href = data.returnUrl;
                         }
                         else {
-                            data.error.forEach((err) => {
-                                var er = `---${err}`;
-
-                                errors += er;
-
-                            })
-                            Toast.fire({
-                                icon: 'error',
-                                title: errors
-                            })
+                            location.reload();
 
                         }
+
+
+                    }
+
+
+                    if (data.status == 0) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: data.message
+                        })
                     }
 
 
                 }
             });
-        });
-        $("#login-form").submit(function (e) {
+
+        })
+        $("#LoginSubmitButton").click(function (e) {
+
             e.preventDefault();
-            let values = { 'Username': $("#username").val(), 'Password': $("#password").val(), 'ReturnUrl': returnUrl };
-            var url = "/Account/SignIn"
+            var url = "/Account/IdentityLogin"
+            let formData = {
+
+                "PhoneNumber": $("#phoneNumberForLogin").val(),
+                "LoginOrRegister": "Login"
+            }
+            //if ($("#usernameForReg").val().trim() == "" || $("#usernameForReg").val().trim() == null) {
+            //    Toast.fire({
+            //        icon: 'error',
+            //        title: "نام و نام خانوادگی را وارد کنید"
+            //    })
+            //    return;
+            //}
+
+            if ($("#phoneNumberForLogin").val().trim() == "" || $("#phoneNumberForLogin").val().trim() == null) {
+                Toast.fire({
+                    icon: 'error',
+                    title: "شماره تلفن را وارد کنید"
+                })
+                return;
+
+            }
+
+
             $.ajax({
                 type: "POST",
                 url: url,
-                dataType: 'json',
-                data: values,
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
                 success: function (data) {
+
                     var errors = "";
 
                     if (data.status == 1) {
+                        verifyData = data.data;
+
                         Toast.fire({
                             icon: 'success',
                             title: data.message
 
                         })
-                        $("#centralModalLogin").modal("hide");
-                        location.reload();
+                        $("#login-form").addClass("d-none");
+                        $("#Register-form").addClass("d-none");
+                        $("#label-1").addClass("d-none");
+                        $("#label-2").addClass("d-none");
+                        $("#VerifyForm").removeClass("d-none");
+
+
 
                     }
 
 
-                    if (data.status == 2) {
-                        Toast.fire({
-                            icon: 'error',
-                            title: data.error
-                        })
-                    }
-                    if (data.status == 3) {
-                        location.href = data.message;
-                    }
                     if (data.status == 0) {
-                        data.error.forEach((err) => {
-                            var er = `---${err}`;
-
-                            errors += er;
-
-                        })
                         Toast.fire({
                             icon: 'error',
-                            title: errors
+                            title: data.message
                         })
-
                     }
+
+
                 }
             });
-        });
+
+        })
     </script>
 </body>
 

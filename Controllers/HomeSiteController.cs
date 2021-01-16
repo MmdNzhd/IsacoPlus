@@ -16,6 +16,7 @@ using KaraYadak.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.CodeAnalysis.CSharp;
+using System.Collections.Immutable;
 
 namespace KaraYadak.Controllers
 {
@@ -47,25 +48,25 @@ namespace KaraYadak.Controllers
             }
             return String.Join(",", list);
         }
+        [Route("GetSubCategories/{mainCategory?}")]
+        public async Task<IActionResult>GetSubCategories(string mainCategory)
+        {
+            var subCategory = await _context.ProductCategoryTypes.Where(x => x.Name.Equals(mainCategory)).FirstOrDefaultAsync();
+            if (subCategory != null)
+            {
+                var finalModel =await  _context.ProductCategories.Where(x => x.ProductCategoryType == subCategory.Id)
+                    .Select(x=>x.Name).ToListAsync();
+
+                return new JsonResult(new { status = 1, data = finalModel });
+            }
+            else
+            {
+                return new JsonResult(new { status = 0, message="دسته بندی یافت نشد."});
+            }
+        }
         public async Task<ActionResult> Index()
         {
 
-          
-           
-            //var ip = _accessor.ActionContext.HttpContext.Connection.RemoteIpAddress.ToString();
-            ////add site visit
-            //if(!await _context.SiteVisits.AnyAsync(x => x.Ip == ip && x.Date.Day == DateTime.Now.Day))
-            //{
-            //    var visit = new Models.SiteVisit()
-            //    {
-            //        Date = DateTime.Now,
-            //        Ip = ip
-            //    };
-            //    await _context.SiteVisits.AddAsync(visit);
-            //    await _context.SaveChangesAsync();
-
-            //}
-                
 
                 
             //blog
@@ -87,12 +88,17 @@ namespace KaraYadak.Controllers
             if (User.Identity.Name != null)
             {
                 var user =await  _context.Users.SingleOrDefaultAsync(x => x.UserName.Equals(User.Identity.Name));
-                ViewBag.Username = user.FirstName + " " + user.LastName;
+                if (user != null)
+                {
+                    if (string.IsNullOrEmpty(user.FirstName)) ViewBag.Username = user.PhoneNumber;
+                    ViewBag.Username = user.FirstName + " " + user.LastName;
+                }
+                else ViewBag.Username = ":(";
             }
-            ViewBag.Categories = await _context.ProductCategories.Where(i => i.ProductCategoryType == 4 ||
-            i.ProductCategoryType == 6 || i.ProductCategoryType == 7 || i.ProductCategoryType == 8).ToListAsync();
+            ViewBag.Categories = await _context.ProductCategoryTypes.Where(x=>x.Id!=11&&x.Id!=5).ToListAsync();
             ViewBag.Brands =await _context.ProductCategories.Where(i => i.Parent != 0 && i.ProductCategoryType == 11).ToListAsync();
 
+            ViewBag.Cars =await _context.ProductCategories.Where(i => i.Parent != 0 && i.ProductCategoryType == 5).ToListAsync();
 
 
             //var categories = new List<CategoriesVM>();
@@ -121,63 +127,82 @@ namespace KaraYadak.Controllers
             //                          Code=pp.Key,
             //                          Product=pp.ToList()
             //                          })
-            var groupByCodeProduct = _context.Products.ToLookup(p => p.Code, p => new ProductForIndexVM
-            {
-                CreatingDate = p.CreatedAt,
-                Title = p.Name,
-                Code = p.Code,
-                Off = p.Discount,
-                Picture = p.ImageUrl,
-                Price = p.Price,
-                Special = p.SpecialSale
 
-            }).ToList();
+            var groupByCodeProduct1 = await _context.Products
+                .Select(p => new ProductForIndexVM
+                {
+                    CreatingDate = p.CreatedAt,
+                    Title = p.Name,
+                    Code = p.Code,
+                    Off = p.Discount,
+                    Picture = p.ImageUrl,
+                    Price = p.Price,
+                    Special = p.SpecialSale,
+                    CategoryId = p.ProductCategoryType
 
+                }).ToListAsync();
+            var groupByCodeProduct = groupByCodeProduct1.GroupBy(g => g.Code)
+              .Select(p => new ProductForIndexVM
+              {
+                  CreatingDate = p.FirstOrDefault().CreatingDate,
+                  Title = p.FirstOrDefault().Title,
+                  Code = p.FirstOrDefault().Code,
+                  Off = p.FirstOrDefault().Off,
+                  Picture = p.FirstOrDefault().Picture,
+                  Price = p.FirstOrDefault().Price,
+                  Special = p.FirstOrDefault().Special,
+                  CategoryId = p.FirstOrDefault().CategoryId
+
+              });
 
 
             var products = new List<List<ProductForIndexVM>>();
             var maxDiscount = (from c in groupByCodeProduct
-                               select c).Max(c => c.FirstOrDefault().Off);
-            var bestOfferProduct = groupByCodeProduct.Where(x => x.FirstOrDefault().Off.Equals(maxDiscount)).Select(x => new ProductForIndexVM
+                               select c).Max(c => c.Off);
+            var bestOfferProduct = groupByCodeProduct.Where(x => x.Off.Equals(maxDiscount)).Select(x => new ProductForIndexVM
             {
-                Code = x.FirstOrDefault().Code,
-                CreatingDate = x.FirstOrDefault().CreatingDate,
-                Title = x.FirstOrDefault().Title,
-                Off = x.FirstOrDefault().Off,
-                Picture = x.FirstOrDefault().Picture,
-                Price = x.FirstOrDefault().Price - x.FirstOrDefault().Off * x.FirstOrDefault().Price / 100,
+                Code = x.Code,
+                CreatingDate = x.CreatingDate,
+                Title = x.Title,
+                Off = x.Off,
+                Picture = (string.IsNullOrEmpty(x.Picture)) ? "" :
+                x.Picture,
+                Price = x.Price - x.Off * x.Price / 100,
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
             }).Take(1).ToList();
 
-            var specialProducts = groupByCodeProduct.Where(x=>x.FirstOrDefault().Special).Select(x => new ProductForIndexVM
+            var specialProducts = groupByCodeProduct.Where(x=>x.Special).Select(x => new ProductForIndexVM
             {
-                Code = x.FirstOrDefault().Code,
-                Title = x.FirstOrDefault().Title,
-                Off = x.FirstOrDefault().Off,
-                Picture = x.FirstOrDefault().Picture,
-                Price = x.FirstOrDefault().Price - x.FirstOrDefault().Off * x.FirstOrDefault().Price / 100,
-                Special = x.FirstOrDefault().Special,
-                UpdateDate = x.FirstOrDefault().UpdateDate
+                Code = x.Code,
+                Title = x.Title,
+                Off = x.Off,
+                Picture = (string.IsNullOrEmpty(x.Picture)) ? "" :
+                x.Picture,
+                Price = x.Price - x.Off * x.Price / 100,
+                Special = x.Special,
+                UpdateDate = x.UpdateDate
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
             }).OrderByDescending(x => x.UpdateDate).Take(10).ToList();
             var maxinDiscountProducts = groupByCodeProduct/*.Where()*/.Select(x => new ProductForIndexVM
             {
-                Code = x.FirstOrDefault().Code,
-                CreatingDate = x.FirstOrDefault().CreatingDate,
-                Title = x.FirstOrDefault().Title,
-                Off = x.FirstOrDefault().Off,
-                Picture = x.FirstOrDefault().Picture,
-                Price = x.FirstOrDefault().Price - x.FirstOrDefault().Off * x.FirstOrDefault().Price / 100,
+                Code = x.Code,
+                CreatingDate = x.CreatingDate,
+                Title = x.Title,
+                Off = x.Off,
+                Picture = (string.IsNullOrEmpty(x.Picture)) ? "" :
+                x.Picture,
+                Price = x.Price - x.Off * x.Price / 100,
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
             }).Where(e => e.Picture != null).OrderByDescending(x => x.Off).Take(10).ToList();
             var product = groupByCodeProduct/*.Where()*/.Select(x => new ProductForIndexVM
             {
-                Code = x.FirstOrDefault().Code,
-                CreatingDate = x.FirstOrDefault().CreatingDate,
-                Title = x.FirstOrDefault().Title,
-                Off = x.FirstOrDefault().Off,
-                Picture = x.FirstOrDefault().Picture,
-                Price = x.FirstOrDefault().Price - x.FirstOrDefault().Off * x.FirstOrDefault().Price / 100,
+                Code = x.Code,
+                CreatingDate = x.CreatingDate,
+                Title = x.Title,
+                Off = x.Off,
+                Picture = (string.IsNullOrEmpty(x.Picture))? "" :
+                x.Picture,
+                Price = x.Price - x.Off * x.Price / 100,
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
             }).Where(e => e.Picture != null).OrderByDescending(x => x.CreatingDate).Take(12).ToList();
 
@@ -195,10 +220,10 @@ namespace KaraYadak.Controllers
             products.Add(maxinDiscountProducts);
             products.Add(product);
 
-
             return View(finalmodel);
         }
 
+    
         public PartialViewResult SpecialOfferProduct()
         {
 

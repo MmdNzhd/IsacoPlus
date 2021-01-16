@@ -17,7 +17,7 @@ namespace KaraYadak
         public bool HasAnswer { get; set; }
         public string SenderFullName { get; set; }
         public string ReceiverFullName { get; set; }
-
+        public string SenderId { get; set; }
 
     }
     public class TicketDetailsForUser: GetAllTicketForAdmin

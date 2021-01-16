@@ -498,10 +498,9 @@ namespace KaraYadak.Controllers
                 return Json(new { status = '0' });
             foreach (var item in products)
             {
-                if (item.ImageUrl == null)
-                {
+               
                     item.ImageUrl = image;
-                }
+                
                 var img = new Image();
                 img.ProductId = item.Id;
                 img.Key = item.Code;

@@ -25,16 +25,16 @@
         @foreach (var item in Model.Products)
         {
             couneter++;
-            <tr style="text-align:center">
-                <th scope="row">@couneter</th>
-                <td>@item.Code</td>
-                <td>@item.Description</td>
-                <td>@item.Count</td>
-                <td>@item.Price</td>
-                <td>@(item.Count*item.Price)</td>
-                <td>@((item.Discount*item.Price/100)*item.Count)</td>
-                <td>@((item.Count*item.Price)- (item.Discount * item.Price / 100)*item.Count)</td>
-            </tr>
+        <tr style="text-align:center">
+            <th scope="row">@couneter</th>
+            <td>@item.Code</td>
+            <td>@item.Name</td>
+            <td>@item.Count</td>
+            <td>@item.Price</td>
+            <td>@(item.Count*item.Price)</td>
+            <td>@((item.Discount*item.Price/100)*item.Count)</td>
+            <td>@((item.Count*item.Price)- (item.Discount * item.Price / 100)*item.Count)</td>
+        </tr>
         }
 
 

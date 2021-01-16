@@ -18,6 +18,7 @@ namespace KaraYadak
         public string SumOfOrder { get; set; }
         public string CountOfOrder { get; set; }
         public bool IsActive { get; set; }
-        
+        public DateTime Date { get; set; }
+
     }
 }

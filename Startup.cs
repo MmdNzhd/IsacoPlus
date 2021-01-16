@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using KaraYadak.Extention;
 using KaraYadak.Services;
 using Parbad.Builder;
+using Microsoft.AspNetCore.Http;
 
 namespace KaraYadak
 {
@@ -96,7 +97,11 @@ namespace KaraYadak
                 {
                     options.ViewLocationFormats.Add("/{0}.cshtml");
                 });
-
+            services.AddResponseCaching(options =>
+            {
+                options.MaximumBodySize = 1024;
+                options.UseCaseSensitivePaths = true;
+            });
 
             services.AddParbad().ConfigureGateways(gateways =>
                                 {
@@ -142,8 +147,9 @@ namespace KaraYadak
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseResponseCaching();
+
 
             app.UseRouting();
 
@@ -160,7 +166,25 @@ namespace KaraYadak
                 endpoints.MapRazorPages();
             });
             app.UseMiddleware<SiteVisitCounter>();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = context =>
+                context.Context.Response.Headers.Add("Cache-Control", "public, max-age=2592000")
+            });
 
+            app.Use(async (context, next) =>
+            {
+                context.Response.GetTypedHeaders().CacheControl =
+                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+                    {
+                        Public = true,
+                        MaxAge = TimeSpan.FromSeconds(1000000)
+                    };
+                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
+                    new string[] { "Accept-Encoding" };
+
+                await next();
+            });
         }
 
 

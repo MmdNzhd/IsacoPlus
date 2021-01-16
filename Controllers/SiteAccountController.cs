@@ -78,11 +78,11 @@ namespace KaraYadak.Controllers
             }
 
         }
-        public IActionResult EditProfile(string call)
+        public async Task<IActionResult> EditProfile(string call)
         {
             ViewBag.Cities = Iran.Cities.Select(x => x.CityName).ToList();
             ViewBag.Provinces = Iran.Cities.Select(x => x.ProvinceName).ToList();
-            ViewBag.Transaction = _context.ShoppingCarts.Where(x => x.UserName.Equals(User.Identity.Name)).ToList();
+            ViewBag.Transaction =await _context.ShoppingCarts.Where(x => x.UserName.Equals(User.Identity.Name)).OrderByDescending(x=>x.Id).ToListAsync();
 
             ViewBag.Provinces = Iran.Provinces.OrderBy(i => i.ProvinceName);
             var item = _context.Users.SingleOrDefault(i => i.UserName == User.Identity.Name);
@@ -109,40 +109,49 @@ namespace KaraYadak.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveProfile(ProfileVM input, IFormFile file)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                var errors = new List<string>();
-                foreach (var item in ModelState.Values)
+                if (!ModelState.IsValid)
                 {
-                    foreach (var err in item.Errors)
+                    var errors = new List<string>();
+                    foreach (var item in ModelState.Values)
                     {
-                        errors.Add(err.ErrorMessage);
+                        foreach (var err in item.Errors)
+                        {
+                            errors.Add(err.ErrorMessage);
+                        }
                     }
+                    return new JsonResult(new { Status = 0, Message = errors });
                 }
-                return new JsonResult(new { Status = 0, Error = errors });
+                var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                user.Address = input.Address;
+                user.FirstName = input.FirstName;
+                user.LastName = input.LastName;
+                user.NationalCode = input.NationalCode;
+                user.PhoneNumber = input.PhoneNumber;
+                user.Phone = input.Phone;
+                user.Email = input.Email;
+                user.Gender = input.Gender;
+                user.AvatarUrl = (file != null) ? upload(file) : "";
+                user.CartNumber = input.CartNumber;
+                user.City = input.City;
+                user.Province = input.Province;
+                user.PostalCode = input.PostalCode;
+                await _context.SaveChangesAsync();
+                if (input.CallbackUrl == null)
+                {
+                    return new JsonResult(new { Status = 1, result = Url.Action("index", "HomeSite") });
+                }
+                else
+                {
+                    return new JsonResult(new { Status = 1, result = input.CallbackUrl });
+
+                }
             }
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            user.Address = input.Address;
-            user.FirstName = input.FirstName;
-            user.LastName = input.LastName;
-            user.NationalCode = input.NationalCode;
-            user.PhoneNumber = input.PhoneNumber;
-            user.Phone = input.Phone;
-            user.Email = input.Email;
-            user.Gender = input.Gender;
-            user.AvatarUrl = (file != null) ? upload(file) : "";
-            user.CartNumber = input.CartNumber;
-            user.City = input.City;
-            user.Province = input.Province;
-            user.PostalCode = input.PostalCode;
-            await _context.SaveChangesAsync();
-            if (input.CallbackUrl == null)
+            catch (Exception ex)
             {
-                return new JsonResult(new { Status = 1, result = Url.Action("index", "HomeSite") });
-            }
-            else
-            {
-                return new JsonResult(new { Status = 1, result = input.CallbackUrl });
+
+                return new JsonResult(new { Status = 0, message="خطایی رخ داده است" });
 
             }
         }

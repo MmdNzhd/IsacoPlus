@@ -65,7 +65,7 @@ namespace KaraYadak.Controllers
             ViewBag.Provinces = Iran.Provinces.ToList();
             var item = _context.Users.SingleOrDefault(i => i.UserName == User.Identity.Name);
             ViewBag.profileIsComplete = false;
-            if (item != null && !string.IsNullOrWhiteSpace(item.PhoneNumber))
+            if (item != null && !string.IsNullOrWhiteSpace(item.Email))
             {
                 ViewBag.profileIsComplete = true;
             }
@@ -209,7 +209,7 @@ namespace KaraYadak.Controllers
             return PartialView(vm);
         }
         [Authorize]
-        public async Task<IActionResult> SubmitBasket()
+        public async Task<IActionResult> SubmitBasket(PostType PostType)
         {
             var user = _context.Users.SingleOrDefault(u => u.UserName == User.Identity.Name);
             if (user == null)
@@ -249,10 +249,13 @@ namespace KaraYadak.Controllers
                     var factorItem = new CartItem()
                     {
                         ProductId = pr.Id,
+                        ProductName = pr.Name,
+                        ProductCode = pr.Code,
                         Price = ((pr.Price) - (pr.Discount * pr.Price / 100)).ToString(),
                         UserName = user.UserName,
                         Date = DateTime.Now,
                         Quantity = count,
+                        Discount=(pr.Discount * pr.Price / 100).ToString(),
                     };
                     listOfFactorItems.Add(factorItem);
                     vm.Price += (pr.Price * count) - ((pr.Discount * pr.Price / 100) * pr.Count);
@@ -279,6 +282,8 @@ namespace KaraYadak.Controllers
                 RequestCode = RandomString(5),
                 SendPrice = vm.SendPrice.ToString(),
                 Status = RequestStatus.Confirmed,
+                PostType= PostType
+
             };
             await _context.CartItems.AddRangeAsync(listOfFactorItems);
             await _context.ShoppingCarts.AddRangeAsync(factor);
@@ -299,7 +304,7 @@ namespace KaraYadak.Controllers
 
             var callbackUrl = Url.Action("Verify", "ShopProduct", new { shoppingCarts = factor.Id }, Request.Scheme);
             var price = factor.Price;
-            var discount = Convert.ToDecimal(factor.DiscountPercent) * Convert.ToDecimal(factor.Price) / 100;
+            var discount = Convert.ToDecimal(factor.DiscountPercent);
             var finallyPriceWithTax = Convert.ToDecimal(price) - discount + Convert.ToDecimal(factor.SendPrice);
 
 
@@ -314,6 +319,7 @@ namespace KaraYadak.Controllers
                 Date = DateTime.Now,
                 UserId = user.Id,
                 ShoppingCartId = factor.Id,
+                PostType= PostType
 
             };
 

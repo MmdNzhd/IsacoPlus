@@ -19,7 +19,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" />
 
-
+    <style>
+        #PostTypeForm {
+            margin-top: 5%;
+            margin-right: 44%;
+        }
+    </style>
 }
 
 <!--Cart-->
@@ -68,6 +73,20 @@
 
 
         <div class="modal-content">
+            <form id="PostTypeForm" action="" method="post">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-4"> ارسال:</label>
+                        <select id="postType" class="custom-select col-7">
+                            <option value="0">پست</option>
+                            <option value="1">تیپاکس</option>
+                            <option value="2">باربری</option>
+                        </select>
+                    </div>
+
+
+                </div>
+            </form>
             <div class="modal-header">
                 <h2 class="modal-title w-100 text-right" id="myModalLabel">فاکتور</h2>
                 <h3>@DateTime.Now.ToShamsi()</h3>
@@ -351,6 +370,26 @@
 
                     </div>
                 </section>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--modal for post type-->
+
+<div class="modal fade" id="PostTypeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+
+    <!-- Change class .modal-sm to change the size of the modal -->
+    <div class="modal-dialog modal-sm " role="document">
+
+
+        <div class="modal-content ">
+
+            <div class="modal-body">
+
+            
 
             </div>
 
@@ -769,15 +808,11 @@
                             })
                         }
                         else {
-                            let errors = `<p> `;
-                            res.error.forEach(er => {
-                                errors += `${er}<br />`;
-                            });
-                            errors += `<p/>`;
+                           
 
                             Toast.fire({
                                 icon: 'error',
-                                title: errors
+                                title: res.message
 
                             })
 
@@ -821,7 +856,7 @@
         });
         $("#submitShop").click(function (e) {
             e.preventDefault();
-            var url = "/ShopProduct/SubmitBasket"
+            var url = "/ShopProduct/SubmitBasket?PostType=" + $("#postType").val();
             $.ajax({
                 type: "Get",
                 url: url,

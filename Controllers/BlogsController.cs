@@ -68,13 +68,13 @@ namespace KaraYadak.Controllers
         {
             if (id == null)
             {
-                return new JsonResult(new { status = "0", message = "بلاگی یافت نشد" });
+                return new JsonResult(new { status = "0", message = "اخباری یافت نشد" });
             }
 
             var blog = await _context.Blogs.FindAsync(id);
             if (blog == null)
             {
-                return new JsonResult(new { status = "0", message = "بلاگی یافت نشد" });
+                return new JsonResult(new { status = "0", message = "اخباری یافت نشد" });
             }
             return PartialView(blog);
         }
@@ -85,7 +85,7 @@ namespace KaraYadak.Controllers
         {
             if (id != blog.Id)
             {
-                return new JsonResult(new { status = "0", message = "بلاگی یافت نشد" });
+                return new JsonResult(new { status = "0", message = "اخباری یافت نشد" });
             }
 
             if (ModelState.IsValid)
@@ -101,7 +101,7 @@ namespace KaraYadak.Controllers
                 {
                     if (!BlogsExist(blog.Id))
                     {
-                        return new JsonResult(new { status = "0", message = "بلاگی یافت نشد" });
+                        return new JsonResult(new { status = "0", message = "اخباری یافت نشد" });
                     }
                     else
                     {
@@ -133,14 +133,14 @@ namespace KaraYadak.Controllers
         {
             if (id == null)
             {
-                return new JsonResult(new { status = "0", message = "بلاگی یافت نشد" });
+                return new JsonResult(new { status = "0", message = "اخباری یافت نشد" });
             }
 
             var blog = await _context.Blogs
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (blog == null)
             {
-                return new JsonResult(new { status = "0", message = "بلاگی یافت نشد" });
+                return new JsonResult(new { status = "0", message = "اخباری یافت نشد" });
             }
             _context.Blogs.Remove(blog);
             await _context.SaveChangesAsync();

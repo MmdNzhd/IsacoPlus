@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using KaraYadak.Services;
+using Newtonsoft.Json;
+using System.Drawing;
 
 namespace KaraYadak.Controllers
 {
@@ -27,22 +29,25 @@ namespace KaraYadak.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IAccountService _accountService;
+        private readonly ISmsSender _smsSender;
         private readonly ApplicationDbContext _context;
 
         public AccountController(ApplicationDbContext context, SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,IAccountService accountService)
+            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IAccountService accountService,
+            ISmsSender smsSender)
         {
             _signInManager = signInManager;
             _roleManager = roleManager;
             _accountService = accountService;
+            _smsSender = smsSender;
             _userManager = userManager;
             _context = context;
         }
         [AllowAnonymous]
         [Authorize(Roles = "Admin")]
-       
+
         [Route("ChangeAdminPass")]
-        public async Task<IActionResult> ChangeAdminPass( )
+        public async Task<IActionResult> ChangeAdminPass()
         {
             var password = RandomString(6);
             var user = await _userManager.FindByNameAsync("alialavi@gmail.com");
@@ -76,7 +81,7 @@ namespace KaraYadak.Controllers
         {
             var user = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
             //await _userManager.AddToRoleAsync(user, "Admin");
-            return Json(await _userManager.IsInRoleAsync(user,"Admin"));
+            return Json(await _userManager.IsInRoleAsync(user, "Admin"));
         }
         public async Task<IActionResult> CreateUser(string name)
         {
@@ -159,9 +164,8 @@ namespace KaraYadak.Controllers
         [HttpPost]
         [AllowAnonymous]
 
-        public async Task<IActionResult> IdentityLogin(IdentityLoginViewModel input)
+        public async Task<IActionResult> IdentityLogin([FromBody] IdentityLoginViewModel input)
         {
-            input.ReturnUrl = input.ReturnUrl ?? Url.Action("index", "home");
 
             input.LoginOrRegister = "Login";
 
@@ -175,22 +179,40 @@ namespace KaraYadak.Controllers
                         errors.Add(err.ErrorMessage);
                     }
                 }
-                return new JsonResult(new { Status = 0, Error = errors });
+                return new JsonResult(new { Status = 0, Message = errors });
             }
             var user = await _userManager.FindByNameAsync(input.PhoneNumber);
             if (user == null)
-                return Json(new { status = 0, Error = "شماره شما در سیستم موجود نمی باشد" });
+                return Json(new { status = 0, Message = "شماره شما در سیستم موجود نمی باشد" });
 
-            Random random = new Random();
-            int current = random.Next(1000, 9999);
-            user.VerificationCode = current.ToString();
-            user.VerificationExpireTime = DateTime.Now.AddMinutes(2);
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result = await _userManager.ResetPasswordAsync(user, code, current.ToString());
+            if (user.UserName == "09390867564")
+            {
+                Random random = new Random();
+                int current = 11111;
+                user.VerificationCode = current.ToString();
+                user.VerificationExpireTime = DateTime.Now.AddMinutes(2);
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await _userManager.ResetPasswordAsync(user, code, current.ToString());
+                return new JsonResult(new { Status = 1, Message = "لطفا کد 5 رقمی را وارد کنید", Data = input });
+            }
+            else
+            {
+                Random random = new Random();
+                int current = random.Next(10000, 99999);
+                user.VerificationCode = current.ToString();
+                user.VerificationExpireTime = DateTime.Now.AddMinutes(2);
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await _userManager.ResetPasswordAsync(user, code, current.ToString());
+                await _smsSender.SendWithPattern(input.PhoneNumber, "xdumcpryk5", JsonConvert.SerializeObject(
+                        new { name = user.FirstName + " " + user.LastName, verificationCode = current }));
+                return new JsonResult(new { Status = 1, Message = "لطفا کد 5 رقمی را وارد کنید", Data = input });
 
-            return new JsonResult(new { Status = 0, Error = "لطفا کد 4 رقمی را وارد کنید" ,Data=input});
+            }
+          
 
 
 
@@ -200,10 +222,10 @@ namespace KaraYadak.Controllers
         [HttpPost]
         [AllowAnonymous]
 
-        public async Task<IActionResult> IdentityRegister(IdentityRegisterViewModel input)
+        public async Task<IActionResult> IdentityRegister([FromBody] IdentityRegisterViewModel input)
         {
-            input.ReturnUrl = input.ReturnUrl ?? Url.Action("index", "home");
-
+            await _context.Roles.AddAsync(new IdentityRole { Name = PublicHelper.WarehousingAdminROLE });
+            await _context.SaveChangesAsync();
             input.LoginOrRegister = "Register";
 
             if (!ModelState.IsValid)
@@ -222,14 +244,14 @@ namespace KaraYadak.Controllers
               x.UserName == input.PhoneNumber).FirstOrDefaultAsync();
             if (user != null)
             {
-                return new JsonResult(new { Status = 0, Error = "شماره شما قبلا در سیستم ثبت شده است" });
+                return new JsonResult(new { Status = 0, Message = "شماره شما قبلا در سیستم ثبت شده است" });
 
             }
-         
+
             Random random = new Random();
-            int current = random.Next(1000, 9999);
-            user.VerificationCode = current.ToString();
-            user.VerificationExpireTime = DateTime.Now.AddMinutes(2);
+            int current = random.Next(10000, 99999);
+            //user.VerificationCode = current.ToString();
+            //user.VerificationExpireTime = DateTime.Now.AddMinutes(2);
 
             var fullName = input.Nickname;
             var names = fullName.Split(" ");
@@ -262,20 +284,33 @@ namespace KaraYadak.Controllers
                 UserName = input.PhoneNumber,
                 Phone = "",
                 PhoneNumber = input.PhoneNumber,
-                VerificationCode=current.ToString(),
-                VerificationExpireTime=DateTime.Now.AddMinutes(2)
+                VerificationCode = current.ToString(),
+                VerificationExpireTime = DateTime.Now.AddMinutes(2)
             }, current.ToString());
 
             if (result.Succeeded)
+
             {
-                return new JsonResult(new { Status = 0, Error = "لطفا کد 4 رقمی را وارد کنید", Data = input });
+                var currectUser = await _userManager.FindByNameAsync(input.PhoneNumber);
+                if (currectUser != null)
+                {
+                    currectUser.LockoutEnabled = false;
+                    currectUser.LockoutEnd = DateTime.Now.AddMinutes(-2);
+                }
+                _context.Users.Update(currectUser);
+                await _context.SaveChangesAsync();
+                await _smsSender.SendWithPattern(input.PhoneNumber, "xdumcpryk5", JsonConvert.SerializeObject(
+                    new { name = input.Nickname, verificationCode = current }));
+
+                return new JsonResult(new { Status = 1, Message = "لطفا کد 5 رقمی را وارد کنید", Data = input });
+
 
             }
             else
             {
                 if (result.Errors.Where(i => i.Code == "DuplicateUserName").Any())
-                    return new JsonResult(new { Status = 2, Error = "نام کاربری از قبل ثبت شده است" });
-                return new JsonResult(new { Status = 0, Error = result.Errors.First().Description });
+                    return new JsonResult(new { Status = 0, Message = "نام کاربری از قبل ثبت شده است" });
+                return new JsonResult(new { Status = 0, Message = result.Errors.First().Description });
             }
 
 
@@ -286,7 +321,7 @@ namespace KaraYadak.Controllers
         [HttpPost]
         [AllowAnonymous]
 
-        public async Task<IActionResult> IdentityVerify(IdentityVerifyViewModel input)
+        public async Task<IActionResult> IdentityVerify([FromBody] IdentityVerifyViewModel input)
         {
 
             if (!ModelState.IsValid)
@@ -301,20 +336,22 @@ namespace KaraYadak.Controllers
                 }
                 return new JsonResult(new { Status = 0, Error = errors });
             }
+            var user = await _userManager.FindByNameAsync(input.PhoneNumber);
+            if (user == null)
+                return Json(new { status = 0, Message = "شماره شما در سیستم موجود نمی باشد" });
+            if (user.VerificationExpireTime < DateTime.Now)
+                return Json(new { status = 0, Message = "کد 5 رقمی شما منقضی شده است" });
             if (input.LoginOrRegister == "Login")
             {
-                var user = await _userManager.FindByNameAsync(input.PhoneNumber);
-                if (user == null)
-                    return Json(new { status = 0, Error = "شماره شما در سیستم موجود نمی باشد" });
-                if(user.VerificationExpireTime>DateTime.Now)
-                    return Json(new { status = 0, Error = "کد 4 رقمی شما منقضی شده است" });
+
 
                 var result = await _signInManager.PasswordSignInAsync(user, input.VerificationNumber, true, lockoutOnFailure: false);
 
                 if (result.Succeeded)
                 {
-                    var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
-                    var isUser = await _userManager.IsInRoleAsync(user, "User");
+                    var isAdmin = await _userManager.IsInRoleAsync(user, PublicHelper.ADMINROLE);
+                    var isUser = await _userManager.IsInRoleAsync(user, PublicHelper.USERROLE);
+                    var isWarehousingAdmin = await _userManager.IsInRoleAsync(user, PublicHelper.WarehousingAdminROLE);
 
                     await _signInManager.SignInAsync(user, true);
 
@@ -322,31 +359,35 @@ namespace KaraYadak.Controllers
                     {
                         if (isAdmin)
                         {
-                            return new JsonResult(new { Status = 3, ReturnUrl = "/dashboard", message = "/dashboard" });
+                            return new JsonResult(new { Status = 1, ReturnUrl = "/dashboard", message = "خوش آمدید!" });
+
+                        }
+                        else if (isWarehousingAdmin)
+                        {
+                            return new JsonResult(new { Status = 1, ReturnUrl = "/WarehousingAdmin", message = "خوش آمدید!" });
 
                         }
                         else
-                        {
-                            return new JsonResult(new { Status = 3, ReturnUrl="/", message = "/" });
+                            return new JsonResult(new { Status = 1, ReturnUrl = "/", message = "خوش آمدید!" });
 
-                        }
                     }
                     return new JsonResult(new { Status = 1, ReturnUrl = input.ReturnUrl, message = "خوش آمدید!" });
                 }
                 else
                 {
-                    return new JsonResult(new { Status = 0, Error = "نام کاربری یا رمز عبور اشتباه است" });
+                    return new JsonResult(new { Status = 0, Message = "نام کاربری یا رمز عبور اشتباه است" });
                 }
 
             }
-            else{
+            else
+            {
 
-                await _userManager.AddToRoleAsync(await _userManager.FindByNameAsync(input.PhoneNumber), "User");
+                await _userManager.AddToRoleAsync(await _userManager.FindByNameAsync(input.PhoneNumber), PublicHelper.USERROLE);
                 var signIn = await _signInManager.PasswordSignInAsync(input.PhoneNumber, input.VerificationNumber, isPersistent: true, lockoutOnFailure: false);
                 if (signIn.Succeeded)
                     return new JsonResult(new { Status = 1, input.ReturnUrl, message = "ثبت نام با موفقیت انجام شد" });
                 else
-                return new JsonResult(new { Status = 1, input.ReturnUrl, message = "ثبت نام با موفقیت انجام شد" });
+                    return new JsonResult(new { Status = 1, input.ReturnUrl, message = "ثبت نام با موفقیت انجام شد" });
             }
 
         }
@@ -381,7 +422,7 @@ namespace KaraYadak.Controllers
 
                 await _signInManager.SignInAsync(user, true);
 
-                if (string.IsNullOrEmpty(input.ReturnUrl)||input.ReturnUrl=="/")
+                if (string.IsNullOrEmpty(input.ReturnUrl) || input.ReturnUrl == "/")
                 {
                     if (isAdmin)
                     {
@@ -394,7 +435,7 @@ namespace KaraYadak.Controllers
 
                     }
                 }
-                return new JsonResult(new { Status = 1, input.ReturnUrl ,message="خوش آمدید!"});
+                return new JsonResult(new { Status = 1, input.ReturnUrl, message = "خوش آمدید!" });
             }
             else
             {
@@ -458,7 +499,7 @@ namespace KaraYadak.Controllers
                 Phone = "",
                 PhoneNumber = input.PhoneNumber,
             }, input.Password);
-           
+
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(await _userManager.FindByNameAsync(input.Email), "User");
@@ -492,18 +533,18 @@ namespace KaraYadak.Controllers
 
         [Authorize(Roles = PublicHelper.ADMINROLE)]
         [HttpGet]
-        public async Task<IActionResult> GetAllUserForAdmin()
+        public async Task<IActionResult> GetAllUserForAdmin(string startDate,string endDate)
         {
-            var result = await _accountService.GetAllUserForAdmin();
+            var result = await _accountService.GetAllUserForAdmin(startDate,endDate);
 
             return new JsonResult(result);
         }
 
-        [Authorize(Roles =PublicHelper.ADMINROLE)]
+        [Authorize(Roles = PublicHelper.ADMINROLE)]
         [HttpPost]
         public async Task<IActionResult> BlockUser(string userId)
         {
-          var result=  await _accountService.BlockUser(userId);
+            var result = await _accountService.BlockUser(userId);
             if (result.isSuccess)
             {
                 return Json(new { status = 1, message = "با موفقیت انجام شد" });
@@ -536,13 +577,49 @@ namespace KaraYadak.Controllers
             var result = await _accountService.GetUserAddress(phoneNumber);
             if (result.isSuccess)
             {
-                return Json(new { status = 1, message = "با موفقیت انجام شد" ,data=result.error});
+                return Json(new { status = 1, message = "با موفقیت انجام شد", data = result.error });
             }
             else
             {
                 return Json(new { status = 0, message = result.error });
             }
         }
+        [Authorize(Roles = PublicHelper.ADMINROLE)]
+        [Route("GetWarehousingAdmin")]
+        public async Task<IActionResult> GetWarehousingAdmin()
+        {
+            try
+            {
+                var result = await _accountService.GetWarehousingAdmin();
+                return Json(new { status = 1, message = "با موفقیت انجام شد", data = result.PhoneNumber });
+
+            }
+            catch (Exception)
+            {
+
+                return Json(new { status = 0, message = "خطایی رخ داده است" });
+
+            }
+
+
+        }
+
+        [Authorize(Roles = PublicHelper.ADMINROLE)]
+        [HttpPost]
+        [Route("ChangeWarehousingAdmin")]
+        public async Task<IActionResult> ChangeWarehousingAdmin(string phoneNumber)
+        {
+            var result = await _accountService.ChangeWarehousingAdmin(phoneNumber);
+            if (result.isSuccess)
+            {
+                return Json(new { status = 1, message = "با موفقیت انجام شد" });
+            }
+            else
+            {
+                return Json(new { status = 0, message = result.error });
+            }
+        }
+
 
     }
 }

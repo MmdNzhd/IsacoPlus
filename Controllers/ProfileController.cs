@@ -6,6 +6,7 @@ using DNTPersianUtils.Core;
 using KaraYadak.Data;
 using KaraYadak.Helper;
 using KaraYadak.Models;
+using KaraYadak.Services;
 using KaraYadak.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -15,15 +16,18 @@ using Nancy.Json;
 
 namespace KaraYadak.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class ProfileController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        public ProfileController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        private readonly IAccountService _accountService;
+
+        public ProfileController(ApplicationDbContext context, UserManager<ApplicationUser> userManager,IAccountService accountService)
         {
             _context = context;
             _userManager = userManager;
+            _accountService = accountService;
         }
 
         public async Task<IActionResult> Index()
@@ -75,19 +79,28 @@ namespace KaraYadak.Controllers
             }
             return Json(new { Status = 0, Message = errors.First() });
         }
+        [AllowAnonymous]
+        [Authorize(Roles = PublicHelper.WarehousingAdminROLE)]
+        [Route("WarehousingAdmin")]
+        public async Task<IActionResult> WarehousingAdmin()
+        {
+            ViewBag.UserList = await _accountService.GetAllUserForAdmin(null,null);
+            return View();
+        }
         [Route("Dashboard")]
         public async Task<IActionResult> Dashboard()
         {
 
             //data for chart --order count
             var _orderForChart = await (from c in _context.ShoppingCarts
-                                       group c by c.Date into g
-                                       select new
-                                       {
-                                           Date = g.Key,
-                                           PersianDate = g.Key.ToShamsi(),
-                                           Count = g.Count()
-                                       }).ToListAsync();
+                                        group c by c.Date into g
+                                        select new
+                                        {
+                                            Date = g.Key,
+                                            PersianDate = g.Key.ToShamsi(),
+                                            Count = g.Count()
+                                        }).ToListAsync();
+
             var _orderForChartWithPerianDate = (from o in _orderForChart
                                                 group o by o.PersianDate into g
                                                 select new
@@ -95,54 +108,63 @@ namespace KaraYadak.Controllers
                                                     date = g.Key,
                                                     count = g.Count()
                                                 }).ToList();
-            ViewBag.orderCountForChart =  Json(new { date = _orderForChartWithPerianDate.Select(x=>x.date).ToList(),
+
+            ViewBag.orderCountForChart = Json(new
+            {
+                date = _orderForChartWithPerianDate.Select(x => x.date).ToList(),
                 count = _orderForChartWithPerianDate.Select(x => x.count).ToList()
             });
 
 
-            var sellCounts =await _context.CartItems.SumAsync(x => x.Quantity);
+            var sellCounts = await _context.CartItems.SumAsync(x => x.Quantity);
             var orders = await _context.ShoppingCarts.Where(x => x.Status.Equals(RequestStatus.Confirmed)).ToListAsync();
             var orderCounts = orders.Count;
-            var product=await _context.Products.Where(x => x.ProductStatus.Equals(ProductStatus.آماده_برای_فروش)).ToListAsync();
+            var product = await _context.Products.Where(x => x.ProductStatus.Equals(ProductStatus.آماده_برای_فروش)).ToListAsync();
             var productCount = product.Count;
-            var user =await _context.Users.ToListAsync();
-            var userCount=user.Count;
+            var user = await _context.Users.ToListAsync();
+            var userCount = user.Count;
 
 
             //TopSellProduct
-            var topSellProductIds = await(from a in _context.CartItems
-                                     group a by a.ProductId into g
-                                     select new {
-                                         ProductId = g.Key,
-                                         Count = g.Sum(x=>x.Quantity)
-                                     }).OrderByDescending(x=>x.Count).Take(10).ToListAsync();
+            var topSellProductIds = await (from a in _context.CartItems
+                                           group a by a.ProductId into g
+                                           select new
+                                           {
+                                               ProductId = g.Key,
+                                               Count = g.Sum(x => x.Quantity)
+                                           }).OrderByDescending(x => x.Count).Take(10).ToListAsync();
             var topSellProducts = new List<ProductForIndexVM>();
             foreach (var item in topSellProductIds)
             {
                 var pr = await _context.Products.FindAsync(item.ProductId);
                 var prtopsell = new ProductForIndexVM()
                 {
-                    Code=pr?.Code,
-                    Title=pr?.Name,
-                    Count=item.Count
+                    Code = pr?.Code,
+                    Title = pr?.Name,
+                    Count = item.Count
                 };
                 topSellProducts.Add(prtopsell);
             }
-           
+
+
             //Last Order
-            var lastOrders = await _context.ShoppingCarts.OrderByDescending(x=>x.Date).Take(5).ToListAsync();
+            var lastOrders = await _context.ShoppingCarts.OrderByDescending(x => x.Date).Take(5).ToListAsync();
+
             foreach (var item in lastOrders)
             {
                 var userForThisOrde = _userManager.FindByNameAsync(item.UserName).Result;
-                item.UserName = userForThisOrde.FirstName + " " + userForThisOrde.LastName;
+                if (userForThisOrde != null)
+                    item.UserName = userForThisOrde.FirstName + " " + userForThisOrde.LastName;
             }
-            var finalModel = new DashboardVM() { 
-            CustomerCounts=userCount,
-            ProductCounts=productCount,
-            OrderCounts=orderCounts,
-            SellerCounts=sellCounts,
-            TopSellProducts=topSellProducts,
-            LastOrders=lastOrders
+
+            var finalModel = new DashboardVM()
+            {
+                CustomerCounts = userCount,
+                ProductCounts = productCount,
+                OrderCounts = orderCounts,
+                SellerCounts = sellCounts,
+                TopSellProducts = topSellProducts,
+                LastOrders = lastOrders
             };
 
             return View(finalModel);

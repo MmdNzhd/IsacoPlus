@@ -9,6 +9,7 @@ namespace KaraYadak
     {
         public const string SessionCaptcha = "_Captcha";
         public const string ADMINROLE = "Admin";
-        public const string USERROLE = "User";
+        public const string USERROLE = "User"; 
+        public const string WarehousingAdminROLE = "WarehousingAdmin"; 
     }
 }
