@@ -1,0 +1,714 @@
+﻿
+@{
+    ViewBag.Title = "مدیریت کاربران";
+    Layout = "_Layout";
+
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors-rtl.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css">
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css" integrity="sha512-f8gN/IhfI+0E9Fc/LKtjVq4ywfhYAVeMGKsECzDUHcFJ5teVwvKTqizm+5a84FINhfrgdvjX8hEJbem2io1iTA==" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <link rel="~/stylesheet" href="vendors/dataTable/dataTables.min.css" type="text/css">
+    <link rel="stylesheet" href="/vendors/select2/css/select2.min.css" type="text/css">
+    <link rel="stylesheet" href="vendors/datepicker/daterangepicker.css" type="text/css">
+
+
+    <style>
+        .bold {
+            font-size: 14px;
+            font-weight: bolder;
+        }
+
+        #logo {
+            margin: auto;
+            max-width: 200px;
+            max-height: 200px;
+            border: 2px solid #f3f3f3
+        }
+
+        .checked {
+            color: orange;
+        }
+
+   
+
+        #label {
+            margin: 28% 28%;
+        }
+
+        #selectAll {
+            margin: 33% 13%;
+        }
+
+        .pagination > li {
+            margin-left: 1%;
+            cursor: pointer;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        div.form-control {
+            text-align: center;
+            background: #f1f1f1;
+            overflow: hidden;
+        }
+
+        .table td {
+            text-align: center;
+        }
+
+        .table-bordered thead td, .table-bordered thead th {
+            border-bottom-width: 2px;
+            text-align: center;
+        }
+
+        .table > tbody > tr > td {
+            vertical-align: middle;
+        }
+
+            .table > tbody > tr > td > img {
+                max-height: 100px;
+                max-width: 100px;
+            }
+
+        .selectedLi {
+            color: red;
+        }
+
+        label {
+            padding-top: 10px;
+            vertical-align: top;
+        }
+
+        #filtering {
+            vertical-align: text-bottom;
+        }
+
+        #ShowDetailsBtn {
+            border: 1px solid black;
+            background: #ddd;
+        }
+
+        #CreateTicketModalBtn {
+            border: 1px solid black;
+            background: #ddd;
+        }
+
+        .error {
+            animation-name: example;
+            animation-duration: 1.6s;
+        }
+
+        @@keyframes example {
+            0% {
+                border-color: red;
+                width: 102%;
+                height: 100%;
+            }
+
+            10% {
+                border-color: white;
+                width: 100%;
+                height: 99%;
+            }
+
+            20% {
+                border-color: red;
+                width: 102%;
+                height: 100%;
+            }
+
+            30% {
+                border-color: white;
+                width: 100%;
+                height: 99%;
+            }
+
+            40% {
+                border-color: red;
+                width: 102%;
+                height: 100%;
+            }
+
+            50% {
+                border-color: white;
+                width: 100%;
+                height: 100%;
+            }
+
+            60% {
+                border-color: red;
+                width: 102%;
+                height: 99%;
+            }
+
+            70% {
+                border-color: white;
+                width: 100%;
+                height: 100%;
+            }
+
+            80% {
+                border-color: red;
+                width: 102%;
+                height: 99%;
+            }
+
+            90% {
+                border-color: white;
+                width: 100%;
+                height: 100%;
+            }
+
+            100% {
+                border-color: red;
+                width: 102%;
+                height: 99%;
+            }
+        }
+    </style>
+
+
+
+
+
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/pdfmake.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/vfs_fonts.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.print.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+
+}
+@section scripts{
+    <script src="/app-assets/js/scripts/ui/data-list-view.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+    <script>
+
+        $("#filter").click(function () {
+            var url = "/Reports/CustomersWhitProductReport?userId=" + $("#userList").val() + " &productCode=" + $("#productList").val()  + " &startDate=" + $("#startDate").val() + "&endDate=" + $("#endDate").val();
+            GetData(url, {}, true);
+
+        })
+
+        $(".swal-button--cancel").html("انصراف");
+        $(".swal-button--danger").html("باشه");
+
+        function sendTicket() {
+            $(".modal-backdrop").removeClass("d-none");
+        }
+        //seprator
+
+        function GetData(url, data, isAlreadyTable) {
+            if (isAlreadyTable == true) {
+                $('#myTable').DataTable().destroy();
+            }
+            var oTable = $('#myTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel', 'print'
+                ],
+                ordering: false,
+                processing: true,
+                paging: true,
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Persian.json"
+                },
+                ajax: {
+
+                    url: url,
+                    dataSrc: "",
+                    type: "GET",
+                    dataType: "json",
+                    cache: true,
+                    delay: 1000,
+                    data: data,
+
+
+                },
+                columns: [
+
+   
+                    {
+                        data: 'factorId',
+                        render: function (data, type, item) {
+
+                            if (data == null | data == "") data = "---"
+
+                            return '<div class="bold">' + data + '</div>'
+                        }
+                    }
+
+                    ,
+                    {
+                        data: 'persianDate',
+                        render: function (data, type, item) {
+
+                            if (data == null | data == "") data = "---"
+
+                            return '<div class="bold">' + data + '</div>'
+                        }
+                    }
+                    ,
+
+
+                    {
+                        data: 'price',
+                        render: function (data, type, item) {
+                            if (data == null | data == "") data = "---"
+                            return '<div class="bold">' + separate(data) + '</div>'
+                        }
+                    }
+
+                    ,
+                    {
+                        data: 'buyCount',
+                        render: function (data, type, item) {
+                            if (data == null | data == "") data = "---"
+
+                            return '<div class="bold">' + data + '</div>'
+                        }
+                    }
+                    ,
+
+
+                    {
+                        data: 'discount',
+                        render: function (data, type, item) {
+                            if (data == null | data == "") data = "---"
+                            return '<div class="bold">' + separate(data) + '</div>'
+                        }
+                    }
+
+                    ,
+                    {
+                        data: 'priceWithDisCount',
+                        render: function (data, type, item) {
+                            if (data == null | data == "") data = "---"
+                            return '<div class="bold">' + separate(data) + '</div>'
+                        }
+                    }
+
+                ]
+
+            });
+        };
+
+        function separate(Number) {
+            Number += '';
+            Number = Number.replace(',', ''); Number = Number.replace(',', ''); Number = Number.replace(',', '');
+            Number = Number.replace(',', ''); Number = Number.replace(',', ''); Number = Number.replace(',', '');
+            x = Number.split('.');
+            y = x[0];
+            z = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(y))
+                y = y.replace(rgx, '$1' + ',' + '$2');
+            return y + z;
+        }
+
+        $(document).ready(async function () {
+            $('#userList').select2();
+            $('#productList').select2();
+            
+
+            $("#endDate").pDatepicker({
+                initialValueType: "gregorian",
+                format: "YYYY/MM/DD",
+                onSelect: "year"
+            });
+
+            $("#startDate").pDatepicker({
+                initialValueType: "gregorian",
+                format: "YYYY/MM/DD",
+                onSelect: "year"
+            });
+
+            $("#notifCount").addClass("d-none");
+            //loadData
+            GetData('/Reports/CustomersWhitProductReport', {}, false);
+
+
+
+
+
+        });
+
+
+
+
+
+
+
+
+
+        $("#userList").change(function () {
+
+            var userId = $("#userList").val();
+            //$.ajax({
+
+            //    method: "POST",
+            //    url: "/Reports/GetUserInfoForReport?userId=" + userId,
+            //    contentType: 'application/json',
+            //    data: {},
+
+            //    success: function (data) {
+            //        if (data.status == 1) {
+            //            $("#phoneNumber").val(data.data.phoneNumber);
+            //            $("#province").val(data.data.province);
+            //            $("#city").val(data.data.city);
+            //            $("#address").val(data.data.address);
+                   
+
+            //        } else {
+            //            toastr.error(data.message);
+            //        }
+            //    },
+            //    error: function (data) {
+            //        if (data.responseJSON == undefined) {
+            //            toastr.error("مشکلی رخ داده است");
+            //            return;
+
+            //        }
+            //        var errors = data.responseJSON.message;
+            //        errors.forEach(elem => {
+            //            if (elem == "Unauthorized") { elem = "کابر نامعتبر لطفا لاگین کنید" }
+            //            if (elem == "Forbidden") { elem = "عدم دسترسی " }
+            //            toastr.error(elem);
+
+
+            //        })
+            //    }
+            //});
+        })
+    </script>
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+<button type="button" id="rejectResultBtn" class="btn btn-primary mr-2 mb-2 d-none" data-toggle="modal" data-target="#rejectResult">
+</button>
+<button type="button" id="ShowDetailsBtn" class="d-none" data-toggle="modal" data-target="#ShowDetails">
+</button>
+
+@*<button type="button" class="btn btn-light" id="CreateTicketModalBtn" onclick="sendTicket()" data-toggle="modal" data-target="#CreateTicket">
+        ارسال پیام جدید
+    </button>*@
+<div class="row">
+    <div class="col-6">
+        <select id="userList" class="custom-select col-10 m-2">
+            <option value=" "> </option>
+
+            @foreach (var item in ViewBag.UserList)
+            {
+                <option value="@item.Id">@item.Fullname</option>
+            }
+        </select>
+    </div>
+    <div class="col-6">
+        <select id="productList" class="custom-select col-10 m-2">
+            <option value=" "> </option>
+
+            @foreach (var item in ViewBag.ProductList)
+            {
+                <option value="@item.Code">@item.Name</option>
+            }
+        </select>
+    </div>
+</div>
+    <div class="row">
+        <label>تاریخ شروع</label>
+        <input type="text" name="startDate" id="startDate" class="form-control m-1 col-1 example1">
+        <label>تاریخ پایان</label>
+        <input type="text" name="endDate" id="endDate" class="form-control m-1 col-1 example1">
+        <button class="form-control btn btn-success m-1 " id="filter">فیلتر</button>
+    </div>
+
+
+    <hr />
+    <table id="myTable" class="table table-striped table-bordered table-responsive">
+        <thead>
+            <tr>
+
+               
+                <th>
+                    شماره فاکتور
+                </th>
+                <th>
+                    تاریخ فاکتور
+                </th>
+               
+                <th>
+                    قیمت واحد
+                </th>
+                <th>
+                    تعداد خرید
+                </th>
+                <th>
+                    تخفیف
+
+                </th>
+                <th>
+                    مبلغ پرداخت
+
+                </th>
+
+
+
+            </tr>
+        </thead>
+        <tbody id="rewsOfTable">
+        </tbody>
+    </table>
+
+    <ul class="pagination" style=" direction: ltr; ">
+    </ul>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="CreateTicket">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">ارسال پیام</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" id="CreateTicketClose">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="CreateTicketForm">
+
+                        @*<input type="hidden" value="" name="id" id="id" />*@
+                        <div class="form-row">
+                            <div class="form-group col-md-12 ">
+                                <label for="subject">موضوع </label>
+                                <input type="text" name="subject" class="form-control " id="subject" />
+                            </div>
+                            <div class="form-group col-md-12 ">
+                                <label for="TicketPriorityStatus">اولویت </label>
+                                <select id="TicketPriorityStatus" name="TicketPriorityStatus" class="form-control">
+                                    <option value="1">فوری</option>
+                                    <option value="2">معمولی</option>
+                                    <option value="3">جهت اطلاع</option>
+                                </select>
+
+                            </div>
+
+                            <input id="userId" type="hidden" name="userId" class="form-control" multiple />
+
+
+
+
+                            <div class="form-group col-md-12 ">
+                                <label for="content">متن پیام </label>
+                                <textarea type="text" name="content" class="form-control" id="content"></textarea>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="file">فایل </label>
+                                <input type="file" name="file" class="form-control" id="file">
+                            </div>
+                        </div>
+
+
+
+                        <button type="submit" id="CreateTicketBtn" class="btn btn-light-primary btn-block">ثبت</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--CreateModal-->
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="ShowDetails">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"> نمایش جزئیات</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" id="ShowDetailsClose">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="ShowDetailsForm">
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12  ">
+                                <img name="logo" class="" id="logo">
+                            </div>
+                            <div class="form-group col-md-4  ">
+                                <label for="companyPersianName">نام فارسی </label>
+                                <div name="companyPersianName" class="form-control  " id="companyPersianName"></div>
+                            </div>
+                            <div class="form-group col-md-4  ">
+                                <label for="AnswerContent">نام لاتین </label>
+                                <div name="companyEngName" class="form-control  " id="companyEngName"></div>
+
+                            </div>
+                            <div class="form-group col-md-4  ">
+                                <label for="managerFullName">مدیریت </label>
+                                <div type="text" name="managerFullName" class="form-control" id="managerFullName"></div>
+                            </div>
+                            <div class="form-group col-md-4  ">
+                                <label for="city">شهر </label>
+                                <div name="city" class="form-control  " id="city"></div>
+
+                            </div>
+                            <div class="form-group col-md-8  ">
+                                <label for="address">آدرس </label>
+                                <div type="text" name="address" class="form-control" id="address"></div>
+                            </div>
+                            <div class="form-group col-md-4  ">
+                                <label for="managerPhoneNUmber">موبایل </label>
+                                <div name="managerPhoneNUmber" class="form-control  " id="managerPhoneNUmber"></div>
+
+                            </div>
+                            <div class="form-group col-md-4  ">
+                                <label for="companyPhone">شماره تماس </label>
+                                <div type="text" name="companyPhone" class="form-control" id="companyPhone"></div>
+                            </div>
+                            <div class="form-group col-md-4  ">
+                                <label for="managerEmail">ایمیل </label>
+                                <div name="managerEmail" class="form-control  " id="managerEmail"></div>
+
+                            </div>
+                            <div class="form-group col-md-4  ">
+                                <label for="activeAdversCount">تعداد آگهی های فعال </label>
+                                <div name="activeAdversCount" class="form-control  " id="activeAdversCount"></div>
+
+                            </div>
+                            <div class="form-group col-md-4  ">
+                                <label for="deactiveAdversCount">تعداد آگهی های غیر فعال </label>
+                                <div type="text" name="deactiveAdversCount" class="form-control" id="deactiveAdversCount"></div>
+                            </div>
+                            <div class="form-group col-md-4  ">
+                                <label for="sumOfBuying">کل خرید </label>
+                                <div name="sumOfBuying" class="form-control  " id="sumOfBuying"></div>
+
+                            </div>
+                            <div class="form-group col-md-6  ">
+                                <label for="isActive">وضعیت کاربر </label>
+                                <div name="isActive" class="form-control  " id="isActive"></div>
+
+                            </div>  <div class="form-group col-md-6  ">
+                                <label for="rate">امتیاز کاریر </label>
+                                <div name="rate" class="form-control  " id="rate"></div>
+
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="CreateTicket">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">ارسال پیام</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" id="CreateTicketClose">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="CreateTicketForm">
+
+                        @*<input type="hidden" value="" name="id" id="id" />*@
+                        <div class="form-row">
+                            <div class="form-group col-md-12 ">
+                                <label for="subject">موضوع </label>
+                                <input type="text" name="subject" class="form-control " id="subject" />
+                            </div>
+                            <div class="form-group col-md-12 ">
+                                <label for="TicketPriorityStatus">اولویت </label>
+                                <select id="TicketPriorityStatus" name="TicketPriorityStatus" class="form-control">
+                                    <option value="1">فوری</option>
+                                    <option value="2">معمولی</option>
+                                    <option value="3">جهت اطلاع</option>
+                                </select>
+
+                            </div>
+
+                            <div class="form-group col-md-8 ">
+                                <label for="TicketPriorityStatus">ارسال به </label>
+                                <select id="userId" name="userId" class="form-control" multiple>
+                                </select>
+
+
+                            </div>
+
+                            <div class="form-group col-md-4 ">
+                                <input type="checkbox" class="form-check-input" id="selectAll">
+                                <label id="label" class="form-check-label" for="selectAll">انتخاب همه</label>
+
+                            </div>
+
+                            <div class="form-group col-md-12 ">
+                                <label for="content">متن پیام </label>
+                                <textarea type="text" name="content" class="form-control" id="content"></textarea>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="file">فایل </label>
+                                <input type="file" name="file" class="form-control" id="file">
+                            </div>
+                        </div>
+
+
+
+                        <button type="submit" id="CreateTicketBtn" class="btn btn-light-primary btn-block">ثبت</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="shoeAddress">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">آدرس کاربر</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" id="CreateGifCodeClose">×</span>
+                    </button>
+                </div>
+                <div class="modal-body userAddress">
+                    <div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+

@@ -15,9 +15,14 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/ToggleSwitch.css">
 
     <style>
-        .swal-footer{
-            text-align:center !important;
+        #myTable {
+            margin: auto;
         }
+
+        .swal-footer {
+            text-align: center !important;
+        }
+
         #notifCount {
             position: absolute;
             left: 5%;
@@ -46,13 +51,28 @@
             left: 50%;
             transform: translate(-50%,-50%)
         }
+
         #dashboardTab, #reportTab {
             font-size: 248%;
             color: white;
         }
+
+        .pwt-btn-calendar {
+            display: none !important;
+        }
     </style>
     @RenderSection("vendorstyles", false)
     <link rel="stylesheet" href="/bordash/vendors/bundle.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/persian-datepicker@latest/dist/css/persian-datepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css" integrity="sha512-f8gN/IhfI+0E9Fc/LKtjVq4ywfhYAVeMGKsECzDUHcFJ5teVwvKTqizm+5a84FINhfrgdvjX8hEJbem2io1iTA==" crossorigin="anonymous" />
+
     @RenderSection("styles", false)
     <link rel="stylesheet" href="/bordash/assets/css/app.min.css" type="text/css">
 </head>
@@ -112,15 +132,15 @@
                     <div class="navigation-menu-tab-header">
                         <a href="#" class="nav-link" data-toggle="dropdown" aria-expanded="false">
                             <figure class="avatar avatar-sm">
-                                <i class="fa fa-home"  id="dashboardTab" aria-hidden="true"></i>
+                                <i class="fa fa-home" id="dashboardTab" aria-hidden="true"></i>
 
                             </figure>
                         </a>
                     </div>
-                    <div class="navigation-menu-tab-header " >
+                    <div class="navigation-menu-tab-header ">
                         <a href="#" class="nav-link" data-toggle="dropdown" aria-expanded="false">
                             <figure class="avatar avatar-sm">
-                                <i id="reportTab"class="fa fa-file-text" aria-hidden="true"></i>
+                                <i id="reportTab" class="fa fa-file-text" aria-hidden="true"></i>
 
                             </figure>
                         </a>
@@ -152,6 +172,13 @@
                 </div>
                 <div>
                     <ul>
+                        <li>
+                            <a href="#" data-toggle="tooltip" data-placement="right" title="دانلود نمونه فایل" id="downloadLink">
+                                <i class="fa fa-download" aria-hidden="true" style="font-size: 25px;"></i>
+
+
+                            </a>
+                        </li>
                         <li>
                             <a href="/" data-toggle="tooltip" data-placement="right" title="رفتن به فروشگاه">
                                 <i data-feather="settings"></i>
@@ -205,11 +232,11 @@
 
                     <div class="open d-none" id="reporting">
                         <ul class="open">
-                            <li><a class="active" href="/contactUsmanager">لیست مشتریان<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" href="/blogs">گزارش خرید مشتری<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" href="/Tickets/Index">مشتری-کالا<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" href="/Settings"> گزارش خرید مشتریان<span class="badge badge-danger"></span></a></li>
-                            <li><a class="active" href="/Tickets/Index">کالا-مشتری<span class="badge badge-danger"></span></a></li>
+                            <li><a class="active" href="/Customers">لیست مشتریان<span class="badge badge-danger"></span></a></li>
+                            <li><a class="active" href="/CustomerPurchaseReport">گزارش خرید مشتری<span class="badge badge-danger"></span></a></li>
+                            <li><a class="active" href="/CustomersWhitProductReport">مشتری-کالا<span class="badge badge-danger"></span></a></li>
+                            <li><a class="active" href="/CustomersPurchaseReport"> گزارش خرید مشتریان<span class="badge badge-danger"></span></a></li>
+                            <li><a class="active" href="/ProductWithCustomer">کالا-مشتری<span class="badge badge-danger"></span></a></li>
 
 
                         </ul>
@@ -234,7 +261,7 @@
                         </ul>
                     </div>
                 </div>
-                </div>
+            </div>
 
         </div>
         <main class="main-content">
@@ -267,13 +294,66 @@
                     <form class="changeUserAdminForm">
 
 
-                        <div class="form-group " >
+                        <div class="form-group ">
                             <label for="PhoneNumberAdmin"> شماره تلفن ادمین:</label>
-                            <input class="form-control" type="text" maxlength="11" id="PhoneNumberAdmin"/>
+                            <input class="form-control" type="text" maxlength="11" id="PhoneNumberAdmin" />
                         </div>
 
                         <button type="submit" id="changeUserAdminBtn" class="btn btn-block btn-light-success">ثبت</button>
                     </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="changeUserAdmin">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"> تغییر ادمین انبار دار</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" id="changeStatusClose">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="changeUserAdminForm">
+
+
+                            <div class="form-group ">
+                                <label for="PhoneNumberAdmin"> شماره تلفن ادمین:</label>
+                                <input class="form-control" type="text" maxlength="11" id="PhoneNumberAdmin" />
+                            </div>
+
+                            <button type="submit" id="changeUserAdminBtn" class="btn btn-block btn-light-success">ثبت</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="downloadFile">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">دانلود نمونه فایل</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" id="changeStatusClose">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <label class="col-5 m-1">فایل اکسل اضافه کردن محصول</label>
+                        <button type="submit" id="downloadInsertProductExel" class="col-5 m-1 btn btn-block btn-light-success">دانلود</button>
+
+                    </div>
+
+                    <div class="row">
+                        <label class="col-5 m-1">فایل اکسل آپدیت کردن محصول</label>
+                        <button type="submit" id="downloadUpdateProductExel" class="col-5 m-1 btn btn-block btn-light-success">دانلود</button>
+
+                    </div>
 
                 </div>
             </div>
@@ -285,6 +365,9 @@
     <script src="/bordash/assets/js/custom.js"></script>
     <script src="/bordash/assets/js/app.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://unpkg.com/persian-date@latest/dist/persian-date.min.js"></script>
+    <script src="https://unpkg.com/persian-datepicker@latest/dist/js/persian-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
     <script>
         $("#reportTab").click(function () { $("#reporting").removeClass("d-none"); $("#accounting-menu").addClass("d-none") })
@@ -310,6 +393,7 @@
 
                 if (href.toLowerCase() == finalUrl.toLowerCase() || href.toLowerCase() == finalUrl.toLowerCase()) {
                     $(a).addClass("active");
+                    $("#reporting").addClass("d-none"); $("#accounting-menu").removeClass("d-none")
                 }
             });
             $("#reporting > .open >li").each(function () {
@@ -321,6 +405,7 @@
 
                 if (href.toLowerCase() == finalUrl.toLowerCase() || href.toLowerCase() == finalUrl.toLowerCase()) {
                     $(a).addClass("active");
+                    $("#reporting").removeClass("d-none"); $("#accounting-menu").addClass("d-none")
                 }
             });
         })
@@ -517,7 +602,7 @@
                         //toastr.success(data.message);
                         $("#PhoneNumberAdmin").val(data.data);
 
-                       
+
 
                     }
                 },
@@ -574,6 +659,22 @@
                 }
             });
 
+        })
+
+        $("#downloadLink").click(function () {
+
+            $("#downloadFile").modal("toggle");
+        })
+
+        $("#downloadUpdateProductExel").click(function (e) {
+            e.preventDefault();
+            location.href = "/updateExel.xlsx";
+        })
+
+
+        $("#downloadInsertProductExel").click(function (e) {
+            e.preventDefault();
+            location.href = "/document.xlsx";
         })
     </script>
     @RenderSection("scripts", false)

@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using KaraYadak.Services;
 using Newtonsoft.Json;
+using System.Drawing;
 
 namespace KaraYadak.Controllers
 {
@@ -532,9 +533,9 @@ namespace KaraYadak.Controllers
 
         [Authorize(Roles = PublicHelper.ADMINROLE)]
         [HttpGet]
-        public async Task<IActionResult> GetAllUserForAdmin()
+        public async Task<IActionResult> GetAllUserForAdmin(string startDate,string endDate)
         {
-            var result = await _accountService.GetAllUserForAdmin();
+            var result = await _accountService.GetAllUserForAdmin(startDate,endDate);
 
             return new JsonResult(result);
         }

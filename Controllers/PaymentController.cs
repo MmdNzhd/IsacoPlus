@@ -27,7 +27,7 @@ namespace KaraYadak.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.UserList = await _accountService.GetAllUserForAdmin();
+            ViewBag.UserList = await _accountService.GetAllUserForAdmin(null,null);
 
             return View();
         }

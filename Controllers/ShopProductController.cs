@@ -249,10 +249,13 @@ namespace KaraYadak.Controllers
                     var factorItem = new CartItem()
                     {
                         ProductId = pr.Id,
+                        ProductName = pr.Name,
+                        ProductCode = pr.Code,
                         Price = ((pr.Price) - (pr.Discount * pr.Price / 100)).ToString(),
                         UserName = user.UserName,
                         Date = DateTime.Now,
                         Quantity = count,
+                        Discount=(pr.Discount * pr.Price / 100).ToString(),
                     };
                     listOfFactorItems.Add(factorItem);
                     vm.Price += (pr.Price * count) - ((pr.Discount * pr.Price / 100) * pr.Count);
@@ -301,7 +304,7 @@ namespace KaraYadak.Controllers
 
             var callbackUrl = Url.Action("Verify", "ShopProduct", new { shoppingCarts = factor.Id }, Request.Scheme);
             var price = factor.Price;
-            var discount = Convert.ToDecimal(factor.DiscountPercent) * Convert.ToDecimal(factor.Price) / 100;
+            var discount = Convert.ToDecimal(factor.DiscountPercent);
             var finallyPriceWithTax = Convert.ToDecimal(price) - discount + Convert.ToDecimal(factor.SendPrice);
 
 

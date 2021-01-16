@@ -84,7 +84,7 @@ namespace KaraYadak.Controllers
         [Route("WarehousingAdmin")]
         public async Task<IActionResult> WarehousingAdmin()
         {
-            ViewBag.UserList = await _accountService.GetAllUserForAdmin();
+            ViewBag.UserList = await _accountService.GetAllUserForAdmin(null,null);
             return View();
         }
         [Route("Dashboard")]
