@@ -23,9 +23,55 @@
     <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
 }
 @section scripts{
-    <script>
+    
+<script>
+    $(".close").click(function () {
+          $("#edit").addClass("d-none");
+        $("#save").removeClass("d-none");
+
+        $(".modal-title").html("ثبت جدید");
+
+        $("#Name").val("");
+        $("#id").val("");
+        $("#Parent").val("");
+        $("#ProductCategoryType").val("");
+
+    })
+
+        $('#edit').click(function (e) {
+
+
+            e.preventDefault();
+            var url = '@Url.Action("Edit", "productcategories")';
+            var Upload = $("#image").get(0);
+            var files = Upload.files;
+            var formData = new FormData();
+            var pId = $("#Parent option:selected").val();
+            var tId = $("#ProductCategoryType option:selected").val();
+            formData.append("name", $("#Name").val());
+            formData.append("Parent", pId);
+            formData.append("Id", $("#id").val());
+            formData.append("ProductCategoryType", tId);
+            formData.append("image", files[0]);
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function (data) {
+                    $('#createModal').modal('toggle');
+                    oTable.draw();
+                    location.reload();
+                }
+            });
+            $(this).trigger('reset');
+        });
+
         $(document).ready(function () {
-            $('form').submit(function (e) {
+            $('#create').submit(function (e) {
                 e.preventDefault();
                 var form = $(this);
                 var url = form.attr('action');
@@ -50,7 +96,7 @@
                     dataType: 'json',
                     success: function (data) {
                         console.log(data);
-                        $('.modal').modal('toggle');
+                        $('#createModal').modal('toggle');
                         oTable.draw();
                     }
                 });
@@ -75,7 +121,9 @@
                         url: '@Url.Action("delete","productcategories")',
                         data: "id=" + id,
                         success: function (data) {
-                            oTable.draw();
+                            var td = $(`td:contains(${id})`);
+                            var tr = $(td).parent();
+                            tr.remove();
                         }
                     });
 
@@ -88,6 +136,30 @@
                     });
                 }
             });
+        }
+         function EditItem(id){
+            $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("GetGetCategory", "productcategories")',
+                        data: "id=" + id,
+                success: function (data) {
+                    if (data.status == 0) {
+                        toastr.error(data.message);
+                    }
+                    else {
+                        $("#save").addClass("d-none");
+                        $("#edit").removeClass("d-none");
+
+                        $("#createModal").modal("toggle");
+                        $(".modal-title").html("ویرایش " + data.model.name);
+
+                        $("#Name").val(data.model.name);
+                        $("#id").val(data.model.id);
+                        $("#Parent").val(data.model.parent);
+                        $("#ProductCategoryType").val(data.model.productCategoryType);
+                    }
+                        }
+                    });
         }
         var oTable = $('.zero-configuration').DataTable({
             processing: true,
@@ -127,19 +199,19 @@
                     data: 'updatedAt',
                     name: 'updatedAt'
                 },
-                //{
-                //    data: 'id',
-                //    name: 'id'
-                //},
+                {
+                    data: 'id',
+                    name: 'id'
+                },
             ],
-            //columnDefs: [
-            //    {
-            //        targets: -1,
-            //        render: function (data, type, row) {
-            //            return '<button type="button" onclick="DeleteItem('+ data +')" class="btn btn-icon btn-sm btn-warning"><i class="feather icon-trash-2"></i></button>';
-            //        }
-            //    },
-            //],
+            columnDefs: [
+                {
+                    targets: -1,
+                    render: function (data, type, row) {
+                        return '<div><button type="button" onclick="DeleteItem(' + data + ')" class="btn btn-icon btn-sm btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button><button type="button" onclick="EditItem(' + data + ')" class="btn btn-icon btn-sm btn-warning m-1"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></div>';
+                    }
+                },
+            ],
         });
     </script>
 }
@@ -153,15 +225,15 @@
                     <div class="card-header">
                         <h4 class="card-title">@ViewBag.Title</h4>
 
-                        <button class="btn btn-success" type="button" data-toggle="modal" data-backdrop="false" data-target="#backdrop"><i class="feather icon-plus"></i>ثبت جدید </button>
+                        <button class="btn btn-success" type="button" data-toggle="modal" data-backdrop="false" data-target="#createModal"><i class="feather icon-plus"></i>ثبت جدید </button>
                         @*<a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
-                        <div class="heading-elements">
-                            <ul class="list-inline mb-0">
-                                <li><a data-toggle="modal" data-backdrop="false" data-target="#backdrop"><i class="feather icon-plus"></i></a></li>
-                            </ul>
-                        </div>*@
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-toggle="modal" data-backdrop="false" data-target="#backdrop"><i class="feather icon-plus"></i></a></li>
+                                </ul>
+                            </div>*@
                         <!-- Modal -->
-                        <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal fade text-left" id="createModal" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -170,10 +242,11 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form asp-action="create" asp-controller="productcategories" method="post">
+                                    <form  id="create"asp-action="create" asp-controller="productcategories" method="post">
                                         <div class="modal-body">
                                             <div class="form-group">
                                                 <input type="text" placeholder="نام" name="Name" id="Name" class="form-control">
+                                                <input type="hidden" name="id" id="id" />
                                             </div>
                                         </div>
                                         <div class="modal-body">
@@ -203,7 +276,8 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary">ثبت</button>
+                                            <button type="submit" id="save" class="btn btn-primary">ثبت</button>
+                                            <button type="button" id="edit" class="btn btn-primary d-none">ثبت</button>
                                         </div>
                                     </form>
                                 </div>
@@ -221,7 +295,7 @@
                                             <th>پدر</th>
                                             <th>نوع</th>
                                             <th>تاریخ تغییر</th>
-                                            @*<th>عملیات</th>*@
+                                            <th>عملیات</th>
                                         </tr>
                                     </thead>
                                 </table>

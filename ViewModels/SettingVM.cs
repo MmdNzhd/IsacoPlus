@@ -26,6 +26,13 @@ namespace KaraYadak.ViewModels
         public string Slider1Text { get; set; }
         public string Slider2Text { get; set; }
         public string Slider3Text { get; set; }
+        public string Slider4Text { get; set; }
+        public string Slider5Text { get; set; }
+        public string Slider1Pic { get; set; }
+        public string Slider2Pic { get; set; }
+        public string Slider3Pic { get; set; }
+        public string Slider4Pic { get; set; }
+        public string Slider5Pic { get; set; }
         public string Successful { get; set; }
         public string Telegram { get; set; }
         public string Twitter { get; set; }
@@ -54,6 +61,8 @@ namespace KaraYadak.ViewModels
         public string Slider1Text { get; set; }
         public string Slider2Text { get; set; }
         public string Slider3Text { get; set; }
+        public string Slider4Text { get; set; }
+        public string Slider5Text { get; set; }
     }
 
     public class GeneralSettingVM
