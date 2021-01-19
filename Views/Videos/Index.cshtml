@@ -1,0 +1,230 @@
+﻿@model IEnumerable<KaraYadak.Models.Video>
+@using DNTPersianUtils.Core;
+@{
+    ViewBag.Title = "مدیریت ویدیو ها";
+    Layout = "_Layout";
+}
+@section vendorstyles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors-rtl.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css">
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css-rtl/pages/data-list-view.css">
+    <style>
+        .data-list-view-header .add-new-data-sidebar .add-new-data, .data-thumb-view-header .add-new-data-sidebar .add-new-data {
+            overflow: scroll !important;
+        }
+    </style>
+}
+@section vendors{
+    <script src="/app-assets/vendors/js/extensions/dropzone.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/dataTables.select.min.js"></script>
+    <script src="/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css" integrity="sha512-f8gN/IhfI+0E9Fc/LKtjVq4ywfhYAVeMGKsECzDUHcFJ5teVwvKTqizm+5a84FINhfrgdvjX8hEJbem2io1iTA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" />
+
+}
+@section scripts{
+    <script src="/app-assets/js/scripts/ui/data-list-view.js"></script>
+    <script>
+        $(".action-edit1").click(function () {
+
+            $(".icon-x").click(function () {
+
+                $(".add-new-data").removeClass("show");
+                $(".overlay-bg").removeClass("show");
+
+
+            })
+
+        })
+        $(".feather").click(function () {
+
+            $(".overlay").removeClass("show");
+            $(".overlay-bg").removeClass("show");
+
+            $("#editOrCreateDiv").removeClass("show");
+
+        })
+
+        //Create Blog
+        $('#createForm').submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                type: "POST",
+                url: $(this).attr('action'),
+                data: formData,
+                //cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.status == '1') {
+                        toastr.success("با موفقیت ثبت شد");
+                        location.reload();
+                    } else {
+                        toastr.error(data.message);
+                    }
+                },
+                error: function (data) {
+                    toastr.warning("خطا در ثبت اطلاعات");
+                    console.log(data);
+                }
+            });
+        });
+        //Load Edit
+        function edit(id) {
+            $.ajax({
+                type: "Get",
+                url: "/Videos/Edit/" + id,
+                data: {},
+                dataType:"html",
+                success: function (data) {
+                    if (data.status == "0") {
+                        toastr.error(data.message);
+                    }
+                    $("#editOrCreateDiv").html(data);
+                    $(".btn-outline-primary").click();
+                    
+                },
+                error: function (data) {
+                    toastr.warning("خطایی رخ داده است");
+                    console.log(data);
+                }
+            });
+        }
+        //Edit Blog
+        $("#editOrCreateDiv").on("click", "#editVideo", function (e) {
+            let thisForm = $(this).parents('Form');
+            e.preventDefault();
+            var formData = new FormData(thisForm[0]);
+            $.ajax({
+                type: "POST",
+                url: $(thisForm).attr('action'),
+                data: formData,
+                //cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.status == '1') {
+                        toastr.success("با موفقیت بروز رسانی شد");
+                        location.reload();
+                    } else {
+                        toastr.error(data.message);
+                    }
+                },
+                error: function (data) {
+                    toastr.warning("خطا در ثبت اطلاعات");
+                    console.log(data);
+                }
+            });
+        })
+        //Delete Blog
+        function del(id) {
+            $.ajax({
+                type: "Get",
+                url: "/Videos/Delete/" + id,
+                data: {},
+                success: function (data) {
+                    if (data.status == "0") {
+                        toastr.error(data.message);
+                    } else {
+                        toastr.success(data.message);
+                        location.reload();
+                    }
+                 
+                },
+                error: function (data) {
+                    toastr.warning("خطایی رخ داده است");
+                    console.log(data);
+                }
+            });
+        }
+       
+    </script>
+}
+<div class="content-body">
+    <section id="data-list-view" class="data-list-view-header">
+        <div class="table-responsive">
+            <table class="table data-list-view datatable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>عنوان</th>
+                        @*<th>توضیح مختصر</th>*@
+                        <th>تاریخ تغییر </th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th></th>
+                            <td>@item.Title</td>
+                            @*<td>@item.ShortDescription</td>*@
+                            <td>@item.UpdateAt.ToFriendlyPersianDateTextify()</td>
+                            <td class="product-action">
+                                <a data-id="@item.Id" class="action-edit1"><i class="feather icon-edit" onclick="edit(@item.Id)" ></i></a>
+                            </td>
+                            <td class="product-action">
+                                <a data-id="@item.Id" class="action-edit1"><i class="feather icon-trash" onclick="del(@item.Id)"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="add-new-data-sidebar">
+            <div class="overlay-bg"></div>
+            <div class="add-new-data" id="editOrCreateDiv">
+                <form id="createForm" asp-controller="Videos" asp-action="Create">
+                    <div class="div mt-2 px-2 d-flex new-data-title justify-content-between">
+                        <div>
+                            <h4 class="text-uppercase"> افزودن ویدیو</h4>
+                        </div>
+                        <div class="hide-data-sidebar">
+                            <i class="feather icon-x"></i>
+                        </div>
+                    </div>
+                    <div class="data-items pb-3">
+                        <div class="data-fields px-2 mt-3">
+                            <div class="row">
+                                <div class="col-sm-12 data-field-col">
+                                    <label for="data-key">تیتر</label>
+                                    <input type="text" name="Title" class="form-control" id="title" required>
+                                </div>
+
+                                <div class="col-sm-12 data-field-col">
+                                    <label for="data-value">توضیح مختصر</label>
+                                    <textarea name="shortDescription" class="form-control" rows="10" id="shortDescription" required> </textarea>
+                                </div>
+                                <div class="col-sm-12 data-field-col">
+                                    <label for="data-value">متن</label>
+                                    <textarea name="Text" class="form-control" rows="10" id="text" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-data-footer d-flex justify-content-around px-3 mt-2">
+                        <div class="add-data-btn">
+                            <button class="btn btn-primary" type="submit">ثبت </button>
+                        </div>
+                        <div class="cancel-data-btn">
+                            <button class="btn btn-outline-danger">بازگشت</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+

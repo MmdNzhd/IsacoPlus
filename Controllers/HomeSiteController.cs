@@ -71,6 +71,7 @@ namespace KaraYadak.Controllers
                 
             //blog
             ViewBag.blogs = await _context.Blogs.OrderByDescending(x => x.CreateAt).Take(7).ToListAsync();
+            ViewBag.Videos = await _context.Videos.OrderByDescending(x => x.CreateAt).Take(7).ToListAsync();
 
             //baner
             var baner =await  _context.Baners.OrderByDescending(x => x.CreateAt).FirstOrDefaultAsync();

@@ -21,6 +21,9 @@
 @section styles{
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <style>
+        .h_iframe-aparat_embed_frame > span {
+            padding-top:30% !important;
+        }
         #modalEstelam {
             width: 240px;
             font-size: 137%;
@@ -830,22 +833,23 @@
         <!-- Swiper -->
         <div class="swiper-container swiper-Landing1">
             <div class="swiper-wrapper" @*id="blogs"*@>
-                @foreach (var item in (List<KaraYadak.Models.Blog>)ViewBag.blogs)
+                @foreach (var item in (List<KaraYadak.Models.Video>)ViewBag.Videos)
                 {
                     <div class="swiper-slide">
-                        <a href="/blogs/BlogDetails/@item.Id">
+                        @*<a href="/blogs/BlogDetails/@item.Id">*@
+                        <a href="#">
                             <div class="hj-blog p-0">
                                 <div class="row w-100 mx-auto titr-blog">
                                     <h5 class="py-2 pr-4 pt-3"><b>@item.Title</b></h5>
                                 </div>
                                 <div class="row w-100 mx-auto py-2">
-                                    <div class="col-7 detalis-blog px-4 py-3">
+                                    @*<div class="row detalis-blog "style="margin: auto;margin-left:45%">
                                         <h6 class="text-justify">
                                             @item.ShortDescription
                                         </h6>
-                                    </div>
-                                    <div class="col-5 pt-4">
-                                        <img src="/uploads/Blogs/@item.Image" class="img-fluid w-100 mx-auto">
+                                    </div>*@
+                                    <div class="row "style="margin: auto;margin-top: -24%;">
+                                        @Html.Raw(item.Text)
                                     </div>
                                 </div>
                             </div>

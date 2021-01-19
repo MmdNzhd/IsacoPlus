@@ -45,6 +45,8 @@ namespace KaraYadak.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<Video> Videos { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
