@@ -20,28 +20,64 @@
 }
 @section styles{
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <style>
-        #modalEstelam {
-            width: 240px;
-            font-size: 137%;
+        .modalfilter{
+            top:22px;
         }
-
-        .modalfilter {
-            top: 22px;
-        }
-
         * {
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
             box-sizing: border-box;
         }
-
+        
+        .select2-selection__choice{
+            background-color: #e4e4e4;
+            border: 1px solid #666;
+            border-radius: 5px;
+            padding:0 4px;
+            color: #666;
+            display: inline-block;
+            margin-left: 5px;
+            margin-top: 5px;
+        }
 
         .loading-container {
             background: #000;
             padding: 20px 0;
         }
 
+        .select2-selection , .select2-results__options{
+           text-align: right;
+        }
+       
+        .select2-container--default .select2-selection--multiple {
+            background: #333;
+            border: none;
+            border-bottom: 1px solid #ffcc00;
+        }
+        .select2-container--default .select2-results>.select2-results__options{
+            background: #333;
+            border: none;
+            border-bottom: 1px solid #ffcc00;
+            color:#fff;
+        }
+        .select2-container--default .select2-results>.select2-results__options::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .select2-container--default .select2-results>.select2-results__options::-webkit-scrollbar-track {
+            background: #888; 
+        }
+ 
+        .select2-container--default .select2-results>.select2-results__options::-webkit-scrollbar-thumb {
+            background: #f1f1f1;  
+            border-radius:5px
+        }
+
+        .select2-container--default .select2-results>.select2-results__options::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
 
         .search-loading {
             position: relative;
@@ -136,8 +172,8 @@
                 transform: scale(1) rotate(0);
             }
 
-
-
+         
+    
 
         @@-webkit-keyframes rotate {
             to {
@@ -176,12 +212,42 @@
                 transform: rotate(360deg) translate(-15px) rotate(-360deg);
             }
         }
+        .ImageContainerSlider{
+            position: absolute;
+            top: 0;
+            right:0;
+            left:0;
+            bottom:0;
+             width:100%;
+            height:100%;       
+            z-index: -1;
+        }   
+        .ImageContainerSlider > .ImageSlider{
+            width:100%;
+            height:100%; 
+            object-fit: cover;         
+        }
+
+        .menuContainerOfSlider{
+            position: absolute;
+        }
+    
+      
+        
+        .paginationOfSlider{
+            position: absolute;
+            bottom: 60px !important;
+            right: 50%;
+            transform: translateX(50%);  
+            z-index: 999;
+        }
     </style>
 }
 @section scripts{
     <script src="~/js/mdb.min.js"></script>
     <script src="~/js/CountDown.js"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
     <script>
         function sleep(ms) {
@@ -252,10 +318,6 @@
             let brand = $("#selectBrand").val();
             let mainCategory = $("#TypePiece").val();
             let subCategory = $("#selectSubCategory").val();
-            if (car == "") car = " ";
-            if (brand == "") brand = " ";
-            if (mainCategory == "") mainCategory = " ";
-            if (subCategory == "") subCategory = " ";
             location.href = "/Filter/" + car + "/" + brand + "/" + mainCategory + "/" + subCategory;
 
             //[Route("Filter/{car?}/{brand?}/{?}/{?}/{page?}")]
@@ -391,25 +453,25 @@
 
     <script>
 
-        $(document).on('click', '#LoginAndRegister', function (e) {
+        $(document).on('click', '#LoginAndRegister', function(e){ 
             $("#login-form").removeClass("d-none");
             $("#Register-form").removeClass("d-none");
             $("#label-1").removeClass("d-none");
             $("#label-2").removeClass("d-none");
             $("#VerifyForm").addClass("d-none");
         });
-        $(document).on('click', '#LoginSubmitButton', function (e) {
+        $(document).on('click', '#LoginSubmitButton', function(e){ 
         });
-        $(document).on('click', '#LoginSubmitButton', function (e) {
-
+        $(document).on('click', '#LoginSubmitButton', function(e){ 
+      
         })
-        $(document).on('click', '#RegisterSubmitButton', function (e) {
+        $(document).on('click', '#RegisterSubmitButton', function(e){ 
             //$("#VerifyForm").removeClass("d-none");
         });
-        $(document).on('click', '#RegisterSubmitButton', function (e) {
-
+        $(document).on('click', '#RegisterSubmitButton', function(e){ 
+           
         })
-
+   
     </script>
 
     <script>
@@ -455,214 +517,219 @@
     </script>
 
     <script>
-        var swiper = new Swiper('.swiper-menuContainer', {
-            spaceBetween: 30,
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
+		var swiper = new Swiper('.swiper-menuContainer', {
+        spaceBetween: 0,
+        loop: true,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
         });
-    </script>
+	</script>
 
     <script>
         var swiper = new Swiper(".swiper-Landing1", {
-            slidesPerView: 3,
-            loop: true,
-            spaceBetween: 30,
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
+        slidesPerView: 3,
+        loop: true,
+        spaceBetween: 30,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        breakpoints: {
+            // when window width is <= 499px
+            0: {
+            slidesPerView: 1,
+            spaceBetweenSlides: 30,
             },
-            breakpoints: {
-                // when window width is <= 499px
-                0: {
-                    slidesPerView: 1,
-                    spaceBetweenSlides: 30,
-                },
-                800: {
-                    slidesPerView: 2,
-                    spaceBetweenSlides: 40,
-                },
+            800: {
+            slidesPerView: 2,
+            spaceBetweenSlides: 40,
+            },
 
-                1300: {
-                    slidesPerView: 3,
-                    spaceBetweenSlides: 40,
-                },
+            1300: {
+            slidesPerView: 3,
+            spaceBetweenSlides: 40,
             },
+        },
+        });
+    </script>
+    
+    <script>
+        $(".js-example-basic-multiple").select2({
+            dropdownAutoWidth: true,
+            width:"100%",
+            multiple:true,
+            placeholder:"s"
         });
     </script>
 
 
 }
 
-<div class="container-fluid hj-header">
+<div class="container-fluid hj-header p-0">
+    <div class="swiper-container m-0 swiper-menuContainer" style="overflow:visible !important">
+        <!-- --navbar-- -->
+        <div class="row w-100 mx-auto menuContainerOfSlider">
+            <!--Navbar -->
+            <nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color w-100 navbarInResponsive">
+                <a class="navbar-brand" href="/"><img src="~/uploads/@Logo" class="img-fluid w-75"></a>
+                <button class="navbar-toggler" type="button" id="menuToggler">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse text-right" id="navbarSupportedContent-333">
+                    <ul class="navbar-nav w-100 p-0 ">
+                        <li class="nav-item px-md-3">
+                            @if (ViewBag.Username != null)
+                            {
+                                <a href="/SiteAccount/EditProfile" class="nav-link text-white">@ViewBag.Username</a>
 
-    <!-- --navbar-- -->
-    <div class="row w-100 mx-auto">
-
-        <!--Navbar -->
-        <nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color w-100">
-            <a class="navbar-brand" href="/"><img src="~/uploads/@Logo" class="img-fluid w-75"></a>
-            <button class="navbar-toggler" type="button" id="menuToggler">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse text-right" id="navbarSupportedContent-333">
-                <ul class="navbar-nav w-100 p-0 ">
-                    <li class="nav-item px-md-3">
-                        @if (ViewBag.Username != null)
-                        {
-                            <a href="/SiteAccount/EditProfile" class="nav-link text-white">@ViewBag.Username</a>
-
-                        }
-                        else
-                        {
-                            <a id="LoginAndRegister" class="nav-link text-white" href="#" data-toggle="modal" data-target="#centralModalLogin">ورود/ثبت نام</a>
-                        }
-                    </li>
-                    <li class="nav-item px-md-3">
-
-                        <a class="nav-link text-white" href="/ShopProduct/ShopBasket">
-                            سبد خرید
-                            <span class="text-center mr-1 bg-success d-inline-block mv-cart-counter" id="cartCount"></span>
-                        </a>
-                    </li>
-                    @if (User.IsInRole("Admin"))
-                    {
+                            }
+                            else
+                            {
+                                <a id="LoginAndRegister" class="nav-link text-white" href="#" data-toggle="modal" data-target="#centralModalLogin">ورود/ثبت نام</a>
+                            }
+                        </li>
                         <li class="nav-item px-md-3">
 
-                            <a class="nav-link text-white" href="/dashboard">
-                                پنل مدیریت
+                            <a class="nav-link text-white" href="/ShopProduct/ShopBasket">
+                                سبد خرید
+                                <span class="text-center mr-1 bg-success d-inline-block mv-cart-counter" id="cartCount"></span>
                             </a>
                         </li>
-                    }
-                    @if (User.IsInRole("WarehousingAdmin"))
-                    {
-                        <li class="nav-item px-md-3">
-
-                            <a class="nav-link text-white" href="/WarehousingAdmin">
-                                پنل مدیریت
-                            </a>
-                        </li>
-                    }
-                    <li class="nav-item px-md-3">
-                        @if (ViewBag.Username != null)
+                        @if (User.IsInRole("Admin"))
                         {
-                            <a class="nav-link text-white " href="/MyFavoriteProducts">علاقه مندی ها</a>
+                            <li class="nav-item px-md-3">
+
+                                <a class="nav-link text-white" href="/dashboard">
+                                    پنل مدیریت
+                                </a>
+                            </li>
                         }
-                    </li>
-                </ul>
-                <ul class="navbar-nav nav-flex-icons p-0 WebResponsiveButton">
-                    <div class="i-btn ">
-                        <span id="modalEstelam" class="btn btn-warning i-btn scaleout-glow" style="width:240px" data-elem="1"> استعلام بارکد ایساکویی  </span>
-                        <form class="i-btn-holder" onsubmit="this.preventDefault()">
-                            <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="بارکد ایساکو را وارد کنید..." />
-                            <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
+                        @if (User.IsInRole("WarehousingAdmin"))
+                        {
+                            <li class="nav-item px-md-3">
 
-                        </form>
-                    </div>
-                </ul>
-            </div>
-        </nav>
-
-    </div>
-    <!-- ---end navbar-- -->
-    <!-- ----intro--- -->
-    <div class="row width-60 hj-filtering mx-auto mt-5">
-
-        <ul class="navbar-nav nav-flex-icons col-12 mb-3 p-0 ResponsiveButton">
-            <div class="i-btn ">
-                <span id="modalEstelam2" class="btn btn-warning i-btn scaleout-glow " style="width:100%" data-elem="1"> استعلام قیمت </span>
-                <form class="i-btn-holder" onsubmit="this.preventDefault()">
-                    <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
-                    <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
-
-                </form>
-            </div>
-        </ul>
-
-        <div class="col-md-10 col-12">
-            <div class="form-group position-relative w-100 mx-auto">
-                <input id="searchItem" class=" hj-serachbox mx-auto d-block position-relative w-100 pr-5 text-white"
-                       placeholder="جستجو بر اساس اسم یا کد کالا">
-                <i class="fa fa-search hj-search-ab pt-1 color-zarposh"></i>
-                <button class="col-lg-2 col-4 hj-serchboxButton" onclick="Search()"> جستجو</button>
-            </div>
-        </div>
-        <div class="col-md-2 col-12 text-right">
-            <button type="button" class=" button-filter w-100" data-toggle="modal"
-                    data-target="#centralModalfilter">
-                <i class="fa fa-filter text-info"></i> فیلتر کردن
-            </button>
-        </div>
-    </div>
-    <!-- ---end intro--- -->
-    <div class="row w-100 mx-auto">
-        <!-- Swiper -->
-        <div class="swiper-container swiper-menuContainer">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="row w-50 py-5 slider-index">
-                        <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
-                            <b>
-                                ایساکــــــو پلـــــــــــــاس
-                            </b>
-                        </h1>
-                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
-                            @Html.Raw(@Slider1)
-                        </h6>
-                    </div>
-
-
+                                <a class="nav-link text-white" href="/WarehousingAdmin">
+                                    پنل مدیریت
+                                </a>
+                            </li>
+                        }
+                        <li class="nav-item px-md-3">
+                            @if (ViewBag.Username != null)
+                            {
+                                <a class="nav-link text-white " href="/MyFavoriteProducts">علاقه مندی ها</a>
+                            }
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav nav-flex-icons p-0 WebResponsiveButton">
+                        <div class="i-btn "> 
+                            <span id="modalEstelam" class="btn btn-warning i-btn scaleout-glow" style="width:200px" data-elem="1"> استعلام بارکد ایساکویی </span>
+                            <form class="i-btn-holder" onsubmit="this.preventDefault()">
+                                <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                                <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
+                            </form>
+                        </div>
+                    </ul>
                 </div>
+            </nav>
+        </div>
 
-                <div class="swiper-slide">
-                    <div class="row w-50 py-5 slider-index">
-                        <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
-                            <b>
-                                ایساکــــــو پلـــــــــــــاس
-                            </b>
-                        </h1>
-                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
-                            @Html.Raw(@Slider2)
-                        </h6>
-                    </div>
+        <!-- ----intro--- -->
+        <div class="row width-60 hj-filtering mx-auto mt-5 searchContainerOfSlider">
 
+            <ul class="navbar-nav nav-flex-icons col-12 mb-3 p-0 ResponsiveButton">
+                <div class="i-btn mx-3"> 
+                    <span id="modalEstelam2" class="btn btn-warning i-btn scaleout-glow " style="width:100%" data-elem="1"> استعلام بارکد ایساکویی </span>
+                    <form class="i-btn-holder" onsubmit="this.preventDefault()">
+                        <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                        <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
 
+                    </form>
                 </div>
+            </ul> 
 
-                <div class="swiper-slide">
-                    <div class="row w-50 py-5 slider-index">
-                        <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
-                            <b>
-                                ایساکــــــو پلـــــــــــــاس
-                            </b>
-                        </h1>
-                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
-                            @Html.Raw(@Slider3)
-                        </h6>
-                    </div>
-
-
+            <div class="col-md-10 col-12">
+                <div class="form-group position-relative w-100 mx-auto">
+                    <input id="searchItem" class=" hj-serachbox mx-auto d-block position-relative w-100 pr-5 text-white"
+                        placeholder="جستجو بر اساس اسم یا کد کالا">
+                    <i class="fa fa-search hj-search-ab pt-1 color-zarposh"></i>
+                    <button class="col-lg-2 col-4 hj-serchboxButton" onclick="Search()"> جستجو</button>
                 </div>
             </div>
-            <!-- Add Pagination -->
-            <div class="swiper-pagination "></div>
+            <div class="col-md-2 col-12 text-right">
+                <button type="button" class=" button-filter w-100" data-toggle="modal"
+                        data-target="#centralModalfilter">
+                    <i class="fa fa-filter text-info"></i> فیلتر کردن
+                </button>
+            </div>
         </div>
-        <!-- ---- end swipwe--- -->
+        
+        <!-- Add Pagination -->
+        <div class="swiper-pagination paginationOfSlider"></div>
 
+        <!-- info -->
+        <div class="row w-75 mx-auto text-center pt-md-5 mt-md-5 hj-li-Index InfoContainerOfSlider">
+            @* <div class="col-md-1 col-0 py-1"></div> *@
+            <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('grouping')"> دسته بندی</button></div>
+            <div class="col-md-2  py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('blogSec')"> وبلاگ</button></div>
+            <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="location.href='/ContactUs'"> تماس با ما</button></div>
+            <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('aboutUs')"> درباره ما</button></div>
+            @* <div class="col-md-1 col-0 py-1"></div> *@
+        </div>
+
+        <div class="swiper-wrapper m-0" style="z-index:-1 !important">
+            <div class="swiper-slide">
+                <div class="ImageContainerSlider">
+                    <img class="ImageSlider" src="../img/header.png" /> 
+                </div>
+                <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
+                    <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
+                        <b>
+                           1 ایساکــــــو پلـــــــــــــاس
+                        </b>
+                    </h1>
+                    <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
+                        @Html.Raw(@Slider1)
+                    </h6>
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="ImageContainerSlider">
+                    <img class="ImageSlider" src="../img/header.png" /> 
+                </div>
+                <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
+                    <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
+                        <b>
+                           2 ایساکــــــو پلـــــــــــــاس
+                        </b>
+                    </h1>
+                    <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
+                        @Html.Raw(@Slider2)
+                    </h6>
+                </div>
+            </div>
+            
+            <div class="swiper-slide">
+                <div class="ImageContainerSlider">
+                    <img class="ImageSlider" src="../img/header.png" /> 
+                </div>
+                <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
+                    <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
+                        <b>
+                           3 ایساکــــــو پلـــــــــــــاس
+                        </b>
+                    </h1>
+                    <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
+                        @Html.Raw(@Slider3)
+                    </h6>
+            </div>
+
+            
+        </div>
+      
     </div>
-
-    <!-- ---- -->
-    <div class="row w-75 mx-auto d-flex justify-content-center text-center pt-md-5 mt-md-5 hj-li-Index">
-        <div class="col-md-1 col-0 py-1"></div>
-        <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('grouping')"> دسته بندی</button></div>
-        <div class="col-md-2  py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('blogSec')"> واخبار</button></div>
-        <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="location.href='/ContactUs'"> تماس با ما</button></div>
-        <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('aboutUs')"> درباره ما</button></div>
-        <div class="col-md-1 col-0 py-1"></div>
-    </div>
-    <!-- ---- -->
-
 </div>
 <!-- ------end header--- -->
 <!-- -----Grouping---- -->
@@ -753,14 +820,14 @@
 
 </div>
 <!-- -----end service----- -->
-<!-- ---blog---- -->
+<!-- --slider---- -->
 <div class="container-fluid w-100 mx-atuo" id="blogSec">
     <div class="row w-100 mx-auto text-center py-4 pt-5">
         <div class="col-lg-5 col-3 text-left pt-4">
             <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
         </div>
         <div class="col-lg-2 col-6">
-            <h2><b class="font-kalameBlack"> اخرین های اخبار</b></h2>
+            <h2><b class="font-kalameBlack"> اخرین های بلاگ</b></h2>
         </div>
         <div class="col-lg-5 col-3 text-right pt-4">
             <img src="./img/Line 35.png"
@@ -808,63 +875,6 @@
 
 </div>
 <!-- ---End blog---- -->
-
-
-<!-- ---Video---- -->
-<div class="container-fluid w-100 mx-atuo" id="blogSec">
-    <div class="row w-100 mx-auto text-center py-4 pt-5">
-        <div class="col-lg-5 col-3 text-left pt-4">
-            <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
-        </div>
-        <div class="col-lg-2 col-6">
-            <h2><b class="font-kalameBlack"> اخرین های ویدیوها</b></h2>
-        </div>
-        <div class="col-lg-5 col-3 text-right pt-4">
-            <img src="./img/Line 35.png"
-                 class="img-fluid w-25 mx-auto border-titr">
-        </div>
-    </div>
-
-    <div class="row w-100 mx-auto text-center py-5 mb-5">
-        <!-- --- -->
-        <!-- Swiper -->
-        <div class="swiper-container swiper-Landing1">
-            <div class="swiper-wrapper" @*id="blogs"*@>
-                @foreach (var item in (List<KaraYadak.Models.Blog>)ViewBag.blogs)
-                {
-                    <div class="swiper-slide">
-                        <a href="/blogs/BlogDetails/@item.Id">
-                            <div class="hj-blog p-0">
-                                <div class="row w-100 mx-auto titr-blog">
-                                    <h5 class="py-2 pr-4 pt-3"><b>@item.Title</b></h5>
-                                </div>
-                                <div class="row w-100 mx-auto py-2">
-                                    <div class="col-7 detalis-blog px-4 py-3">
-                                        <h6 class="text-justify">
-                                            @item.ShortDescription
-                                        </h6>
-                                    </div>
-                                    <div class="col-5 pt-4">
-                                        <img src="/uploads/Blogs/@item.Image" class="img-fluid w-100 mx-auto">
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                }
-            </div>
-            <!-- Add Pagination -->
-            <div class="swiper-pagination"></div>
-
-        </div>
-        <!-- ---- -->
-
-
-    </div>
-
-</div>
-<!-- ---End Video---- -->
 <!-- ---banner with offer--- -->
 
 @if (baner != null)
@@ -933,7 +943,7 @@
         <div class="modal-content modal-login">
             <div class="modal-body">
                 <div class="login-wrap">
-                    <div class="login-html">
+                    <div class="login-html" >
                         <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label id="label-1" for="tab-1" class="tab">ورود </label>
                         <input id="tab-2" type="radio" name="tab" class="sign-up"><label id="label-2" for="tab-2" class="tab"> ثبت نام</label>
                         <div class="login-form mt-3">
@@ -944,7 +954,7 @@
                                         <input id="VerificationNumber" type="text" class="input" name="VerificationNumber">
                                     </div>
                                     <div class="group">
-                                        <input type="submit" id="verifivation" class="button" value=" ورود">
+                                                   <input type="submit" id="verifivation" class="button" value=" ورود">
                                     </div>
                                     <div class="hr"></div>
                                 </div>
@@ -963,10 +973,10 @@
                                         <input id="LoginSubmitButton" type="submit" class="button" value=" ورود">
                                     </div>
                                     <div class="hr"></div>
-
+                               
                                 </div>
                             </form>
-                            <form id="Register-form" action="" method="post">
+                            <form  id="Register-form" action="" method="post">
                                 <div class="sign-up-htm">
                                     <div class="group">
                                         <label for="usernameForReg" class="label">نام نام خانوادگی</label>
@@ -975,9 +985,9 @@
                                     <div class="group">
                                         <label for="phonenumberForReg" class="label">شماره تماس</label>
                                         <input id="phonenumberForReg" type="text" class="input" data-type="number" name="PhoneNumber">
-                                        <input type="hidden" name="LoginOrRegister" value="Register">
-                                        <input type="hidden" name="ReturnUrl">
-
+                                        <input  type="hidden" name="LoginOrRegister" value="Register">
+                                        <input  type="hidden" name="ReturnUrl" >
+                                        
                                     </div>
                                     <div class="group">
                                         <input id="RegisterSubmitButton" type="submit" class="button" value=" ثبت نام">
@@ -986,10 +996,10 @@
                                         <label for="tab-1"> قبلا ثبت نام کردید؟</label>
                                     </div>
                                 </div>
-                            </form>
+                            </form> 
                         </div>
                     </div>
-
+                   
                 </div>
             </div>
         </div>
@@ -997,24 +1007,24 @@
 </div>
 
 
-@* <div class="login-html d-none" id="VerifyForm">
-        <input id="tab-3" type="radio" name="tab" class="sign-in" checked><label for="tab-3" class="tab">کد تایید  </label>
-         <div class="verify-form mt-3"  >
-            <form id="verify-form" action="" method="post">
-                <div class="sign-in-htm">
-                    <div class="group">
-                        <label for="username" class="label"> کد تایید </label>
-                        <input id="username" type="text" class="input" name="username">
-                    </div>
-                    <div class="group">
-                        <input type="submit" class="button" value=" ورود">
-                    </div>
-                    <div class="hr"></div>
-                </div>
-            </form>
-        </div>
-    </div> *@
-
+ @* <div class="login-html d-none" id="VerifyForm">
+                        <input id="tab-3" type="radio" name="tab" class="sign-in" checked><label for="tab-3" class="tab">کد تایید  </label>
+                         <div class="verify-form mt-3"  >
+                            <form id="verify-form" action="" method="post">
+                                <div class="sign-in-htm">
+                                    <div class="group">
+                                        <label for="username" class="label"> کد تایید </label>
+                                        <input id="username" type="text" class="input" name="username">
+                                    </div>
+                                    <div class="group">
+                                        <input type="submit" class="button" value=" ورود">
+                                    </div>
+                                    <div class="hr"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div> *@
+ 
 <!-- end modal login -->
 <!--filter modal-->
 <div class="modal fade" id="centralModalfilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -1030,55 +1040,11 @@
             <div class="modal-body">
                 <div class="container">
                     <form>
-                        <div class="form-group row pt-5 py-2">
-                            <label for=" TypePiece selectBrand" class="col-sm-2 col-form-label text-md-center text-right">دسته بندی اصلی</label>
-                            <div class="col-sm-10">
-                                <select class="form-control view-filterInput" id="TypePiece">
-                                    <option value=""></option>
-
-                                    @foreach (var item in (List<KaraYadak.Models.ProductCategoryType>)ViewBag.Categories)
-                                    {
-                                        <option value="@item.Name">@item.Name</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
                         <div class="form-group row py-2">
                             <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">دسته بندی فرعی</label>
                             <div class="col-sm-10">
-                                <select class="form-control view-filterInput" id="selectSubCategory">
-                                    <option value=" "> </option>
-
-                                    @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Brands)
-                                    {
-                                        <option value="@item.Name">@item.Name</option>
-                                    }
-
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group row py-2">
-                            <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">خودرو</label>
-                            <div class="col-sm-10">
-                                <select class="form-control view-filterInput" id="selectCar">
-                                    <option value=" "> </option>
-
-                                    @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Cars)
-                                    {
-                                        <option value="@item.Name">@item.Name</option>
-                                    }
-
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group row py-2">
-                            <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">برند</label>
-                            <div class="col-sm-10">
-                                <select class="form-control view-filterInput" id="selectBrand">
-                                    <option value=" "> </option>
-
+                                <select class="js-example-basic-multiple form-control view-filterInput" id="TypePiece">
+                   
                                     @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Brands)
                                     {
                                         <option value="@item.Name">@item.Name</option>

@@ -55,11 +55,6 @@ button {
 }*/
 
 /* ------ */
-.hj-header {
-  background: url("../img/header.png");
-  background-size: 100% 100%;
-  height: 100%;
-}
 
 .hj-navbarIndex {
   background: transparent;
@@ -801,12 +796,6 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 @media only screen and (max-width: 750px) {
-  .hj-header {
-    background: url(../img/header.png);
-    background-size: 100% cover;
-    height: auto;
-  }
-
   .hj-banner {
     width: 100% !important;
   }
@@ -1131,5 +1120,64 @@ em.error {
 @media only screen and (max-width: 992px) {
   .WebResponsiveButton {
     display: none;
+  }
+}
+.searchContainerOfSlider {
+  position: absolute;
+  right: 50%;
+  top: 100px;
+  transform: translateX(50%);
+}
+@media only screen and (max-width: 992px) {
+  .searchContainerOfSlider {
+    top: 40px;
+  }
+}
+@media only screen and (max-width: 992px) {
+  .navbarInResponsive {
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+
+.InfoContainerOfSlider {
+  position: absolute;
+  bottom: -25px;
+  right: 50%;
+  transform: translateX(50%);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.InfoContainerOfSlider > * {
+  padding: 10px 15px !important;
+  flex-basis: 200px;
+  flex-shrink: 0;
+}
+@media only screen and (max-width: 767px) {
+  .InfoContainerOfSlider {
+    bottom: -60px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .InfoContainerOfSlider > * {
+    padding: 10px 15px !important;
+    flex-basis: 200px;
+    flex-shrink: 0;
+  }
+}
+@media only screen and (max-width: 420px) {
+  .InfoContainerOfSlider > * {
+    padding: 10px 15px !important;
+    flex-basis: 150px;
+    flex-shrink: 0;
+  }
+}
+@media only screen and (max-width: 360px) {
+  .InfoContainerOfSlider > * {
+    padding: 10px 15px !important;
+    flex-basis: 120px;
+    flex-shrink: 0;
   }
 }
