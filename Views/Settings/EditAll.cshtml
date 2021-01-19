@@ -2,7 +2,7 @@
 @model KaraYadak.ViewModels.SettingVM
 @{
     ViewBag.Title = "تنظیمات";
-    Layout = "_AdminPanel";
+    Layout = "_Layout";
 }
 @section vendorstyles{
     <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors-rtl.min.css">
@@ -26,7 +26,7 @@
         }
     </style>
     <link href="~/assets/cropper/css/cropper.css" rel="stylesheet" />
-}}
+}
 
 @section vendors{
     <script src="/app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>
@@ -40,12 +40,29 @@
     <script src="~/app-assets/vendors/js/vendors.min.js"></script>
     <script src="~/src/js/scripts/extensions/sweet-alerts.js"></script>
     <script>
+        $(document).ready(function () {
+
+            $("#overallSetting").click();
+
+        })
         //CKEDITOR.replace('IndexP', {
         //    language: 'fa',
         //    uiColor: '#7367F0',
         //    contentsLangDirection: 'rtl',
         //    extraAllowedContent: 'br(*)'
         //});
+
+        $("#textSetting").click(function () {
+            $("#overallSettingForm").addClass("d-none");
+            $("#textSettingForm").removeClass("d-none");
+
+        })
+
+        $("#overallSetting").click(function () {
+            $("#textSettingForm").addClass("d-none");
+            $("#overallSettingForm").removeClass("d-none");
+        })
+
         CKEDITOR.replace('Slider1Text', {
             language: 'fa',
             uiColor: '#7367F0',
@@ -64,6 +81,22 @@
             contentsLangDirection: 'rtl',
             extraAllowedContent: 'br(*)'
         });
+
+
+        CKEDITOR.replace('Slider4Text', {
+            language: 'fa',
+            uiColor: '#7367F0',
+            contentsLangDirection: 'rtl',
+            extraAllowedContent: 'br(*)'
+        });
+
+        CKEDITOR.replace('Slider5Text', {
+            language: 'fa',
+            uiColor: '#7367F0',
+            contentsLangDirection: 'rtl',
+            extraAllowedContent: 'br(*)'
+        });
+
 
         CKEDITOR.replace('Footer', {
             language: 'fa',
@@ -118,10 +151,12 @@
         $("#textSettingForm").submit(function (e) {
             e.preventDefault();
             var form = $(this);
-            var url = form.attr('action'); Slider1Text
+            var url = form.attr('action');
             var Slider1Text = CKEDITOR.instances.Slider1Text.getData();
             var Slider2Text = CKEDITOR.instances.Slider2Text.getData();
             var Slider3Text = CKEDITOR.instances.Slider3Text.getData();
+            var Slider4Text = CKEDITOR.instances.Slider4Text.getData();
+            var Slider5Text = CKEDITOR.instances.Slider5Text.getData();
             var ContactUs = CKEDITOR.instances.ContactUs.getData();
             var Footer = CKEDITOR.instances.Footer.getData();
             var AboutUS = CKEDITOR.instances.AboutUS.getData();
@@ -144,6 +179,16 @@
             var Upload10 = $("#Category6").get(0);
             var files10 = Upload10.files;
 
+            var Upload11 = $("#Slider1Pic").get(0);
+            var files11 = Upload11.files;
+            var Upload12 = $("#Slider2Pic").get(0);
+            var files12 = Upload12.files;
+            var Upload13 = $("#Slider3Pic").get(0);
+            var files13 = Upload13.files;
+            var Upload14 = $("#Slider4Pic").get(0);
+            var files14 = Upload14.files;
+            var Upload15 = $("#Slider5Pic").get(0);
+            var files15 = Upload15.files;
 
 
             var formData = new FormData();
@@ -153,6 +198,8 @@
             formData.append("Slider1Text", Slider1Text);
             formData.append("Slider2Text", Slider2Text);
             formData.append("Slider3Text", Slider3Text);
+            formData.append("Slider4Text", Slider4Text);
+            formData.append("Slider5Text", Slider5Text);
             formData.append("SiteLogo", files4[0]);
             formData.append("Category1", files5[0]);
             formData.append("Category2", files6[0]);
@@ -161,6 +208,12 @@
             formData.append("Category5", files9[0]);
             formData.append("Category6", files10[0]);
             formData.append("Category7", files3[0]);
+
+            formData.append("sPic1", files11[0]);
+            formData.append("sPic2", files12[0]);
+            formData.append("sPic3", files13[0]);
+            formData.append("sPic4", files14[0]);
+            formData.append("sPic5", files15[0]);
 
             $.blockUI({ message: '<h1>درحال ارسال درخواست...</h1>' });
             $.ajax({
@@ -185,7 +238,6 @@
 
     </script>
 }
-@await Component.InvokeAsync(nameof(KaraYadak.Components.PageHeaderComponent), new { Page = ViewBag.Title, Parent = "", ParentUrl = "" })
 
 <div class="content-body">
     <section id="basic-vertical-layouts">
@@ -391,7 +443,7 @@
                                                 <div class="col-12 col-lg-12">
                                                     <div class="row">
                                                         <div class="form-group col-lg-3">
-                                                            <label class="ash-lable" >نگهداری و نظافت</label>
+                                                            <label class="ash-lable">نگهداری و نظافت</label>
                                                             <input asp-for="Category7" type="file" class="form-control ash-input ash-file" id="Category7">
                                                             <span>سایز پیشنهادی : 1200 * 750</span>
                                                         </div>
@@ -424,6 +476,88 @@
                                                     <div class="form-group">
                                                         <label class="ash-lable" asp-for="Slider3Text">متن اسلایدر سوم </label>
                                                         <textarea id="Slider3Text" name="Slider3Text" type="text" class="form-control ash-input" asp-for="Slider3Text"></textarea>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 col-lg-12">
+                                                    <div class="form-group">
+                                                        <label class="ash-lable" asp-for="Slider4Text">متن اسلایدر چهارم </label>
+                                                        <textarea id="Slider4Text" name="Slider4Text" type="text" class="form-control ash-input" asp-for="Slider4Text"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-12">
+                                                    <div class="form-group">
+                                                        <label class="ash-lable" asp-for="Slider5Text">متن اسلایدر پنجم </label>
+                                                        <textarea id="Slider5Text" name="Slider5Text" type="text" class="form-control ash-input" asp-for="Slider5Text"></textarea>
+                                                    </div>
+                                                </div>
+                                                <!--1-->
+                                                <div class="col-12 col-lg-12">
+                                                    <div class="row">
+                                                        <div class="form-group col-lg-3">
+                                                            <label class="ash-lable">تصویر اسلاید 1</label>
+                                                            <input asp-for="Slider1Pic" type="file" class="form-control ash-input ash-file"
+                                                                   id="Slider1Pic">
+                                                            <span>سایز پیشنهادی : 1200 * 750</span>
+                                                        </div>
+                                                        <div class="form-group offset-3 col-lg-6">
+                                                            <img style="max-height:100%;max-width:100%" src="~/uploads/@Model.Slider1Pic" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--2-->
+                                                <div class="col-12 col-lg-12">
+                                                    <div class="row">
+                                                        <div class="form-group col-lg-3">
+                                                            <label class="ash-lable">تصویر اسلاید 2</label>
+                                                            <input asp-for="Slider2Pic" type="file" class="form-control ash-input ash-file"
+                                                                   id="Slider2Pic">
+                                                            <span>سایز پیشنهادی : 1200 * 750</span>
+                                                        </div>
+                                                        <div class="form-group offset-3 col-lg-6">
+                                                            <img style="max-height:100%;max-width:100%" src="~/uploads/@Model.Slider2Pic" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--3-->
+                                                <div class="col-12 col-lg-12">
+                                                    <div class="row">
+                                                        <div class="form-group col-lg-3">
+                                                            <label class="ash-lable">تصویر اسلاید 3</label>
+                                                            <input asp-for="Slider3Pic" type="file" class="form-control ash-input ash-file"
+                                                                   id="Slider3Pic">
+                                                            <span>سایز پیشنهادی : 1200 * 750</span>
+                                                        </div>
+                                                        <div class="form-group offset-3 col-lg-6">
+                                                            <img style="max-height:100%;max-width:100%" src="~/uploads/@Model.Slider3Pic" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--4-->
+                                                <div class="col-12 col-lg-12">
+                                                    <div class="row">
+                                                        <div class="form-group col-lg-3">
+                                                            <label class="ash-lable">تصویر اسلاید 4</label>
+                                                            <input asp-for="Slider4Pic" type="file" class="form-control ash-input ash-file"
+                                                                   id="Slider4Pic">
+                                                            <span>سایز پیشنهادی : 1200 * 750</span>
+                                                        </div>
+                                                        <div class="form-group offset-3 col-lg-6">
+                                                            <img style="max-height:100%;max-width:100%" src="~/uploads/@Model.Slider4Pic" />
+                                                        </div>
+                                                    </div>
+                                                </div> <!--5-->
+                                                <div class="col-12 col-lg-12">
+                                                    <div class="row">
+                                                        <div class="form-group col-lg-3">
+                                                            <label class="ash-lable">تصویر اسلاید 5</label>
+                                                            <input asp-for="Slider5Pic" type="file" class="form-control ash-input ash-file"
+                                                                   id="Slider5Pic">
+                                                            <span>سایز پیشنهادی : 1200 * 750</span>
+                                                        </div>
+                                                        <div class="form-group offset-3 col-lg-6">
+                                                            <img style="max-height:100%;max-width:100%" src="~/uploads/@Model.Slider5Pic" />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

@@ -334,6 +334,17 @@ namespace KaraYadak.Controllers
                 Slider1Text = _context.Settings.Where(x => x.Key.Equals("Slider1")).Select(x => x.Value).FirstOrDefault(),
                 Slider2Text = _context.Settings.Where(x => x.Key.Equals("Slider2")).Select(x => x.Value).FirstOrDefault(),
                 Slider3Text = _context.Settings.Where(x => x.Key.Equals("Slider3")).Select(x => x.Value).FirstOrDefault(),
+                Slider4Text = _context.Settings.Where(x => x.Key.Equals("Slider4")).Select(x => x.Value).FirstOrDefault(),
+                Slider5Text = _context.Settings.Where(x => x.Key.Equals("Slider5")).Select(x => x.Value).FirstOrDefault(),
+
+
+
+                Slider1Pic= _context.Settings.Where(x => x.Key.Equals("Slider1Pic")).Select(x => x.Value).FirstOrDefault(),
+                Slider2Pic= _context.Settings.Where(x => x.Key.Equals("Slider2Pic")).Select(x => x.Value).FirstOrDefault(),
+                Slider3Pic= _context.Settings.Where(x => x.Key.Equals("Slider3Pic")).Select(x => x.Value).FirstOrDefault(),
+                Slider4Pic= _context.Settings.Where(x => x.Key.Equals("Slider4Pic")).Select(x => x.Value).FirstOrDefault(),
+                Slider5Pic= _context.Settings.Where(x => x.Key.Equals("Slider5Pic")).Select(x => x.Value).FirstOrDefault(),
+
 
                 Category1 = _context.Settings.Where(x => x.Key.Equals("Category1")).Select(x => x.Value).FirstOrDefault(),
                 Category1Title = _context.Settings.Where(x => x.Key.Equals("Category1")).Select(x => x.Title).FirstOrDefault(),
@@ -356,7 +367,8 @@ namespace KaraYadak.Controllers
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> EditSiteSetting(SiteSettingVM siteSetting, IFormFile Category7, IFormFile SiteLogo, IFormFile Category1
-            , IFormFile Category2, IFormFile Category3, IFormFile Category4, IFormFile Category5, IFormFile Category6)
+            , IFormFile Category2, IFormFile Category3, IFormFile Category4, IFormFile Category5, IFormFile Category6,
+            IFormFile sPic1, IFormFile sPic2, IFormFile sPic3, IFormFile sPic4, IFormFile sPic5)
         {
 
             if (ModelState.IsValid)
@@ -396,6 +408,18 @@ namespace KaraYadak.Controllers
                     slider3TextSetting.UpdatedAt = DateTime.Now;
                     _context.Entry(slider3TextSetting).State = EntityState.Modified;
 
+                    //Slider4Text
+                    Setting slider4TextSetting = _context.Settings.Where(x => x.Key.Equals("Slider4")).SingleOrDefault();
+                    slider4TextSetting.Value = siteSetting.Slider4Text;
+                    slider4TextSetting.UpdatedAt = DateTime.Now;
+                    _context.Entry(slider4TextSetting).State = EntityState.Modified;
+
+
+                    //Slider4Text
+                    Setting slider5TextSetting = _context.Settings.Where(x => x.Key.Equals("Slider5")).SingleOrDefault();
+                    slider5TextSetting.Value = siteSetting.Slider5Text;
+                    slider5TextSetting.UpdatedAt = DateTime.Now;
+                    _context.Entry(slider5TextSetting).State = EntityState.Modified;
                     //SiteLogo
                     Setting siteLogoSetting = _context.Settings.Where(x => x.Key.Equals("SiteLogo")).SingleOrDefault();
                     if (SiteLogo != null)
@@ -404,6 +428,53 @@ namespace KaraYadak.Controllers
                     }
                     siteLogoSetting.UpdatedAt = DateTime.Now;
                     _context.Entry(siteLogoSetting).State = EntityState.Modified;
+
+
+                    //slider1Pic
+                    Setting slider1PicSetting = _context.Settings.Where(x => x.Key.Equals("slider1Pic")).SingleOrDefault();
+                    if (sPic1 != null)
+                    {
+                        slider1PicSetting.Value = upload(sPic1);
+                    }
+                    slider1PicSetting.UpdatedAt = DateTime.Now;
+                    _context.Entry(slider1PicSetting).State = EntityState.Modified;
+
+
+                    //slider2Pic
+                    Setting slider2PicSetting = _context.Settings.Where(x => x.Key.Equals("slider2Pic")).SingleOrDefault();
+                    if (sPic2 != null)
+                    {
+                        slider2PicSetting.Value = upload(sPic2);
+                    }
+                    slider2PicSetting.UpdatedAt = DateTime.Now;
+                    _context.Entry(slider2PicSetting).State = EntityState.Modified;
+
+                    //slider2Pic
+                    Setting slider3PicSetting = _context.Settings.Where(x => x.Key.Equals("slider3Pic")).SingleOrDefault();
+                    if (sPic3 != null)
+                    {
+                        slider3PicSetting.Value = upload(sPic3);
+                    }
+                    slider3PicSetting.UpdatedAt = DateTime.Now;
+                    _context.Entry(slider3PicSetting).State = EntityState.Modified;
+
+                    //slider2Pic
+                    Setting slider4PicSetting = _context.Settings.Where(x => x.Key.Equals("slider4Pic")).SingleOrDefault();
+                    if (sPic4 != null)
+                    {
+                        slider4PicSetting.Value = upload(sPic4);
+                    }
+                    slider4PicSetting.UpdatedAt = DateTime.Now;
+                    _context.Entry(slider4PicSetting).State = EntityState.Modified;
+
+                    //slider2Pic
+                    Setting slider5PicSetting = _context.Settings.Where(x => x.Key.Equals("slider5Pic")).SingleOrDefault();
+                    if (sPic5 != null)
+                    {
+                        slider5PicSetting.Value = upload(sPic5);
+                    }
+                    slider5PicSetting.UpdatedAt = DateTime.Now;
+                    _context.Entry(slider5PicSetting).State = EntityState.Modified;
 
 
                     //Category_1
@@ -475,7 +546,7 @@ namespace KaraYadak.Controllers
                 }
                 catch (Exception e)
                 {
-                    return Json(new { e.Message, e.InnerException });
+                    return Json(new { e });
                 }
                 //return RedirectToAction(nameof(Index));
 

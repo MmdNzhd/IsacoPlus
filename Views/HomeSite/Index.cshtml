@@ -25,9 +25,11 @@
             width: 240px;
             font-size: 137%;
         }
-        .modalfilter{
-            top:22px;
+
+        .modalfilter {
+            top: 22px;
         }
+
         * {
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
@@ -134,8 +136,8 @@
                 transform: scale(1) rotate(0);
             }
 
-         
-    
+
+
 
         @@-webkit-keyframes rotate {
             to {
@@ -389,25 +391,25 @@
 
     <script>
 
-        $(document).on('click', '#LoginAndRegister', function(e){ 
+        $(document).on('click', '#LoginAndRegister', function (e) {
             $("#login-form").removeClass("d-none");
             $("#Register-form").removeClass("d-none");
             $("#label-1").removeClass("d-none");
             $("#label-2").removeClass("d-none");
             $("#VerifyForm").addClass("d-none");
         });
-        $(document).on('click', '#LoginSubmitButton', function(e){ 
+        $(document).on('click', '#LoginSubmitButton', function (e) {
         });
-        $(document).on('click', '#LoginSubmitButton', function(e){ 
-      
+        $(document).on('click', '#LoginSubmitButton', function (e) {
+
         })
-        $(document).on('click', '#RegisterSubmitButton', function(e){ 
+        $(document).on('click', '#RegisterSubmitButton', function (e) {
             //$("#VerifyForm").removeClass("d-none");
         });
-        $(document).on('click', '#RegisterSubmitButton', function(e){ 
-           
+        $(document).on('click', '#RegisterSubmitButton', function (e) {
+
         })
-   
+
     </script>
 
     <script>
@@ -453,43 +455,43 @@
     </script>
 
     <script>
-		var swiper = new Swiper('.swiper-menuContainer', {
-        spaceBetween: 30,
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
+        var swiper = new Swiper('.swiper-menuContainer', {
+            spaceBetween: 30,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
         });
-	</script>
+    </script>
 
     <script>
         var swiper = new Swiper(".swiper-Landing1", {
-        slidesPerView: 3,
-        loop: true,
-        spaceBetween: 30,
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-        breakpoints: {
-            // when window width is <= 499px
-            0: {
-            slidesPerView: 1,
-            spaceBetweenSlides: 30,
-            },
-            800: {
-            slidesPerView: 2,
-            spaceBetweenSlides: 40,
-            },
-
-            1300: {
             slidesPerView: 3,
-            spaceBetweenSlides: 40,
+            loop: true,
+            spaceBetween: 30,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
             },
-        },
+            breakpoints: {
+                // when window width is <= 499px
+                0: {
+                    slidesPerView: 1,
+                    spaceBetweenSlides: 30,
+                },
+                800: {
+                    slidesPerView: 2,
+                    spaceBetweenSlides: 40,
+                },
+
+                1300: {
+                    slidesPerView: 3,
+                    spaceBetweenSlides: 40,
+                },
+            },
         });
     </script>
-    
+
 
 }
 
@@ -550,7 +552,7 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav nav-flex-icons p-0 WebResponsiveButton">
-                    <div class="i-btn "> 
+                    <div class="i-btn ">
                         <span id="modalEstelam" class="btn btn-warning i-btn scaleout-glow" style="width:240px" data-elem="1"> استعلام بارکد ایساکویی  </span>
                         <form class="i-btn-holder" onsubmit="this.preventDefault()">
                             <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="بارکد ایساکو را وارد کنید..." />
@@ -568,7 +570,7 @@
     <div class="row width-60 hj-filtering mx-auto mt-5">
 
         <ul class="navbar-nav nav-flex-icons col-12 mb-3 p-0 ResponsiveButton">
-            <div class="i-btn "> 
+            <div class="i-btn ">
                 <span id="modalEstelam2" class="btn btn-warning i-btn scaleout-glow " style="width:100%" data-elem="1"> استعلام قیمت </span>
                 <form class="i-btn-holder" onsubmit="this.preventDefault()">
                     <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
@@ -576,7 +578,7 @@
 
                 </form>
             </div>
-        </ul> 
+        </ul>
 
         <div class="col-md-10 col-12">
             <div class="form-group position-relative w-100 mx-auto">
@@ -627,7 +629,7 @@
 
 
                 </div>
-                
+
                 <div class="swiper-slide">
                     <div class="row w-50 py-5 slider-index">
                         <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
@@ -806,6 +808,63 @@
 
 </div>
 <!-- ---End blog---- -->
+
+
+<!-- ---Video---- -->
+<div class="container-fluid w-100 mx-atuo" id="blogSec">
+    <div class="row w-100 mx-auto text-center py-4 pt-5">
+        <div class="col-lg-5 col-3 text-left pt-4">
+            <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+        </div>
+        <div class="col-lg-2 col-6">
+            <h2><b class="font-kalameBlack"> اخرین های ویدیوها</b></h2>
+        </div>
+        <div class="col-lg-5 col-3 text-right pt-4">
+            <img src="./img/Line 35.png"
+                 class="img-fluid w-25 mx-auto border-titr">
+        </div>
+    </div>
+
+    <div class="row w-100 mx-auto text-center py-5 mb-5">
+        <!-- --- -->
+        <!-- Swiper -->
+        <div class="swiper-container swiper-Landing1">
+            <div class="swiper-wrapper" @*id="blogs"*@>
+                @foreach (var item in (List<KaraYadak.Models.Blog>)ViewBag.blogs)
+                {
+                    <div class="swiper-slide">
+                        <a href="/blogs/BlogDetails/@item.Id">
+                            <div class="hj-blog p-0">
+                                <div class="row w-100 mx-auto titr-blog">
+                                    <h5 class="py-2 pr-4 pt-3"><b>@item.Title</b></h5>
+                                </div>
+                                <div class="row w-100 mx-auto py-2">
+                                    <div class="col-7 detalis-blog px-4 py-3">
+                                        <h6 class="text-justify">
+                                            @item.ShortDescription
+                                        </h6>
+                                    </div>
+                                    <div class="col-5 pt-4">
+                                        <img src="/uploads/Blogs/@item.Image" class="img-fluid w-100 mx-auto">
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                }
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+
+        </div>
+        <!-- ---- -->
+
+
+    </div>
+
+</div>
+<!-- ---End Video---- -->
 <!-- ---banner with offer--- -->
 
 @if (baner != null)
@@ -874,7 +933,7 @@
         <div class="modal-content modal-login">
             <div class="modal-body">
                 <div class="login-wrap">
-                    <div class="login-html" >
+                    <div class="login-html">
                         <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label id="label-1" for="tab-1" class="tab">ورود </label>
                         <input id="tab-2" type="radio" name="tab" class="sign-up"><label id="label-2" for="tab-2" class="tab"> ثبت نام</label>
                         <div class="login-form mt-3">
@@ -885,7 +944,7 @@
                                         <input id="VerificationNumber" type="text" class="input" name="VerificationNumber">
                                     </div>
                                     <div class="group">
-                                                   <input type="submit" id="verifivation" class="button" value=" ورود">
+                                        <input type="submit" id="verifivation" class="button" value=" ورود">
                                     </div>
                                     <div class="hr"></div>
                                 </div>
@@ -904,10 +963,10 @@
                                         <input id="LoginSubmitButton" type="submit" class="button" value=" ورود">
                                     </div>
                                     <div class="hr"></div>
-                               
+
                                 </div>
                             </form>
-                            <form  id="Register-form" action="" method="post">
+                            <form id="Register-form" action="" method="post">
                                 <div class="sign-up-htm">
                                     <div class="group">
                                         <label for="usernameForReg" class="label">نام نام خانوادگی</label>
@@ -916,9 +975,9 @@
                                     <div class="group">
                                         <label for="phonenumberForReg" class="label">شماره تماس</label>
                                         <input id="phonenumberForReg" type="text" class="input" data-type="number" name="PhoneNumber">
-                                        <input  type="hidden" name="LoginOrRegister" value="Register">
-                                        <input  type="hidden" name="ReturnUrl" >
-                                        
+                                        <input type="hidden" name="LoginOrRegister" value="Register">
+                                        <input type="hidden" name="ReturnUrl">
+
                                     </div>
                                     <div class="group">
                                         <input id="RegisterSubmitButton" type="submit" class="button" value=" ثبت نام">
@@ -927,10 +986,10 @@
                                         <label for="tab-1"> قبلا ثبت نام کردید؟</label>
                                     </div>
                                 </div>
-                            </form> 
+                            </form>
                         </div>
                     </div>
-                   
+
                 </div>
             </div>
         </div>
@@ -938,24 +997,24 @@
 </div>
 
 
- @* <div class="login-html d-none" id="VerifyForm">
-                        <input id="tab-3" type="radio" name="tab" class="sign-in" checked><label for="tab-3" class="tab">کد تایید  </label>
-                         <div class="verify-form mt-3"  >
-                            <form id="verify-form" action="" method="post">
-                                <div class="sign-in-htm">
-                                    <div class="group">
-                                        <label for="username" class="label"> کد تایید </label>
-                                        <input id="username" type="text" class="input" name="username">
-                                    </div>
-                                    <div class="group">
-                                        <input type="submit" class="button" value=" ورود">
-                                    </div>
-                                    <div class="hr"></div>
-                                </div>
-                            </form>
-                        </div>
-                    </div> *@
- 
+@* <div class="login-html d-none" id="VerifyForm">
+        <input id="tab-3" type="radio" name="tab" class="sign-in" checked><label for="tab-3" class="tab">کد تایید  </label>
+         <div class="verify-form mt-3"  >
+            <form id="verify-form" action="" method="post">
+                <div class="sign-in-htm">
+                    <div class="group">
+                        <label for="username" class="label"> کد تایید </label>
+                        <input id="username" type="text" class="input" name="username">
+                    </div>
+                    <div class="group">
+                        <input type="submit" class="button" value=" ورود">
+                    </div>
+                    <div class="hr"></div>
+                </div>
+            </form>
+        </div>
+    </div> *@
+
 <!-- end modal login -->
 <!--filter modal-->
 <div class="modal fade" id="centralModalfilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"

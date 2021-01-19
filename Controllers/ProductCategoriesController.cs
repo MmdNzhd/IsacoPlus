@@ -37,7 +37,7 @@ namespace KaraYadak.Controllers
         {
             ViewBag.ProductCategoryParents = _context.ProductCategories.Where(i => i.Parent == 0).ToList();
             ViewBag.ProductCategoryTypes = _context.ProductCategoryTypes.ToList();
-           
+
             return View();
         }
 
@@ -50,23 +50,23 @@ namespace KaraYadak.Controllers
             }
 
             var items = await (from pc in _context.ProductCategories
-                         join pp in _context.ProductCategories.DefaultIfEmpty() on pc.Parent equals pp.Id
-                         into tbl1
-                         from t1 in tbl1.DefaultIfEmpty()
-                         join pct in _context.ProductCategoryTypes.DefaultIfEmpty() on pc.ProductCategoryType equals pct.Id
-                         into tbl2
-                         from t2 in tbl2.DefaultIfEmpty()
-                         select new
-                         {
-                             pc.Id,
-                             pc.Name,
-                             pc.ProductCategoryType,
-                             pc.Parent,
-                             pc.UpdatedAt,
-                             ParentString = pc.Parent > 0 ? t1.Name : "ندارد",
-                             ProductCategoryTypeString = pc.ProductCategoryType > 0 ? t2.Name : "بی نوع",
-                         }).OrderByDescending(x=>x.UpdatedAt)
-                         
+                               join pp in _context.ProductCategories.DefaultIfEmpty() on pc.Parent equals pp.Id
+                               into tbl1
+                               from t1 in tbl1.DefaultIfEmpty()
+                               join pct in _context.ProductCategoryTypes.DefaultIfEmpty() on pc.ProductCategoryType equals pct.Id
+                               into tbl2
+                               from t2 in tbl2.DefaultIfEmpty()
+                               select new
+                               {
+                                   pc.Id,
+                                   pc.Name,
+                                   pc.ProductCategoryType,
+                                   pc.Parent,
+                                   pc.UpdatedAt,
+                                   ParentString = pc.Parent > 0 ? t1.Name : "ندارد",
+                                   ProductCategoryTypeString = pc.ProductCategoryType > 0 ? t2.Name : "بی نوع",
+                               }).OrderByDescending(x => x.UpdatedAt)
+
                          .ToListAsync();
 
             int recordsTotal = items.Count();
@@ -93,25 +93,31 @@ namespace KaraYadak.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ProductCategoryType,Parent")] ProductCategory productCategory,IFormFile image)
+        public async Task<IActionResult> Create([Bind("Id,Name,ProductCategoryType,Parent")] ProductCategory productCategory, IFormFile image)
         {
             //return Json(productCategory);
             if (ModelState.IsValid)
             {
-                if(image != null)
+                if (image != null)
                 {
                     var fileName = upload(image);
                     productCategory.Image = "/uploads/" + fileName;
                 }
-                _context.Add(productCategory);
+                _context.Update(productCategory);
                 await _context.SaveChangesAsync();
                 return Json("ok");
             }
             return Json("no");
         }
+        public async Task<IActionResult> GetGetCategory(int id)
+        {
+            var cat = await _context.ProductCategories.FindAsync(id);
+            if (cat == null)
+                return new JsonResult(new { status = "0", message = "دسته بندی مورد نظر یافت نشد" });
+            return new JsonResult(new { status = "1", message = "با موفقیت انجام شد" ,model=cat});
 
+        }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ProductCategoryType,Parent")] ProductCategory productCategory)
         {
             if (id != productCategory.Id)
