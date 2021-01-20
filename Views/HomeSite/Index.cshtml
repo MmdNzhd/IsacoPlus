@@ -17,16 +17,30 @@
     var Slider1 = _context.Settings.Where(x => x.Key.Equals("Slider1")).Select(x => x.Value).SingleOrDefault();
     var Slider2 = _context.Settings.Where(x => x.Key.Equals("Slider2")).Select(x => x.Value).SingleOrDefault();
     var Slider3 = _context.Settings.Where(x => x.Key.Equals("Slider3")).Select(x => x.Value).SingleOrDefault();
+    var Slider4 = _context.Settings.Where(x => x.Key.Equals("Slider4")).Select(x => x.Value).SingleOrDefault();
+    var Slider5 = _context.Settings.Where(x => x.Key.Equals("Slider5")).Select(x => x.Value).SingleOrDefault();
+
+
+    var Slider1Pic = _context.Settings.Where(x => x.Key.Equals("Slider1Pic")).Select(x => x.Value).SingleOrDefault();
+    var Slider2Pic = _context.Settings.Where(x => x.Key.Equals("Slider2Pic")).Select(x => x.Value).SingleOrDefault();
+    var Slider3Pic = _context.Settings.Where(x => x.Key.Equals("Slider3Pic")).Select(x => x.Value).SingleOrDefault();
+    var Slider4Pic = _context.Settings.Where(x => x.Key.Equals("Slider4Pic")).Select(x => x.Value).SingleOrDefault();
+    var Slider5Pic = _context.Settings.Where(x => x.Key.Equals("Slider5Pic")).Select(x => x.Value).SingleOrDefault();
 }
 @section styles{
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <style>
-        .h_iframe-aparat_embed_frame > span {
-            padding-top:30% !important;
+        .swiper-pagination-bullet {
+            background: #FFFF !important;
         }
-        #modalEstelam {
-            width: 240px;
-            font-size: 137%;
+
+        . swiper-pagination-bullet-active {
+            background: #ffcc00 !important;
+        }
+
+        .h_iframe-aparat_embed_frame > span {
+            padding-top: 25% !important;
         }
 
         .modalfilter {
@@ -39,12 +53,55 @@
             box-sizing: border-box;
         }
 
+        .select2-selection__choice {
+            background-color: #e4e4e4;
+            border: 1px solid #666;
+            border-radius: 5px;
+            padding: 0 4px;
+            color: #666;
+            display: inline-block;
+            margin-left: 5px;
+            margin-top: 5px;
+        }
 
         .loading-container {
             background: #000;
             padding: 20px 0;
         }
 
+        .select2-selection, .select2-results__options {
+            text-align: right;
+        }
+
+        .select2-container--default .select2-selection--multiple {
+            background: #333;
+            border: none;
+            border-bottom: 1px solid #ffcc00;
+        }
+
+        .select2-container--default .select2-results > .select2-results__options {
+            background: #333;
+            border: none;
+            border-bottom: 1px solid #ffcc00;
+            color: #fff;
+        }
+
+            .select2-container--default .select2-results > .select2-results__options::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            .select2-container--default .select2-results > .select2-results__options::-webkit-scrollbar-track {
+                background: #888;
+            }
+
+            .select2-container--default .select2-results > .select2-results__options::-webkit-scrollbar-thumb {
+                background: #f1f1f1;
+                border-radius: 5px
+            }
+
+                .select2-container--default .select2-results > .select2-results__options::-webkit-scrollbar-thumb:hover {
+                    background: #555;
+                }
 
         .search-loading {
             position: relative;
@@ -179,14 +236,67 @@
                 transform: rotate(360deg) translate(-15px) rotate(-360deg);
             }
         }
+
+        .ImageContainerSlider {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+            .ImageContainerSlider > .ImageSlider {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .menuContainerOfSlider {
+            position: absolute;
+        }
+
+
+
+        .paginationOfSlider {
+            position: absolute;
+            bottom: 60px !important;
+            right: 50%;
+            transform: translateX(50%);
+            z-index: 999;
+        }
     </style>
 }
 @section scripts{
     <script src="~/js/mdb.min.js"></script>
     <script src="~/js/CountDown.js"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
     <script>
+        setInterval(function () { moveAutomaticSlider(); }, 5000);
+
+        function moveAutomaticSlider() {
+            var sliders = $(".paginationOfSlider > .swiper-pagination-bullet");
+            for (var i = 0; i < sliders.length; i++) {
+
+                if ($(sliders[i]).hasClass("swiper-pagination-bullet-active")) {
+                    if (i == 4) {
+                        //$(sliders[4]).removeClass("swiper-pagination-bullet-active");
+                        $(sliders[0]).click();
+                        return;
+                    }
+                    else {
+                        //$(sliders[i]).removeClass("swiper-pagination-bullet-active");
+                        $(sliders[i + 1]).click();
+                        return;
+                    }
+
+                }
+            }
+        }
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
@@ -255,10 +365,6 @@
             let brand = $("#selectBrand").val();
             let mainCategory = $("#TypePiece").val();
             let subCategory = $("#selectSubCategory").val();
-            if (car == "") car = " ";
-            if (brand == "") brand = " ";
-            if (mainCategory == "") mainCategory = " ";
-            if (subCategory == "") subCategory = " ";
             location.href = "/Filter/" + car + "/" + brand + "/" + mainCategory + "/" + subCategory;
 
             //[Route("Filter/{car?}/{brand?}/{?}/{?}/{page?}")]
@@ -459,7 +565,8 @@
 
     <script>
         var swiper = new Swiper('.swiper-menuContainer', {
-            spaceBetween: 30,
+            spaceBetween: 0,
+            loop: true,
             pagination: {
                 el: '.swiper-pagination',
                 clickable: true,
@@ -469,9 +576,12 @@
 
     <script>
         var swiper = new Swiper(".swiper-Landing1", {
-            slidesPerView: 3,
+            autoplay: {
+                delay: 2000,
+            },
+            slidesPerView: 5,
             loop: true,
-            spaceBetween: 30,
+            spaceBetween: 1,
             pagination: {
                 el: ".swiper-pagination",
                 clickable: true,
@@ -495,650 +605,689 @@
         });
     </script>
 
+    <script>
+        //$(".js-example-basic-multiple").select2({
+        //    dropdownAutoWidth: true,
+        //    width: "100%",
+        //    multiple: true,
+        //    placeholder: ""
+        //});
+    </script>
+
 
 }
 
-<div class="container-fluid hj-header">
-
-    <!-- --navbar-- -->
-    <div class="row w-100 mx-auto">
-
-        <!--Navbar -->
-        <nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color w-100">
-            <a class="navbar-brand" href="/"><img src="~/uploads/@Logo" class="img-fluid w-75"></a>
-            <button class="navbar-toggler" type="button" id="menuToggler">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse text-right" id="navbarSupportedContent-333">
-                <ul class="navbar-nav w-100 p-0 ">
-                    <li class="nav-item px-md-3">
-                        @if (ViewBag.Username != null)
-                        {
-                            <a href="/SiteAccount/EditProfile" class="nav-link text-white">@ViewBag.Username</a>
-
-                        }
-                        else
-                        {
-                            <a id="LoginAndRegister" class="nav-link text-white" href="#" data-toggle="modal" data-target="#centralModalLogin">ورود/ثبت نام</a>
-                        }
-                    </li>
-                    <li class="nav-item px-md-3">
-
-                        <a class="nav-link text-white" href="/ShopProduct/ShopBasket">
-                            سبد خرید
-                            <span class="text-center mr-1 bg-success d-inline-block mv-cart-counter" id="cartCount"></span>
-                        </a>
-                    </li>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li class="nav-item px-md-3">
-
-                            <a class="nav-link text-white" href="/dashboard">
-                                پنل مدیریت
-                            </a>
-                        </li>
-                    }
-                    @if (User.IsInRole("WarehousingAdmin"))
-                    {
-                        <li class="nav-item px-md-3">
-
-                            <a class="nav-link text-white" href="/WarehousingAdmin">
-                                پنل مدیریت
-                            </a>
-                        </li>
-                    }
-                    <li class="nav-item px-md-3">
-                        @if (ViewBag.Username != null)
-                        {
-                            <a class="nav-link text-white " href="/MyFavoriteProducts">علاقه مندی ها</a>
-                        }
-                    </li>
-                </ul>
-                <ul class="navbar-nav nav-flex-icons p-0 WebResponsiveButton">
-                    <div class="i-btn ">
-                        <span id="modalEstelam" class="btn btn-warning i-btn scaleout-glow" style="width:240px" data-elem="1"> استعلام بارکد ایساکویی  </span>
-                        <form class="i-btn-holder" onsubmit="this.preventDefault()">
-                            <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="بارکد ایساکو را وارد کنید..." />
-                            <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
-
-                        </form>
-                    </div>
-                </ul>
-            </div>
-        </nav>
-
-    </div>
-    <!-- ---end navbar-- -->
-    <!-- ----intro--- -->
-    <div class="row width-60 hj-filtering mx-auto mt-5">
-
-        <ul class="navbar-nav nav-flex-icons col-12 mb-3 p-0 ResponsiveButton">
-            <div class="i-btn ">
-                <span id="modalEstelam2" class="btn btn-warning i-btn scaleout-glow " style="width:100%" data-elem="1"> استعلام قیمت </span>
-                <form class="i-btn-holder" onsubmit="this.preventDefault()">
-                    <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
-                    <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
-
-                </form>
-            </div>
-        </ul>
-
-        <div class="col-md-10 col-12">
-            <div class="form-group position-relative w-100 mx-auto">
-                <input id="searchItem" class=" hj-serachbox mx-auto d-block position-relative w-100 pr-5 text-white"
-                       placeholder="جستجو بر اساس اسم یا کد کالا">
-                <i class="fa fa-search hj-search-ab pt-1 color-zarposh"></i>
-                <button class="col-lg-2 col-4 hj-serchboxButton" onclick="Search()"> جستجو</button>
-            </div>
-        </div>
-        <div class="col-md-2 col-12 text-right">
-            <button type="button" class=" button-filter w-100" data-toggle="modal"
-                    data-target="#centralModalfilter">
-                <i class="fa fa-filter text-info"></i> فیلتر کردن
-            </button>
-        </div>
-    </div>
-    <!-- ---end intro--- -->
-    <div class="row w-100 mx-auto">
-        <!-- Swiper -->
-        <div class="swiper-container swiper-menuContainer">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="row w-50 py-5 slider-index">
-                        <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
-                            <b>
-                                ایساکــــــو پلـــــــــــــاس
-                            </b>
-                        </h1>
-                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
-                            @Html.Raw(@Slider1)
-                        </h6>
-                    </div>
-
-
-                </div>
-
-                <div class="swiper-slide">
-                    <div class="row w-50 py-5 slider-index">
-                        <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
-                            <b>
-                                ایساکــــــو پلـــــــــــــاس
-                            </b>
-                        </h1>
-                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
-                            @Html.Raw(@Slider2)
-                        </h6>
-                    </div>
-
-
-                </div>
-
-                <div class="swiper-slide">
-                    <div class="row w-50 py-5 slider-index">
-                        <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
-                            <b>
-                                ایساکــــــو پلـــــــــــــاس
-                            </b>
-                        </h1>
-                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
-                            @Html.Raw(@Slider3)
-                        </h6>
-                    </div>
-
-
-                </div>
-            </div>
-            <!-- Add Pagination -->
-            <div class="swiper-pagination "></div>
-        </div>
-        <!-- ---- end swipwe--- -->
-
-    </div>
-
-    <!-- ---- -->
-    <div class="row w-75 mx-auto d-flex justify-content-center text-center pt-md-5 mt-md-5 hj-li-Index">
-        <div class="col-md-1 col-0 py-1"></div>
-        <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('grouping')"> دسته بندی</button></div>
-        <div class="col-md-2  py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('blogSec')"> واخبار</button></div>
-        <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="location.href='/ContactUs'"> تماس با ما</button></div>
-        <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('aboutUs')"> درباره ما</button></div>
-        <div class="col-md-1 col-0 py-1"></div>
-    </div>
-    <!-- ---- -->
-
-</div>
-<!-- ------end header--- -->
-<!-- -----Grouping---- -->
-<div class="container-fluid mt-5 " id="grouping">
-    <div class="row w-100 mx-auto text-center py-4">
-        <div class="col-lg-5 col-3 text-left pt-4">
-            <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
-        </div>
-        <div class="col-lg-2 col-6">
-            <h2><b class="font-kalameBlack">دسته بندی</b></h2>
-        </div>
-        <div class="col-lg-5 col-3 text-right pt-4">
-            <img src="./img/Line 35.png"
-                 class="img-fluid w-25 mx-auto border-titr">
-        </div>
-    </div>
-
-    <div class="row w-100 mx-auto text-center hj-grouping">
-        <div class="col-md-9 p-0">
-            <div class="row w-100 mx-auto text-center">
-                <div class="col-md-4 py-3 hj-category ">
-                    <a href="/Filtering/اقلام مصرفی"> <img src="./img/1.png" class="img-fluid w-100 mx-auto"></a>
-                    <b>
-                        <h4 class="STiter-Grouping">اقلام مصرفی</h4>
-                    </b>
-                </div>
-                <div class="col-md-4 py-3 hj-category">
-                    <a href="/listOfcars"> <img src="./img/2.png" class="img-fluid w-100 mx-auto"></a>
-                    <b>
-                        <h4 class="STiter-Grouping"> خودرو</h4>
-                    </b>
-                </div>
-                <div class="col-md-4 py-3 hj-category">
-                    <a href="/Filtering/اقلام تزئینی و داخلی خودرو"><img src="./img/3.png" class="img-fluid w-100 mx-auto"></a>
-                    <b>
-                        <h4 class="STiter-Grouping"> اقلام تزئینی و داخلی خودرو</h4>
-                    </b>
-                </div>
-
-            </div>
-            <div class="row w-100 mx-auto text-center">
-                <div class="col-md-4 py-3 hj-category">
-                    <a href="/Filtering/قطعات بدنه "><img src="./img/4.png" class="img-fluid w-100 mx-auto"></a>
-                    <b>
-                        <h4 class="STiter-Grouping"> قطعات بدنه </h4>
-                    </b>
-                </div>
-                <div class="col-md-4 py-3 hj-category">
-                    <a href="/Filtering/سیستم برق و الکترونیک و کولر"><img src="./img/Group 5.png" class="img-fluid w-100 mx-auto"></a>
-                    <b>
-                        <h4 class="STiter-Grouping"> سیستم برق و الکترونیک و کولر</h4>
-                    </b>
-                </div>
-                <div class="col-md-4 py-3 hj-category">
-                    <a href="/Filtering/اقلام تزئینی و داخلی خودرو"> <img src="./img/6.png" class="img-fluid w-100 mx-auto"></a>
-                    <b>
-                        <h4 class="STiter-Grouping"> اقلام تزئینی و داخلی خودرو</h4>
-                    </b>
-                </div>
-
-            </div>
-        </div>
-        <div class="col-md-3 py-3 hj-category ">
-            <a href="/Filtering/قطعات بدنه "><img src="img/l1.png" class="img-fluid w-100 mx-auto"></a>
-            <b>
-                <h4 class="STiter-Grouping"> قطعات بدنه </h4>
-            </b>
-        </div>
-    </div>
-</div>
-<!-- -----end Grouping---- -->
-<!-- -----service----- -->
-<div class="container-fluid p-0 my-5">
-    <div class="row w-100 mx-auto hj-Service">
-        <div class="col-4 py-3 mx-auto text-center">
-            <img src="./img/money (2).svg"
-                 class="img-fluid mx-auto pl-3">ضمانت بازگشت وجه
-        </div>
-        <div class="col-4 py-3 mx-auto text-center">
-            گارانتی<img src="./img/ribbon.svg"
-                        class="img-fluid mx-auto px-2">محصولات
-        </div>
-        <div class="col-4 py-3 mx-auto text-center">
-            ضمانت بازگشت کالا<img src="./img/Group 18.svg"
-                                  class="img-fluid mx-auto pr-3">
-        </div>
-    </div>
-
-</div>
-<!-- -----end service----- -->
-<!-- ---blog---- -->
-<div class="container-fluid w-100 mx-atuo" id="blogSec">
-    <div class="row w-100 mx-auto text-center py-4 pt-5">
-        <div class="col-lg-5 col-3 text-left pt-4">
-            <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
-        </div>
-        <div class="col-lg-2 col-6">
-            <h2><b class="font-kalameBlack"> اخرین های اخبار</b></h2>
-        </div>
-        <div class="col-lg-5 col-3 text-right pt-4">
-            <img src="./img/Line 35.png"
-                 class="img-fluid w-25 mx-auto border-titr">
-        </div>
-    </div>
-
-    <div class="row w-100 mx-auto text-center py-5 mb-5">
-        <!-- --- -->
-        <!-- Swiper -->
-        <div class="swiper-container swiper-Landing1">
-            <div class="swiper-wrapper" @*id="blogs"*@>
-                @foreach (var item in (List<KaraYadak.Models.Blog>)ViewBag.blogs)
-                {
-                    <div class="swiper-slide">
-                        <a href="/blogs/BlogDetails/@item.Id">
-                            <div class="hj-blog p-0">
-                                <div class="row w-100 mx-auto titr-blog">
-                                    <h5 class="py-2 pr-4 pt-3"><b>@item.Title</b></h5>
-                                </div>
-                                <div class="row w-100 mx-auto py-2">
-                                    <div class="col-7 detalis-blog px-4 py-3">
-                                        <h6 class="text-justify">
-                                            @item.ShortDescription
-                                        </h6>
-                                    </div>
-                                    <div class="col-5 pt-4">
-                                        <img src="/uploads/Blogs/@item.Image" class="img-fluid w-100 mx-auto">
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                }
-            </div>
-            <!-- Add Pagination -->
-            <div class="swiper-pagination"></div>
-
-        </div>
-        <!-- ---- -->
-
-
-    </div>
-
-</div>
-<!-- ---End blog---- -->
-
-
-<!-- ---Video---- -->
-<div class="container-fluid w-100 mx-atuo" id="blogSec">
-    <div class="row w-100 mx-auto text-center py-4 pt-5">
-        <div class="col-lg-5 col-3 text-left pt-4">
-            <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
-        </div>
-        <div class="col-lg-2 col-6">
-            <h2><b class="font-kalameBlack"> اخرین های ویدیوها</b></h2>
-        </div>
-        <div class="col-lg-5 col-3 text-right pt-4">
-            <img src="./img/Line 35.png"
-                 class="img-fluid w-25 mx-auto border-titr">
-        </div>
-    </div>
-
-    <div class="row w-100 mx-auto text-center py-5 mb-5">
-        <!-- --- -->
-        <!-- Swiper -->
-        <div class="swiper-container swiper-Landing1">
-            <div class="swiper-wrapper" @*id="blogs"*@>
-                @foreach (var item in (List<KaraYadak.Models.Video>)ViewBag.Videos)
-                {
-                    <div class="swiper-slide">
-                        @*<a href="/blogs/BlogDetails/@item.Id">*@
-                        <a href="#">
-                            <div class="hj-blog p-0">
-                                <div class="row w-100 mx-auto titr-blog">
-                                    <h5 class="py-2 pr-4 pt-3"><b>@item.Title</b></h5>
-                                </div>
-                                <div class="row w-100 mx-auto py-2">
-                                    @*<div class="row detalis-blog "style="margin: auto;margin-left:45%">
-                                        <h6 class="text-justify">
-                                            @item.ShortDescription
-                                        </h6>
-                                    </div>*@
-                                    <div class="row "style="margin: auto;margin-top: -24%;">
-                                        @Html.Raw(item.Text)
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                }
-            </div>
-            <!-- Add Pagination -->
-            <div class="swiper-pagination"></div>
-
-        </div>
-        <!-- ---- -->
-
-
-    </div>
-
-</div>
-<!-- ---End Video---- -->
-<!-- ---banner with offer--- -->
-
-@if (baner != null)
-{
-    <div class="container-fluid">
-        <a href="@baner.Url">
-
-            <div class="row  mx-auto hj-banner position-relative">
-                <img src="/uploads/@baner.Image" class="img-fluid  position-relative" style="width:100% !important ">
-                <span id="baneertimer" class=" countdown" style="font-weight: bold;"></span>
-            </div>
-        </a>
-    </div>
-
-}
-
-<!-- ---banner with offer--- -->
-<!-- ----Products---- -->
-
-<div class="container-fluid pt-5 p-0">
-    <div class="row w-100 mx-auto text-center py-4">
-        <div class="col-lg-5 col-3 text-left pt-4">
-            <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
-        </div>
-        <div class="col-lg-2 col-6">
-            <h2><b class="font-kalameBlack">محصولات</b></h2>
-        </div>
-        <div class="col-lg-5 col-3 text-right pt-4">
-            <img src="./img/Line 35.png"
-                 class="img-fluid w-25 mx-auto border-titr">
-        </div>
-    </div>
-
-    @Html.Partial("SpecialOfferProduct", Model.Second)
-
-    <!-- -------------- -->
-    @Html.Partial("maxinDiscountProducts", Model.Third)
-
-    <!-- ----- -->
-
-
-    <div class="row w-100 mx-auto text-center py-4 pt-5">
-        <div class="col-lg-5 col-3 text-left pt-4">
-            <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
-        </div>
-        <div class="col-lg-2 col-6">
-            <h2><b class="font-kalameBlack"> محصولات دیگر</b></h2>
-        </div>
-        <div class="col-lg-5 col-3 text-right pt-4">
-            <img src="./img/Line 35.png"
-                 class="img-fluid w-25 mx-auto border-titr">
-        </div>
-    </div>
-
-
-    @Html.Partial("OtherProducts", Model.Fourth);
-    <!-- --------- -->
-</div>
-<!-- ----end Products---- -->
-<!-- modal login -->
-<div class="modal fade" id="centralModalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-
-    <!-- Change class .modal-sm to change the size of the modal -->
-    <div class="modal-dialog modal-md login" role="document">
-        <div class="modal-content modal-login">
-            <div class="modal-body">
-                <div class="login-wrap">
-                    <div class="login-html">
-                        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label id="label-1" for="tab-1" class="tab">ورود </label>
-                        <input id="tab-2" type="radio" name="tab" class="sign-up"><label id="label-2" for="tab-2" class="tab"> ثبت نام</label>
-                        <div class="login-form mt-3">
-                            <form id="VerifyForm" class="d-none" action="" method="post">
-                                <div class="sign-up-htm sign-in-htm">
-                                    <div class="group">
-                                        <label for="VerificationNumber" class="label"> کد تایید </label>
-                                        <input id="VerificationNumber" type="text" class="input" name="VerificationNumber">
-                                    </div>
-                                    <div class="group">
-                                        <input type="submit" id="verifivation" class="button" value=" ورود">
-                                    </div>
-                                    <div class="hr"></div>
-                                </div>
-                            </form>
-                            <form id="login-form" action="" method="post">
-                                <div class="sign-in-htm">
-                                    <div class="group">
-                                        <label for="phoneNumberForLogin" class="label"> شماره تماس  </label>
-                                        <input id="phoneNumberForLogin" type="text" class="input" name="phoneNumberForLogin">
-                                    </div>
-                                    <div class="group">
-                                        <input id="check" type="checkbox" class="check" checked>
-                                        <label for="check"><span class="icon"></span> به یاد داشته باش </label>
-                                    </div>
-                                    <div class="group">
-                                        <input id="LoginSubmitButton" type="submit" class="button" value=" ورود">
-                                    </div>
-                                    <div class="hr"></div>
-
-                                </div>
-                            </form>
-                            <form id="Register-form" action="" method="post">
-                                <div class="sign-up-htm">
-                                    <div class="group">
-                                        <label for="usernameForReg" class="label">نام نام خانوادگی</label>
-                                        <input id="usernameForReg" type="text" class="input" name="Nickname">
-                                    </div>
-                                    <div class="group">
-                                        <label for="phonenumberForReg" class="label">شماره تماس</label>
-                                        <input id="phonenumberForReg" type="text" class="input" data-type="number" name="PhoneNumber">
-                                        <input type="hidden" name="LoginOrRegister" value="Register">
-                                        <input type="hidden" name="ReturnUrl">
-
-                                    </div>
-                                    <div class="group">
-                                        <input id="RegisterSubmitButton" type="submit" class="button" value=" ثبت نام">
-                                    </div>
-                                    <div class="foot-lnk">
-                                        <label for="tab-1"> قبلا ثبت نام کردید؟</label>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-@* <div class="login-html d-none" id="VerifyForm">
-        <input id="tab-3" type="radio" name="tab" class="sign-in" checked><label for="tab-3" class="tab">کد تایید  </label>
-         <div class="verify-form mt-3"  >
-            <form id="verify-form" action="" method="post">
-                <div class="sign-in-htm">
-                    <div class="group">
-                        <label for="username" class="label"> کد تایید </label>
-                        <input id="username" type="text" class="input" name="username">
-                    </div>
-                    <div class="group">
-                        <input type="submit" class="button" value=" ورود">
-                    </div>
-                    <div class="hr"></div>
-                </div>
-            </form>
-        </div>
-    </div> *@
-
-<!-- end modal login -->
-<!--filter modal-->
-<div class="modal fade" id="centralModalfilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <!-- Change class .modal-sm to change the size of the modal -->
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content modalfilter">
-            <div class="modal-header modal-header-filter">
-                <button type="button" class="close button-close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+<div class="container-fluid hj-header p-0">
+    <div class="swiper-container m-0 swiper-menuContainer" style="overflow:visible !important">
+        <!-- --navbar-- -->
+        <div class="row w-100 mx-auto menuContainerOfSlider">
+            <!--Navbar -->
+            <nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color w-100 navbarInResponsive">
+                <a class="navbar-brand" href="/"><img src="~/uploads/@Logo" class="img-fluid w-75"></a>
+                <button class="navbar-toggler" type="button" id="menuToggler">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <form>
-                        <div class="form-group row pt-5 py-2">
-                            <label for=" TypePiece selectBrand" class="col-sm-2 col-form-label text-md-center text-right">دسته بندی اصلی</label>
-                            <div class="col-sm-10">
-                                <select class="form-control view-filterInput" id="TypePiece">
-                                    <option value=""></option>
+                <div class="collapse navbar-collapse text-right" id="navbarSupportedContent-333">
+                    <ul class="navbar-nav w-100 p-0 ">
+                        <li class="nav-item px-md-3">
+                            @if (ViewBag.Username != null)
+                            {
+                                <a href="/SiteAccount/EditProfile" class="nav-link text-white">@ViewBag.Username</a>
 
-                                    @foreach (var item in (List<KaraYadak.Models.ProductCategoryType>)ViewBag.Categories)
-                                    {
-                                        <option value="@item.Name">@item.Name</option>
-                                    }
-                                </select>
-                            </div>
+                            }
+                            else
+                            {
+                                <a id="LoginAndRegister" class="nav-link text-white" href="#" data-toggle="modal" data-target="#centralModalLogin">ورود/ثبت نام</a>
+                            }
+                        </li>
+                        <li class="nav-item px-md-3">
+
+                            <a class="nav-link text-white" href="/ShopProduct/ShopBasket">
+                                سبد خرید
+                                <span class="text-center mr-1 bg-success d-inline-block mv-cart-counter" id="cartCount"></span>
+                            </a>
+                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item px-md-3">
+
+                                <a class="nav-link text-white" href="/dashboard">
+                                    پنل مدیریت
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("WarehousingAdmin"))
+                        {
+                            <li class="nav-item px-md-3">
+
+                                <a class="nav-link text-white" href="/WarehousingAdmin">
+                                    پنل مدیریت
+                                </a>
+                            </li>
+                        }
+                        <li class="nav-item px-md-3">
+                            @if (ViewBag.Username != null)
+                            {
+                                <a class="nav-link text-white " href="/MyFavoriteProducts">علاقه مندی ها</a>
+                            }
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav nav-flex-icons p-0 WebResponsiveButton">
+                        <div class="i-btn ">
+                            <span id="modalEstelam" class="btn btn-warning i-btn scaleout-glow" style="width:200px" data-elem="1"> استعلام بارکد ایساکویی </span>
+                            <form class="i-btn-holder" onsubmit="this.preventDefault()">
+                                <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                                <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
+                            </form>
                         </div>
-                        <div class="form-group row py-2">
-                            <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">دسته بندی فرعی</label>
-                            <div class="col-sm-10">
-                                <select class="form-control view-filterInput" id="selectSubCategory">
-                                    <option value=" "> </option>
+                    </ul>
+                </div>
+            </nav>
+        </div>
 
-                                    @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Brands)
-                                    {
-                                        <option value="@item.Name">@item.Name</option>
-                                    }
+        <!-- ----intro--- -->
+        <div class="row width-60 hj-filtering mx-auto mt-5 searchContainerOfSlider">
 
-                                </select>
-                            </div>
-                        </div>
+            <ul class="navbar-nav nav-flex-icons col-12 mb-3 p-0 ResponsiveButton">
+                <div class="i-btn mx-3">
+                    <span id="modalEstelam2" class="btn btn-warning i-btn scaleout-glow " style="width:100%" data-elem="1"> استعلام بارکد ایساکویی </span>
+                    <form class="i-btn-holder" onsubmit="this.preventDefault()">
+                        <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                        <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
 
-                        <div class="form-group row py-2">
-                            <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">خودرو</label>
-                            <div class="col-sm-10">
-                                <select class="form-control view-filterInput" id="selectCar">
-                                    <option value=" "> </option>
-
-                                    @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Cars)
-                                    {
-                                        <option value="@item.Name">@item.Name</option>
-                                    }
-
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group row py-2">
-                            <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">برند</label>
-                            <div class="col-sm-10">
-                                <select class="form-control view-filterInput" id="selectBrand">
-                                    <option value=" "> </option>
-
-                                    @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Brands)
-                                    {
-                                        <option value="@item.Name">@item.Name</option>
-                                    }
-
-                                </select>
-                            </div>
-                        </div>
                     </form>
                 </div>
-            </div>
-            <div class="modal-footer">
+            </ul>
 
-                <button type="button" class="btn btn-warning btn-sm w-100 py-2 btn-filterModal" onclick="filter()">
-                    <i class="fa fa-filter "></i> فیلتر کردن
+            <div class="col-md-10 col-12">
+                <div class="form-group position-relative w-100 mx-auto">
+                    <input id="searchItem" class=" hj-serachbox mx-auto d-block position-relative w-100 pr-5 text-white"
+                           placeholder="جستجو بر اساس اسم یا کد کالا">
+                    <i class="fa fa-search hj-search-ab pt-1 color-zarposh"></i>
+                    <button class="col-lg-2 col-4 hj-serchboxButton" onclick="Search()"> جستجو</button>
+                </div>
+            </div>
+            <div class="col-md-2 col-12 text-right">
+                <button type="button" class=" button-filter w-100" data-toggle="modal"
+                        data-target="#centralModalfilter">
+                    <i class="fa fa-filter text-info"></i> فیلتر کردن
                 </button>
             </div>
         </div>
-    </div>
-</div>
-<!--filter modal-->
-@*<div class="inquire">
-        <span class="i-btn">استعلام قیمت</span>
 
-        <form class="w-100" onsubmit="this.preventDefault()">
-            <div class="form-group">
-                <input type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
-                <button class="btn btn-success d-flex ml-auto" id="inquireSubmit" type="button">جستجو</button>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination paginationOfSlider"></div>
+
+        <!-- info -->
+        <div class="row w-75 mx-auto text-center pt-md-5 mt-md-5 hj-li-Index InfoContainerOfSlider">
+            @* <div class="col-md-1 col-0 py-1"></div> *@
+            <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('grouping')"> دسته بندی</button></div>
+            <div class="col-md-2  py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('blogSec')"> واخبار</button></div>
+            <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="location.href='/ContactUs'"> تماس با ما</button></div>
+            <div class="col-md-2 py-1"> <button type="button" class=" button-filter w-100" onclick="smoothScrollTo('aboutUs')"> درباره ما</button></div>
+            @* <div class="col-md-1 col-0 py-1"></div> *@
+        </div>
+
+        <div class="swiper-wrapper m-0" style="z-index:-1 !important">
+            <div class="swiper-slide">
+                <div class="ImageContainerSlider">
+                    <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
+                </div>
+                <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
+                    <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
+                        <b>
+                            ایساکــــــو پلـــــــــــــاس
+                        </b>
+                    </h1>
+                    <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
+                        @Html.Raw(@Slider1)
+                    </h6>
+                </div>
             </div>
-        </form>
-    </div>*@
+
+            <div class="swiper-slide">
+                <div class="ImageContainerSlider">
+                    <img class="ImageSlider" src="../../uploads/@Slider2Pic" />
+                </div>
+                <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
+                    <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
+                        <b>
+                            ایساکــــــو پلـــــــــــــاس
+                        </b>
+                    </h1>
+                    <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
+                        @Html.Raw(@Slider2)
+                    </h6>
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="ImageContainerSlider">
+                    <img class="ImageSlider" src="../../uploads/@Slider3Pic" />
+                </div>
+                <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
+                    <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
+                        <b>
+                            ایساکــــــو پلـــــــــــــاس
+                        </b>
+                    </h1>
+                    <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
+                        @Html.Raw(@Slider3)
+                    </h6>
+                </div>
 
 
-<div class="inquire-modal">
-    <div class="content d-flex mx-auto flex-column position-relative" id="content">
-        <span class="close-btn"></span>
-        <h3 id="modalTtile" class="d-block text-center mb-5">نتایج جستجو</h3>
+            </div>
 
-        <!--loading-->
-        <div class="loading-container">
-            <div class="search-loading">
-                <div class="my-loader"></div>
-                <svg class="loader-mag-glass" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
-                    <path fill="#ffcc00" d="M55.863 62.09c0-6.737 5.481-12.219 12.219-12.219 6.738 0 12.219 5.482 12.219 12.22 0 6.737-5.481 12.22-12.219 12.22-6.738 0-12.219-5.483-12.219-12.22zm40.34 23.652L82.991 72.53a18.103 18.103 0 0 0 3.31-10.44c0-10.046-8.172-18.219-18.219-18.219-10.046 0-18.219 8.173-18.219 18.22 0 10.046 8.173 18.22 18.219 18.22 4 0 7.691-1.312 10.699-3.505l13.18 13.18a2.992 2.992 0 0 0 2.121.877 3 3 0 0 0 2.121-5.121zm-97.731 56.625h150v-150h-150v150zm0-150h150v150h-150v-150z" display="block" />
-                </svg>
-                <svg class="loader-complete" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%" viewBox="0 0 150 150">
-                    <g class="loader-complete-bg">
-                        <path fill="none" stroke="#FFF" stroke-width="19.228" d="M75 9.792c35.988 0 65.208 29.22 65.208 65.208S110.988 140.208 75 140.208 9.792 110.988 9.792 75 39.012 9.792 75 9.792z" display="block" />
-                        <path fill="#FFF" d="M87.513 69.651zm0 0zm0 0zm0 0z" display="block" />
-                        <path fill="#A9E962" d="M75 130.55c-30.63 0-55.55-24.92-55.55-55.55 0-30.63 24.92-55.55 55.55-55.55 30.63 0 55.55 24.92 55.55 55.55 0 30.63-24.92 55.55-55.55 55.55zm-75.75 20.2h151.5V-.75H-.75v151.5zm0-151.5h151.5v151.5H-.75V-.75z" display="block" />
-                    </g>
-                    <g class="loader-complete-check">
-                        <path fill="#FFF" d="M70.282 96.012a4.563 4.563 0 0 1-3.11-1.224L52.297 80.946a4.566 4.566 0 1 1 6.221-6.685l11.13 10.357 21.27-28.778a4.566 4.566 0 1 1 7.345 5.427L73.954 94.16a4.56 4.56 0 0 1-3.672 1.852zm-73.268 56.972h155.97V-2.986H-2.986v155.97zm0-155.97h155.97v155.97H-2.986V-2.986z" display="block" />
-                    </g>
-                </svg>
+            <div class="swiper-slide">
+                <div class="ImageContainerSlider">
+                    <img class="ImageSlider" src="../../uploads/@Slider4Pic" />
+                </div>
+                <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
+                    <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
+                        <b>
+                            ایساکــــــو پلـــــــــــــاس
+                        </b>
+                    </h1>
+                    <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
+                        @Html.Raw(@Slider4)
+                    </h6>
+                </div>
+
+
+            </div>
+            <div class="swiper-slide">
+                <div class="ImageContainerSlider">
+                    <img class="ImageSlider" src="../../uploads/@Slider5Pic" />
+                </div>
+                <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
+                    <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
+                        <b>
+                            ایساکــــــو پلـــــــــــــاس
+                        </b>
+                    </h1>
+                    <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
+                        @Html.Raw(@Slider5)
+                    </h6>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+    <!-- ------end header--- -->
+    <!-- -----Grouping---- -->
+    <div class="container-fluid mt-5 " id="grouping">
+        <div class="row w-100 mx-auto text-center py-4">
+            <div class="col-lg-5 col-3 text-left pt-4">
+                <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+            </div>
+            <div class="col-lg-2 col-6">
+                <h2><b class="font-kalameBlack">دسته بندی</b></h2>
+            </div>
+            <div class="col-lg-5 col-3 text-right pt-4">
+                <img src="./img/Line 35.png"
+                     class="img-fluid w-25 mx-auto border-titr">
+            </div>
+        </div>
+
+        <div class="row w-100 mx-auto text-center hj-grouping">
+            <div class="col-md-9 p-0">
+                <div class="row w-100 mx-auto text-center">
+                    <div class="col-md-4 py-3 hj-category ">
+                        <a href="/Filtering/اقلام مصرفی"> <img src="./img/1.png" class="img-fluid w-100 mx-auto"></a>
+                        <b>
+                            <h4 class="STiter-Grouping">اقلام مصرفی</h4>
+                        </b>
+                    </div>
+                    <div class="col-md-4 py-3 hj-category">
+                        <a href="/listOfcars"> <img src="./img/2.png" class="img-fluid w-100 mx-auto"></a>
+                        <b>
+                            <h4 class="STiter-Grouping"> خودرو</h4>
+                        </b>
+                    </div>
+                    <div class="col-md-4 py-3 hj-category">
+                        <a href="/Filtering/اقلام تزئینی و داخلی خودرو"><img src="./img/3.png" class="img-fluid w-100 mx-auto"></a>
+                        <b>
+                            <h4 class="STiter-Grouping"> اقلام تزئینی و داخلی خودرو</h4>
+                        </b>
+                    </div>
+
+                </div>
+                <div class="row w-100 mx-auto text-center">
+                    <div class="col-md-4 py-3 hj-category">
+                        <a href="/Filtering/قطعات بدنه "><img src="./img/4.png" class="img-fluid w-100 mx-auto"></a>
+                        <b>
+                            <h4 class="STiter-Grouping"> قطعات بدنه </h4>
+                        </b>
+                    </div>
+                    <div class="col-md-4 py-3 hj-category">
+                        <a href="/Filtering/سیستم برق و الکترونیک و کولر"><img src="./img/Group 5.png" class="img-fluid w-100 mx-auto"></a>
+                        <b>
+                            <h4 class="STiter-Grouping"> سیستم برق و الکترونیک و کولر</h4>
+                        </b>
+                    </div>
+                    <div class="col-md-4 py-3 hj-category">
+                        <a href="/Filtering/اقلام تزئینی و داخلی خودرو"> <img src="./img/6.png" class="img-fluid w-100 mx-auto"></a>
+                        <b>
+                            <h4 class="STiter-Grouping"> اقلام تزئینی و داخلی خودرو</h4>
+                        </b>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3 py-3 hj-category ">
+                <a href="/Filtering/قطعات بدنه "><img src="img/l1.png" class="img-fluid w-100 mx-auto"></a>
+                <b>
+                    <h4 class="STiter-Grouping"> قطعات بدنه </h4>
+                </b>
             </div>
         </div>
     </div>
-</div>
+    <!-- -----end Grouping---- -->
+    <!-- -----service----- -->
+    <div class="container-fluid p-0 my-5">
+        <div class="row w-100 mx-auto hj-Service">
+            <div class="col-4 py-3 mx-auto text-center">
+                <img src="./img/money (2).svg"
+                     class="img-fluid mx-auto pl-3">ضمانت بازگشت وجه
+            </div>
+            <div class="col-4 py-3 mx-auto text-center">
+                گارانتی<img src="./img/ribbon.svg"
+                            class="img-fluid mx-auto px-2">محصولات
+            </div>
+            <div class="col-4 py-3 mx-auto text-center">
+                ضمانت بازگشت کالا<img src="./img/Group 18.svg"
+                                      class="img-fluid mx-auto pr-3">
+            </div>
+        </div>
+
+    </div>
+    <!-- -----end service----- -->
+    <!-- --slider---- -->
+    <div class="container-fluid w-100 mx-atuo" id="blogSec">
+        <div class="row w-100 mx-auto text-center py-4 pt-5">
+            <div class="col-lg-5 col-3 text-left pt-4">
+                <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+            </div>
+            <div class="col-lg-2 col-6">
+                <h2><b class="font-kalameBlack"> اخرین های اخبار</b></h2>
+            </div>
+            <div class="col-lg-5 col-3 text-right pt-4">
+                <img src="./img/Line 35.png"
+                     class="img-fluid w-25 mx-auto border-titr">
+            </div>
+        </div>
+
+        <div class="row w-100 mx-auto text-center py-5 mb-5">
+            <!-- --- -->
+            <!-- Swiper -->
+            <div class="swiper-container swiper-Landing1">
+                <div class="swiper-wrapper" @*id="blogs"*@>
+                    @foreach (var item in (List<KaraYadak.Models.Blog>)ViewBag.blogs)
+                    {
+                        <div class="swiper-slide">
+                            <a href="/blogs/BlogDetails/@item.Id">
+                                <div class="hj-blog p-0">
+                                    <div class="row w-100 mx-auto titr-blog">
+                                        <h5 class="py-2 pr-4 pt-3"><b>@item.Title</b></h5>
+                                    </div>
+                                    <div class="row w-100 mx-auto py-2">
+                                        <div class="col-7 detalis-blog px-4 py-3">
+                                            <h6 class="text-justify">
+                                                @item.ShortDescription
+                                            </h6>
+                                        </div>
+                                        <div class="col-5 pt-4">
+                                            <img src="/uploads/Blogs/@item.Image" class="img-fluid w-100 mx-auto">
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    }
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+
+            </div>
+            <!-- ---- -->
+
+
+        </div>
+
+    </div>
+    <!-- ---End blog---- -->
+
+    <div class="container-fluid w-100 mx-atuo" id="blogSec">
+        <div class="row w-100 mx-auto text-center py-4 pt-5">
+            <div class="col-lg-5 col-3 text-left pt-4">
+                <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+            </div>
+            <div class="col-lg-2 col-6">
+                <h2><b class="font-kalameBlack"> اخرین های ویدیویی</b></h2>
+            </div>
+            <div class="col-lg-5 col-3 text-right pt-4">
+                <img src="./img/Line 35.png"
+                     class="img-fluid w-25 mx-auto border-titr">
+            </div>
+        </div>
+
+        <div class="row w-100 mx-auto text-center py-5 mb-5">
+            <!-- --- -->
+            <!-- Swiper -->
+            <div class="swiper-container swiper-Landing1">
+                <div class="swiper-wrapper" @*id="blogs"*@>
+                    @foreach (var item in (List<KaraYadak.Models.Video>)ViewBag.Videos)
+                    {
+                        <div class="swiper-slide">
+                            @*<a href="/blogs/BlogDetails/@item.Id">*@
+                            <a href="#">
+                                <div class="hj-blog p-0">
+                                    <div class="row w-100 mx-auto titr-blog">
+                                        <h5 class="py-2 pr-4 pt-3"><b>@item.Title</b></h5>
+                                    </div>
+                                    <div class="row w-100 mx-auto py-2">
+                                        @*<div class="row detalis-blog "style="margin: auto;margin-left:45%">
+                                                <h6 class="text-justify">
+                                                    @item.ShortDescription
+                                                </h6>
+                                            </div>*@
+                                        <div class="row " style="margin: auto;margin-top: -24%;">
+                                            @Html.Raw(item.Text)
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    }
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+
+            </div>
+            <!-- ---- -->
+
+
+        </div>
+
+    </div>
+    <!-- ---banner with offer--- -->
+
+    @if (baner != null)
+    {
+        <div class="container-fluid">
+            <a href="@baner.Url">
+
+                <div class="row  mx-auto hj-banner position-relative">
+                    <img src="/uploads/@baner.Image" class="img-fluid  position-relative" style="width:100% !important ">
+                    <span id="baneertimer" class=" countdown" style="font-weight: bold;"></span>
+                </div>
+            </a>
+        </div>
+
+    }
+
+    <!-- ---banner with offer--- -->
+    <!-- ----Products---- -->
+
+    <div class="container-fluid pt-5 p-0">
+        <div class="row w-100 mx-auto text-center py-4">
+            <div class="col-lg-5 col-3 text-left pt-4">
+                <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+            </div>
+            <div class="col-lg-2 col-6">
+                <h2><b class="font-kalameBlack">محصولات</b></h2>
+            </div>
+            <div class="col-lg-5 col-3 text-right pt-4">
+                <img src="./img/Line 35.png"
+                     class="img-fluid w-25 mx-auto border-titr">
+            </div>
+        </div>
+
+        @Html.Partial("SpecialOfferProduct", Model.Second)
+
+        <!-- -------------- -->
+        @Html.Partial("maxinDiscountProducts", Model.Third)
+
+        <!-- ----- -->
+
+
+        <div class="row w-100 mx-auto text-center py-4 pt-5">
+            <div class="col-lg-5 col-3 text-left pt-4">
+                <img src="./img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+            </div>
+            <div class="col-lg-2 col-6">
+                <h2><b class="font-kalameBlack"> محصولات دیگر</b></h2>
+            </div>
+            <div class="col-lg-5 col-3 text-right pt-4">
+                <img src="./img/Line 35.png"
+                     class="img-fluid w-25 mx-auto border-titr">
+            </div>
+        </div>
+
+
+        @Html.Partial("OtherProducts", Model.Fourth);
+        <!-- --------- -->
+    </div>
+    <!-- ----end Products---- -->
+    <!-- modal login -->
+    <div class="modal fade" id="centralModalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+
+        <!-- Change class .modal-sm to change the size of the modal -->
+        <div class="modal-dialog modal-md login" role="document">
+            <div class="modal-content modal-login">
+                <div class="modal-body">
+                    <div class="login-wrap">
+                        <div class="login-html">
+                            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label id="label-1" for="tab-1" class="tab">ورود </label>
+                            <input id="tab-2" type="radio" name="tab" class="sign-up"><label id="label-2" for="tab-2" class="tab"> ثبت نام</label>
+                            <div class="login-form mt-3">
+                                <form id="VerifyForm" class="d-none" action="" method="post">
+                                    <div class="sign-up-htm sign-in-htm">
+                                        <div class="group">
+                                            <label for="VerificationNumber" class="label"> کد تایید </label>
+                                            <input id="VerificationNumber" type="text" class="input" name="VerificationNumber">
+                                        </div>
+                                        <div class="group">
+                                            <input type="submit" id="verifivation" class="button" value=" ورود">
+                                        </div>
+                                        <div class="hr"></div>
+                                    </div>
+                                </form>
+                                <form id="login-form" action="" method="post">
+                                    <div class="sign-in-htm">
+                                        <div class="group">
+                                            <label for="phoneNumberForLogin" class="label"> شماره تماس  </label>
+                                            <input id="phoneNumberForLogin" type="text" class="input" name="phoneNumberForLogin">
+                                        </div>
+                                        <div class="group">
+                                            <input id="check" type="checkbox" class="check" checked>
+                                            <label for="check"><span class="icon"></span> به یاد داشته باش </label>
+                                        </div>
+                                        <div class="group">
+                                            <input id="LoginSubmitButton" type="submit" class="button" value=" ورود">
+                                        </div>
+                                        <div class="hr"></div>
+
+                                    </div>
+                                </form>
+                                <form id="Register-form" action="" method="post">
+                                    <div class="sign-up-htm">
+                                        <div class="group">
+                                            <label for="usernameForReg" class="label">نام نام خانوادگی</label>
+                                            <input id="usernameForReg" type="text" class="input" name="Nickname">
+                                        </div>
+                                        <div class="group">
+                                            <label for="phonenumberForReg" class="label">شماره تماس</label>
+                                            <input id="phonenumberForReg" type="text" class="input" data-type="number" name="PhoneNumber">
+                                            <input type="hidden" name="LoginOrRegister" value="Register">
+                                            <input type="hidden" name="ReturnUrl">
+
+                                        </div>
+                                        <div class="group">
+                                            <input id="RegisterSubmitButton" type="submit" class="button" value=" ثبت نام">
+                                        </div>
+                                        <div class="foot-lnk">
+                                            <label for="tab-1"> قبلا ثبت نام کردید؟</label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @* <div class="login-html d-none" id="VerifyForm">
+            <input id="tab-3" type="radio" name="tab" class="sign-in" checked><label for="tab-3" class="tab">کد تایید  </label>
+             <div class="verify-form mt-3"  >
+                <form id="verify-form" action="" method="post">
+                    <div class="sign-in-htm">
+                        <div class="group">
+                            <label for="username" class="label"> کد تایید </label>
+                            <input id="username" type="text" class="input" name="username">
+                        </div>
+                        <div class="group">
+                            <input type="submit" class="button" value=" ورود">
+                        </div>
+                        <div class="hr"></div>
+                    </div>
+                </form>
+            </div>
+        </div> *@
+
+    <!-- end modal login -->
+    <!--filter modal-->
+    <div class="modal fade" id="centralModalfilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <!-- Change class .modal-sm to change the size of the modal -->
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content modalfilter">
+                <div class="modal-header modal-header-filter">
+                    <button type="button" class="close button-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group row pt-5 py-2">
+                                <label for=" TypePiece selectBrand" class="col-sm-2 col-form-label text-md-center text-right">دسته بندی اصلی</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control view-filterInput" id="TypePiece">
+                                        <option value=""></option>
+
+                                        @foreach (var item in (List<KaraYadak.Models.ProductCategoryType>)ViewBag.Categories)
+                                        {
+                                            <option value="@item.Name">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row py-2">
+                                <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">دسته بندی فرعی</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control view-filterInput" id="selectSubCategory">
+                                        <option value=" "> </option>
+
+                                        @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Brands)
+                                        {
+                                            <option value="@item.Name">@item.Name</option>
+                                        }
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row py-2">
+                                <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">خودرو</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control view-filterInput" id="selectCar">
+                                        <option value=" "> </option>
+
+                                        @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Cars)
+                                        {
+                                            <option value="@item.Name">@item.Name</option>
+                                        }
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row py-2">
+                                <label for="selectBrand" class="col-sm-2 col-form-label text-md-center text-right ">برند</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control view-filterInput" id="selectBrand">
+                                        <option value=" "> </option>
+
+                                        @foreach (var item in (List<KaraYadak.Models.ProductCategory>)ViewBag.Brands)
+                                        {
+                                            <option value="@item.Name">@item.Name</option>
+                                        }
+
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-warning btn-sm w-100 py-2 btn-filterModal" onclick="filter()">
+                        <i class="fa fa-filter "></i> فیلتر کردن
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--filter modal-->
+    @*<div class="inquire">
+            <span class="i-btn">استعلام قیمت</span>
+
+            <form class="w-100" onsubmit="this.preventDefault()">
+                <div class="form-group">
+                    <input type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
+                    <button class="btn btn-success d-flex ml-auto" id="inquireSubmit" type="button">جستجو</button>
+                </div>
+            </form>
+        </div>*@
+
+
+    <div class="inquire-modal">
+        <div class="content d-flex mx-auto flex-column position-relative" id="content">
+            <span class="close-btn"></span>
+            <h3 id="modalTtile" class="d-block text-center mb-5">نتایج جستجو</h3>
+
+            <!--loading-->
+            <div class="loading-container">
+                <div class="search-loading">
+                    <div class="my-loader"></div>
+                    <svg class="loader-mag-glass" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+                        <path fill="#ffcc00" d="M55.863 62.09c0-6.737 5.481-12.219 12.219-12.219 6.738 0 12.219 5.482 12.219 12.22 0 6.737-5.481 12.22-12.219 12.22-6.738 0-12.219-5.483-12.219-12.22zm40.34 23.652L82.991 72.53a18.103 18.103 0 0 0 3.31-10.44c0-10.046-8.172-18.219-18.219-18.219-10.046 0-18.219 8.173-18.219 18.22 0 10.046 8.173 18.22 18.219 18.22 4 0 7.691-1.312 10.699-3.505l13.18 13.18a2.992 2.992 0 0 0 2.121.877 3 3 0 0 0 2.121-5.121zm-97.731 56.625h150v-150h-150v150zm0-150h150v150h-150v-150z" display="block" />
+                    </svg>
+                    <svg class="loader-complete" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%" viewBox="0 0 150 150">
+                        <g class="loader-complete-bg">
+                            <path fill="none" stroke="#FFF" stroke-width="19.228" d="M75 9.792c35.988 0 65.208 29.22 65.208 65.208S110.988 140.208 75 140.208 9.792 110.988 9.792 75 39.012 9.792 75 9.792z" display="block" />
+                            <path fill="#FFF" d="M87.513 69.651zm0 0zm0 0zm0 0z" display="block" />
+                            <path fill="#A9E962" d="M75 130.55c-30.63 0-55.55-24.92-55.55-55.55 0-30.63 24.92-55.55 55.55-55.55 30.63 0 55.55 24.92 55.55 55.55 0 30.63-24.92 55.55-55.55 55.55zm-75.75 20.2h151.5V-.75H-.75v151.5zm0-151.5h151.5v151.5H-.75V-.75z" display="block" />
+                        </g>
+                        <g class="loader-complete-check">
+                            <path fill="#FFF" d="M70.282 96.012a4.563 4.563 0 0 1-3.11-1.224L52.297 80.946a4.566 4.566 0 1 1 6.221-6.685l11.13 10.357 21.27-28.778a4.566 4.566 0 1 1 7.345 5.427L73.954 94.16a4.56 4.56 0 0 1-3.672 1.852zm-73.268 56.972h155.97V-2.986H-2.986v155.97zm0-155.97h155.97v155.97H-2.986V-2.986z" display="block" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>

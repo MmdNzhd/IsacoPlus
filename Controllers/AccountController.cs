@@ -387,7 +387,7 @@ namespace KaraYadak.Controllers
                 if (signIn.Succeeded)
                     return new JsonResult(new { Status = 1, input.ReturnUrl, message = "ثبت نام با موفقیت انجام شد" });
                 else
-                    return new JsonResult(new { Status = 1, input.ReturnUrl, message = "ثبت نام با موفقیت انجام شد" });
+                    return new JsonResult(new { Status = 0, input.ReturnUrl, message = "کد وارد شده نامعتبر میباشد" });
             }
 
         }
