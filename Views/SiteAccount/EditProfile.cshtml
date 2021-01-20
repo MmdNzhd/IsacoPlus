@@ -72,15 +72,15 @@
                     @*<h5 class="edit-profile pb-2"> <a href="/userTicket" class="text text-warning">پشتیانی</a></h5>*@
                     <a href="/userTicket" class="btn btn-warning">پشتیبانی</a>
 
-                    <a  href="/LogOut" class="btn btn-danger text-white">خروج</a>
+                    <a href="/LogOut" class="btn btn-danger text-white">خروج</a>
 
                 </div>
 
-               
+
                 @*<div class="col-7 mx-auto text-center pt-5">
 
-                    <h4 class="exit"><a href="/LogOut" class="text text-danger">خروج</a></h4>
-                </div>*@
+                        <h4 class="exit"><a href="/LogOut" class="text text-danger">خروج</a></h4>
+                    </div>*@
             </div>
         </div>
 
@@ -217,36 +217,43 @@
                         @foreach (var item in ViewBag.Transaction as List<ShoppingCart>)
                         {
                             DateTime date = item.Date;
-                        <tr>
-                            <th scope="row">@item.Id</th>
-                            <td class="text-primary">@item.RequestCode</td>
-                            <td class="text-warning">@date.ToShamsi()</td>
-                            <td>0</td>
-                            <td>
-                                @item.Price
-                                تومان
-                            </td>
-                            @if (item.Status == RequestStatus.Confirmed)
-                            {
-                                <td class="text-success">پرداخت موفق</td>
-                            }
-                            else
-                            {
-                                <td class="text-danger">پرداخت موفق</td>
+                            <tr>
+                                <th scope="row">@item.Id</th>
+                                <td class="text-primary">@item.RequestCode</td>
+                                <td class="text-warning">@date.ToShamsi()</td>
+                                <td>0</td>
+                                <td>
+                                    @item.Price
+                                    تومان
+                                </td>
+                                @if (item.Status == RequestStatus.Confirmed)
+                                {
+                                    <td class="text-success">پرداخت موفق</td>
+                                }
+                                else
+                                {
+                                    <td class="text-danger">پرداخت موفق</td>
 
-                            }
-                            @*<td><a href=#>بیشتر</a></td>*@
-                            <td>@item.PostType.GetDisplayAttributeFrom()</td>
-                            <td>@item.OrderLevel.GetDisplayAttributeFrom()</td>
-                            <td>@item.PostTrackingNumber</td>
+                                }
+                                @*<td><a href=#>بیشتر</a></td>*@
+                                <td>@item.PostType.GetDisplayAttributeFrom()</td>
+                                <td>@item.OrderLevel.GetDisplayAttributeFrom()</td>
+                                <td >
+                                    @item.PostTrackingNumber
+                                    @if (!string.IsNullOrEmpty(item.PostTrackingNumber))
+                                    {
+                                        <input id="@item.PostTrackingNumber" readonly onclick="copyPostalCode(this)" class="btn btn-warning" value="کپی کد و رفتن به سایت "/>
 
-                            <td>
-                                <button type="button" item-id="@item.Id" class="btn btn-primary "
-                                        onclick="getDetails(@item.Id,'@date.ToShamsi()')">
-                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                </button>
-                            </td>
-                        </tr>
+                                    }
+                                </td>
+
+                                <td>
+                                    <button type="button" item-id="@item.Id" class="btn btn-primary "
+                                            onclick="getDetails(@item.Id,'@date.ToShamsi()')">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -444,7 +451,7 @@
                         })
                     }
                     else {
-                      
+
                         Toast.fire({
                             icon: 'error',
                             title: res.message
@@ -538,6 +545,19 @@
 
 
             });
+        }
+
+        function copyPostalCode(item){
+        var code=$(item).attr("id");
+        var fullLink = document.createElement('input');
+        document.body.appendChild(fullLink);
+        fullLink.value = code;
+        fullLink.select();
+        document.execCommand("copy", false);
+        fullLink.remove();
+       location.href="https://tracking.post.ir/";
+       
+
         }
     </script>
 }

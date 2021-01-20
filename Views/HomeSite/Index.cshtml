@@ -31,6 +31,10 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <style>
+        .inquire-modal {
+            height: 300vh;
+        }
+
         .swiper-pagination-bullet {
             background: #FFFF !important;
         }
@@ -274,8 +278,13 @@
     <script src="~/js/CountDown.js"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-
+    <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
+              $(".inquire-modal").click(function(){
+
+                    $(".inquire-modal").removeClass("active");
+                })
         setInterval(function () { moveAutomaticSlider(); }, 5000);
 
         function moveAutomaticSlider() {
@@ -575,7 +584,7 @@
     </script>
 
     <script>
-        var swiper = new Swiper(".swiper-Landing1", {
+        var mySwiper = new Swiper(".swiper-Landing1", {
             autoplay: {
                 delay: 2000,
             },
@@ -603,6 +612,12 @@
                 },
             },
         });
+        $(".font-kalameBlack").click(function(){
+
+mySwiper.autoplay.stop();
+
+
+})
     </script>
 
     <script>

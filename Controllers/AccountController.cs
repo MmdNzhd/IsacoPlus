@@ -240,6 +240,11 @@ namespace KaraYadak.Controllers
                 }
                 return new JsonResult(new { Status = 0, Error = errors });
             }
+            var userFullName = input.Nickname.Trim().Split(" ");
+            if (userFullName.Length <= 1)
+            {
+                return new JsonResult(new { Status = 0, Message = "لطفا نام و نام خانوادگی را کامل وارد کنید" });
+            }
             var user = await _context.Users.Where(x => x.PhoneNumber == input.PhoneNumber || x.Phone == input.PhoneNumber ||
               x.UserName == input.PhoneNumber).FirstOrDefaultAsync();
             if (user != null)
