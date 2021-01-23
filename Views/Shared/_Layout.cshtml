@@ -219,13 +219,13 @@
                             <li><a class="active" href="/comments">مدیریت نظرات<span class="badge badge-danger"></span></a></li>
                             <li><a class="active" href="/Account/UserManager"> مدیریت کاربران<span class="badge badge-danger"></span></a></li>
                             <li><a class="active" href="/Payment/Index"> مدیریت مالی<span class="badge badge-danger"></span></a></li>
+                            <li><a class="active" href="/SpecialSaleOnMondays"> فروش ویژه دوشنبه<span class="badge badge-danger"></span></a></li>
 
                             <li><a class="active" href="/contactUsmanager">مدیریت تماس با ما<span class="badge badge-danger"></span></a></li>
                             <li><a class="active" href="/blogs">مدیریت اخبار<span class="badge badge-danger"></span></a></li>
                             <li><a class="active" href="/Videos">مدیریت ویدیو ها<span class="badge badge-danger"></span></a></li>
                             <li><a class="active" href="/Tickets/Index">مدیریت پیام ها<span class="badge badge-danger"></span></a></li>
                             <li><a class="active" href="/Settings"> تنظیمات<span class="badge badge-danger"></span></a></li>
-
 
                         </ul>
                     </div>
@@ -371,6 +371,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
     <script>
+        var serializeForm = function (form) {
+            var obj = {};
+            var formData = new FormData(form);
+            for (var key of formData.keys()) {
+                obj[key] = formData.get(key);
+            }
+            return obj;
+        };
         $("#reportTab").click(function () { $("#reporting").removeClass("d-none"); $("#accounting-menu").addClass("d-none") })
         $("#dashboardTab").click(function () { $("#reporting").addClass("d-none"); $("#accounting-menu").removeClass("d-none") })
 

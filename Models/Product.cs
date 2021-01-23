@@ -47,6 +47,8 @@ namespace KaraYadak.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string QR { get; set; }
+        public bool MondaySpecialSale { get; set; }
+
     }
 
     public class ProductViewModel
