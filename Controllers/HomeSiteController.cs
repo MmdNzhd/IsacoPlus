@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -49,32 +49,32 @@ namespace KaraYadak.Controllers
             return String.Join(",", list);
         }
         [Route("GetSubCategories/{mainCategory?}")]
-        public async Task<IActionResult>GetSubCategories(string mainCategory)
+        public async Task<IActionResult> GetSubCategories(string mainCategory)
         {
             var subCategory = await _context.ProductCategoryTypes.Where(x => x.Name.Equals(mainCategory)).FirstOrDefaultAsync();
             if (subCategory != null)
             {
-                var finalModel =await  _context.ProductCategories.Where(x => x.ProductCategoryType == subCategory.Id)
-                    .Select(x=>x.Name).ToListAsync();
+                var finalModel = await _context.ProductCategories.Where(x => x.ProductCategoryType == subCategory.Id)
+                    .Select(x => x.Name).ToListAsync();
 
                 return new JsonResult(new { status = 1, data = finalModel });
             }
             else
             {
-                return new JsonResult(new { status = 0, message="دسته بندی یافت نشد."});
+                return new JsonResult(new { status = 0, message = "دسته بندی یافت نشد." });
             }
         }
         public async Task<ActionResult> Index()
         {
 
 
-                
+
             //blog
             ViewBag.blogs = await _context.Blogs.OrderByDescending(x => x.CreateAt).Take(7).ToListAsync();
             ViewBag.Videos = await _context.Videos.OrderByDescending(x => x.CreateAt).Take(7).ToListAsync();
 
             //baner
-            var baner =await  _context.Baners.OrderByDescending(x => x.CreateAt).FirstOrDefaultAsync();
+            var baner = await _context.Baners.OrderByDescending(x => x.CreateAt).FirstOrDefaultAsync();
             ViewBag.baner = baner;
             var now = DateTime.Now;
             if (baner.Date < now)
@@ -88,7 +88,7 @@ namespace KaraYadak.Controllers
 
             if (User.Identity.Name != null)
             {
-                var user =await  _context.Users.SingleOrDefaultAsync(x => x.UserName.Equals(User.Identity.Name));
+                var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName.Equals(User.Identity.Name));
                 if (user != null)
                 {
                     if (string.IsNullOrEmpty(user.FirstName)) ViewBag.Username = user.PhoneNumber;
@@ -96,10 +96,10 @@ namespace KaraYadak.Controllers
                 }
                 else ViewBag.Username = ":(";
             }
-            ViewBag.Categories = await _context.ProductCategoryTypes.Where(x=>x.Id!=11&&x.Id!=5).ToListAsync();
-            ViewBag.Brands =await _context.ProductCategories.Where(i => i.Parent != 0 && i.ProductCategoryType == 11).ToListAsync();
+            ViewBag.Categories = await _context.ProductCategoryTypes.Where(x => x.Id != 11 && x.Id != 5).ToListAsync();
+            ViewBag.Brands = await _context.ProductCategories.Where(i => i.Parent != 0 && i.ProductCategoryType == 11).ToListAsync();
 
-            ViewBag.Cars =await _context.ProductCategories.Where(i => i.Parent != 0 && i.ProductCategoryType == 5).ToListAsync();
+            ViewBag.Cars = await _context.ProductCategories.Where(i => i.Parent != 0 && i.ProductCategoryType == 5).ToListAsync();
 
 
             //var categories = new List<CategoriesVM>();
@@ -172,13 +172,13 @@ namespace KaraYadak.Controllers
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
             }).Take(1).ToList();
 
-            var specialProducts = groupByCodeProduct.Where(x=>x.Special).Select(x => new ProductForIndexVM
+            var specialProducts = groupByCodeProduct.Where(x => x.Special).Select(x => new ProductForIndexVM
             {
                 Code = x.Code,
                 Title = x.Title,
                 Off = x.Off,
                 Picture = (string.IsNullOrEmpty(x.Picture)) ? "" :
-                x.Picture,
+                  x.Picture,
                 Price = x.Price - x.Off * x.Price / 100,
                 Special = x.Special,
                 UpdateDate = x.UpdateDate
@@ -201,7 +201,7 @@ namespace KaraYadak.Controllers
                 CreatingDate = x.CreatingDate,
                 Title = x.Title,
                 Off = x.Off,
-                Picture = (string.IsNullOrEmpty(x.Picture))? "" :
+                Picture = (string.IsNullOrEmpty(x.Picture)) ? "" :
                 x.Picture,
                 Price = x.Price - x.Off * x.Price / 100,
                 //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
@@ -224,7 +224,7 @@ namespace KaraYadak.Controllers
             return View(finalmodel);
         }
 
-    
+
         public PartialViewResult SpecialOfferProduct()
         {
 
@@ -251,7 +251,7 @@ namespace KaraYadak.Controllers
         {
             return View();
         }
-      
+
 
         [HttpPost]
         public async Task<IActionResult> AddContactusMessage(ContactUsMessage contactUs)
@@ -274,6 +274,11 @@ namespace KaraYadak.Controllers
                 }
             }
             return Json(new { status = "0", message = "خطایی رخ داده است لطفا مجددا امتحان کنید." });
+        }
+
+        public async Task<IActionResult> MondaySale()
+        {
+            return View();
         }
 
     }
