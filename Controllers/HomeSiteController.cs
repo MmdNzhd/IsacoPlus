@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Collections.Immutable;
+using AngleSharp.Common;
 
 namespace KaraYadak.Controllers
 {
@@ -278,7 +279,68 @@ namespace KaraYadak.Controllers
 
         public async Task<IActionResult> MondaySale()
         {
-            return View();
+           
+           
+            var specialMondayInfo = new SpecialMondayInfo();
+            var settings = await _context.Settings.ToListAsync();
+
+            specialMondayInfo.SpecialMondayBanner = new SpecialMondayBanner()
+            {
+                LeftPic = settings.Where(x => x.Key == "MondayLeftBaner").FirstOrDefault().Value,
+                RightPic = settings.Where(x => x.Key == "MondayRightBaner").FirstOrDefault().Value,
+                MondayVerticalBaner1 = settings.Where(x => x.Key == "MondayVerticalBaner1").FirstOrDefault().Value,
+                MondayVerticalBaner2 = settings.Where(x => x.Key == "MondayVerticalBaner2").FirstOrDefault().Value,
+                MondayVerticalBaner3 = settings.Where(x => x.Key == "MondayVerticalBaner3").FirstOrDefault().Value,
+                Title = settings.Where(x => x.Key == "MondayTitle").FirstOrDefault().Value,
+                TopSliderPic1 = settings.Where(x => x.Key == "MondayTopBaner1").FirstOrDefault().Value,
+                TopSliderPic2 = settings.Where(x => x.Key == "MondayTopBaner2").FirstOrDefault().Value,
+                TopSliderPic3 = settings.Where(x => x.Key == "MondayTopBaner3").FirstOrDefault().Value,
+                TopSliderPic4 = settings.Where(x => x.Key == "MondayTopBaner4").FirstOrDefault().Value,
+                TopSliderPic5 = settings.Where(x => x.Key == "MondayTopBaner5").FirstOrDefault().Value,
+                TopSliderPic6 = settings.Where(x => x.Key == "MondayTopBaner6").FirstOrDefault().Value,
+            };
+
+            var groupByCodeProduct1 = await _context.Products
+                .Where(x => x.MondaySpecialSale)
+                  .Select(p => new ProductForIndexVM
+                  {
+                      CreatingDate = p.CreatedAt,
+                      Title = p.Name,
+                      Code = p.Code,
+                      Off = p.Discount,
+                      Picture = p.ImageUrl,
+                      Price = p.Price,
+                      Special = p.SpecialSale,
+                      CategoryId = p.ProductCategoryType
+
+                  }).ToListAsync();
+            var groupByCodeProduct = groupByCodeProduct1.GroupBy(g => g.Code)
+              .Select(p => new ProductForIndexVM
+              {
+                  CreatingDate = p.FirstOrDefault().CreatingDate,
+                  Title = p.FirstOrDefault().Title,
+                  Code = p.FirstOrDefault().Code,
+                  Off = p.FirstOrDefault().Off,
+                  Picture = p.FirstOrDefault().Picture,
+                  Price = p.FirstOrDefault().Price,
+                  Special = p.FirstOrDefault().Special,
+                  CategoryId = p.FirstOrDefault().CategoryId
+
+              });
+            var product = groupByCodeProduct.Select(x => new ProductForIndexVM
+            {
+                Code = x.Code,
+                CreatingDate = x.CreatingDate,
+                Title = x.Title,
+                Off = x.Price - x.Off * x.Price / 100,
+                Picture = (string.IsNullOrEmpty(x.Picture)) ? "" :
+              x.Picture,
+                Price = x.Price - x.Off * x.Price / 100,
+                //Rate = x.FirstOrDefault().Rate.GetValueOrDefault(),
+            }).Take(1).ToList();
+            specialMondayInfo.Products = product;
+
+            return View(specialMondayInfo);
         }
 
     }

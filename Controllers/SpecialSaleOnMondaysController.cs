@@ -52,6 +52,8 @@ namespace KaraYadak.Controllers
         [HttpPost]
         public async Task<IActionResult> GetProduct()
         {
+
+
             var items = (from a in _context.Products.Where(x => x.MondaySpecialSale)
                     .Join(_context.ProductCategories,
                     ac => ac.CategoryIdLvl1,

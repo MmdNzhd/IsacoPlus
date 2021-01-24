@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using KaraYadak.ViewModels;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -63,7 +64,7 @@ namespace KaraYadak
     public class SpecialMondayInfo
     {
         public SpecialMondayBanner SpecialMondayBanner { get; set; }
-        public List<SpecialMondayProduct> Products { get; set; }
+        public List<ProductForIndexVM> Products { get; set; }
     }
 
     public class AddProductInMondayViewModel

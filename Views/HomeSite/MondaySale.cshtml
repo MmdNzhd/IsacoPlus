@@ -1,24 +1,10 @@
 ﻿@using KaraYadak.Helper
-@model KaraYadak.ViewModels.ListForIndexVM
+@model SpecialMondayInfo
 @{
     ViewBag.Title = "فروش ویژه دوشنبه";
     Layout = "_SiteLayout";
 }
-@inject KaraYadak.Data.ApplicationDbContext _context
-@{
-    var Slider1 = _context.Settings.Where(x => x.Key.Equals("Slider1")).Select(x => x.Value).SingleOrDefault();
-    var Slider2 = _context.Settings.Where(x => x.Key.Equals("Slider2")).Select(x => x.Value).SingleOrDefault();
-    var Slider3 = _context.Settings.Where(x => x.Key.Equals("Slider3")).Select(x => x.Value).SingleOrDefault();
-    var Slider4 = _context.Settings.Where(x => x.Key.Equals("Slider4")).Select(x => x.Value).SingleOrDefault();
-    var Slider5 = _context.Settings.Where(x => x.Key.Equals("Slider5")).Select(x => x.Value).SingleOrDefault();
 
-
-    var Slider1Pic = _context.Settings.Where(x => x.Key.Equals("Slider1Pic")).Select(x => x.Value).SingleOrDefault();
-    var Slider2Pic = _context.Settings.Where(x => x.Key.Equals("Slider2Pic")).Select(x => x.Value).SingleOrDefault();
-    var Slider3Pic = _context.Settings.Where(x => x.Key.Equals("Slider3Pic")).Select(x => x.Value).SingleOrDefault();
-    var Slider4Pic = _context.Settings.Where(x => x.Key.Equals("Slider4Pic")).Select(x => x.Value).SingleOrDefault();
-    var Slider5Pic = _context.Settings.Where(x => x.Key.Equals("Slider5Pic")).Select(x => x.Value).SingleOrDefault();
-}
 
 @section styles{
     <link href="~/css/style.css" rel="stylesheet" />
@@ -34,11 +20,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" />
 
-    <style> 
+    <style>
         #PostTypeForm {
             margin-top: 5%;
             margin-right: 44%;
         }
+
         .navbar {
             background: blue !important;
         }
@@ -212,7 +199,7 @@
                 transform: scale(1) rotate(0);
             }
 
-             .ImageContainerSlider {
+        .ImageContainerSlider {
             position: absolute;
             top: 0;
             right: 0;
@@ -254,7 +241,7 @@
             <div class="swiper-wrapper m-0" style="z-index:-1 !important">
                 <div class="swiper-slide">
                     <div class="ImageContainerSlider">
-                        <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
+                        <img class="ImageSlider" src="../../uploads/@Model.SpecialMondayBanner.TopSliderPic1" />
                     </div>
                     <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
                         <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
@@ -262,15 +249,12 @@
                                 ایساکــــــو پلـــــــــــــاس
                             </b>
                         </h1>
-                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
-                            @Html.Raw(@Slider1)
-                        </h6>
                     </div>
                 </div>
 
                 <div class="swiper-slide">
                     <div class="ImageContainerSlider">
-                        <img class="ImageSlider" src="../../uploads/@Slider2Pic" />
+                        <img class="ImageSlider" src="../../uploads/@Model.SpecialMondayBanner.TopSliderPic2" />
                     </div>
                     <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
                         <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
@@ -278,15 +262,12 @@
                                 ایساکــــــو پلـــــــــــــاس
                             </b>
                         </h1>
-                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
-                            @Html.Raw(@Slider2)
-                        </h6>
                     </div>
                 </div>
 
                 <div class="swiper-slide">
                     <div class="ImageContainerSlider">
-                        <img class="ImageSlider" src="../../uploads/@Slider3Pic" />
+                        <img class="ImageSlider" src="../../uploads/@Model.SpecialMondayBanner.TopSliderPic3" />
                     </div>
                     <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
                         <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
@@ -294,9 +275,6 @@
                                 ایساکــــــو پلـــــــــــــاس
                             </b>
                         </h1>
-                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
-                            @Html.Raw(@Slider3)
-                        </h6>
                     </div>
 
 
@@ -304,7 +282,7 @@
 
                 <div class="swiper-slide">
                     <div class="ImageContainerSlider">
-                        <img class="ImageSlider" src="../../uploads/@Slider4Pic" />
+                        <img class="ImageSlider" src="../../uploads/@Model.SpecialMondayBanner.TopSliderPic4" />
                     </div>
                     <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
                         <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
@@ -312,16 +290,13 @@
                                 ایساکــــــو پلـــــــــــــاس
                             </b>
                         </h1>
-                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
-                            @Html.Raw(@Slider4)
-                        </h6>
                     </div>
 
 
                 </div>
                 <div class="swiper-slide">
                     <div class="ImageContainerSlider">
-                        <img class="ImageSlider" src="../../uploads/@Slider5Pic" />
+                        <img class="ImageSlider" src="../../uploads/@Model.SpecialMondayBanner.TopSliderPic5" />
                     </div>
                     <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
                         <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
@@ -329,9 +304,21 @@
                                 ایساکــــــو پلـــــــــــــاس
                             </b>
                         </h1>
-                        <h6 class="text-center mx-auto w-100 detalis-SliderIndex pb-5">
-                            @Html.Raw(@Slider5)
-                        </h6>
+                    </div>
+
+
+                </div>
+
+                <div class="swiper-slide">
+                    <div class="ImageContainerSlider">
+                        <img class="ImageSlider" src="../../uploads/@Model.SpecialMondayBanner.TopSliderPic6" />
+                    </div>
+                    <div class="row w-50 slider-index" style="padding-top: 10rem !important;">
+                        <h1 class=" text-center mx-auto w-100 titr-SliderIndex py-3">
+                            <b>
+                                ایساکــــــو پلـــــــــــــاس
+                            </b>
+                        </h1>
                     </div>
 
 
@@ -341,89 +328,56 @@
         </div>
     </div>
 
-    <div class="context-container">      
+    <div class="context-container">
         <div class="AdvertiseContainer">
             <div class="advertise-item">
-                 <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
+                <img class="ImageSlider" src="../../uploads/@Model.SpecialMondayBanner.LeftPic" />
             </div>
             <div class="advertise-item">
-                 <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
+                <img class="ImageSlider" src="../../uploads/@Model.SpecialMondayBanner.RightPic" />
             </div>
         </div>
 
         <div class="ProductsContainer">
             <div class="productsHolder">
                 <h3 class="productsTitle">
-                    محصولات
+                    @Model.SpecialMondayBanner.Title
                 </h3>
                 <div class="productsHolderItem">
-                    <div class="productItemContainer">
-                        <div class="imageContainer">
-                            <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
+                    @foreach (var item in Model.Products)
+                    {
+                        <div class="productItemContainer">
+                            <div class="imageContainer">
+                                @if (!string.IsNullOrEmpty(item.Picture))
+                                {
+                                    <img class="ImageSlider" src="../../uploads/ProductImages/@item.Picture" />
+
+                                }
+                                else
+                                {
+                                    <img src="~/img/DefualtProduct.png" />
+
+                                }
+                            </div>
+                            <h3> @item.Title </h3>
+                            <span> @item.Price </span>
+                            <span> @item.Off</span>
+                            <button type="button" class="btn btn-success" onclick="addToShopBasket('@item.Code')">
+                                    افزودن به سبد خرید </button>
                         </div>
-                        <h3> نام محصول </h3>
-                        <span> قیمت به تومان </span>
-                        <button> افزودن به سبد خرید </button>
-                    </div>
-                    <div class="productItemContainer">
-                        <div class="imageContainer">
-                            <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
-                        </div>
-                        <h3> نام محصول </h3>
-                        <span> قیمت به تومان </span>
-                        <button> افزودن به سبد خرید </button>
-                    </div>
-                    <div class="productItemContainer">
-                        <div class="imageContainer">
-                            <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
-                        </div>
-                        <h3> نام محصول </h3>
-                        <span> قیمت به تومان </span>
-                        <button> افزودن به سبد خرید </button>
-                    </div>
-                    <div class="productItemContainer">
-                        <div class="imageContainer">
-                            <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
-                        </div>
-                        <h3> نام محصول </h3>
-                        <span> قیمت به تومان </span>
-                        <button> افزودن به سبد خرید </button>
-                    </div>
-                    <div class="productItemContainer">
-                        <div class="imageContainer">
-                            <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
-                        </div>
-                        <h3> نام محصول </h3>
-                        <span> قیمت به تومان </span>
-                        <button> افزودن به سبد خرید </button>
-                    </div>
-                    <div class="productItemContainer">
-                        <div class="imageContainer">
-                            <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
-                        </div>
-                        <h3> نام محصول </h3>
-                        <span> قیمت به تومان </span>
-                        <button> افزودن به سبد خرید </button>
-                    </div>
-                    <div class="productItemContainer">
-                        <div class="imageContainer">
-                            <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
-                        </div>
-                        <h3> نام محصول </h3>
-                        <span> قیمت به تومان </span>
-                        <button> افزودن به سبد خرید </button>
-                    </div>
+                    }
+
                 </div>
             </div>
             <div class="adverHolder">
                 <div class="adverSidebar">
-                    <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
+                    <img class="ImageSlider" src="../../uploads/@Model.SpecialMondayBanner.MondayVerticalBaner1" />
                 </div>
                 <div class="adverSidebar">
-                    <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
+                    <img class="ImageSlider" src="../../uploads/@Model.SpecialMondayBanner.MondayVerticalBaner2" />
                 </div>
                 <div class="adverSidebar">
-                    <img class="ImageSlider" src="../../uploads/@Slider1Pic" />
+                    <img class="ImageSlider" src="../../uploads/@Model.SpecialMondayBanner.MondayVerticalBaner3" />
                 </div>
             </div>
         </div>
@@ -437,6 +391,8 @@
     <script src="~/range-slider/js/ion.rangeSlider.min.js"></script>
 
     <script>
+        
+        
         var swiper = new Swiper('.swiper-menuContainer', {
             spaceBetween: 0,
             loop: true,
