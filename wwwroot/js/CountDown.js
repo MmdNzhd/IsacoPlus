@@ -31,12 +31,3 @@
     }
   }, 1000);
 }
-
-const iframeContainer = document.getElementById("frame");
-
-const iframeDocument = iframeContent.contentDocument;
-
-console.log(iframeDocument.body);
-iframeDocument.body.addEventListener("click", () => {
-  console.log("sam");
-});
