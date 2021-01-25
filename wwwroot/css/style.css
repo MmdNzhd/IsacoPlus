@@ -1180,6 +1180,15 @@ em.error {
     flex-basis: 200px;
     flex-shrink: 0;
   }
+  .titr-SliderIndex {
+    font-size: 1.8rem;
+    margin-top: 4rem;
+  }
+  .detalis-SliderIndex {
+    font-size: 1rem;
+    padding: 0 15px;
+    text-align: justify;
+  }
 }
 
 @media only screen and (max-width: 420px) {
@@ -1195,5 +1204,9 @@ em.error {
     padding: 10px 15px !important;
     flex-basis: 120px;
     flex-shrink: 0;
+  }
+  .titr-SliderIndex {
+    font-size: 1.6rem;
+    margin-top: 5rem;
   }
 }
