@@ -271,6 +271,10 @@
             transform: translateX(50%);
             z-index: 999;
         }
+
+        .swiper-button-prev:after, .swiper-container-rtl .swiper-button-next:after {
+            color: rgb(255, 193, 7);
+        }   
     </style>
 }
 @section scripts{
@@ -321,7 +325,7 @@
             }
         });
 
-        $("#inquireSubmit").on("click", function () {
+        $(".inquireSubmit").on("click", function () {
             inquireFlag = 0;
             //$(".inquire").removeClass("active");
             //$(".inquire-modal").addClass("active");
@@ -400,7 +404,7 @@
         input.addEventListener("keyup", function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
-                $("#inquireSubmit").click();
+                $(".inquireSubmit").click();
             }
         });
         //
@@ -408,7 +412,7 @@
         var div = $(".i-btn-holder").addClass("d-none").removeClass("d-block");
 
         $("#modalEstelam").click(function () {
-            $("#inquireSubmit").css("width", "100%");
+            $(".inquireSubmit").css("width", "100%");
 
             if ($(this).attr("data-elem") == "1") {
                 if (openClose) {
@@ -423,7 +427,7 @@
             }
         })
         $("#modalEstelam2").click(function () {
-            $("#inquireSubmit").css("width", "100%");
+            $(".inquireSubmit").css("width", "100%");
 
             if ($(this).attr("data-elem") == "1") {
                 if (openClose) {
@@ -438,7 +442,7 @@
             }
         })
 
-        $("#inquireSubmit").click(function (e) {
+        $(".inquireSubmit").click(function (e) {
 
             $(".i-btn-holder").addClass("d-none").removeClass("d-block");
             openClose = true;
@@ -579,6 +583,10 @@
             pagination: {
                 el: '.swiper-pagination',
                 clickable: true,
+            },  
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
             },
         });
     </script>
@@ -727,10 +735,10 @@
                             <span id="modalEstelam" class="btn btn-warning i-btn scaleout-glow" style="width:200px" data-elem="1"> استعلام بارکد ایساکویی </span>
                             <form class="i-btn-holder" onsubmit="this.preventDefault()">
                                 <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
-                                <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
+                                <button class="btn btn-success p-2 inquireSubmit" type="button">جستجو</button>
                             </form>
                         </div>
-                    </ul>
+                    </ul> 
                 </div>
             </nav>
         </div>
@@ -741,10 +749,9 @@
             <ul class="navbar-nav nav-flex-icons col-12 mb-3 p-0 ResponsiveButton">
                 <div class="i-btn mx-3">
                     <span id="modalEstelam2" class="btn btn-warning i-btn scaleout-glow " style="width:100%" data-elem="1"> استعلام بارکد ایساکویی </span>
-                    <form class="i-btn-holder" onsubmit="this.preventDefault()">
+                    <form class="i-btn-holder w-100" onsubmit="this.preventDefault()">
                         <input data-elem="0" type="text" class="form-control mb-3" id="inquireSearch" placeholder="عنوان محصول را وارد کنید..." />
-                        <button class="btn btn-success p-2" id="inquireSubmit" type="button">جستجو</button>
-
+                        <button class="btn btn-success p-2 inquireSubmit" type="button">جستجو</button>
                     </form>
                 </div>
             </ul>
@@ -766,7 +773,8 @@
         </div>
 
         <!-- Add Pagination -->
-        <div class="swiper-pagination paginationOfSlider"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
 
         <!-- info -->
         <div class="row w-75 mx-auto text-center pt-md-5 mt-md-5 hj-li-Index InfoContainerOfSlider">
