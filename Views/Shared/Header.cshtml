@@ -53,14 +53,12 @@
                     <li class="nav-item">
                         @if (User.IsInRole("WarehousingAdmin"))
                         {
-
                             <a class="nav-link text-white text-right" href="/WarehousingAdmin">
                                 پنل مدیریت
                             </a>
                         }
                         else if (User.IsInRole("Admin"))
                         {
-
                             <a class="nav-link text-white text-right" href="/dashboard">
                                 پنل مدیریت
                             </a>
