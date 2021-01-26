@@ -1,0 +1,42 @@
+.aboutus-container {
+}
+
+.aboutus-holder {
+  width: 1280px;
+  margin: 30px auto;
+  direction: rtl;
+  text-align: right;
+}
+
+.aboutus-holder .title {
+  color: #444;
+  font-size: 1.6rem;
+  padding: 10px 30px;
+}
+.aboutus-holder .description {
+  color: #666;
+  font-size: 1.2rem;
+  padding: 10px 30px;
+  text-align: justify;
+}
+
+@media only screen and (max-width: 1280px) {
+  .aboutus-holder {
+    width: 940px;
+  }
+}
+@media only screen and (max-width: 960px) {
+  .aboutus-holder {
+    width: 747px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .aboutus-holder {
+    width: 460px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .aboutus-holder {
+    width: 100%;
+  }
+}
