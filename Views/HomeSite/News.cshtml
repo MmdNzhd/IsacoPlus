@@ -1,0 +1,42 @@
+@{
+    ViewData["Title"] = "اخبار";
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+
+@section styles{
+    <link href="~/css/news.css" rel="stylesheet" />
+}
+
+<div class="container-fluid p-0 mx-auto  bg-product">
+    <partial name="Header" />    
+</div>
+<div class="news-container">
+    <div class="news-holder">
+        <form class="form-inline my-3 mx-auto ">
+            <div class="container-searchNavberOfNews md-form my-0 mx-auto position-relative">
+                <input id="searchItem" class="searchInput form-control mr-sm-2 search-prodoct pr-4" type="text" placeholder="جستجو"
+                        aria-label="Search">
+                <i class="fa fa-search icon-search"></i>
+                <button type="button" class="btn btn-warning button-searchNavberOfNews py-1 px-3" onclick="Search()" onkeyup="Search()">جستجو</button>
+            </div>
+        </form>
+
+        <a href="/blogs/BlogDetails">
+            <div class="hj-blog p-0">
+                <div class="row w-100 mx-auto titr-blog">
+                    <h5 class="py-2 pr-4 pt-3"><b>title</b></h5>
+                </div>
+                <div class="homeSiteNewsContainer row w-100 mx-auto py-2">
+                    <div class="col-8 detalis-blog px-4 py-3">
+                        <h6 class="text-justify">
+                            title
+                        </h6>
+                    </div>
+                    <div class="col-4 pt-4">
+                        <img src="" class="img-fluid w-100 mx-auto">
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>

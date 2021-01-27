@@ -342,8 +342,10 @@ namespace KaraYadak.Controllers
 
             return View(specialMondayInfo);
         }
-        public async Task<IActionResult> AboutUS() {
-
+        public async Task<IActionResult> AboutUs() {
+            return View();
+        }
+        public async Task<IActionResult> News() {
             return View();
         }
     }
