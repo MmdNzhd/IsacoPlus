@@ -1,0 +1,38 @@
+@model KaraYadak.ViewModels.ListForIndexVM
+@{
+    ViewData["Title"] = "سئوالات متداول";
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+@inject KaraYadak.Data.ApplicationDbContext _context
+@section styles{
+    <link href="~/css/FAndQ.css" rel="stylesheet" />
+}
+
+
+<div class="container-fluid p-0 mx-auto  bg-product">
+    <partial name="Header" />    
+</div>
+<div class="news-container">
+
+     <div class="FrequentQContainer">
+        <div class="TitleTopic">
+            سئوالات متداول
+        </div>
+
+        <div class="TicketContainer" className=" sbs-shadow srounded-md sp-2">
+        
+              <div class="NotifContainre">
+                <span class="NotifIcon">
+                  <i
+                    className="fa fa-bell fa-1.5x c-primary"
+                    aria-hidden="true"
+                  ></i>
+                </span>
+                <div class="NotifContext">
+                  <span class="Title">سئوال : </span>
+                  <div class="Description">جواب :  </div>
+                </div>
+              </div>
+        </div>
+      </div>
+</div>

@@ -360,7 +360,10 @@ namespace KaraYadak.Controllers
             ViewBag.Videos = await _context.Videos.OrderByDescending(x => x.CreateAt).Take(7).ToListAsync();
             return View();
         }
-
-
+        public async Task<ActionResult> FAndQ()
+        {
+            ViewBag.Videos = await _context.Videos.OrderByDescending(x => x.CreateAt).Take(7).ToListAsync();
+            return View();
+        }
     }
 }
