@@ -26,13 +26,40 @@
   display: flex;
   justify-content: flex-end;
 }
+.videosContainerDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .videosDescriptionContainer {
   padding: 0 10px;
   color: #555;
   font-size: 1rem;
   width: calc(100% - 320px);
-  text-align: center;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.videosDescriptionContainer > p {
+  color: #555;
+  font-size: 1rem;
+  cursor: default;
+}
+.videosDescriptionContainer > .vedioDetailLink {
+  font-size: 1rem;
+  text-decoration: none;
+  color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  padding: 6px 8px;
+  display: inline;
+  width: fit-content;
+  transition: 0.6s;
+}
+.videosDescriptionContainer > .vedioDetailLink:hover {
+  filter: brightness(80%);
 }
 
 @media only screen and (max-width: 1280px) {

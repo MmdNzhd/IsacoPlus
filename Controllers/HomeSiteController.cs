@@ -351,13 +351,13 @@ namespace KaraYadak.Controllers
 
         public async Task<ActionResult> Videos()
         {
-
-
-
-       
             ViewBag.Videos = await _context.Videos.OrderByDescending(x => x.CreateAt).Take(7).ToListAsync();
+            return View();
+        }
 
-            
+        public async Task<ActionResult> VideosDetails()
+        {
+            ViewBag.Videos = await _context.Videos.OrderByDescending(x => x.CreateAt).Take(7).ToListAsync();
             return View();
         }
 

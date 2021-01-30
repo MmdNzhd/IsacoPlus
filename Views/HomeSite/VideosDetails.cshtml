@@ -1,0 +1,75 @@
+@model KaraYadak.ViewModels.ListForIndexVM
+@{
+    ViewData["Title"] = "جزئیات ویدیو";
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+@inject KaraYadak.Data.ApplicationDbContext _context
+@section styles{
+    <link href="~/css/videos.css" rel="stylesheet" />
+}
+
+
+<div class="container-fluid p-0 mx-auto  bg-product">
+    <partial name="Header" />    
+</div>
+<div class="news-container">
+    <div class="news-holder">
+        <div >
+            @foreach (var item in (List<KaraYadak.Models.Video>)ViewBag.Videos)
+            {
+                <div >
+                    @*<a href="/blogs/BlogDetails/@item.Id">*@
+                    <div>
+                        <div class="hj-blog p-0">
+                            <div class="row w-100 mx-auto titr-blog">
+                                <h5 class="py-2 pr-4 pt-3"><b>@item.Title</b></h5>
+                            </div>
+                            <div class="row w-100 mx-auto py-2 videosContainerDetails">
+                                <div class="row " id="videoContainer" style="margin:0 !important" >
+                                    @Html.Raw(item.Text)
+                                </div>
+                                <div class="videosDescriptionContainer">
+                                    توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="container modelCar">
+            <div class="row w-100 mx-auto text-center py-4 mt-5 pt-5">
+                <div class="col-lg-4 col-3 text-left pt-4">
+                    <img src="~/img/Line 35.png" class="img-fluid w-25 mx-auto border-titr">
+                </div>
+                <div class="col-lg-4 col-6">
+                    <h2><b class="font-kalameBlack"> نظر کاربران </b></h2>
+                </div>
+                <div class="col-lg-4 col-3 text-right pt-4">
+                    <img src="~/img/Line 35.png"
+                        class="img-fluid w-25 mx-auto border-titr">
+                </div>
+            </div>
+
+            <form id="commentSubmit">
+                <div class="row my-5">
+                    <div class="col-12 col-lg-6 mx-auto">
+                        <div class="form-group d-block w-100">
+                            <span class="d-block text-center text-dark mb-3">در این قسمت می‌توانید نظر خود را راجع به این محصول ثبت کنید.</span>
+                            <textarea id="text" class="form-control mb-3" placeholder="نظر خود را در این قسمت بنویسید..."></textarea>
+
+                            <div class="text-center">
+                                امتیاز شما به این محصول: <div class="mv-starrr mb-3 d-inline-block mr-2" id="sendComment"></div>
+                            </div>
+
+                        </div>
+
+                        <button type="submit" class="d-block mx-auto btn btn-success mb-0">ثبت نظر</button>
+                    </div>
+                </div>
+                <div class="row">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
