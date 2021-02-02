@@ -311,7 +311,7 @@ button {
 hj-gallery2 {
   float: left;
   border-radius: 3px;
-  width: 90%;
+  width: 100%;
 }
 
 .hj-gallery .mv-g-title,
@@ -323,7 +323,7 @@ hj-gallery2 {
 .hj-gallery2 {
   background-float: right;
   border-radius: 3px;
-  width: 90%;
+  width: 100%;
 }
 
 .hj-prouduct-Tslider {

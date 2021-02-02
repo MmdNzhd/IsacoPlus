@@ -1,0 +1,157 @@
+.FrequentQContainer {
+  max-width: 1100px;
+  margin: 80px auto;
+  padding: 50px;
+  font-family: iransans-regular;
+}
+.TitleTopic {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #444;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.TicketContainer {
+  height: auto;
+  padding: 0;
+}
+
+.NotifContainre-container {
+  border-radius: 15px;
+  background: #fff;
+  height: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: 15px 5px;
+  box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.1);
+}
+.NotifContainre {
+  border-radius: 15px;
+  height: auto;
+  overflow: hidden;
+  display: flex;
+  margin: 15px 5px;
+}
+.NotifIcon {
+  padding: 8px;
+  background: #ddd;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.NotifContext {
+  max-height: 100%;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: iransans-regular;
+  padding: 5px 0;
+  margin: 0 5px;
+  width: 100%;
+}
+
+.NotifContext > .context-of-product {
+  direction: rtl;
+  text-align: right;
+  padding-left: 20px;
+}
+
+.NotifContext > .context-of-product > .Title {
+  font-size: 1.8rem;
+  color: #444;
+  padding: 2px 5px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  color: #888;
+  padding: 5px 10px;
+  border-radius: 8px 8px 0 0;
+  background-color: #eee;
+}
+
+.NotifContext > .context-of-product > .Description {
+  font-size: 1rem;
+  color: #555;
+  padding: 5px;
+  box-sizing: border-box;
+  max-height: 200px;
+  overflow: auto;
+  text-align: justify;
+  border-radius: 8px;
+  background-color: #eee;
+}
+
+.reply-context-container {
+  padding: 5px;
+  box-sizing: border-box;
+  max-height: 200px;
+  overflow: auto;
+  border-radius: 8px;
+  background-color: #eee;
+  margin: 5px 10px;
+}
+
+.reply-context-container > .reply-context {
+  font-size: 1rem;
+  color: #888;
+  font-size: 0.9rem;
+  text-align: justify;
+  padding: 8px 10px;
+}
+.reply-context-container > .reply-context > p {
+  margin-top: 8px;
+}
+
+.NotifContext > .product-info > .image-container {
+  width: 220px;
+  height: 220px;
+  border-radius: 7px;
+  overflow: hidden;
+  display: block;
+  position: relative;
+  cursor: pointer;
+}
+.NotifContext > .product-info > .image-container > .image-container-context {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 60px;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 5px;
+}
+.NotifContext > .product-info > .image-container > .image-container-context * {
+  color: #fff;
+}
+.NotifContext > .product-info > .image-container > img {
+  transition: 1s;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.NotifContext > .product-info > .image-container:hover > img {
+  width: 105%;
+  height: 105%;
+  object-fit: cover;
+}
+
+.Description::-webkit-scrollbar {
+  width: 10px;
+}
+.Description::-webkit-scrollbar-track {
+  background: transparent;
+}
+.Description::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 5px;
+}
+.Description::-webkit-scrollbar-thumb:hover {
+  background: #ccc;
+}
